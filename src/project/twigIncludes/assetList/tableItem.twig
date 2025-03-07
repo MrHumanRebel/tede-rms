@@ -10,12 +10,14 @@
         {{ (type['totals']['mass'] > 0 ? type['totals']['mass'] ~ 'kg' : '') }}
     </td>
     {% if project.projectsTypes_config_finance == 1 %}
-    <td>
-        {{ type['totals']['price']|money }}
-    </td>
-    <td>
-        {{ type['totals']['discountPrice']|money }}
-    </td>
+        {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+            <td>
+                {{ type['totals']['price']|money }}
+            </td>
+            <td>
+                {{ type['totals']['discountPrice']|money }}
+            </td>
+        {% endif %}
     {% endif %}
 </tr>
 {% endif %}
@@ -69,8 +71,10 @@
     </td>
     <td>{{ assetAssignment.assets_mass != null ? assetAssignment.assets_mass|mass : (assetAssignment.assetTypes_mass != null and assetAssignment.assetTypes_mass != 0 ? assetAssignment.assetTypes_mass|mass : "") }}</td>
     {% if project.projectsTypes_config_finance == 1 %}
-        <td>{{ assetAssignment.price|money }}{{ assetAssignment.assetsAssignments_customPrice > 0 ? '&nbsp;<span class="badge badge-info" title="Custom price set"><i class="fas fa-coins"></i></span>' :'' }}</td>
-        <td>{{ assetAssignment.discountPrice|money }}{{  assetAssignment.assetsAssignments_discount > 0 ? " ("~assetAssignment.assetsAssignments_discount ~ "%)" : "" }}</td>
+        {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+            <td>{{ assetAssignment.price|money }}{{ assetAssignment.assetsAssignments_customPrice > 0 ? '&nbsp;<span class="badge badge-info" title="Custom price set"><i class="fas fa-coins"></i></span>' :'' }}</td>
+            <td>{{ assetAssignment.discountPrice|money }}{{  assetAssignment.assetsAssignments_discount > 0 ? " ("~assetAssignment.assetsAssignments_discount ~ "%)" : "" }}</td>
+        {% endif %}
     {% endif %}
 </tr>
 {% endfor %}

@@ -41,16 +41,38 @@ $vCalendar = new \Eluceo\iCal\Component\Calendar($CONFIG['ROOTURL']);
 foreach ($iCalAssignments as $event) {
     $vEvent = new \Eluceo\iCal\Component\Event();
     $vEvent->setUseTimezone(true);
+    
+    // Query the asset list for this event's project
+    $DBLIB->where("assets.projects_id", $event['projects_id']);
+    $assets = $DBLIB->get("assets", null, ["assets_name"]);
+    $assetList = "";
+    if ($assets) {
+        $assetNames = array_map(function($a) {
+            return $a['assets_name'];
+        }, $assets);
+        $assetList = "Eszközök: " . implode(", ", $assetNames) . "\n";
+    }
+    
     $vEvent
         ->setDtStart(new \DateTime($event['projects_dates_use_start']))
         ->setDtEnd(new \DateTime($event['projects_dates_use_end']))
         ->setNoTime(false)
         ->setSummary($event['projects_name'] . ($event['clients_name'] ? " (" . $event['clients_name'] . ")" : ""))
         ->setCategories(['events', 'AdamRMS'])
-        ->setLocation($event['locations_name'] . "\n" . $event['locations_address'], $event['locations_name'] . "\n" . $event['locations_address'])
-        ->setDescription('Role: ' . $event['crewAssignments_role'] . "\n" . "Event Status: " . $event['projectsStatuses_name'] . "\n" . "Description: ". $event['projects_description'] . "\n" . "Project Manager: " . $event['pm_name1'] . " " . $event['pm_name2'])
+        ->setLocation(
+            $event['locations_name'] . "\n" . $event['locations_address'], 
+            $event['locations_name'] . "\n" . $event['locations_address']
+        )
+        ->setDescription(
+            'Szerep: ' . $event['crewAssignments_role'] . "\n" .
+            "Esemény státusza: " . $event['projectsStatuses_name'] . "\n" .
+            "Leírás: " . $event['projects_description'] . "\n" .
+            "Projektvezető: " . $event['pm_name1'] . " " . $event['pm_name2'] . "\n" .
+            $assetList
+        )
         ->setMsBusyStatus("FREE")
     ;
+    
     $vCalendar->addComponent($vEvent);
 }
 

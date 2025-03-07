@@ -8,8 +8,10 @@
         <th>Status/Location</th>
         <th style="width:6em;">Mass</th>
         {% if project.projectsTypes_config_finance == 1 %}
-        <th style="width:5em;">Price</th>
-        <th style="width:9em;">Discounted Price</th>
+            {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                <th style="width:5em;">Price</th>
+                <th style="width:9em;">Discounted Price</th>
+            {% endif %}
         {% endif %}
     </tr>
     </thead>

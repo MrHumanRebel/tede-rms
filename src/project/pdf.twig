@@ -64,7 +64,7 @@
                 " ",
                 { text: "{{ project.projects_name|escape("js") }}", style: { bold: true, fontSize: 25 } },
                 {% if GET['quote'] %}
-                    { text: "Quotation", style: { fontSize: 16 } },
+                    { text: "Árajánlat", style: { fontSize: 16 } },
                 {% endif %}
                 {
                     table: {
@@ -73,24 +73,24 @@
                             {
                                 table: {
                                     body: [
-                                        ['Our Reference:',"{{project.projects_id|escape("js")}}"],
+                                        ['Hivatkozásunk:',"{{project.projects_id|escape("js")}}"],
                                         {% if project.projects_dates_deliver_start %}
-                                            ['Deliver:',"{{ project.projects_dates_deliver_start|date("j M Y h:ia")|escape("js")}}"],
+                                            ['Átadás:',"{{ project.projects_dates_deliver_start|date("j M Y h:ia")|escape("js")}}"],
                                         {% endif %}
                                         {% if project.projects_dates_use_start %}
-                                            ['Start:',"{{ project.projects_dates_use_start|date("j M Y h:ia")|escape("js")}}"],
+                                            ['Kezdés:',"{{ project.projects_dates_use_start|date("j M Y h:ia")|escape("js")}}"],
                                         {% endif %}
                                         {% if project.projects_dates_use_end %}
-                                            ['Finish:',"{{ project.projects_dates_use_end|date("j M Y h:ia")|escape("js") }}"],
+                                            ['Befejezés:',"{{ project.projects_dates_use_end|date("j M Y h:ia")|escape("js") }}"],
                                         {% endif %}
                                         {% if project.projects_dates_deliver_end %}
-                                            ['Collect:',"{{ project.projects_dates_deliver_end|date("j M Y h:ia")|escape("js") }}"],
+                                            ['Átvétel:',"{{ project.projects_dates_deliver_end|date("j M Y h:ia")|escape("js") }}"],
                                         {% endif %}
                                         {% if GET['totalmass'] and project.projectsTypes_config_assets == 1 %}
-                                            ['Mass Estimate:',"{{FINANCIALS.mass|mass|escape("js") }}"],
+                                            ['Tömeg becslés:',"{{FINANCIALS.mass|mass|escape("js") }}"],
                                         {% endif %}
                                         {% if GET['totalvalue'] and project.projectsTypes_config_assets == 1 %}
-                                            ['Value Estimate:',"{{FINANCIALS.value|money|escape("js") }}"],
+                                            ['Értékbecslés:',"{{FINANCIALS.value|money|escape("js") }}"],
                                         {% endif %}
                                     ],
                                 },
@@ -100,7 +100,7 @@
                             {% if GET['venue'] and project.projectsTypes_config_venue == 1 %}
                             {
                                 stack: [
-                                    { text: 'Venue', style: {bold: true}},
+                                    { text: 'Helyszín', style: {bold: true}},
                                     "{{ project.locations_name|escape("js") }}",
                                     "{{ project.locations_address|escape("js") }}"
                                 ],
@@ -120,35 +120,35 @@
                         widths: [ "35%", "15%", "35%", "15%"],
                         body: [
                             [
-                                { text: "Equipment SubTotal" },
+                                { text: "Felszerelés részösszeg" },
                                 { text: "{{ FINANCIALS.prices.subTotal|money|escape("js") }}", style: { alignment: 'right' } },
-                                { text: "Sales" },
+                                { text: "Értékesítés" },
                                 { text: "{{ FINANCIALS.payments.sales.total|money|escape("js") }}", style: { alignment: 'right' } },
                             ],
                             [
-                                { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}Discounts{% else %}Adjustments{% endif %}" },
-                                { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}-{{ FINANCIALS.prices.discounts|money|escape("js") }}{% else %}None{% endif %}", style: { alignment: 'right' } },
-                                { text: "Staffing" },
+                                { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}Kedvezmények{% else %}Módosítások{% endif %}" },
+                                { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}-{{ FINANCIALS.prices.discounts|money|escape("js") }}{% else %}Nincs{% endif %}", style: { alignment: 'right' } },
+                                { text: "Személyzet" },
                                 { text: "{{ FINANCIALS.payments.staff.total|money|escape("js") }}", style: { alignment: 'right' } },
                             ],
                             [
-                                { text: "Equipment Total", style: { bold: true } },
+                                { text: "Felszerelés végösszeg", style: { bold: true } },
                                 { text: "{{ FINANCIALS.prices.total|money|escape("js") }}", style: { alignment: 'right' } },
-                                { text: "Sub Hires" },
+                                { text: "Albérletek" },
                                 { text: "{{ FINANCIALS.payments.subHire.total|money|escape("js") }}", style: { alignment: 'right' } },
                             ],
                             {% if not GET['quote'] %}
                             [
-                                { text: "SubTotal" },
+                                { text: "Részösszeg" },
                                 { text: "{{ FINANCIALS.payments.subTotal|money|escape("js") }}", style: { alignment: 'right' } },
-                                { text: "Payments Received to Date" },
+                                { text: "Eddig beérkezett fizetések" },
                                 { text: "-{{ FINANCIALS.payments.received.total|money|escape("js") }}", style: { alignment: 'right' } },
                             ],
                             {% endif %}
                             [
                                 { text: "" },
                                 { text: "", style: { alignment: 'right' } },
-                                { text: "{% if GET['quote'] %}Grand Total{% else %}Grand Total Outstanding{% endif %}", style: { bold: true } },
+                                { text: "{% if GET['quote'] %}Összesen{% else %}Teljes hátralék{% endif %}", style: { bold: true } },
                                 { text: "{{ FINANCIALS.payments.total|money|escape("js") }}", style: { alignment: 'right' } },
                             ],
                         ],
@@ -157,11 +157,11 @@
                 },
                 {% endif %}
                 {% if project.projects_invoiceNotes|length > 0 and GET['invoiceNotes'] %}
-                    { text: "Notes", style: { fontSize: 20, bold: true } },
+                    { text: "Megjegyzések", style: { fontSize: 20, bold: true } },
                     "{{ project.projects_invoiceNotes|escape("js") }}",
                 {% endif %}
                 {% if GET['assets'] and project.projectsTypes_config_assets == 1 %}
-                    { text: "Equipment", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
+                    { text: "Felszerelés", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
                     
                     {% set columnCount = 2 %}
                     {% if GET['checkboxes'] %}{% set columnCount = columnCount + 1 %}{% endif %}
@@ -190,13 +190,13 @@
                                 body: [
                                     [
                                         {% if GET['checkboxes'] %}' ',{% endif %}
-                                        'Item',
+                                        'Elem',
                                         {% if GET['comments'] %}' ',{% endif %}
                                         '{# Definable Fields #} ',
-                                        {% if GET['masses'] %}'Mass',{% endif %}
+                                        {% if GET['masses'] %}'Tömeg',{% endif %}
                                         {% if project.projectsTypes_config_finance == 1 %}
-                                            {% if GET['prices'] %}'Price {{ moneySymbol() }}',{% endif %}
-                                            {% if GET['discounts'] %}'Disc {{ moneySymbol() }}',{% endif %}
+                                            {% if GET['prices'] %}'Ár {{ moneySymbol() }}',{% endif %}
+                                            {% if GET['discounts'] %}'Kedv. {{ moneySymbol() }}',{% endif %}
                                         {% endif %}
                                     ],
                                 {% set currentCategory = "" %}
@@ -256,16 +256,16 @@
                                         {% set currentCategory = type['assets'][0].assetCategories_name %}
                                         {% set currentCategoryID = type['assets'][0].assetCategories_id %}
                                         [{ 
-                                            text: "{{ type['assets'][0].assetCategories_name|escape("js") }}", 
+                                            text: "{{ type['assets'][0].assetCategories_name|escape('js') }}", 
                                             style: { bold: true },
                                             fillColor: '#F5F5F5',
                                             colSpan: {{ columnCount }},
                                             margin: 3
                                         },
-                                        {% for i in range(2, columnCount) %}{},{% endfor %}
+                                        {% for i in range(2, columnCount) %}{% if not loop.last %},{% endif %}{% endfor %}
                                     ],
                                     {% endif %}
-                                    {% embed 'project/twigIncludes/assetList/tableItemPDF.twig' with {"type": type,"all": instance, "categoryid":currentCategoryID,"instanceid": instance['instance'].instances_id} %}{% endembed %}
+                                    {% embed 'project/twigIncludes/assetList/tableItemPDF.twig' with {"type": type, "all": instance, "categoryid": currentCategoryID, "instanceid": instance['instance'].instances_id} %}{% endembed %}
                                 {% endfor %}
                                 ],
                             },
@@ -273,12 +273,10 @@
                             margin: [ 0, 10, 0, 10 ]
                         },
                     {% endfor %}{% endif %}
-                    {% if GET['flagsBlocks'] %}{ text: "[F] indicates asset flagged, [B] indicates asset blocked" },{% endif %}
-                    { text: "[L] indicates asset linked to another" },
-                    { text: "{{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) }} Total Item{{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) != 1 ? 's' }}", style: { fontSize: 16, bold: true, alignment: 'right' } },
+                    { text: "Összesen: {{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) }} darab elem", style: { fontSize: 16, bold: true, alignment: 'right' } },
                 {% endif %}
                 {% if FINANCIALS.payments.subHire.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['subHires']  %}
-                    { text: "Additional Hire Items", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
+                    { text: "További bérleti elemek", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
                     { 
                         table: {
                             widths: ['auto', '*'{% if GET['prices'] %},'auto','auto'{% endif %}],
@@ -322,7 +320,7 @@
                         columns: [
                             {
                                 width: '*',
-                                text: 'Total: ',
+                                text: 'Összesen: ',
                                 style: { bold: true, alignment: 'right' },
                                 margin: [ 0, 0, 5, 0 ]
                             },
@@ -336,7 +334,7 @@
                     {% endif %}
                 {% endif %}
                 {% if FINANCIALS.payments.sales.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['sales'] %}
-                    { text: "Sales", style: { fontSize: 20, bold: true } },
+                    { text: "Értékesítés", style: { fontSize: 20, bold: true } },
                     { 
                         table: {
                             widths: ['auto', '*'{% if GET['prices'] %},'auto','auto'{% endif %}],
@@ -380,7 +378,7 @@
                         columns: [
                             {
                                 width: '*',
-                                text: 'Total: ',
+                                text: 'Összesen: ',
                                 style: { bold: true, alignment: 'right' },
                                 margin: [ 0, 0, 5, 0 ]
                             },
@@ -394,7 +392,7 @@
                     {% endif %}
                 {% endif %}
                 {% if project.projectsTypes_config_finance == 1 and FINANCIALS.payments.staff.ledger|length > 0 and GET['staff'] %}
-                    { text: "Staff", style: { fontSize: 20, bold: true } },
+                    { text: "Személyzet", style: { fontSize: 20, bold: true } },
                     { 
                         table: {
                             widths: ['auto', '*'{% if GET['prices'] %},'auto','auto'{% endif %}],
@@ -438,7 +436,7 @@
                         columns: [
                             {
                                 width: '*',
-                                text: 'Total: ',
+                                text: 'Összesen: ',
                                 style: { bold: true, alignment: 'right' },
                                 margin: [ 0, 0, 5, 0 ]
                             },
@@ -470,10 +468,10 @@
                 return {
                     columns: [
                         {text: "{{ USERDATA['instance']['instances_name']|escape("js") }}", width: "40%"},
-                        {text: "{% if GET['quote'] %}Quotation{% endif %}", alignment: 'center', width: "20%"},
+                        {text: "{% if GET['quote'] %}Árajánlat{% endif %}", alignment: 'center', width: "20%"},
                         { text: "{% if project.projectsTypes_config_client == 1 and project['clients_name'] %}{{  project['clients_name']|escape("js") }} - {% endif %}{{ project['projects_name']|escape("js") }}", alignment: 'right', width: "40%"}
-                    ]
-                    , margin: [40, 20, 40, 20]
+                    ],
+                    margin: [40, 20, 40, 20]
                 };           
             },
             footer: function(currentPage, pageCount) { 
@@ -481,12 +479,13 @@
                 return {
                     columns: [
                         {text: "{{ "now"|date("j M Y h:i:sa")|escape("js") }}", width: "40%"},
-                        {text: currentPage.toString() + '/' + pageCount, alignment: 'center', width: "20%"},
-                        {text: "Generated by AdamRMS", alignment: 'right', width: "40%" }]
-                    , margin: [40, 20, 40, 20]
+                        {text: "9174 Dunaszeg, Iskola utca 7.", alignment: 'center', width: "20%"},
+                        {text: "TéDé Rendezvények", alignment: 'right', width: "40%"}
+                    ],
+                    margin: [40, 20, 40, 20]
                 }; 
             },
-            {% if GET['draft'] %}watermark: { text: 'DRAFT', opacity: 0.2, bold: true, italics: false },{% endif %}
+            {% if GET['draft'] %}watermark: { text: 'MUNKÁBAN', opacity: 0.2, bold: true, italics: false },{% endif %}
             pageSize: 'A4',
             pageOrientation: 'portrait',
             pageMargins: [ 40, 40, 40, 40 ],
