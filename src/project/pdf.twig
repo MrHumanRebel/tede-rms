@@ -10,8 +10,8 @@
                 {% if INSTANCELOGO %}
                 {
                     image: "{{ INSTANCELOGO|escape("js") }}",
-                    width: 200,
-                    margin: [157, 0, 0, 20]
+                    width: 500,
+                    margin: [0, 0, 0, 40]
                 },
                 {% endif %}
                 {
@@ -90,7 +90,7 @@
                                             ['Tömeg becslés:',"{{FINANCIALS.mass|mass|escape("js") }}"],
                                         {% endif %}
                                         {% if GET['totalvalue'] and project.projectsTypes_config_assets == 1 %}
-                                            ['Értékbecslés:',"{{FINANCIALS.value|money|escape("js") }}"],
+                                            ['Értékbecslés:',"{{FINANCIALS.value|money|replace({'.00':''})|escape('js') }}"],
                                         {% endif %}
                                     ],
                                 },
@@ -121,35 +121,35 @@
                         body: [
                             [
                                 { text: "Felszerelés részösszeg" },
-                                { text: "{{ FINANCIALS.prices.subTotal|money|escape("js") }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.subTotal|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
                                 { text: "Értékesítés" },
-                                { text: "{{ FINANCIALS.payments.sales.total|money|escape("js") }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.sales.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             [
                                 { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}Kedvezmények{% else %}Módosítások{% endif %}" },
-                                { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}-{{ FINANCIALS.prices.discounts|money|escape("js") }}{% else %}Nincs{% endif %}", style: { alignment: 'right' } },
+                                { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}-{{ FINANCIALS.prices.discounts|money|replace({'.00':''})|escape('js') }}{% else %}Nincs{% endif %}", style: { alignment: 'right' } },
                                 { text: "Személyzet" },
-                                { text: "{{ FINANCIALS.payments.staff.total|money|escape("js") }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.staff.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             [
                                 { text: "Felszerelés végösszeg", style: { bold: true } },
-                                { text: "{{ FINANCIALS.prices.total|money|escape("js") }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
                                 { text: "Albérletek" },
-                                { text: "{{ FINANCIALS.payments.subHire.total|money|escape("js") }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.subHire.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             {% if not GET['quote'] %}
                             [
                                 { text: "Részösszeg" },
-                                { text: "{{ FINANCIALS.payments.subTotal|money|escape("js") }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.subTotal|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
                                 { text: "Eddig beérkezett fizetések" },
-                                { text: "-{{ FINANCIALS.payments.received.total|money|escape("js") }}", style: { alignment: 'right' } },
+                                { text: "-{{ FINANCIALS.payments.received.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             {% endif %}
                             [
                                 { text: "" },
                                 { text: "", style: { alignment: 'right' } },
                                 { text: "{% if GET['quote'] %}Összesen{% else %}Teljes hátralék{% endif %}", style: { bold: true } },
-                                { text: "{{ FINANCIALS.payments.total|money|escape("js") }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                         ],
                     },
@@ -195,8 +195,8 @@
                                         '{# Definable Fields #} ',
                                         {% if GET['masses'] %}'Tömeg',{% endif %}
                                         {% if project.projectsTypes_config_finance == 1 %}
-                                            {% if GET['prices'] %}'Ár {{ moneySymbol() }}',{% endif %}
-                                            {% if GET['discounts'] %}'Kedv. {{ moneySymbol() }}',{% endif %}
+                                            {% if GET['prices'] %}'Ár',{% endif %}
+                                            {% if GET['discounts'] %}'Kedvezményes ár',{% endif %}
                                         {% endif %}
                                     ],
                                 {% set currentCategory = "" %}
@@ -300,11 +300,11 @@
                                     "{{ payment.payments_comment|escape("js") }}",
                                     {% if GET['prices'] %}
                                         {
-                                            text: "{{ payment.payments_amount|money|escape("js") }}",
+                                            text: "{{ payment.payments_amount|money|replace({'.00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                         {
-                                            text: "{{ payment.payments_amountTotal|money|escape("js") }}",
+                                            text: "{{ payment.payments_amountTotal|money|replace({'.00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                     {% endif %}
@@ -326,7 +326,7 @@
                             },
                             {
                                 width: 'auto',
-                                text: "{{ FINANCIALS.payments.subHire.total|money|escape("js") }}",
+                                text: "{{ FINANCIALS.payments.subHire.total|money|replace({'.00':''})|escape('js') }}",
                             },
                             
                         ]
@@ -358,11 +358,11 @@
                                     "{{ payment.payments_comment|escape("js") }}",
                                     {% if GET['prices'] %}
                                         {
-                                            text: "{{ payment.payments_amount|money|escape("js") }}",
+                                            text: "{{ payment.payments_amount|money|replace({'.00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                         {
-                                            text: "{{ payment.payments_amountTotal|money|escape("js") }}",
+                                            text: "{{ payment.payments_amountTotal|money|replace({'.00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                     {% endif %}
@@ -384,7 +384,7 @@
                             },
                             {
                                 width: 'auto',
-                                text: "{{ FINANCIALS.payments.sales.total|money|escape("js") }}",
+                                text: "{{ FINANCIALS.payments.sales.total|money|replace({'.00':''})|escape('js') }}",
                             },
                             
                         ]
@@ -416,11 +416,11 @@
                                     "{{ payment.payments_comment|escape("js") }}",
                                     {% if GET['prices'] %}
                                         {
-                                            text: "{{ payment.payments_amount|money|escape("js") }}",
+                                            text: "{{ payment.payments_amount|money|replace({'.00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                         {
-                                            text: "{{ payment.payments_amountTotal|money|escape("js") }}",
+                                            text: "{{ payment.payments_amountTotal|money|replace({'.00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                     {% endif %}
@@ -442,7 +442,7 @@
                             },
                             {
                                 width: 'auto',
-                                text: "{{ FINANCIALS.payments.staff.total|money|escape("js") }}",
+                                text: "{{ FINANCIALS.payments.staff.total|money|replace({'.00':''})|escape('js') }}",
                             },
                             
                         ]
@@ -475,16 +475,31 @@
                 };           
             },
             footer: function(currentPage, pageCount) { 
-                if (currentPage === 1) return null;
                 return {
-                    columns: [
-                        {text: "{{ "now"|date("j M Y h:i:sa")|escape("js") }}", width: "40%"},
-                        {text: "9174 Dunaszeg, Iskola utca 7.", alignment: 'center', width: "20%"},
-                        {text: "TéDé Rendezvények", alignment: 'right', width: "40%"}
-                    ],
-                    margin: [40, 20, 40, 20]
+                    table: {
+                        widths: ['33%', '33%', '33%'],
+                        body: [
+                            [
+                                {text: "Tamás Dávid EV.", alignment: 'left'},
+                                {text: "Cím: 9174 Dunaszeg, Iskola utca 7.", alignment: 'center'},
+                                {text: "Telefon: +36 30 242 55 44", alignment: 'right'}
+                            ],
+                            [
+                                {text: "Bank számla szám: 11737007-20749635", alignment: 'left'},
+                                {text: "Adószám: 60721561-2-28", alignment: 'center'},
+                                {text: "Mail: info@tede.hu", link: "mailto:info@tede.hu", alignment: 'right'}
+                            ],
+                            [
+                                {text: "- " + currentPage.toString() + " - / " + pageCount.toString(), alignment: 'center', colSpan: 3}
+                            ]
+                        ]
+                    },
+                    layout: 'lightHorizontalLines',
+                    margin: [40, 10, 40, 10]
                 }; 
             },
+
+
             {% if GET['draft'] %}watermark: { text: 'MUNKÁBAN', opacity: 0.2, bold: true, italics: false },{% endif %}
             pageSize: 'A4',
             pageOrientation: 'portrait',

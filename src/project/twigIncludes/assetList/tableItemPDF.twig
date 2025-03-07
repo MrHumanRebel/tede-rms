@@ -12,10 +12,10 @@
     {% endif %}
     {% if project.projectsTypes_config_finance == 1 %}
         {% if GET['prices'] %}
-            '{{ type['totals']['price']|money|escape("js") }}',
+            '{{ type['totals']['price']|money|replace({'.00':''})|escape('js') }}',
         {% endif %}
         {% if GET['discounts'] %}
-            '{{ type['totals']['discountPrice']|money|escape("js") }}',
+            '{{ type['totals']['discountPrice']|money|replace({'.00':''})|escape('js') }}',
         {% endif %}
     {% endif %}
 ],
@@ -53,8 +53,8 @@
             '{{ assetAssignment.assets_mass != null ? assetAssignment.assets_mass|mass : (assetAssignment.assetTypes_mass != null and assetAssignment.assetTypes_mass != 0 ? assetAssignment.assetTypes_mass|mass : "") }}',
         {% endif %}
         {% if project.projectsTypes_config_finance == 1 %}
-            {% if GET['prices'] %}'{{ assetAssignment.price|money|escape("js") }}',{% endif %}
-            {% if GET['discounts'] %}'{{ assetAssignment.discountPrice|money|escape("js") }}',{% endif %}
+            {% if GET['prices'] %}'{{ assetAssignment.price|money|replace({'.00':''})|escape('js') }}',{% endif %}
+            {% if GET['discounts'] %}'{{ assetAssignment.discountPrice|money|replace({'.00':''})|escape('js') }}',{% endif %}
         {% endif %}
     ],
     {% endif %}
