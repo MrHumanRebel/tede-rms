@@ -38,12 +38,14 @@
                     <th style="width: 6rem;">
                         Manager
                     </th>
-                    <th style="width: 8rem;">
-                        Outstanding
-                    </th>
-                    <th style="width: 11rem;">
-                        Payments Received
-                    </th>
+                    {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                        <th style="width: 8rem;">
+                            Outstanding
+                        </th>
+                        <th style="width: 11rem;">
+                            Payments Received
+                        </th>
+                    {% endif %}
                     <th style="width: 15%">
                         Status
                     </th>
@@ -94,12 +96,16 @@
                         </td>
                         <td>
                             {% if project.projectsTypes_config_finance == 1 %}
-                            {{ (project.finance.projectsFinanceCache_grandTotal|moneyPositive ? project.finance.projectsFinanceCache_grandTotal|money(USERDATA.instance['instances_config_currency']) : '') }}
+                                {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                                    {{ (project.finance.projectsFinanceCache_grandTotal|moneyPositive ? project.finance.projectsFinanceCache_grandTotal|money(USERDATA.instance['instances_config_currency']) : '') }}
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td>
                             {% if project.projectsTypes_config_finance == 1 %}
-                            {{ project.finance.projectsFinanceCache_paymentsReceived|money(USERDATA.instance['instances_config_currency']) }}
+                                {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                                    {{ project.finance.projectsFinanceCache_paymentsReceived|money(USERDATA.instance['instances_config_currency']) }}
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td class="project_progress">
