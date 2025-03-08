@@ -7,13 +7,6 @@
     <script>
         var docDefinition = {
             content: [
-                {% if INSTANCELOGO %}
-                {
-                    image: "{{ INSTANCELOGO|escape("js") }}",
-                    width: 500,
-                    margin: [0, 0, 0, 40]
-                },
-                {% endif %}
                 {
                     columns: [
                         {
@@ -73,18 +66,18 @@
                             {
                                 table: {
                                     body: [
-                                        ['Hivatkozásunk:',"{{project.projects_id|escape("js")}}"],
+                                        ['Hivatkozás:',"{{project.projects_id|escape("js")}}"],
                                         {% if project.projects_dates_deliver_start %}
-                                            ['Átadás:',"{{ project.projects_dates_deliver_start|date("j M Y h:ia")|escape("js")}}"],
+                                            ['Átadás:',"{{ project.projects_dates_deliver_start|date("Y. m. d. H:i")|escape("js")}}"],
                                         {% endif %}
                                         {% if project.projects_dates_use_start %}
-                                            ['Kezdés:',"{{ project.projects_dates_use_start|date("j M Y h:ia")|escape("js")}}"],
+                                            ['Kezdés:',"{{ project.projects_dates_use_start|date("Y. m. d. H:i")|escape("js")}}"],
                                         {% endif %}
                                         {% if project.projects_dates_use_end %}
-                                            ['Befejezés:',"{{ project.projects_dates_use_end|date("j M Y h:ia")|escape("js") }}"],
+                                            ['Befejezés:',"{{ project.projects_dates_use_end|date("Y. m. d. H:i")|escape("js") }}"],
                                         {% endif %}
                                         {% if project.projects_dates_deliver_end %}
-                                            ['Átvétel:',"{{ project.projects_dates_deliver_end|date("j M Y h:ia")|escape("js") }}"],
+                                            ['Átvétel:',"{{ project.projects_dates_deliver_end|date("Y. m. d. H:i")|escape("js") }}"],
                                         {% endif %}
                                         {% if GET['totalmass'] and project.projectsTypes_config_assets == 1 %}
                                             ['Tömeg becslés:',"{{FINANCIALS.mass|mass|escape("js") }}"],
@@ -462,48 +455,89 @@
                     margin: [ 0, 10, 0, 0 ]
                 },
                 {% endif %}
+                {
+                    "table": {
+                        "widths": ["30%", "70%"],
+                        "body": [
+                            [
+                                {
+                                    "text": "Dátum: {{ 'now' | date('Y. m. d.') | escape('js') }}", 
+                                    "alignment": "left",
+                                    "border": [false, false, false, false] 
+                                },
+                                { 
+                                    "text": "Az ajánlatot elfogadom",
+                                    "alignment": "left",
+                                    "border": [true, false, false, false],
+                                    "borderWidth": 2
+                                },
+
+                            ]
+                        ]
+                    },
+                    "margin": [0, 30, 0, 0] 
+                },
+
             ],
             header: function(currentPage) { 
-                if (currentPage === 1) return null;
                 return {
-                    columns: [
-                        {text: "{{ USERDATA['instance']['instances_name']|escape("js") }}", width: "40%"},
-                        {text: "{% if GET['quote'] %}Árajánlat{% endif %}", alignment: 'center', width: "20%"},
-                        { text: "{% if project.projectsTypes_config_client == 1 and project['clients_name'] %}{{  project['clients_name']|escape("js") }} - {% endif %}{{ project['projects_name']|escape("js") }}", alignment: 'right', width: "40%"}
+                    stack: [
+                        {% if INSTANCELOGO %}
+                        {
+                            image: "{{ INSTANCELOGO|escape('js') }}",
+                            width: 500,
+                            alignment: 'center',
+                            margin: [0, 0, 0, 0]
+
+                        },
+                        {% endif %}
                     ],
-                    margin: [40, 20, 40, 20]
+                    margin: [0, 20, 0, 0] // Left, Top, Right, Bottom
                 };           
             },
             footer: function(currentPage, pageCount) { 
                 return {
-                    table: {
-                        widths: ['33%', '33%', '33%'],
-                        body: [
-                            [
-                                {text: "Tamás Dávid EV.", alignment: 'left'},
-                                {text: "Cím: 9174 Dunaszeg, Iskola utca 7.", alignment: 'center'},
-                                {text: "Telefon: +36 30 242 55 44", alignment: 'right'}
+                    stack: [
+                        // Line with margin below it
+                        { 
+                            canvas: [ 
+                                { 
+                                    type: 'line', 
+                                    x1: 40, 
+                                    y1: 0, 
+                                    x2: 555, 
+                                    y2: 0, 
+                                    lineWidth: 1 
+                                } 
                             ],
-                            [
-                                {text: "Bank számla szám: 11737007-20749635", alignment: 'left'},
-                                {text: "Adószám: 60721561-2-28", alignment: 'center'},
-                                {text: "Mail: info@tede.hu", link: "mailto:info@tede.hu", alignment: 'right'}
-                            ],
-                            [
-                                {text: "- " + currentPage.toString() + " - / " + pageCount.toString(), alignment: 'center', colSpan: 3}
-                            ]
-                        ]
-                    },
-                    layout: 'lightHorizontalLines',
-                    margin: [40, 10, 40, 10]
+                            margin: [0, 0, 0, 5] 
+                        },
+                        // Table with text and page count
+                        {
+                            table: {
+                                widths: ['100%'],
+                                body: [
+                                    [
+                                        { 
+                                            text: "Tamás Dávid EV.\t Cím: 9174 Dunaszeg, Iskola utca 7.\t Telefon: +36 30 242 55 44 \n" +
+                                                "Bankszámla szám: 11737007-20749635\t Adószám: 60721561-2-28\t Mail: info@tede.hu\n" + 
+                                                currentPage.toString() + " / " + pageCount.toString(), 
+                                            alignment: 'center' 
+                                        }
+                                    ],
+                                ]
+                            },
+                            layout: 'noBorders'
+                        }
+                    ],
+                    margin: [20, 20, 20, 20]  // Left, Top, Right, Bottom
                 }; 
             },
-
 
             {% if GET['draft'] %}watermark: { text: 'MUNKÁBAN', opacity: 0.2, bold: true, italics: false },{% endif %}
             pageSize: 'A4',
             pageOrientation: 'portrait',
-            pageMargins: [ 40, 40, 40, 40 ],
+            pageMargins: [ 40, 110, 40, 100 ],
             info: {
                 title: "{% if project.projectsTypes_config_client == 1 and project['clients_name'] %}{{  project['clients_name']|escape("js") }} - {% endif %}{{ project['projects_name']|escape("js") }}",
                 author: "{{ USERDATA['instance']['instances_name']|escape("js") }}",
