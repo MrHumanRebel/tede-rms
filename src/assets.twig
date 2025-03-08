@@ -208,27 +208,30 @@
                                             <li class="small">
                                                 <span class="fa-li"><i class="fas fa-weight"></i></span> {{ (asset.tags[0]['assets_mass'] ? asset.tags[0]['assets_mass']|number_format(2) : (asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 ? asset.assetTypes_mass|mass : '?')) }}
                                             </li>
-                                                {% endif %}
+                                            {% endif %}
                                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                             <li class="small">
-                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ (asset.tags[0]['assets_value'] ?: asset.assetTypes_value)|money(SEARCH.INSTANCE['instances_config_currency']) }}<br/>
-                                                {{ (asset.tags[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency']) }}/day<br/>{{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency']) }}/week
+                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ (asset.tags[0]['assets_value'] ?: asset.assetTypes_value)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}<br/>
+                                                {{ (asset.tags[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/day<br/>
+                                                {{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/week
                                             </li>
                                             {% endif %}
                                         {% else %}
-                                            {% if asset.assetTypes_mass != "" and asset.assetTypes_mass != 0  %}
-                                                <li class="small">
-                                                    <span class="fa-li"><i class="fas fa-weight"></i></span> {{ asset.assetTypes_mass|mass }}
-                                                </li>
+                                            {% if asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 %}
+                                            <li class="small">
+                                                <span class="fa-li"><i class="fas fa-weight"></i></span> {{ asset.assetTypes_mass|mass }}
+                                            </li>
                                             {% endif %}
                                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                             <li class="small">
-                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ asset.assetTypes_value|money(SEARCH.INSTANCE['instances_config_currency']) }}<br/>
-                                                {{ asset.assetTypes_dayRate|money(SEARCH.INSTANCE['instances_config_currency']) }}/day<br/>{{ asset.assetTypes_weekRate|money(SEARCH.INSTANCE['instances_config_currency']) }}/week
+                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ asset.assetTypes_value|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}<br/>
+                                                {{ asset.assetTypes_dayRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/day<br/>
+                                                {{ asset.assetTypes_weekRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/week
                                             </li>
                                             {% endif %}
                                             <li class="small" title="Number owned"><span class="fa-li"><i class="fas fa-boxes"></i></span> {{asset.count}}</li>
                                         {% endif %}
+
                                         {% if searchResults.SEARCH.INSTANCE_ID != USERDATA.instance.instances_id %}
                                             {% for instance in USERDATA.instances %}
                                                 {% if searchResults.SEARCH.INSTANCE_ID == instance.instances_id %}
@@ -290,10 +293,10 @@
                                                                                 {% endfor %}
                                                                                 <td>{{ thisasset['assets_notes']|nl2br }}</td>
                                                                                 <td>
-                                                                                    {{ moneySymbol(SEARCH.INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency']) }}
+                                                                                    {{ moneySymbol(SEARCH.INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ moneySymbol(SEARCH.INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency']) }}
+                                                                                    {{ moneySymbol(SEARCH.INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ thisasset.flagsblocks.COUNT.FLAG > 0 ?: '' }}
@@ -368,10 +371,10 @@
                                                                                 {% endfor %}
                                                                                 <td>{{ thisasset['assets_notes']|nl2br }}</td>
                                                                                 <td>
-                                                                                    {{ moneySymbol(SEARCH.INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency']) }}
+                                                                                    {{ moneySymbol(SEARCH.INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ moneySymbol(SEARCH.INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency']) }}
+                                                                                    {{ moneySymbol(SEARCH.INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ thisasset.flagsblocks.COUNT.FLAG > 0 ?: '' }}
