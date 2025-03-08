@@ -455,6 +455,7 @@
                     margin: [ 0, 10, 0, 0 ]
                 },
                 {% endif %}
+                {% if GET['paymentTerms'] %}
                 {
                     "table": {
                         "widths": ["50%", "50%"],
@@ -478,6 +479,7 @@
                     },
                     margin: [0, 60, 40, 0] // Left, Top, Right, Bottom
                 },
+                {% endif %}
 
             ],
             header: function(currentPage) { 
