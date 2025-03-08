@@ -488,7 +488,7 @@
                         {% if INSTANCELOGO %}
                         {
                             image: "{{ INSTANCELOGO|escape('js') }}",
-                            width: 500,
+                            width: 515,
                             alignment: 'center',
                             margin: [0, 0, 0, 0]
 
@@ -506,13 +506,14 @@
                             canvas: [ 
                                 { 
                                     type: 'line', 
-                                    x1: 40, 
+                                    x1: 0, 
                                     y1: 0, 
-                                    x2: 555, 
+                                    x2: 510, 
                                     y2: 0, 
                                     lineWidth: 1 
                                 } 
                             ],
+                            alignment: 'center',
                             margin: [0, 0, 0, 5] 
                         },
                         // Table with text and page count
