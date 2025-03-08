@@ -457,25 +457,26 @@
                 {% endif %}
                 {
                     "table": {
-                        "widths": ["30%", "70%"],
+                        "widths": ["50%", "50%"],
                         "body": [
                             [
                                 {
-                                    "text": "Dátum: {{ 'now' | date('Y. m. d.') | escape('js') }}", 
-                                    "alignment": "left",
-                                    "border": [false, false, false, false] 
+                                    text: "Dátum: {{ 'now' | date('Y. m. d.') | escape('js') }}", 
+                                    alignment: "center",
+                                    border: [false, false, false, false],
+                                    margin: [0, 0, 0, 50]
                                 },
                                 { 
-                                    "text": "Az ajánlatot elfogadom",
-                                    "alignment": "left",
-                                    "border": [true, false, false, false],
-                                    "borderWidth": 2
+                                    text: "Az ajánlatot elfogadom",
+                                    alignment: "center",
+                                    border: [false, true, false, false],
+                                    margin: [50, 0, 50, 0], // Left, Top, Right, Bottom
+                                    borderWidth: 10
                                 },
-
                             ]
                         ]
                     },
-                    "margin": [0, 30, 0, 0] 
+                    margin: [0, 60, 40, 0] // Left, Top, Right, Bottom
                 },
 
             ],
@@ -537,7 +538,7 @@
             {% if GET['draft'] %}watermark: { text: 'MUNKÁBAN', opacity: 0.2, bold: true, italics: false },{% endif %}
             pageSize: 'A4',
             pageOrientation: 'portrait',
-            pageMargins: [ 40, 110, 40, 100 ],
+            pageMargins: [ 40, 100, 40, 90 ],
             info: {
                 title: "{% if project.projectsTypes_config_client == 1 and project['clients_name'] %}{{  project['clients_name']|escape("js") }} - {% endif %}{{ project['projects_name']|escape("js") }}",
                 author: "{{ USERDATA['instance']['instances_name']|escape("js") }}",
