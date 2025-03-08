@@ -110,13 +110,13 @@
                         </li>
                         {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                             <li class="list-group-item">
-                                <b>Value</b> <span class="float-right text-primary">{{ asset.assetTypes_value|money(ASSET_INSTANCE['instances_config_currency']) }}</span>
+                                <b>Value</b> <span class="float-right text-primary">{{ asset.assetTypes_value|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
                             </li>
                             <li class="list-group-item">
-                                <b>Day Rate</b> <span class="float-right text-primary">{{ asset.assetTypes_dayRate|money(ASSET_INSTANCE['instances_config_currency']) }}</span>
+                                <b>Day Rate</b> <span class="float-right text-primary">{{ asset.assetTypes_dayRate|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
                             </li>
                             <li class="list-group-item">
-                                <b>Week Rate</b> <span class="float-right text-primary">{{ asset.assetTypes_weekRate|money(ASSET_INSTANCE['instances_config_currency']) }}</span>
+                                <b>Week Rate</b> <span class="float-right text-primary">{{ asset.assetTypes_weekRate|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
                             </li>
                         {% endif %}
                     </ul>
@@ -930,14 +930,14 @@
                                     {% endfor %}
                                     <td>{{ thisasset['assets_notes']|nl2br }}</td>
                                     {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-                                        <td>
-                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_value ?: asset.assetTypes_value)|money(ASSET_INSTANCE['instances_config_currency']) }}
+                                        <td> 
+                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_value ?: asset.assetTypes_value)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
                                         </td>
                                         <td>
-                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(ASSET_INSTANCE['instances_config_currency']) }}
+                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
                                         </td>
                                         <td>
-                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(ASSET_INSTANCE['instances_config_currency']) }}
+                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
                                         </td>
                                     {% endif %}
                                     <td>{{ thisasset.files|length > 0 ?: "" }}</td>
