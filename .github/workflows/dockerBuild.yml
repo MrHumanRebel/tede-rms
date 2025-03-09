@@ -13,7 +13,7 @@ jobs:
 
       - name: Create Version Folder if not exists
         run: |
-          test -d src/version || mkdir src/version
+          test -d src/version || mkdir -p src/version
         shell: bash
 
       - name: Write Version Number
