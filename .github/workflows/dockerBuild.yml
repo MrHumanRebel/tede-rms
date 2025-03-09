@@ -1,7 +1,9 @@
 name: Docker Build & Push
+
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main  # Vagy a megfelelő branch, amelyet használsz
   workflow_dispatch: # Allows manual execution
 
 jobs:
@@ -36,7 +38,7 @@ jobs:
             org.opencontainers.image.licenses=AGPL-3.0
           tags: |
             type=semver,pattern=${{ github.event.release.tag_name }}
-            type=raw,value=latest,enable=${{ github.event_name == 'release' || github.event_name == 'workflow_dispatch' }}
+            type=raw,value=latest,enable=${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker buildx
