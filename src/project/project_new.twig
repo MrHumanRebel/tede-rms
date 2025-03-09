@@ -108,14 +108,14 @@
                 timePicker: true,
                 timePickerIncrement: 15,
                 locale: {
-                    format: 'DD MMM YYYY hh:mm A'
+                    format: 'YYYY. MM. DD. HH:mm'
                 },
                 autoUpdateInput: false,
             });
 
             $('#datePickerInput').on('apply.daterangepicker', function(ev, picker) {
-                startDate = picker.startDate.format('DD MMM YYYY hh:mm A');
-                endDate = picker.endDate.format('DD MMM YYYY hh:mm A');
+                startDate = picker.startDate.format('YYYY. MM. DD. HH:mm');
+                endDate = picker.endDate.format('YYYY. MM. DD. HH:mm');
 
                 $(this).val(startDate + ' - ' + endDate);
             });

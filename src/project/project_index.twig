@@ -1,4 +1,3 @@
-<meta charset="utf-8">
 {% extends "assets/template.twig" %}
 {% block htmlIncludes %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
@@ -222,7 +221,7 @@
                                                             <input type="text" class="form-control float-right" id="datePickerInput">
                                                         </div>
                                                     {% else %}
-                                                        <b class="d-block">{{project.projects_dates_use_start ? project.projects_dates_use_start|date("Y-m-d h:i:sa")  ~ ' - ' ~  project.projects_dates_use_end|date("Y-m-d h:i:sa") }}</b>
+                                                        <b class="d-block">{{ project.projects_dates_use_start ? project.projects_dates_use_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_use_end|date("Y. m. d. H:i") }}</b>
                                                         {% endif %}
                                                         </p>
                                                         {% if project.projectsTypes_config_assets == 1 %}
@@ -240,7 +239,7 @@
                                                                     </div>
                                                                 {% endif %}
                                                             {% else %}
-                                                                <b class="d-block">{{project.projects_dates_deliver_start ? project.projects_dates_deliver_start|date("Y-m-d h:i:sa") ~ ' - ' ~ project.projects_dates_deliver_end|date("Y-m-d h:i:sa") }}</b>
+                                                                <b class="d-block">{{ project.projects_dates_deliver_start ? project.projects_dates_deliver_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_deliver_end|date("Y. m. d. H:i") }}</b>
                                                             {% endif %}
                                                             </p>
                                                             <p class="text-sm">Project duration for asset pricing purposes
@@ -356,15 +355,15 @@
                                                             {% set comments = true %}
                                                             {% if event.auditLog_timestamp|date("Y-m-d") != currentDate %}
                                                                 <div class="time-label">
-                                                                    <span class="bg-red">{{ event.auditLog_timestamp|date("D jS M Y") }}</span>
+                                                                    <span class="bg-red">{{ event.auditLog_timestamp|date("Y. m. d.") }}</span>
                                                                 </div>
                                                                 {% set currentDate = event.auditLog_timestamp|date("Y-m-d") %}
                                                             {% endif %}
                                                             <div>
                                                                 <i class="far fa-comment bg-blue"></i>
                                                                 <div class="timeline-item">
-                                                                    <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("h:i:sa") }}</span>
-                                                                    <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2}} </a> commented
+                                                                    <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("H:i") }}</span>
+                                                                    <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> commented
                                                                     </h3>
                                                                     <div class="timeline-body">{{ event.auditLog_actionData|raw }}</div>
                                                                 </div>
@@ -376,7 +375,7 @@
                                                         <i class="fas fa-clock bg-gray"></i>
                                                     </div>
                                                     {% else %}
-                                                        <i>Nobody has commented on this project</i>
+                                                        <i>Még senki sem kommentálta ezt a projektet</i>
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -1028,17 +1027,17 @@
                 timePicker: true,
                 timePickerIncrement: 15,
                 locale: {
-                    format: 'DD MMM YYYY hh:mm A'
+                    format: 'YYYY. MM. DD. HH:mm'
                 },
                 {% if project.projects_dates_use_start %}
-                startDate: "{{ project.projects_dates_use_start|date("j M Y h:i:sa") }}",
-                endDate: "{{ project.projects_dates_use_end|date("j M Y h:i:sa") }}"
+                startDate: "{{ project.projects_dates_use_start|date("Y. m. d. H:i") }}",
+                endDate: "{{ project.projects_dates_use_end|date("Y. m. d. H:i") }}"
                 {% else %}
                 autoUpdateInput: false,
                 {% endif %}
             });
             $('#datePickerInput').on('apply.daterangepicker', function(ev, picker) {
-                ajaxcall("projects/changeProjectDates.php", {"projects_id": "{{ project.projects_id }}","projects_dates_use_start":picker.startDate.format('DD MMM YYYY hh:mm A'),"projects_dates_use_end":picker.endDate.format('DD MMM YYYY hh:mm A')}, function (data) {
+                ajaxcall("projects/changeProjectDates.php", {"projects_id": "{{ project.projects_id }}", "projects_dates_use_start": picker.startDate.format('YYYY. MM. DD. HH:mm'), "projects_dates_use_end": picker.endDate.format('YYYY. MM. DD. HH:mm')}, function (data) {
                     location.reload();
                 });
             });
@@ -1046,14 +1045,14 @@
                 timePicker: true,
                 timePickerIncrement: 15,
                 locale: {
-                    format: 'DD MMM YYYY hh:mm A'
+                    format: 'YYYY. MM. DD. HH:mm'
                 },
-            {% if project.projects_dates_deliver_start %}
-                startDate: "{{ project.projects_dates_deliver_start|date("j M Y h:i:sa") }}",
-                endDate: "{{ project.projects_dates_deliver_end|date("j M Y h:i:sa") }}"
-            {% else %}
+                {% if project.projects_dates_deliver_start %}
+                startDate: "{{ project.projects_dates_deliver_start|date("Y. m. d. H:i") }}",
+                endDate: "{{ project.projects_dates_deliver_end|date("Y. m. d. H:i") }}"
+                {% else %}
                 autoUpdateInput: false,
-            {% endif %}
+                {% endif %}
             });
             function changeProjectDeliverDates(start, end) {
                 ajaxcall("projects/changeProjectDeliverDates.php", {"projects_id": "{{ project.projects_id }}","projects_dates_deliver_start":start,"projects_dates_deliver_end":end}, function (data) {
@@ -1290,10 +1289,10 @@
                 timePickerIncrement: 1,
                 singleDatePicker: true,
                 locale: {
-                    format: 'DD MMM YYYY hh:mm A'
+                    format: 'YYYY. MM. DD. HH:mm'
                 },
-                startDate: "{{ "now"|date("j M Y h:i:sa") }}",
-                maxDate:"{{ "now"|date("j M Y h:i:sa") }}",
+                startDate: "{{ 'now'|date('Y. m. d. H:i') }}",
+                maxDate: "{{ 'now'|date('Y. m. d. H:i') }}",
             });
             $(".newPayment").click(function () {
                 var type = $(this).data("type");

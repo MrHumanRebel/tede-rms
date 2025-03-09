@@ -441,14 +441,14 @@
                 timePicker: true,
                 timePickerIncrement: 15,
                 locale: {
-                    format: 'DD MMM YYYY hh:mm A'
+                    format: 'YYYY. MM. DD. HH:mm'
                 },
                 {% if job.maintenanceJobs_timestamp_due %}
                 startDate: "{{ job.maintenanceJobs_timestamp_due|date("j M Y h:i:sa") }}",
                 {% endif %}
             });
             $('#datePickerInputDue').on('apply.daterangepicker', function(ev, picker) {
-                ajaxcall("maintenance/job/changeDueDate.php", {"maintenanceJobs_id": "{{ job.maintenanceJobs_id }}","maintenanceJobs_timestamp_due":picker.startDate.format('DD MMM YYYY hh:mm A')}, function (data) {
+                ajaxcall("maintenance/job/changeDueDate.php", {"maintenanceJobs_id": "{{ job.maintenanceJobs_id }}","maintenanceJobs_timestamp_due":picker.startDate.format('YYYY. MM. DD. HH:mm')}, function (data) {
                     location.reload();
                 });
             });

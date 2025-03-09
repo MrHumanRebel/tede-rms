@@ -463,12 +463,12 @@ $(document).ready(function () {
         timePicker: true,
         timePickerIncrement: 15,
         locale: {
-            format: 'DD MMM YYYY hh:mm A'
+            format: 'YYYY. MM. DD. HH:mm'
         },
         autoUpdateInput: false,
     });
     $('#assetSearchForm input[name ="dates"]').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('DD MMM YYYY hh:mm A') + ' - ' + picker.endDate.format('DD MMM YYYY hh:mm A'));
+        $(this).val(picker.startDate.format('YYYY. MM. DD. HH:mm') + ' - ' + picker.endDate.format('YYYY. MM. DD. HH:mm'));
     });
     $('#assetSearchForm input[name ="dates"]').on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
