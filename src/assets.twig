@@ -36,7 +36,7 @@
                                         <option value="{{ term }}" selected>{{ term }}</option>
                                     {% endfor %}
                                 </select>
-                                <small class="form-text text-muted">Seperate multiple keywords with a comma</small>
+                                <small class="form-text text-muted">Több kulcsszót vesszővel válasszon el</small>
                             </div>
                             <div class="form-group">
                                 <label>Címke</label>
@@ -127,6 +127,17 @@
                                     <option {{ searchResults.SEARCH.TERMS.SORT == "date-a" ? 'selected' : '' }}  value="date-a">Hozzáadás dátuma (legkorábbi elöl)</option>
                                 </select>
                             </div>
+
+                            
+                            <style>
+                                .mb-1 {
+                                    margin-bottom: 15px;
+                                }
+
+                                .mb-1 span {
+                                    margin-left: 15px;
+                                }
+                            </style>
                             <div class="mb-1">
                                 <input type="checkbox" name="showlinked" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.SHOWLINKED ? "checked" : "" }}>
                                 <span>Az egyes eszközökhöz rendelt eszközök megjelenítése</span>
@@ -482,7 +493,7 @@ $(document).ready(function () {
         theme: "bootstrap4",
         minimumInputLength: 1,
         width: '100%',
-        placeholder: "SD7T, Viper, Wash, Condenser, CYC, Dynamic, Clamp",
+        placeholder: "WPC, WMP, MPT",
     });
     $('#assetSearchForm select[name ="tags[]"]').select2({
         tags: true,
@@ -491,7 +502,7 @@ $(document).ready(function () {
         theme: "bootstrap4",
         minimumInputLength: 1,
         width: '100%',
-        placeholder: "A-1053, A-0056, T-2401, D-1402",
+        placeholder: "A-1053, D-0056",
     });
     $('#assetSearchForm select[name ="manufacturer[]"]').select2({
         tags: false,
@@ -500,7 +511,7 @@ $(document).ready(function () {
         minimumInputLength: 0,
         width: '100%',
         minimumResultsForSearch: 1,
-        placeholder: "Enter some manufacturer names to search",
+        placeholder: "Adjon meg néhány gyártónevet a kereséshez",
         ajax: {
             delay: 250,
             url: "{{ CONFIG.ROOTURL }}/api/manufacturer/search.php",
@@ -536,7 +547,7 @@ $(document).ready(function () {
         minimumInputLength: 0,
         width: '100%',
         minimumResultsForSearch: 1,
-        placeholder: "Enter some category names to search",
+        placeholder: "Adjon meg néhány kategórianevet a kereséshez",
         ajax: {
             delay: 250,
             url: "{{ CONFIG.ROOTURL }}/api/categories/search.php",
@@ -572,7 +583,7 @@ $(document).ready(function () {
         minimumInputLength: 1,
         width: '100%',
         minimumResultsForSearch: 1,
-        placeholder: "Enter some group names to search",
+        placeholder: "Adjon meg néhány csoportnevet a kereséshez",
         ajax: {
             delay: 250,
             url: "{{ CONFIG.ROOTURL }}/api/groups/search.php",
@@ -651,7 +662,7 @@ $(document).ready(function () {
     $(".removeFromBasketAssetButton").click(function () {
         var assetId = $(this).data("assetid");
         bootbox.confirm({
-            message: "Are you sure you wish to remove this asset from the project?",
+            message: "Biztosan el szeretné távolítani ezt az eszközt a projektből?",
             buttons: {
                 confirm: {
                     label: 'Igen',
