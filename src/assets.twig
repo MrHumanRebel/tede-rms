@@ -19,10 +19,8 @@
         <form method="get" action="{{CONFIG.ROOTURL}}/assets.php" id="assetSearchForm">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Assets</h3>
+                    <h3 class="card-title">Eszközök</h3>
                     <div class="card-tools">
-<a href="{{ CONFIG.LINKS_USERGUIDEURL }}assets/finding-assets/" target="_blank" class="btn btn-tool">Help</a>
-
                         <a href="{{ CONFIG.ROOTURL }}/api/assets/export.php?xlsx" class="btn btn-tool" title="Excel Export"><i class="fas fa-file-excel"></i></a>
                         <a href="{{ CONFIG.ROOTURL }}/api/assets/export.php?csv" class="btn btn-tool" title="CSV Export"><i class="fas fa-file-csv"></i></a>
                         <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
@@ -32,7 +30,7 @@
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="form-group">
-                                <label>Keyword</label>
+                                <label>Kulcsszó</label>
                                 <select class="form-control select2bs4" multiple="multiple" name="keyword[]">
                                     {% for term in searchResults.SEARCH.TERMS.KEYWORDS %}
                                         <option value="{{ term }}" selected>{{ term }}</option>
@@ -41,7 +39,7 @@
                                 <small class="form-text text-muted">Seperate multiple keywords with a comma</small>
                             </div>
                             <div class="form-group">
-                                <label>Tag</label>
+                                <label>Címke</label>
                                 <select class="form-control select2bs4" multiple="multiple" name="tags[]">
                                     {% for tag in searchResults.SEARCH.TERMS.TAGS %}
                                         <option value="{{ tag }}" selected>{{ tag }}</option>
@@ -49,7 +47,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Manufacturer</label>
+                                <label>Gyártó</label>
                                 <select class="form-control select2bs4" multiple name="manufacturer[]">
                                     {% for manufacturer in searchResults.SEARCH['SELECTED_TERMS']['MANUFACTURER'] %}
                                         <option value="{{ manufacturer.manufacturers_id }}" selected>{{ manufacturer.manufacturers_name }}</option>
@@ -60,7 +58,7 @@
                         </div>
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="form-group">
-                                <label>Group</label>
+                                <label>Csoport</label>
                                 <select class="form-control select2bs4" name="group[]" multiple>
                                     {% for group in searchResults.SEARCH['SELECTED_TERMS']['GROUPS'] %}
                                         <option value="{{ group.assetGroups_id }}" selected>{{ group.assetGroups_name }}</option>
@@ -68,7 +66,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Category</label>
+                                <label>Kategória</label>
                                 <select class="form-control select2bs4" multiple name="category[]">
                                     {% for category in searchResults.SEARCH['SELECTED_TERMS']['CATEGORY'] %}
                                         <option value="{{ category.assetCategories_id }}" selected>{{ category.assetCategoriesGroups_name }} - {{ category.assetCategories_name }}</option>
@@ -76,7 +74,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Business</label>
+                                <label>Vállalkozás</label>
                                 <select class="form-control select2 select2bs4" name="instance_id">
                                     {% for instance in USERDATA.instances %}
                                         <option {{ searchResults.SEARCH.INSTANCE_ID == instance.instances_id ? 'selected' : '' }}  value="{{instance.instances_id}}">{{instance.instances_name}}</option>
@@ -87,9 +85,9 @@
                         <div class="col-12 col-md-6 col-lg-4">
                             {% if "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN"|instancePermissions %}
                                 <div class="form-group">
-                                    <label>Project to assign assets to</label>
+                                    <label>Projekt, amelyhez eszközöket rendelhetsz</label>
                                     <select class="form-control select2 select2bs4" name="project">
-                                        <option value="">No project selected</option>
+                                        <option value="">Nincs kiválasztott projekt</option>
                                         {% for project in searchOptions.projects %}
                                             <option {{ searchResults.SEARCH.PROJECT_ID == project.projects_id ? 'selected' : '' }}  value="{{ project.projects_id }}">{{ project.projects_name }}{{ project.clients_name ? " | " ~ project.clients_name : "" }}</option>
                                         {% endfor %}
@@ -99,13 +97,13 @@
                                     <input type="hidden" name="project_referer" value="{{ searchResults.SEARCH.PROJECT_REFERER }}">
                                 {% endif %}
                             {% else %}
-                            <div class="form-group">
-                                <label>Show availability between</label>
-                                <input type="text" class="form-control" name="dates" value="{{ searchResults.SEARCH.TERMS['DATE-START'] ? searchResults.SEARCH.TERMS['DATE-START'] ~ " - " ~ searchResults.SEARCH.TERMS['DATE-END'] }}" />
-                            </div>
+                                <div class="form-group">
+                                    <label>Elérhetőség megjelenítése az alábbi időpontok között</label>
+                                    <input type="text" class="form-control" name="dates" value="{{ searchResults.SEARCH.TERMS['DATE-START'] ? searchResults.SEARCH.TERMS['DATE-START'] ~ " - " ~ searchResults.SEARCH.TERMS['DATE-END'] }}" />
+                                </div>
                             {% endif %}
                             <div class="form-group">
-                                <label>Number of results per page</label>
+                                <label>Eredmények száma oldalanként</label>
                                 <select class="form-control select2 select2bs4" name="resultsperpage">
                                     <option {{ searchResults.SEARCH.PAGE_LIMIT == 10 ? 'selected' : '' }}>10</option>
                                     <option {{ searchResults.SEARCH.PAGE_LIMIT == 20 ? 'selected' : '' }}>20</option>
@@ -113,38 +111,38 @@
                                     <option {{ searchResults.SEARCH.PAGE_LIMIT == 100 ? 'selected' : '' }}>100</option>
                                 </select>
                             </div>
+                        </div>
                             <div class="form-group">
-                                <label>Sort by</label>
+                                <label>Rendezés</label>
                                 <select class="form-control select2 select2bs4" name="sort">
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "price-a" ? 'selected' : '' }}  value="price-a">Weekly Price (low-high)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "price-d" ? 'selected' : '' }}  value="price-d">Weekly Price (high-low)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "value-a" ? 'selected' : '' }}  value="value-a">Value (low-high)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "value-d" ? 'selected' : '' }}  value="value-d">Value (high-low)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "alphabet-a" ? 'selected' : '' }}  value="alphabet-a">Alphabetical (A-Z)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "alphabet-d" ? 'selected' : '' }}  value="alphabet-d">Alphabetical (Z-A)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "mass-a" ? 'selected' : '' }}  value="mass-a">Mass (low-high)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "mass-d" ? 'selected' : '' }}  value="mass-d">Mass (high-low)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "date-d" ? 'selected' : '' }}  value="date-d">Date Added (most recent first)</option>
-                                    <option {{ searchResults.SEARCH.TERMS.SORT == "date-a" ? 'selected' : '' }}  value="date-a">Date Added (oldest first)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "price-a" ? 'selected' : '' }}  value="price-a">Heti ár (alacsony-magas)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "price-d" ? 'selected' : '' }}  value="price-d">Heti ár (magas-alacsony)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "value-a" ? 'selected' : '' }}  value="value-a">Érték (alacsony-magas)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "value-d" ? 'selected' : '' }}  value="value-d">Érték (magas-alacsony)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "alphabet-a" ? 'selected' : '' }}  value="alphabet-a">ABC sorrend (A-Z)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "alphabet-d" ? 'selected' : '' }}  value="alphabet-d">ABC sorrend (Z-A)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "mass-a" ? 'selected' : '' }}  value="mass-a">Tömeg (alacsony-magas)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "mass-d" ? 'selected' : '' }}  value="mass-d">Tömeg (magas-alacsony)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "date-d" ? 'selected' : '' }}  value="date-d">Hozzáadás dátuma (legújabb elöl)</option>
+                                    <option {{ searchResults.SEARCH.TERMS.SORT == "date-a" ? 'selected' : '' }}  value="date-a">Hozzáadás dátuma (legkorábbi elöl)</option>
                                 </select>
                             </div>
                             <div class="mb-1">
                                 <input type="checkbox" name="showlinked" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.SHOWLINKED ? "checked" : "" }}>
-                                <span>Show assets linked to others</span>
+                                <span>Az egyes eszközökhöz rendelt eszközök megjelenítése</span>
                             </div>
                             <div class="mb-1">
                                 <input type="checkbox" name="showarchived" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.SHOWARCHIVED ? "checked" : "" }}>
-                                <span>Show archived assets</span>
+                                <span>Archivált eszközök megjelenítése</span>
                             </div>
                             <div class="mb-1">
                                 <input type="checkbox" name="hideimages" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.HIDEIMAGES ? "checked" : "" }}>
-                                <span>Hide asset images</span>
+                                <span>Eszköz képek elrejtése</span>
                             </div>
-                        </div>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary btn-lg ">Search</button>
+                    <button type="submit" class="btn btn-primary btn-lg ">Keresés</button>
                 </div>
             </div>
         </form>
