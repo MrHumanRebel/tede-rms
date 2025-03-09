@@ -11,6 +11,12 @@ $projectsStatus = $DBLIB->getValue("projectsStatuses","projectsStatuses_id",1);
 
 $hasProjectDates = isset($_POST['projects_dates_use_start']) and isset($_POST['projects_dates_use_end']);
 
+// Define a helper function to format the date
+function formatDate($dateStr) {
+    $date = DateTime::createFromFormat('Y. m. d. H:i', $dateStr);
+    return $date ? $date->format('Y-m-d H:i:s') : null;
+}
+
 $project = $DBLIB->insert("projects", [
     "projects_name" => $_POST['projects_name'],
     "instances_id" => $AUTH->data['instance']['instances_id'],
@@ -20,14 +26,16 @@ $project = $DBLIB->insert("projects", [
     "projectsTypes_id" => $_POST['projectsType_id'],
     "projectsStatuses_id" => $projectsStatus,
     "projects_parent_project_id" => ($_POST['projects_parent_project_id'] ?? null),
-    "projects_dates_use_start" => $hasProjectDates ? date("Y-m-d H:i:s", strtotime($_POST['projects_dates_use_start'])) : null,
-    "projects_dates_use_end" => $hasProjectDates ? date("Y-m-d H:i:s", strtotime($_POST['projects_dates_use_end'])) : null
+    "projects_dates_use_start" => $hasProjectDates ? formatDate($_POST['projects_dates_use_start']) : null,
+    "projects_dates_use_end" => $hasProjectDates ? formatDate($_POST['projects_dates_use_end']) : null
 ]);
+
 if (!$project) finish(false, ["code" => "CREATE-PROJECT-FAIL", "message"=> "Could not create new project"]);
 
 $bCMS->auditLog("INSERT", "projects",null, $AUTH->data['users_userid'],null, $project);
 $bCMS->auditLog("UPDATE-NAME", "projects", "Set the name to ". $_POST['projects_name'], $AUTH->data['users_userid'],null, $project);
 finish(true, null, ["projects_id" => $project]);
+
 
 /** @OA\Post(
  *     path="/projects/new.php", 
