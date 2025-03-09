@@ -23,15 +23,19 @@ jobs:
         env:
           TAG: ${{ github.event.release.tag_name }}
 
+      - name: Debug GitHub Context
+        run: |
+          echo "GitHub Context: ${{ toJson(github) }}"
+
       - name: Docker github meta
         id: docker_github_meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/MrHumanRebel/adam-rms-hun  # Updated to the new forked repository
+          images: ghcr.io/MrHumanRebel/adam-rms-hun
           context: git
           labels: |
             maintainer=adam-rms
-            org.opencontainers.image.source=https://github.com/MrHumanRebel/adam-rms-hun  # Updated to the new forked repository
+            org.opencontainers.image.source=https://github.com/MrHumanRebel/adam-rms-hun
             org.opencontainers.image.documentation=https://adam-rms.com/self-hosting
             org.opencontainers.image.url=https://adam-rms.com
             org.opencontainers.image.vendor="Bithell Studios Ltd."
@@ -73,7 +77,6 @@ jobs:
             echo "Error: Tag name is empty!" >&2
             exit 1
           fi
-          # Convert tag to lowercase
           LOWER_TAG=$(echo "$TAG" | tr '[:upper:]' '[:lower:]')
           echo "lower_tag=$LOWER_TAG" >> $GITHUB_ENV
         shell: bash
@@ -85,7 +88,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm64/v8
           push: ${{ github.event_name != 'pull_request' }}
-          # Use the lowercase tag from the previous step
           tags: ghcr.io/MrHumanRebel/adam-rms-hun:${{ env.lower_tag }}
           labels: ${{ steps.docker_github_meta.outputs.labels }}
           annotations: ${{ steps.docker_github_meta.outputs.annotations }}
