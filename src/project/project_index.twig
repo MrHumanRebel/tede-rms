@@ -1198,7 +1198,7 @@
                         {% set STATUSESAVAILABLE = [] %}
                         {% for STATUS in POSSIBLEPROJECTSTATUSES %}
                             {
-                                text: "{{ (STATUS.projectsStatuses_name ~ " (" ~ STATUS.projectsStatuses_description ~ ')')|escape('js') }}",
+                                text: "{{ STATUS.projectsStatuses_name }}{% if STATUS.projectsStatuses_description != '' %} ({{ STATUS.projectsStatuses_description }}){% endif %}",
                                 value: '{{ STATUS.projectsStatuses_id }}',
                             },
                             {% if STATUS.projectsStatuses_assetsReleased == 1 %}

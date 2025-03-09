@@ -22,11 +22,11 @@ jobs:
         id: docker_github_meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ghcr.io/MrHumanRebel/adam-rms-hun  # Updated to the new forked repository
           context: git
           labels: |
             maintainer=adam-rms
-            org.opencontainers.image.source=https://github.com/adam-rms/adam-rms
+            org.opencontainers.image.source=https://github.com/MrHumanRebel/adam-rms-hun  # Updated to the new forked repository
             org.opencontainers.image.documentation=https://adam-rms.com/self-hosting
             org.opencontainers.image.url=https://adam-rms.com
             org.opencontainers.image.vendor="Bithell Studios Ltd."
