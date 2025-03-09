@@ -32,7 +32,7 @@
                                 <span class="text">
                                     {{crew.crewAssignments_role}} -
                                     {% if crew.users_userid is null and crew.crewAssignments_personName is null %}
-                                        <i>Vacant</i>
+                                        <i>Szabad</i>
                                     {% elseif crew.users_name1 %}
                                         {% if "BUSINESS:USERS:VIEW:INDIVIDUAL_USER"|instancePermissions %}
                                             <a href="{{ CONFIG.ROOTURL }}/user.php?id={{ crew.users_userid }}">
@@ -64,7 +64,7 @@
     <div class="col">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="card-title">Crew Role Vacancies</h3>
+                <h3 class="card-title">Szabad Személyzet Pozíciók</h3>
                 {% if "PROJECTS:PROJECT_CREW:EDIT:CREW_RECRUITMENT"|instancePermissions %}
                 <a href="{{ CONFIG.ROOTURL }}/project/crew/vacantCrew.php?id={{ project.projects_id }}" type="button" class="btn btn-secondary btn-sm ml-auto">Manage</a>
                 {% endif %}
@@ -74,7 +74,7 @@
             <div class="alert alert-info">
                 <p class="my-auto">
                     <i class="fas fa-info-circle"></i> 
-                    There are currently no crew vacancies for this project.
+                    Jelenleg nincsenek szabad pozíciók ehhez a projekthez.
                 </p>
             </div>
         {% endif %}
@@ -86,28 +86,28 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <h5>Description</h5>
+                            <h5>Leírás</h5>
                             <p>{{ role.projectsVacantRoles_description }}</p>
-                            <h5>Person Specification</h5>
+                            <h5>Elvárások</h5>
                             <p>{{ role.projectsVacantRoles_personSpecification }}</p>
                             {% if role.projectsVacantRoles_deadline %}
                                 <p>
-                                    <strong>Deadline: </strong>
+                                    <strong>Határidő: </strong>
                                     {{ role.projectsVacantRoles_deadline|date("d M Y h:ia") }}
                                 </p>
                             {% endif %}
                             <p>
-                                <strong>Places Remaining: </strong>
+                                <strong>Helyek száma: </strong>
                                 {{ role.projectsVacantRoles_slots - role.projectsVacantRoles_slotsFilled }}
                             </p>
                             <div class="project-actions text-center">
                                 <div class="btn-group">
                                     <a type="button" class="btn btn-default btn-sm" href="{{CONFIG.ROOTURL}}/project/crew/vacancy.php?id={{ role.projectsVacantRoles_id }}&from=project">
-                                        More Info and
+                                        További információk és
                                         {% if role.projectsVacantRoles_firstComeFirstServed %}
-                                        Sign Up
+                                        Jelentkezés
                                         {% else %}
-                                        Apply
+                                        Pályázat
                                         {% endif %}
                                     </a>
                                 </div>

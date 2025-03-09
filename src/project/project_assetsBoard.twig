@@ -67,7 +67,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Quick Dispatch</h4>
+                <h4 class="modal-title">Gyors Kiadás</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -90,7 +90,7 @@
                         <div class="tab-pane show active p2" id="quick-dispatch-modal-board-thisinstance" role="tabpanel" aria-labelledby="asset-list-tabs-profile-tab">
                             <p>Enter an asset's tag from {{ USERDATA.instance.instances_name }} to set its status.</p>
                             <div class="form-group">
-                                <label>Set Asset Status to</label>
+                                <label>Állítsa be az eszköz státuszát erre</label>
                                 <select class="form-control assetStatusSelectorQuickDispatch" data-instanceid="{{ USERDATA.instance["instances_id"] }}">
                                     {% for status in BOARDSTATUSES[USERDATA.instance["instances_id"]] %}
                                     <option value="{{ status['assetsAssignmentsStatus_id'] }}">{{ status['assetsAssignmentsStatus_name'] }}</option>
@@ -102,7 +102,7 @@
                         <div class="tab-pane p2" id="quick-dispatch-modal-board-instance{{ instance['instance']['instances_id'] }}">
                             <p>Enter an asset's tag from {{  instance['instance'].instances_name }} tag to set its status.</p>
                             <div class="form-group">
-                                <label>Set Asset Status to</label>
+                                <label>Állítsa be az eszköz státuszát erre</label>
                                 <select class="form-control assetStatusSelectorQuickDispatch" data-instanceid="{{ instance['instance']['instances_id'] }}">
                                     {% for status in BOARDSTATUSES[instance['instance']['instances_id']] %}
                                     <option value="{{ status['assetsAssignmentsStatus_id'] }}">{{ status['assetsAssignmentsStatus_name'] }}</option>
@@ -186,7 +186,7 @@
             drawButtons();
             Toast.fire({
                 type: 'success',
-                title: 'Asset Status Updated'
+                title: 'Eszköz státusza frissítve'
             });
         });
     }

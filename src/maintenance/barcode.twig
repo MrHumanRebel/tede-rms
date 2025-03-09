@@ -197,11 +197,11 @@
                         message: 'Would you like to change your location to ' + assetResult.response.location['locations_name'] + '?',
                         buttons: {
                             confirm: {
-                                label: 'Yes',
+                                label: 'Igen',
                                 className: 'btn-danger'
                             },
                             cancel: {
-                                label: 'No',
+                                label: 'Nem',
                                 className: 'btn-default'
                             }
                         
@@ -220,11 +220,11 @@
                             message: `No asset found with this barcode in {{ USERDATA.instance.instances_name }}.<br/>Would you like to associate the barcode ${barcodeValue} (type ${barcodeType}) with an asset in {{ USERDATA.instance.instances_name }}?`,
                             buttons: {
                                 confirm: {
-                                    label: 'Yes',
+                                    label: 'Igen',
                                     className: 'btn-success'
                                 },
                                 cancel: {
-                                    label: 'No',
+                                    label: 'Nem',
                                     className: 'btn-default'
                                 }
                             },
@@ -236,7 +236,7 @@
                                             message: 'Would you like to assciate this barcode with the asset in {{ USERDATA.instance.instances_name }} that has the Tag ' + assetResult.response.assetSuggest['assets_tag'] + '? The asset is a ' + assetResult.response.assetSuggest['assetTypes_name'] + ' (' + assetResult.response.assetSuggest['manufacturers_name'] + ')',
                                             buttons: {
                                                 confirm: {
-                                                    label: 'Yes',
+                                                    label: 'Igen',
                                                     className: 'btn-default'
                                                 },
                                                 cancel: {
@@ -313,11 +313,11 @@
                 message: 'Are you sure you wish to delete this barcode? All scan history for this barcode will be lost',
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Igen',
                         className: 'btn-danger'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Nem',
                         className: 'btn-success'
                     }
                 
@@ -425,11 +425,11 @@
                         message: 'Would you like to change the assets tag to ' + $("#selectAnAssetToAssign-barcode").val() + '?',
                         buttons: {
                             confirm: {
-                                label: 'Yes',
+                                label: 'Igen',
                                 className: 'btn-default'
                             },
                             cancel: {
-                                label: 'No',
+                                label: 'Nem',
                                 className: 'btn-default'
                             }
                     },

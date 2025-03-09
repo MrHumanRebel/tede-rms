@@ -1,7 +1,7 @@
 {% if project.auditLog|length > 0 %}
     <div class="card">
         <div class="card-body">
-            <!-- The time line -->
+            <!-- Az idővonal -->
             <div class="timeline">
                 {% set currentDate = '' %}
                 {% for event in project.auditLog %}
@@ -24,23 +24,23 @@
                                 <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("h:i:sa") }}</span>
                                 <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2}} </a>
                                     {% if event.auditLog_actionType == "QUICKCOMMENT" %}
-                                        added a comment
+                                        hozzászólt
                                     {% elseif event.auditLog_actionType == "INSERT" %}
-                                        created the project
+                                        létrehozta a projektet
                                     {% elseif event.auditLog_actionType == "ARCHIVE" %}
-                                        archived the project
+                                        archiválta a projektet
                                     {% elseif event.auditLog_actionType == "UNARCHIVE" %}
-                                        removed the project from the archive
+                                        eltávolította a projektet az archiválásból
                                     {% elseif event.auditLog_actionType in ['CHANGE-MANAGER','UPDATE-NAME','UPDATE-STATUS','CHANGE-CLIENT'] %}
                                         {{ event.auditLog_actionData }}
                                     {% else %}
-                                        edited the project
+                                        szerkesztette a projektet
                                     {% endif %}
                                 </h3>
                                 {% if event.auditLog_actionType == "QUICKCOMMENT" %}
                                     <div class="timeline-body">{{ event.auditLog_actionData|raw }}</div>
                                 {% elseif event.auditLog_actionType in ['INSERT', 'ARCHIVE','UNARCHIVE','CHANGE-MANAGER','UPDATE-NAME','UPDATE-STATUS','CHANGE-CLIENT'] %}
-                                    {# Blank #}
+                                    {# Üres #}
                                 {% else %}
                                     <div class="timeline-body" style="font-style: italic;">{{event.auditLog_actionData|nl2br }}</div>
                                 {% endif %}

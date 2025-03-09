@@ -1,7 +1,7 @@
 {% if project.projectsStatuses_assetsReleased %} 
     <div class="alert alert-danger">
-        <h5>Assets not locked - assets are released</h5>
-        Assets assigned to this project are not exclusive (because of its status) and can be assigned to other projects that clash with this one. Update project status before confirming with client
+        <h5>Eszközök nincsenek lezárva - az eszközök fel vannak szabadítva</h5>
+        A projekthez rendelt eszközök nem kizárólagosak (a státusz miatt), és más projekteknél is felhasználhatók, amelyek ütközhetnek ezzel a projekttel. Frissítse a projekt státuszát, mielőtt megerősíti az ügyféllel.
     </div>
 {% endif %}
 {% for assetAssignment in FINANCIALS.assetsAssigned %}
@@ -32,32 +32,31 @@
             <li class="pt-2 px-3">
                 <div class="card-tools">
                     {% if "PROJECTS:PROJECT_ASSETS:EDIT:ASSIGNMNET_COMMENT"|instancePermissions %}
-                        <button type="button" class="btn btn-tool" title="Set comment for assignment" id="setAssetAssignmentComment">
+                        <button type="button" class="btn btn-tool" title="Komment beállítása a hozzárendeléshez" id="setAssetAssignmentComment">
                             <i class="far fa-comment"></i></button>
                     {% endif %}
                     {% if "PROJECTS:PROJECT_ASSETS:EDIT:DISCOUNT"|instancePermissions and project.projectsTypes_config_finance == 1 %}
-                        <button type="button" class="btn btn-tool" title="Set discount" id="setAssetAssignmentDiscount">
+                        <button type="button" class="btn btn-tool" title="Kedvezmény beállítása" id="setAssetAssignmentDiscount">
                             <i class="fas fa-percent"></i></button>
                     {% endif %}
                     {% if "PROJECTS:PROJECT_ASSETS:EDIT:CUSTOM_PRICE"|instancePermissions and project.projectsTypes_config_finance == 1 %}
-                        <button type="button" class="btn btn-tool" title="Set custom price" id="setAssetAssignmentPrice">
+                        <button type="button" class="btn btn-tool" title="Egyéni ár beállítása" id="setAssetAssignmentPrice">
                             <i class="fas fa-coins"></i></button>
                     {% endif %}
                     {% if "PROJECTS:PROJECT_ASSETS:EDIT:ASSIGNMENT_STATUS"|instancePermissions %}
-                        <button type="button" class="btn btn-tool" title="Set status" id="setAllAssetStatus">
+                        <button type="button" class="btn btn-tool" title="Státusz beállítása" id="setAllAssetStatus">
                             <i class="fas fa-clipboard-check"></i></button>
                     {% endif %}
                     {% if "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN"|instancePermissions %}
-                        <button type="button" class="btn btn-tool" title="Swap Asset" id="swapAsset">
+                        <button type="button" class="btn btn-tool" title="Eszköz csere" id="swapAsset">
                             <i class="fas fa-sync"></i>
                         </button>
-                        <button type="button" class="btn btn-tool" title="Remove assets" id="setAssetAssignmentDelete">
+                        <button type="button" class="btn btn-tool" title="Eszközök eltávolítása" id="setAssetAssignmentDelete">
                             <i class="fas fa-trash"></i></button>
                     {% endif %}
-                    <button type="button" class="btn btn-tool" title="Expand All" id="expandAll">
-                        <i class="fas fa-angle-down"></i> Expand</button>
-<a type="button" class="btn btn-tool" href="{{ CONFIG.LINKS_USERGUIDEURL }}projects/assets" target="_blank">Help</a>
-
+                    <button type="button" class="btn btn-tool" title="Mindet kibővíteni" id="expandAll">
+                        <i class="fas fa-angle-down"></i> Kiterjesztés</button>
+                    <a type="button" class="btn btn-tool" href="{{ CONFIG.LINKS_USERGUIDEURL }}projects/assets" target="_blank">Segítség</a>
                 </div>
             </li>
         </ul>
@@ -181,8 +180,8 @@
             var selected = getSelected();
             if (selected.length > 0) {
                 bootbox.prompt({
-                    title: "Set Comment",
-                    message: "This will override any existing comments set in this project for the assets selected",
+                    title: "Komment beállítása",
+                    message: "Ez felülírja a projektben a kiválasztott eszközökhöz már beállított kommenteket.",
                     inputType: 'text',
                     callback: function (result) {
                         if (result) {
@@ -203,8 +202,8 @@
             var selected = getSelected();
             if (selected.length > 0) {
                 bootbox.prompt({
-                    title: "Set Custom Price",
-                    message: "This will override the automatic calculation of the hire cost normally based on the length of the project and instead fix it to value set here<br/>Setting a custom price of 0 will remove any custom prices set<br/><br/>This will override any existing custom prices set in this project for the assets selected",
+                    title: "Egyéni ár beállítása",
+                    message: "Ez felülírja a bérleti díj automatikus számítását, amely általában a projekt hosszúsága alapján történik, és helyette itt megadott értékre állítja.<br/>Ha az egyéni ár 0-ra van állítva, akkor eltávolítja az összes korábban megadott egyéni árat.<br/><br/>Ez felülírja a projektben a kiválasztott eszközökhöz már beállított egyéni árakat.",
                     inputType: 'number',
                     min: 0,
                     step: 0.01,
@@ -227,8 +226,8 @@
             var selected = getSelected();
             if (selected.length > 0) {
                 bootbox.prompt({
-                    title: "Set Discount",
-                    message: "Discounts the selected assets by a percentage.<br /><br />E.g. Inputting 20 would multiply the price by 0.8, inputting 100 would set the price to 0, or inputting 0 would be full price.<br />This will override any existing discounts set in this project for the assets selected.",
+                    title: "Kedvezmény beállítása",
+                    message: "Kedvezményt ad a kiválasztott eszközökhöz egy százalékos arányban.<br /><br />Pl. Ha 20-at ad meg, akkor az ár 0,8-szal szorzódik, ha 100-at ad meg, akkor az ár 0-ra csökken, vagy ha 0-t ad meg, akkor teljes árat jelent.<br />Ez felülírja a projektben a kiválasztott eszközökhöz már beállított kedvezményeket.",
                     inputType: 'number',
                     min: 0,
                     max: 100,
@@ -252,14 +251,14 @@
             var selected = getSelected();
             if (selected.length > 0) {
                 bootbox.confirm({
-                    message: "Are you sure you wish to remove these assets from the project? This will have billing implications",
+                    message: "Biztosan el akarja távolítani ezeket az eszközöket a projektből? Ez számlázási következményekkel járhat.",
                     buttons: {
                         cancel: {
-                            label: 'No',
+                            label: 'Nem',
                             className: 'btn-success'
                         },
                         confirm: {
-                            label: 'Yes',
+                            label: 'Igen',
                             className: 'btn-danger'
                         }
                     },
@@ -280,12 +279,12 @@
             if (selected.length < 1) {
                 Toast.fire({
                     type: 'error',
-                    title: 'Please select an asset.'
+                    title: 'Kérjük, válasszon ki egy eszközt.'
                 });
             } else if (selected.length > 1) {
                 Toast.fire({
                     type: 'error',
-                    title: 'Please select just one asset.'
+                    title: 'Kérjük, válasszon ki csak egy eszközt.'
                 });
             } else {
                 //we have some assets, lets swap them
@@ -325,7 +324,7 @@
                         //no assets exist, so let user know
                         Toast.fire({
                             type: 'info',
-                            title: ' No assets available to swap!'
+                            title: 'Nincs elérhető eszköz a cseréhez!'
                         });
                     }
                 });
@@ -336,9 +335,9 @@
         $("#setAllAssetStatus").click(function () {
             let selected = getSelected();
             if (selected.length > 0) {
-                popupTitle = "Set status of selected assets in {{ project.projects_name }}"
+                popupTitle = "Állítsa be a kiválasztott eszközök státuszát a(z) {{ project.projects_name }} projektben"
             } else {
-                popupTitle = "Set status of all assets in {{ project.projects_name }}"
+                popupTitle = "Állítsa be az összes eszköz státuszát a(z) {{ project.projects_name }} projektben"
             }
             bootbox.prompt({
                 title: popupTitle,
