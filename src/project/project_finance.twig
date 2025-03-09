@@ -3,96 +3,87 @@
     <div class="col-lg-6 col-md-6 col-sm-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Overview</h3>
+                <h3 class="card-title">Áttekintés</h3>
             </div>
             <div class="card-body p-0">
                 <table class="table">
                     <tr>
                         <td style="width: 35%;">
-                            Equipment SubTotal
+                            Felszerelés Összesen
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.prices.subTotal|money }}
+                            {{ FINANCIALS.prices.subTotal|money|replace({'.00':''}) }}
                         </td>
                         <td style="width: 35%;">
-                            Sales
+                            Értékesítés
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.sales.total|money }}
+                            {{ FINANCIALS.payments.sales.total|money|replace({'.00':''}) }}
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 35%;">
-                            {% if FINANCIALS.prices.discounts|moneyPositive %}Discounts{% else %}Adjustments{% endif %}
+                            {% if FINANCIALS.prices.discounts|moneyPositive %}Kedvezmények{% else %}Módosítások{% endif %}
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {% if FINANCIALS.prices.discounts|moneyPositive %}&#8209;{{ FINANCIALS.prices.discounts|money }}{% else %}None{% endif %}
+                            {% if FINANCIALS.prices.discounts|moneyPositive %}&#8209;{{ FINANCIALS.prices.discounts|money|replace({'.00':''}) }}{% else %}Nincs{% endif %}
                         </td>
                         <td style="width: 35%;">
-                            Staffing
+                            Munkavállalók
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.staff.total|money }}
+                            {{ FINANCIALS.payments.staff.total|money|replace({'.00':''}) }}
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 35%;">
-                            <b>Equipment Total</b>
+                            <b>Felszerelés Összesen</b>
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.prices.total|money }}
+                            {{ FINANCIALS.prices.total|money|replace({'.00':''}) }}
                         </td>
-                        <td  style="width: 35%;">
-                            Additional Hires
+                        <td style="width: 35%;">
+                            További bérlemények
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.subHire.total|money }}
+                            {{ FINANCIALS.payments.subHire.total|money|replace({'.00':''}) }}
                         </td>
                     </tr>
                     <tr style="background-color: rgba(0,0,0,.03);">
                         <td style="width: 35%;">
-                            SubTotal
+                            Összesen
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.subTotal|money }}
+                            {{ FINANCIALS.payments.subTotal|money|replace({'.00':''}) }}
                         </td>
                         <td style="width: 35%;">
-                            Payments Received to Date
+                            Kifizetések Eddig
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            &#8209;{{ FINANCIALS.payments.received.total|money }}
+                            &#8209;{{ FINANCIALS.payments.received.total|money|replace({'.00':''}) }}
                         </td>
                     </tr>
                     <tr>
-                        <td style="width: 35%;">
-
+                        <td style="width: 35%;">  
                         </td>
-                        <td style="width: 15%;text-align: right;">
-
+                        <td style="width: 15%;text-align: right;">  
                         </td>
                         <td style="width: 35%;">
-                            <b>Grand Total Outstanding</b>
+                            <b>Összes Kintlévőség</b>
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.total|money }}
+                            {{ FINANCIALS.payments.total|money|replace({'.00':''}) }}
                         </td>
                     </tr>
                 </table>
             </div>
             <div class="card-footer">
                 <div class="btn-group float-right">
-<a href="{{ CONFIG.LINKS_USERGUIDEURL }}projects/finance" target="_blank" type="button" class="btn btn-info">Help</a>
-
                     {% if "PROJECTS:PROJECT_PAYMENTS:CREATE"|instancePermissions %}
-                        <button type="button" class="btn btn-default newPayment" data-type="1">Add Payment Received</button>
-                        <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                            <span class="sr-only">Toggle Dropdown</span>
-                            <div class="dropdown-menu" role="menu">
-                                <a class="dropdown-item newPayment" data-type="2" href="#">Add Sales Item</a>
-                                <a class="dropdown-item newPayment" data-type="3" href="#">Add Additional Hire</a>
-                                <a class="dropdown-item newPayment" data-type="4" href="#">Add Staff Cost</a>
-                            </div>
-                        </button>
+                        <button type="button" class="btn btn-default newPayment" data-type="1">Kifizetés hozzáadása</button>
+                        <button type="button" class="btn btn-default newPayment" data-type="2">Értékesítési tétel hozzáadása</button>
+                        <button type="button" class="btn btn-default newPayment" data-type="3">További bérlemény hozzáadása</button>
+                        <button type="button" class="btn btn-default newPayment" data-type="4">Munkavállalói költség hozzáadása</button>
                     {% endif %}
                 </div>
             </div>
@@ -101,7 +92,7 @@
     <div class="col-lg-6 col-md-6 col-sm-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Invoice Notes</h3>
+                <h3 class="card-title">Számla Megjegyzések</h3>
             </div>
             <div class="card-body">
                 {% if project.projects_invoiceNotes|nl2br %}
@@ -123,17 +114,17 @@
     <div class="col-lg-6 col-md-6 col-sm-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Payments Received</h3>
+                <h3 class="card-title">Kifizetések</h3>
             </div>
             <div class="card-body p-0">
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Reference</th>
-                        <th>Date</th>
-                        <th>Method</th>
-                        <th>Comment</th>
-                        <th>Amount</th>
+                        <th>Hivatkozás</th>
+                        <th>Dátum</th>
+                        <th>Módszer</th>
+                        <th>Megjegyzés</th>
+                        <th>Összeg</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -144,7 +135,7 @@
                             <td>{{ payment.payments_date|date("d/M/Y G:i:s") }}</td>
                             <td>{{ payment.payments_method }}</td>
                             <td>{{ payment.payments_comment|nl2br }}</td>
-                            <td>{{ payment.payments_amount|money }}</td>
+                            <td>{{ payment.payments_amount|money|replace({'.00':''}) }}</td>
                             <td style="min-width:140px;">
                                 {% if "PROJECTS:PROJECT_PAYMENTS:VIEW:FILE_ATTACHMENTS"|instancePermissions %}
                                     <button data-toggle="modal" data-target="#filesModal{{ payment.payments_id }}" type="button" class="btn btn-outline-secondary btn-sm">{{ (payment.files|length > 0 ? payment.files|length ~ '&nbsp;' : '')|raw }}<i class="fas fa-paperclip" style="display:inline;"></i></button>
@@ -165,16 +156,16 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Sales</h3>
+                    <h3 class="card-title">Értékesítés</h3>
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>Quantity</th>
-                            <th style="width: 100%;">Comment</th>
-                            <th>Amount</th>
-                            <th>Total</th>
+                            <th>Mennyiség</th>
+                            <th style="width: 100%;">Megjegyzés</th>
+                            <th>Összeg</th>
+                            <th>Összesen</th>
                             <th style="min-width:140px;"></th>
                         </tr>
                         </thead>
@@ -192,8 +183,8 @@
                             <tr>
                                 <td style="width: 10px;">{{ payment.payments_quantity }}x</td>
                                 <td>{{ payment.payments_comment|nl2br }}</td>
-                                <td style="width:100px;">{{ payment.payments_amount|money }}</td>
-                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money }}</td>
+                                <td style="width:100px;">{{ payment.payments_amount|money|replace({'.00':''}) }}</td>
+                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({'.00':''}) }}</td>
                                 <td>
                                     {% if "PROJECTS:PROJECT_PAYMENTS:VIEW:FILE_ATTACHMENTS"|instancePermissions %}
                                         <button data-toggle="modal" data-target="#filesModal{{ payment.payments_id }}" type="button" class="btn btn-outline-secondary btn-sm">{{ (payment.files|length > 0 ? payment.files|length ~ '&nbsp;' : '')|raw }}<i class="fas fa-paperclip" style="display:inline;"></i></button>
@@ -214,16 +205,16 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Additional Hires</h3>
+                    <h3 class="card-title">További bérlemények</h3>
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>Quantity</th>
-                            <th style="width: 100%;">Comment</th>
-                            <th>Amount</th>
-                            <th>Total</th>
+                            <th>Mennyiség</th>
+                            <th style="width: 100%;">Megjegyzés</th>
+                            <th>Összeg</th>
+                            <th>Összesen</th>
                             <th style="min-width:140px;"></th>
                         </tr>
                         </thead>
@@ -241,8 +232,8 @@
                             <tr>
                                 <td style="width: 10px;">{{ payment.payments_quantity }}x</td>
                                 <td>{{ payment.payments_comment|nl2br }}</td>
-                                <td style="width:100px;">{{ payment.payments_amount|money }}</td>
-                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money }}</td>
+                                <td style="width:100px;">{{ payment.payments_amount|money|replace({'.00':''}) }}</td>
+                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({'.00':''}) }}</td>
                                 <td>
                                     {% if "PROJECTS:PROJECT_PAYMENTS:VIEW:FILE_ATTACHMENTS"|instancePermissions %}
                                         <button data-toggle="modal" data-target="#filesModal{{ payment.payments_id }}" type="button" class="btn btn-outline-secondary btn-sm">{{ (payment.files|length > 0 ? payment.files|length ~ '&nbsp;' : '')|raw }}<i class="fas fa-paperclip" style="display:inline;"></i></button>
@@ -263,17 +254,17 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Staff</h3>
+                    <h3 class="card-title">Munkavállalók</h3>
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>Quantity</th>
-                            <th>Supplier</th>
-                            <th style="width: 100%;">Comment</th>
-                            <th>Amount</th>
-                            <th>Total</th>
+                            <th>Mennyiség</th>
+                            <th>Megnevezés</th>
+                            <th style="width: 100%;">Megjegyzés</th>
+                            <th>Összeg</th>
+                            <th>Összesen</th>
                             <th style="min-width:140px;"></th>
                         </tr>
                         </thead>
@@ -283,8 +274,8 @@
                                 <td style="width: 10px;">{{ payment.payments_quantity }}x</td>
                                 <td>{{ payment.payments_supplier|nbsp}}</td>
                                 <td>{{ payment.payments_comment|nl2br }}</td>
-                                <td style="width:100px;">{{ payment.payments_amount|money }}</td>
-                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money }}</td>
+                                <td style="width:100px;">{{ payment.payments_amount|money|replace({'.00':''}) }}</td>
+                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({'.00':''}) }}</td>
                                 <td>
                                     {% if "PROJECTS:PROJECT_PAYMENTS:VIEW:FILE_ATTACHMENTS"|instancePermissions %}
                                         <button data-toggle="modal" data-target="#filesModal{{ payment.payments_id }}" type="button" class="btn btn-outline-secondary btn-sm">{{ (payment.files|length > 0 ? payment.files|length ~ '&nbsp;' : '')|raw }}<i class="fas fa-paperclip" style="display:inline;"></i></button>

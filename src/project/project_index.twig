@@ -153,10 +153,10 @@
                                                     {% endif %}
                                                     <div class="text-muted">
                                                         {% if "PROJECTS:EDIT:CLIENT"|instancePermissions and project.projectsTypes_config_client == 1 %}
-                                                            <p class="text-sm">Client</p>
+                                                            <p class="text-sm">Ügyfél</p>
                                                             <select class="form-control select2bs4" multiple id="editProjectClient">
                                                                 {% if project.clients_id == "" %}
-                                                                    <option value="" disabled selected>No Client Selected....</option>
+                                                                    <option value="" disabled selected>Nincs ügyfél kiválasztva...</option>
                                                                 {% endif %}
                                                                 {% for client in clients %}
                                                                     {% if client.clients_archived == 0 or ((client.clients_archived == 1) and (project.clients_id == client.clients_id) ) %}
@@ -165,7 +165,7 @@
                                                                 {% endfor %}
                                                             </select>
                                                         {% elseif project.projectsTypes_config_client == 1  %}
-                                                            <p class="text-sm">Client
+                                                            <p class="text-sm">Ügyfél
                                                                 <b class="d-block">
                                                                     <a  style="color: inherit; text-decoration: inherit;"  {% if "CLIENTS:VIEW"|instancePermissions %}href="{{ CONFIG.ROOTURL }}/clients.php"{% endif %}>
                                                                         {{ project.clients_name }}</a>
@@ -173,14 +173,14 @@
                                                             </p>
                                                         {% endif %}
                                                         {% if "PROJECTS:EDIT:LEAD"|instancePermissions %}
-                                                            <p class="text-sm">Project Manager</p>
+                                                            <p class="text-sm">Projektmenedzser</p>
                                                             <select class="form-control select2bs4" multiple id="editProjectManager">
                                                                 {% for user in potentialProjectManagers %}
                                                                     <option value="{{ user.users_userid }}" {{ project.users_userid == user.users_userid ? 'selected' }}>{{ (user.users_name1 ~ " " ~ user.users_name2) }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         {% else %}
-                                                            <p class="text-sm">Project Manager
+                                                            <p class="text-sm">Projektmenedzser
                                                                 <b class="d-block">
                                                                     {% if "BUSINESS:USERS:VIEW:INDIVIDUAL_USER"|instancePermissions %}
                                                                     <a style="color: inherit; text-decoration: inherit;" href="{{ CONFIG.ROOTURL }}/user.php?id={{ project.projects_manager }}">
@@ -193,10 +193,10 @@
                                                             </p>
                                                         {% endif %}
                                                         {% if "PROJECTS:EDIT:ADDRESS"|instancePermissions and project.projectsTypes_config_venue == 1  %}
-                                                            <p class="text-sm">Venue</p>
+                                                            <p class="text-sm">Helyszín</p>
                                                             <select class="form-control select2bs4" multiple id="editProjectAddress">
                                                                 {% if project.locations_id == "" %}
-                                                                    <option value="" disabled selected>No Location Selected....</option>
+                                                                    <option value="" disabled selected>Nincs helyszín kiválasztva...</option>
                                                                 {% endif %}
                                                                 {% for location in locations %}
                                                                     <option value="{{ location.locations_id }}" {{ project.locations_id == location.locations_id ? 'selected' }} {{ location.locations_archived == 1 ? 'disabled' }}>{{ location.locations_archived == 1 ? '[Archived] ' }}{{ location.locations_name }}</option>
@@ -208,11 +208,11 @@
                                                                 {% endfor %}
                                                             </select>
                                                         {% elseif project.projectsTypes_config_venue == 1 %}
-                                                            <p class="text-sm">Venue
+                                                            <p class="text-sm">Helyszín
                                                                 <b class="d-block"><a  style="color: inherit; text-decoration: inherit;"  {% if "LOCATIONS:VIEW"|instancePermissions %}href="{{ CONFIG.ROOTURL }}/location/"{% endif %}>{{ project.locations_name }}</a></b>
                                                             </p>
                                                         {% endif %}
-                                                        <p class="text-sm">Dates
+                                                        <p class="text-sm">Dátumok
                                                             {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
@@ -225,7 +225,7 @@
                                                         {% endif %}
                                                         </p>
                                                         {% if project.projectsTypes_config_assets == 1 %}
-                                                            <p class="text-sm">Dates assets in use
+                                                            <p class="text-sm">Dátumok amikor az eszközök használva vannak
                                                             {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
                                                                 <div class="input-group">
                                                                     <div class="input-group-prepend">
@@ -235,32 +235,32 @@
                                                                 </div>
                                                                 {% if project.projects_dates_use_start %}
                                                                     <div style="width: 100%;text-align: right;">
-                                                                        <a href="#" id="copyProjectDatesToDeliverDates">Copy from Project Dates</a>
+                                                                        <a href="#" id="copyProjectDatesToDeliverDates">Ugyan az mint a projekt dátumai</a>
                                                                     </div>
                                                                 {% endif %}
                                                             {% else %}
                                                                 <b class="d-block">{{ project.projects_dates_deliver_start ? project.projects_dates_deliver_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_deliver_end|date("Y. m. d. H:i") }}</b>
                                                             {% endif %}
                                                             </p>
-                                                            <p class="text-sm">Project duration for asset pricing purposes
+                                                            <p class="text-sm">Projekt időtartama az eszközárazás céljából
                                                             {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
                                                                 <div class="input-group">
                                                                     <div class="input-group-prepend">
-                                                                        <span class="input-group-text">Weeks</span>
+                                                                        <span class="input-group-text">Hetek</span>
                                                                     </div>
-                                                                    <input type="number" min="0" step="1" max="256" value="{{ FINANCIALS['priceMaths']["weeks"] }}" class="form-control float-right" required id="financeDurationMathsWeeks">
+                                                                    <input type="number" min="0" step="1" max="256" value="{{ FINANCIALS['priceMaths']["weeks"] }}" class="form-control float-right" required id="financeDurationMathsHetek">
                                                                     <span class="input-group-text">Days</span>
                                                                     <input type="number" min="0" step="1" max="256" value="{{ FINANCIALS['priceMaths']["days"] }}" class="form-control float-right" required id="financeDurationMathsDays">
                                                                     <div class="input-group-append">
-                                                                        <button class="btn btn-default" type="button" id="financeDurationMathsSave">Save</button>
+                                                                        <button class="btn btn-default" type="button" id="financeDurationMathsSave">Mentés</button>
                                                                     </div>
                                                                 </div>
                                                                 {% if project.projects_dates_use_start %}
                                                                 <div style="width: 100%;text-align: right;">
                                                                     {% if project.projects_dates_finances_days is same as(null) and project.projects_dates_finances_weeks is same as (null) %}
-                                                                        Project duration is currently based on project dates
+                                                                        A projekt időtartama jelenleg a projekt dátumain alapul
                                                                     {% else %}
-                                                                     <a href="#" id="copyProjectDatesToFinanceDurationMaths">Sync to Project Dates ({{ FINANCIALS['priceMaths']["calendarDays"] }} day{{ FINANCIALS['priceMaths']["calendarDays"] == 1 ? '' : 's' }})</a>
+                                                                     <a href="#" id="copyProjectDatesToFinanceDurationMaths">Szinkronizálás a projekt dátumaival ({{ FINANCIALS['priceMaths']["calendarDays"] }} day{{ FINANCIALS['priceMaths']["calendarDays"] == 1 ? '' : 's' }})</a>
                                                                     {% endif %}
                                                                 </div>
                                                                 {% endif %}
@@ -272,7 +272,7 @@
                                                     </div>
                                                     <br/>
                                                     {% if project.projects_parent_project_id and project.projects_status_follow_parent %}
-                                                    <div class="alert alert-info mb-1"><p>This sub-project is following the status of its parent project</p></div> 
+                                                    <div class="alert alert-info mb-1"><p>Ez az alprojekt a szülőprojekt állapotát követi</p></div> 
                                                     {% endif %}
                                                     <div class="alert" style="background-color: {{ project.projectsStatuses_backgroundColour }}; color: {{ project.projectsStatuses_foregroundColour }};">
                                                         <h5><b>Status: </b>{{ project.projectsStatuses_name }}</h5>
@@ -283,26 +283,26 @@
                                         </div>
                                         <div class="card-footer">
                                             <div class="btn-group float-right">
-                                                <button type="button" class="btn btn-default quickAddCommentButton">New Comment</button>
+                                                <button type="button" class="btn btn-default quickAddCommentButton">Új megjegyzés</button>
                                                 {% if "PROJECTS:EDIT:STATUS"|instancePermissions and not( project.projects_parent_project_id and project.projects_status_follow_parent) %}
-                                                    <button type="button" class="btn btn-secondary" id="editProjectStatus">Change Status</button>
+                                                    <button type="button" class="btn btn-secondary" id="editProjectStatus">Állapot módosítása</button>
                                                 {% endif %}
                                                 <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                    <span class="sr-only">Legördülő menü váltása</span>
                                                     <div class="dropdown-menu" role="menu">
                                                         {% if "PROJECTS:CREATE"|instancePermissions %}
                                                             {% if project.subProjects == null %}
-                                                                <a class="dropdown-item" id="assignParentProject">Assign Parent Project</a>
+                                                                <a class="dropdown-item" id="assignParentProject">Szülőprojekt hozzárendelése</a>
                                                             {% endif %}
                                                             {% if project.projects_parent_project_id == null %}
                                                                 {% if canCreateSubProjects %}
-                                                                    <a class="dropdown-item" id="newSubProject">New Sub-Project</a>
+                                                                    <a class="dropdown-item" id="newSubProject">Új alprojekt</a>
                                                                 {% endif %}
                                                             {% else %}
                                                                 {% if project.projects_status_follow_parent %}
-                                                                    <a class="dropdown-item" id="stopFollowParent">Stop Following Parent Status</a>
+                                                                    <a class="dropdown-item" id="stopFollowParent">Szülő állapot követésének leállítása</a>
                                                                 {% else %}
-                                                                    <a class="dropdown-item" id="followParent">Follow Parent Status</a>
+                                                                    <a class="dropdown-item" id="followParent">Szülő állapot követése</a>
                                                                 {% endif %}
                                                             {% endif %}
                                                             {% if project.projects_parent_project_id == null or project.subProjects == null %}
@@ -310,25 +310,27 @@
                                                             {% endif %}
                                                         {% endif %}
                                                         {% if "PROJECTS:EDIT:NAME"|instancePermissions %}
-                                                            <a class="dropdown-item" id="editProjectName" href="#">Edit Name</a>
+                                                            <a class="dropdown-item" id="editProjectName" href="#">Név szerkesztése</a>
                                                         {% endif %}
                                                         {% if "PROJECTS:EDIT:DESCRIPTION_AND_SUB_PROJECTS"|instancePermissions %}
-                                                            <a class="dropdown-item" id="editProjectDescription" href="#">Edit Description</a>
+                                                            <a class="dropdown-item" id="editProjectDescription" href="#">Leírás szerkesztése</a>
                                                         {% endif %}
-                                                        {% if "PROJECTS:EDIT:NAME"|instancePermissions or "PROJECTS:EDIT:DESCRIPTION_AND_SUB_PROJECTS"|instancePermissions%}
+                                                        {% if "PROJECTS:EDIT:NAME"|instancePermissions or "PROJECTS:EDIT:DESCRIPTION_AND_SUB_PROJECTS"|instancePermissions %}
                                                             <div class="dropdown-divider"></div>
                                                         {% endif %}
                                                         {% if "PROJECTS:EDIT:PROJECT_TYPE"|instancePermissions and potentialProjectTypes|length > 1 %}
-                                                            <a class="dropdown-item" id="editProjectType" href="#">Change Project Type</a>
+                                                            <a class="dropdown-item" id="editProjectType" href="#">Projekt típusának módosítása</a>
                                                         {% endif %}
                                                         {% if "PROJECTS:ARCHIVE"|instancePermissions %}
                                                             {% if project.projects_archived == 1 %}
-                                                                <a class="dropdown-item" id="archiveProject" href="#">Remove from Archive</a>
+                                                                <a class="dropdown-item" id="archiveProject" href="#">Eltávolítás az archívumból</a>
                                                             {% else %}
-                                                                <a class="dropdown-item" id="archiveProject" href="#">Archive</a>
+                                                                <a class="dropdown-item" id="archiveProject" href="#">Archiválás</a>
                                                             {% endif %}
                                                         {% endif %}
-                                                        {% if "PROJECTS:DELETE"|instancePermissions %}<a class="dropdown-item" id="deleteProject" href="#">Delete</a>{% endif %}
+                                                        {% if "PROJECTS:DELETE"|instancePermissions %}
+                                                            <a class="dropdown-item" id="deleteProject" href="#">Törlés</a>
+                                                        {% endif %}
                                                     </div>
                                                 </button>
                                             </div>
@@ -339,7 +341,7 @@
                                     {% if project.auditLog|length > 0 %}
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3 class="card-title">Comments</h3>
+                                                <h3 class="card-title">Megjegyzések</h3>
                                                 <div class="card-tools">
                                                     <button type="button" class="btn btn-tool quickAddCommentButton" title="New Project comment" >
                                                         <i class="fas fa-plus"></i></button>
@@ -363,7 +365,7 @@
                                                                 <i class="far fa-comment bg-blue"></i>
                                                                 <div class="timeline-item">
                                                                     <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("H:i") }}</span>
-                                                                    <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> commented
+                                                                    <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> hozzászólt
                                                                     </h3>
                                                                     <div class="timeline-body">{{ event.auditLog_actionData|raw }}</div>
                                                                 </div>
@@ -457,41 +459,41 @@
                         </div>
                         <select class="form-control" name="payments_method">
                             <option selected></option>
-                            <option>Credit Card</option>
-                            <option>Debit Card</option>
-                            <option>Bank Transfer</option>
-                            <option>Cash</option>
-                            <option>Cheque</option>
-                            <option>Other</option>
+                            <option>Hitelkártya</option>
+                            <option>Bankkártya</option>
+                            <option>Banki átutalás</option>
+                            <option>Készpénz</option>
+                            <option>Csekk</option>
+                            <option>Egyéb</option>
                         </select>
                     </div>
                     <div class="input-group mb-3 newPaymentModal-nonPaymentOnly">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Quantity</span>
+                            <span class="input-group-text">Mennyiség</span>
                         </div>
                         <input class="form-control" type="number" step="1" min="0" value="1" name="payments_quantity">
                     </div>
                     <div class="input-group mb-3 newPaymentModal-nonPaymentOnly">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Supplier</span>
+                            <span class="input-group-text">Szállító</span>
                         </div>
                         <input class="form-control" type="text" name="payments_supplier">
                     </div>
                     <div class="input-group" style="margin-bottom: 5px;">
-                        <div class="input-group-prepend"><span class="input-group-text">Description</span></div>
+                        <div class="input-group-prepend"><span class="input-group-text">Leírás</span></div>
                         <textarea class="form-control" rows="3" name="payments_comment"  placeholder=""></textarea>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Amount {{ moneySymbol() }}</span>
+                            <span class="input-group-text">Összeg {{ moneySymbol() }}</span>
                         </div>
                         <input class="form-control" type="number" step="0.01" min="0" value="0" name="payments_amount">
                     </div>
                 </form>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="newPaymentModal-button">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Bezárás</button>
+                <button type="button" class="btn btn-primary" id="newPaymentModal-button">Változtatások mentése</button>
             </div>
         </div>
     </div>
@@ -525,7 +527,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Crew to {{ project.projects_name }}</h4>
+                        <h4 class="modal-title">Csapat hozzáadása {{ project.projects_name }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -538,19 +540,19 @@
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">Role</span>
+                                    <span class="input-group-text">Beosztás</span>
                                 </div>
                                 <input class="form-control" type="text" name="crewAssignments_role" minlength="2" required placeholder="Head Flyman">
                             </div>
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">Comment</span></div>
+                                <div class="input-group-prepend"><span class="input-group-text">Hozzászólás</span></div>
                                 <textarea class="form-control" rows="3" name="crewAssignments_comment" placeholder="Making own way to venue - bringing key to operate drum revolve. Designated FirstAider"></textarea>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="addCrewModal-button">Add</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Bezárás</button>
+                        <button type="button" class="btn btn-primary" id="addCrewModal-button">Hozzáadás</button>
                     </div>
                 </div>
             </div>
@@ -561,7 +563,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Crew Emails for {{ project.projects_name }}</h4>
+                        <h4 class="modal-title">Crew e-mailek a(z)  {{ project.projects_name }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -570,7 +572,7 @@
                         <pre>{% for crew in project.crewAssignments  %}{% if crew.users_email != null %}{{ crew.users_name1 }} {{ crew.users_name2 }} &lt;{{ crew.users_email }}&gt;,{% endif %}{% endfor %}</pre>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Bezárás</button>
                         <a href="mailto:?subject={{ project.projects_name }}&bcc={% for crew in project.crewAssignments  %}{% if crew.users_email != null %}{{ crew.users_email }},{% endif %}{% endfor %}" type="button" class="btn btn-primary">Launch Email Client</a>
                     </div>
                 </div>
@@ -583,7 +585,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Payment Files</h4>
+                        <h4 class="modal-title">Kifizetési fájlok</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -612,7 +614,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Project Files</h4>
+                    <h4 class="modal-title">Projekt fájlok</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -638,7 +640,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Project Quotes</h4>
+                    <h4 class="modal-title">Projekt Árajánlatok</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -656,7 +658,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Project Invoices</h4>
+                    <h4 class="modal-title">Projekt Számlák</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -685,100 +687,101 @@
                         <div class="form-group">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="instancelogo" {% if USERDATA.instance.instances_logo %}checked{% else %}disabled{% endif %}>
-                                <label class="form-check-label">Business Logo</label>
+                                <label class="form-check-label">Vállalati logó</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="addresses" checked>
-                                <label class="form-check-label">Addresses</label>
+                                <label class="form-check-label">Címek</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="pmdetails" checked>
-                                <label class="form-check-label">Project Manager</label>
+                                <label class="form-check-label">Projektmenedzser</label>
                             </div>
                             {% if project.projectsTypes_config_assets == 1 %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="totalmass" checked>
-                                    <label class="form-check-label">Total Mass</label>
+                                    <label class="form-check-label">Teljes tömeg</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="totalvalue" checked>
-                                    <label class="form-check-label">Total Value</label>
+                                    <label class="form-check-label">Teljes érték</label>
                                 </div>
                             {% endif %}
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="venue" checked>
-                                <label class="form-check-label">Venue</label>
+                                <label class="form-check-label">Helyszín</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="invoiceNotes" checked>
-                                <label class="form-check-label">Invoice Notes</label>
+                                <label class="form-check-label">Számla megjegyzések</label>
                             </div>
                             {% if project.projectsTypes_config_assets == 1 %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="assets" checked>
-                                    <label class="form-check-label">Equipment List</label>
+                                    <label class="form-check-label">Berendezések listája</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="showAll">
-                                    <label class="form-check-label">Individual Items in Equipment List</label>
+                                    <label class="form-check-label">Egyéni tételek a berendezés listájában</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="flagsBlocks" checked>
-                                    <label class="form-check-label">Flags &amp; Blocks in Equipment List</label>
+                                    <label class="form-check-label">Zászlók és blokkok a berendezés listájában</label>
                                 </div>
-
 
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="checkboxes">
-                                    <label class="form-check-label">Equipment Checkboxes</label>
+                                    <label class="form-check-label">Berendezés jelölőnégyzetek</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="comments">
-                                    <label class="form-check-label">Equipment Comments</label>
+                                    <label class="form-check-label">Berendezés megjegyzések</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="masses" checked>
-                                    <label class="form-check-label">Equipment Masses</label>
+                                    <label class="form-check-label">Berendezés tömegei</label>
                                 </div>
                             {% endif %}
+
                             {% if "PROJECTS:PROJECT_PAYMENTS:VIEW"|instancePermissions and project.projectsTypes_config_finance == 1  %}
                                 <hr/>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="finance" checked>
-                                    <label class="form-check-label">Financial Totals</label>
+                                    <label class="form-check-label">Pénzügyi összegek</label>
                                 </div>
                                 {% if project.projectsTypes_config_assets == 1 %}
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="prices" checked>
-                                        <label class="form-check-label">Prices</label>
+                                        <label class="form-check-label">Árak</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="discounts" checked>
-                                        <label class="form-check-label">Equipment Discounts</label>
+                                        <label class="form-check-label">Berendezések kedvezményei</label>
                                     </div>
                                 {% endif %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="subHires" checked>
-                                    <label class="form-check-label">Additional Hires</label>
+                                    <label class="form-check-label">További bérlemények</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="sales" checked>
-                                    <label class="form-check-label">Sales</label>
+                                    <label class="form-check-label">Értékesítés</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="staff" checked>
-                                    <label class="form-check-label">Staff</label>
+                                    <label class="form-check-label">Munkavállalók</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="paymentTerms" checked>
-                                    <label class="form-check-label">Payment Terms</label>
+                                    <label class="form-check-label">Fizetési feltételek</label>
                                 </div>
                             {% endif %}
+
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button type="submit" name="draft" value="true" class="btn btn-default">Draft Printout</button>
-                        <button type="submit" name="upload" value="true" class="btn btn-success">Generate PDF</button>
+                        <button type="submit" name="draft" value="true" class="btn btn-default">Piszkozat nyomtatás</button>
+                        <button type="submit" name="upload" value="true" class="btn btn-success">PDF generálása</button>
                     </div>
                 </div>
             </form>
@@ -800,7 +803,7 @@
             });
             $(".quickAddCommentButton").click(function () {
                 bootbox.dialog({
-                    title: "Enter comment",
+                    title: "Komment hozzáadása",
                     size: 'large',
                     message: '<div id="editor"></div>',
                     buttons: {
@@ -820,7 +823,7 @@
                             }
                         },
                         cancel:{
-                            label: "Cancel",
+                            label: "Mégsem",
                             className: "btn btn-danger",
                         }
                     }
@@ -871,7 +874,7 @@
             {% if "PROJECTS:EDIT:PROJECT_TYPE"|instancePermissions %}
             $("#editProjectType").click(function () {
                 bootbox.prompt({
-                    title: "Change Project Type",
+                    title: "Projekt típusának módosítása",
                     inputType: 'select',
                     value: {{ project.projectsTypes_id }},
                     inputOptions: [
@@ -916,7 +919,7 @@
             {% if "PROJECTS:EDIT:DESCRIPTION_AND_SUB_PROJECTS"|instancePermissions %}
             $("#editProjectDescription").click(function () {
                 bootbox.prompt({
-                    title: "Edit Project Description",
+                    title: "Projekt leírásának szerkesztése",
                     inputType: 'textarea',
                     value: "{{ project.projects_description|escape("js") }}",
                     callback: function (result) {
@@ -935,7 +938,7 @@
             {% if "PROJECTS:EDIT:INVOICE_NOTES"|instancePermissions %}
             $(".editProjectInvoiceNotes").click(function () {
                 bootbox.prompt({
-                    title: "Edit Project Invoice Notes",
+                    title: "Projekt számla megjegyzések szerkesztése",
                     inputType: 'textarea',
                     value: `{{ project.projects_invoiceNotes|escape("js") }}`,
                     callback: function (result) {
@@ -955,14 +958,14 @@
             $("#archiveProject").click(function () {
                 {% if project.projects_archived != 1 %}
                 bootbox.confirm({
-                    message: "Are you sure you wish to archive the project?",
+                    message: "Biztosan archíválni szeretnéd a projektet?",
                     buttons: {
                         confirm: {
-                            label: 'Yes',
+                            label: 'Igen',
                             className: 'btn-danger'
                         },
                         cancel: {
-                            label: 'No',
+                            label: 'Nem',
                             className: 'btn-success'
                         }
                     },
@@ -976,14 +979,14 @@
                 });
                 {% else %}
                 bootbox.confirm({
-                    message: "Are you sure you wish to remove this project from the archive?",
+                    message: "Biztosan el szeretnéd távolítani ezt a projektet az archívumból?",
                     buttons: {
                         confirm: {
-                            label: 'Yes',
+                            label: 'Igen',
                             className: 'btn-danger'
                         },
                         cancel: {
-                            label: 'No',
+                            label: 'Nem',
                             className: 'btn-success'
                         }
                     },
@@ -1001,14 +1004,14 @@
             {% if "PROJECTS:DELETE"|instancePermissions %}
             $("#deleteProject").click(function () {
                 bootbox.confirm({
-                    message: "Are you sure you wish to delete the project?",
+                    message: "Biztosan el szeretnéd törölni a projektet?",
                     buttons: {
                         confirm: {
-                            label: 'Yes',
+                            label: 'Igen',
                             className: 'btn-danger'
                         },
                         cancel: {
-                            label: 'No',
+                            label: 'Nem',
                             className: 'btn-success'
                         }
                     },
@@ -1059,7 +1062,7 @@
                     if (data.response.changed) {
                         location.reload();
                     } else {
-                        var message = "The dates of this project can't be changed because assets assigned to it have been assigned to other projects that clash. <br/><br/> Would you like to automatically remove the following assets from this project? This will have billing implications<br/><br/><br/><table class='table table-bordered'><tr><th>Tag</th><th>Name</th><th>Project Clashing</th></tr>";
+                        var message = "A projekt dátumai nem módosíthatók, mivel az ehhez rendelt eszközök más projektekhez is rendelve vannak, amelyek ütköznek. <br/><br/> Szeretnéd automatikusan eltávolítani a következő eszközöket a projektről? Ez számlázási következményekkel járhat.<br/><br/><br/><table class='table table-bordered'><tr><th>Címke</th><th>Név</th><th>Ütköző Projekt</th></tr>";
                         $.each(data.response.assets, function( index, value ) {
                             message += "<tr><td>" + value['assets_tag'] + "</td><td>" + value['assetTypes_name'] + "</td><td>" + value['projects_name'] + "</td></tr>";
                         });
@@ -1067,11 +1070,11 @@
                             message: message + "</table>",
                             buttons: {
                                 cancel: {
-                                    label: 'No - cancel date change',
+                                    label: 'Nem - dátum módosításának visszavonása',
                                     className: 'btn-success'
                                 },
                                 confirm: {
-                                    label: 'Yes',
+                                    label: 'Igen',
                                     className: 'btn-danger'
                                 }
                             },
@@ -1098,31 +1101,32 @@
                 });
             }
             $('#datePickerInputDeliver').on('apply.daterangepicker', function(ev, picker) {
-                changeProjectDeliverDates(picker.startDate.format('DD MMM YYYY hh:mm A'),picker.endDate.format('DD MMM YYYY hh:mm A'));
-            });
-            $("#copyProjectDatesToDeliverDates").click(function () {
-                changeProjectDeliverDates($("#datePickerInput").data('daterangepicker').startDate.format('DD MMM YYYY hh:mm A'),$("#datePickerInput").data('daterangepicker').endDate.format('DD MMM YYYY hh:mm A'));
+                changeProjectDeliverDates(picker.startDate.format('YYYY.MM.DD. HH:mm'), picker.endDate.format('YYYY.MM.DD. HH:mm'));
             });
 
-            function setFinanceDurationMathsWeeks(weeks, days) {
+            $("#copyProjectDatesToDeliverDates").click(function () {
+                changeProjectDeliverDates($("#datePickerInput").data('daterangepicker').startDate.format('YYYY.MM.DD. HH:mm'), $("#datePickerInput").data('daterangepicker').endDate.format('YYYY.MM.DD. HH:mm'));
+            });
+
+            function setFinanceDurationMathsHetek(weeks, days) {
                 ajaxcall("projects/changeProjectFinanceDurationMaths.php", {"projects_id": "{{ project.projects_id }}","projects_dates_finances_weeks":weeks,"projects_dates_finances_days":days}, function (data) {
                     location.reload();
                 });
             }
             $("#financeDurationMathsSave").click(function () {
                 var days = $("#financeDurationMathsDays").val();
-                var weeks = $("#financeDurationMathsWeeks").val();
-                setFinanceDurationMathsWeeks(weeks, days);
+                var weeks = $("#financeDurationMathsHetek").val();
+                setFinanceDurationMathsHetek(weeks, days);
             });
             $("#copyProjectDatesToFinanceDurationMaths").click(function () {
-                setFinanceDurationMathsWeeks("-1", "-1");
+                setFinanceDurationMathsHetek("-1", "-1");
             });
 
             {% endif %}
             {% if "PROJECTS:EDIT:NAME"|instancePermissions %}
             $("#editProjectName").click(function () {
                 bootbox.prompt({
-                    title: "Change Project Name",
+                    title: "Projekt név módosítása",
                     inputType: 'text',
                     value: `{{ project.projects_name|escape("js") }}`,
                     callback: function (result) {
@@ -1147,7 +1151,7 @@
                     if (data.response.changed) {
                         location.reload();
                     } else {
-                        var message = "The status of this project can't be changed because assets assigned to it have been assigned to other projects that clash. <br/><br/> Would you like to automatically remove the following assets from this project? This will have billing implications<br/><br/><br/><table class='table table-bordered'><tr><th>Tag</th><th>Name</th><th>Project Clashing</th></tr>";
+                        var message = "A projekt státusza nem módosítható, mert a hozzárendelt eszközök más projektekhez is hozzárendelésre kerültek, amelyek ütköznek. <br/><br/> Szeretné automatikusan eltávolítani a következő eszközöket ebből a projekből? Ez számlázási következményekkel jár. <br/><br/><br/><table class='table table-bordered'><tr><th>Címke</th><th>Név</th><th>Ütköző Projekt</th></tr>";
                         $.each(data.response.assets, function( index, value ) {
                             message += "<tr><td>" + value['assets_tag'] + "</td><td>" + value['assetTypes_name'] + "</td><td>" + value['projects_name'] + "</td></tr>";
                         });
@@ -1155,11 +1159,11 @@
                             message: message + "</table>",
                             buttons: {
                                 cancel: {
-                                    label: 'No',
+                                    label: 'Nem',
                                     className: 'btn-success'
                                 },
                                 confirm: {
-                                    label: 'Yes',
+                                    label: 'Igen',
                                     className: 'btn-danger'
                                 }
                             },
@@ -1177,7 +1181,7 @@
                                             changeStatus(newStatus);
                                         });
                                     {% else %}
-                                    bootbox.alert("Sorry - you don't have permission to remove these assets");
+                                    bootbox.alert("Elnézést, nincs engedélye ezeknek az eszközöknek az eltávolítására.");
                                     {% endif %}
                                 }
                             }
@@ -1187,7 +1191,7 @@
             }
             $("#editProjectStatus").click(function () {
                 bootbox.prompt({
-                    title: "Set project status",
+                    title: "Állítsa be a projekt státuszát",
                     inputType: 'select',
                     value: {{ project.projectsStatuses_id }},
                     inputOptions: [
@@ -1207,14 +1211,14 @@
                             var newStatus = result;                            
                             if ([{{ STATUSESAVAILABLE|join(",") }}].includes(parseInt(newStatus))) {
                                 bootbox.confirm({
-                                    message: "This will allow assets assigned to this project to be assigned to other clashing projects - are you sure you wish to continue?",
+                                    message: "Ez lehetővé teszi, hogy az ehhez a projekthez rendelt eszközök más ütköző projektekhez legyenek rendelve - biztosan folytatni szeretné?",
                                     buttons: {
                                         confirm: {
-                                            label: 'Yes',
+                                            label: 'Igen',
                                             className: 'btn-danger'
                                         },
                                         cancel: {
-                                            label: 'No',
+                                            label: 'Nem',
                                             className: 'btn-success'
                                         }
                                     },
@@ -1262,14 +1266,14 @@
             {% if "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_ALL_BUSINESS_ASSETS"|instancePermissions %}
             $("#addAllAssetsToProject").click(function () {
                 bootbox.confirm({
-                    message: "Are you sure you wish to add all assets in the business that are available to the project?",
+                    message: "Biztosan hozzá szeretné adni az összes, a vállalkozásban elérhető eszközt a projekthez?",
                     buttons: {
                         confirm: {
-                            label: 'Yes',
+                            label: 'Igen',
                             className: 'btn-success'
                         },
                         cancel: {
-                            label: 'Cancel',
+                            label: 'Mégsem',
                             className: 'btn-default'
                         }
                     },
@@ -1302,18 +1306,18 @@
                 $(".newPaymentModal-nonPaymentOnly").show();
                 switch(type) {
                     case 1:
-                        $("#newPaymentModal-title").html("Add payment received");
+                        $("#newPaymentModal-title").html("Kifizetés hozzáadása");
                         $(".newPaymentModal-paymentOnly").show();
                         $(".newPaymentModal-nonPaymentOnly").hide();
                         break;
                     case 2:
-                        $("#newPaymentModal-title").html("Add Sales Item");
+                        $("#newPaymentModal-title").html("Értékesítési tétel hozzáadása");
                         break;
                     case 3:
-                        $("#newPaymentModal-title").html("Add Additional Hire Cost");
+                        $("#newPaymentModal-title").html("További bérleti költség hozzáadása");
                         break;
                     case 4:
-                        $("#newPaymentModal-title").html("Add Staff cost");
+                        $("#newPaymentModal-title").html("Munkavállalói költség hozzáadása");
                         break;
                 }
             });
@@ -1328,14 +1332,14 @@
             $(".deletePaymentButton").click(function () {
                 var id = $(this).data("paymentid");
                 bootbox.confirm({
-                    message: "Are you sure you wish to delete this payment?",
+                    message: "Biztosan törölni szeretné ezt a kifizetést?",
                     buttons: {
                         confirm: {
-                            label: 'Yes',
+                            label: 'Igen',
                             className: 'btn-success'
                         },
                         cancel: {
-                            label: 'Cancel',
+                            label: 'Mégsem',
                             className: 'btn-default'
                         }
                     },
@@ -1393,7 +1397,7 @@
             {% if "PROJECTS:PROJECT_NOTES:CREATE:NOTES"|instancePermissions %}
             $("#newProjectNote").click(function () {
                 bootbox.prompt({
-                    title: "Note Title",
+                    title: "Megjegyzés címe",
                     inputType: 'text',
                     callback: function (result) {
                         if (result) {
@@ -1413,7 +1417,7 @@
                 var id = $(this).data("assignment");
                 var role = $(this).data("role");
                 bootbox.prompt({
-                    title: "Edit Role Name", 
+                    title: "Beosztás név szerkesztése",
                     value: role,
                     callback: function (roleResult) {
                         if (roleResult && roleResult != null) {
@@ -1428,7 +1432,7 @@
                 var id = $(this).data("assignment");
                 var comment = $(this).data("comment");
                 bootbox.prompt({
-                    title: "Edit Role Comment", 
+                    title: "Beosztás megjegyzés szerkesztése", 
                     value: comment,
                     callback: function (commentResult) {
                         console.log(commentResult);
@@ -1441,14 +1445,14 @@
             $(".deleteCrewAssignment").click(function () {
                 var id = $(this).data("assignment");
                 bootbox.confirm({
-                    message: "Are you sure you wish to remove this crew member - they will be notified?",
+                    message: "Biztosan el szeretnéd távolítani ezt a munkatársat? Ő értesítést fog kapni.",
                     buttons: {
                         confirm: {
-                            label: 'Yes',
+                            label: 'Igen',
                             className: 'btn-success'
                         },
                         cancel: {
-                            label: 'Cancel',
+                            label: 'Mégsem',
                             className: 'btn-default'
                         }
                     },
@@ -1547,7 +1551,7 @@
             {% if "PROJECTS:CREATE"|instancePermissions %}
             $("#newSubProject").click(function () {
                 bootbox.prompt({
-                    title: "Select Sub-Project Type",
+                    title: "Válaszd ki az Al-Projekt Típusát",
                     inputType: 'select',
                     inputOptions: [
                         {% for type in potentialProjectTypes %}
@@ -1560,7 +1564,7 @@
                     callback: function (result){
                         if (result) {
                             var projectType = result;
-                            bootbox.prompt("Enter Sub-Project Name", function (result) {
+                            bootbox.prompt("Add meg az Al-Projekt Nevet", function (result) {
                                 if (result) {
                                     ajaxcall("projects/new.php", {
                                         "projects_name": result,
@@ -1579,12 +1583,12 @@
 
             $("#assignParentProject").click(function () {
                 bootbox.prompt({
-                    title: "Choose Parent Project",
+                    title: "Válassza ki a Szülő Projektet",
                     inputType: 'select',
                     value: "{{ (project.projects_parent_project_id ?: '-1') }}",
                     inputOptions: [
                         {
-                            text: 'No Parent',
+                            text: 'Nincs Szülő',
                             value: -1,
                         },
                         {% for allProject in projects %}

@@ -3,7 +3,7 @@
         {% if project.projectsTypes_config_notes == 1 %}
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Notes</h3>
+                    <h3 class="card-title">Megjegyzések</h3>
                 </div>
                 <div class="card-body p-0">
                     <ul class="todo-list">
@@ -35,7 +35,7 @@
         {% if CONFIG.FILES_ENABLED == "Enabled" and USERDATA.instance.instances_storageEnabled == 1 and project.projectsTypes_config_files == 1 %}
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">File Attachments</h3>
+                <h3 class="card-title">Fájl Csatolmányok</h3>
                 <div class="card-tools">
                     <a data-toggle="modal" data-target="#projectFilesModal" type="button" class="btn btn-tool">
                         <i class="fas fa-external-link-alt"></i></a>
@@ -69,7 +69,7 @@
         {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Invoices</h3>
+                <h3 class="card-title">Számlák</h3>
                 {% if invoices %}
                 <div class="card-tools">
                     <a data-toggle="modal" data-target="#projectInvoicesModal" type="button" class="btn btn-tool">
@@ -98,7 +98,7 @@
             <div class="card-footer">
                 <div class="btn-group float-right">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModal">
-                        Create Invoice
+                        Számla Létrehozása
                     </button>
                 </div>
             </div>
@@ -106,7 +106,7 @@
     
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Quotes</h3>
+                <h3 class="card-title">Árajánlatok</h3>
                 {% if quotes %}
                 <div class="card-tools">
                     <a data-toggle="modal" data-target="#projectQuotesModal" type="button" class="btn btn-tool">
@@ -135,7 +135,7 @@
             <div class="card-footer">
                 <div class="btn-group float-right">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModal" data-quote="true">
-                        Create Quote
+                        Árajánlat Létrehozása
                     </button>
                 </div>
             </div>
