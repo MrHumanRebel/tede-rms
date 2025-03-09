@@ -2,15 +2,15 @@
     <thead>
     <tr>
         <th style="width:1px"><input type="checkbox" class="assetAssignmentCheckboxAll" data-instanceid="{{ instanceid }}" /></th>
-        <th style="width:5em">Item</th>
-        <th style="width:35em">{# Comment #}</th>
-        <th style="width:25em">{# Spec #}</th>
-        <th>Status/Location</th>
-        <th style="width:6em;">Mass</th>
+        <th style="width:5em">Tétel</th>
+        <th style="width:35em">Megjegyzés</th>
+        <th style="width:25em">Specifikáció</th>
+        <th>Státusz/Helyszín</th>
+        <th style="width:6em;">Tömeg</th>
         {% if project.projectsTypes_config_finance == 1 %}
             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-                <th style="width:5em;">Price</th>
-                <th style="width:9em;">Discounted Price</th>
+                <th style="width:5em;">Ár</th>
+                <th style="width:9em;">Kedvezményes ár</th>
             {% endif %}
         {% endif %}
     </tr>

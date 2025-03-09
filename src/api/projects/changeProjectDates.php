@@ -1,15 +1,32 @@
 <?php
 require_once __DIR__ . '/../apiHeadSecure.php';
 
-if (!$AUTH->instancePermissionCheck("PROJECTS:EDIT:DATES") or !isset($_POST['projects_id'])) die("404");
+if (!$AUTH->instancePermissionCheck("PROJECTS:EDIT:DATES") or !isset($_POST['projects_id']) || !isset($_POST['projects_dates_use_start']) || !isset($_POST['projects_dates_use_end'])) {
+    die("404");
+}
+
+// Parse the date in "YYYY. MM. DD. HH:mm" format to a valid MySQL datetime format
+$start_date = DateTime::createFromFormat('Y. m. d. H:i', $_POST['projects_dates_use_start']);
+$end_date = DateTime::createFromFormat('Y. m. d. H:i', $_POST['projects_dates_use_end']);
+
+// Check if the dates are valid
+if (!$start_date || !$end_date) {
+    die("Invalid date format");
+}
 
 $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where("projects.projects_deleted", 0);
 $DBLIB->where("projects.projects_id", $_POST['projects_id']);
-$project = $DBLIB->update("projects", ["projects.projects_dates_use_start" => date ("Y-m-d H:i:s", strtotime($_POST['projects_dates_use_start'])), "projects.projects_dates_use_end" => date ("Y-m-d H:i:s", strtotime($_POST['projects_dates_use_end']))]);
-if (!$project) finish(false);
+$project = $DBLIB->update("projects", [
+    "projects.projects_dates_use_start" => $start_date->format("Y-m-d H:i:s"),
+    "projects.projects_dates_use_end" => $end_date->format("Y-m-d H:i:s")
+]);
 
-$bCMS->auditLog("CHANGE-DATE", "projects", "Set the start date to ". date ("D jS M Y h:i:sa", strtotime($_POST['projects_dates_use_start'])) . "\nSet the end date to ". date ("D jS M Y h:i:sa", strtotime($_POST['projects_dates_use_end'])), $AUTH->data['users_userid'],null, $_POST['projects_id']);
+if (!$project) {
+    finish(false);
+}
+
+$bCMS->auditLog("CHANGE-DATE", "projects", "A kezdő dátumot erre állította: " . $start_date->format("D jS M Y h:i:sa") . "\nA befejező dátumot erre állította: " . $end_date->format("D jS M Y h:i:sa"), $AUTH->data['users_userid'], null, $_POST['projects_id']);
 finish(true);
 
 /** @OA\Post(
