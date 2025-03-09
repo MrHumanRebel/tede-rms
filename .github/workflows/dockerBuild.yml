@@ -2,6 +2,9 @@ name: Docker Build & Push
 on:
   release:
     types: [published]
+  workflow_dispatch:  # This enables manual triggering
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
