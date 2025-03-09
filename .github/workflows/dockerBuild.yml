@@ -68,7 +68,14 @@ jobs:
       - name: Convert tag to lowercase
         id: convert_tag
         run: |
-          echo "tag=${{ github.event.release.tag_name }}" | tr '[:upper:]' '[:lower:]' > tag.txt
+          TAG=${{ github.event.release.tag_name }}
+          if [ -z "$TAG" ]; then
+            echo "Error: Tag name is empty!" >&2
+            exit 1
+          fi
+          # Convert tag to lowercase
+          LOWER_TAG=$(echo "$TAG" | tr '[:upper:]' '[:lower:]')
+          echo "lower_tag=$LOWER_TAG" >> $GITHUB_ENV
         shell: bash
 
       - name: Push to GitHub Container Registry
@@ -79,7 +86,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm64/v8
           push: ${{ github.event_name != 'pull_request' }}
           # Use the lowercase tag from the previous step
-          tags: ghcr.io/MrHumanRebel/adam-rms-hun:${{ steps.convert_tag.outputs.tag }} 
+          tags: ghcr.io/MrHumanRebel/adam-rms-hun:${{ env.lower_tag }}
           labels: ${{ steps.docker_github_meta.outputs.labels }}
           annotations: ${{ steps.docker_github_meta.outputs.annotations }}
           cache-from: type=local,src=/tmp/.buildx-cache
