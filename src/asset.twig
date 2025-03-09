@@ -160,7 +160,7 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Név</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -269,7 +269,7 @@
                                 <div class="card" style="margin-bottom:0;">
                                     <div class="card-header p-2">
                                         <ul class="nav nav-pills">
-                                            <li class="nav-item"><a class="nav-link active" href="#editAssetDetails" data-toggle="tab">Details</a></li>
+                                            <li class="nav-item"><a class="nav-link active" href="#editAssetDetails" data-toggle="tab">Részletek</a></li>
                                             <li class="nav-item"><a class="nav-link" href="#linked" data-toggle="tab">Asset Link</a></li>
                                             <li class="nav-item"><a class="nav-link" href="#groups" data-toggle="tab">Groups</a></li>
                                             {% if assetFieldsLength > 0 %}<li class="nav-item"><a class="nav-link" href="#editAssetFields" data-toggle="tab">Custom Fields</a></li>{% endif %}
@@ -309,7 +309,7 @@
                                                         </select>
                                                     </div>
                                                 </form>
-                                                <button class="btn btn-default float-right" id="saveAssetSettingsButton" style="margin-top:10px;margin-bottom:10px;">Save</button>
+                                                <button class="btn btn-default float-right" id="saveAssetSettingsButton" style="margin-top:10px;margin-bottom:10px;">Mentés</button>
                                             </div>
                                             <div class="tab-pane" style="padding: 1.25rem" id="linked">
                                                 <div class="callout">
@@ -325,7 +325,7 @@
                                                         <option value="{{ assets[0]['assets_linkedTo'] }}" selected>{{ assets[0]['link']['assets_tag']|aTag }} ({{ assets[0]['link']['assetTypes_name'] }})</option>
                                                     {% endif %}
                                                 </select>
-                                                <button class="btn btn-default float-right" id="saveAssetLinkChangeButton" style="margin-top:10px;margin-bottom:10px;">Save</button>
+                                                <button class="btn btn-default float-right" id="saveAssetLinkChangeButton" style="margin-top:10px;margin-bottom:10px;">Mentés</button>
                                                 {% if assets[0]['assets_linkedTo'] %}
                                                     <button class="btn btn-warning float-right" id="removeAssetLinkChangeButton" style="margin-top:10px;margin-bottom:10px;">Remove Link</button>
                                                 {% endif %}
@@ -349,7 +349,7 @@
                                                         {% endif %}
                                                     {% endfor %}
                                                 </form>
-                                                <button class="btn btn-default float-right" id="saveAssetDefinableFieldButton" style="margin-top:10px;margin-bottom:10px;">Save</button>
+                                                <button class="btn btn-default float-right" id="saveAssetDefinableFieldButton" style="margin-top:10px;margin-bottom:10px;">Mentés</button>
                                             </div>
                                             {% if "ASSETS:EDIT:OVVERRIDES"|instancePermissions %}
                                                 <div class="tab-pane" style="padding: 1.25rem" id="editAssetDetailsOverrides">
@@ -394,7 +394,7 @@
                                                             <input type="number" step="0.001" min="0" name="assets_weekRate" class="form-control" value="{{ assets[0].assets_weekRate|moneyDecimal }}" />
                                                         </div>
                                                     </form>
-                                                    <button class="btn btn-default float-right" id="editAssetDetailsOverridesButton" style="margin-top:10px;margin-bottom:10px;">Save</button>
+                                                    <button class="btn btn-default float-right" id="editAssetDetailsOverridesButton" style="margin-top:10px;margin-bottom:10px;">Mentés</button>
                                                 </div>
                                             {% endif %}
                                             <div class="tab-pane" style="padding: 1.25rem" id="editAssetType">
@@ -656,7 +656,7 @@
                                                     </div>
                                                 </form>
 
-                                                <button class="btn btn-default float-right" id="addNewJobButton" style="margin-top:10px;margin-bottom:10px;">Save</button>
+                                                <button class="btn btn-default float-right" id="addNewJobButton" style="margin-top:10px;margin-bottom:10px;">Mentés</button>
                                             </div>
                                             <div class="active tab-pane" style="padding: 1.25rem" id="maintenance-flags">
                                                 {% for flag in assets[0].flagsblocks.BLOCK %}
@@ -1038,25 +1038,14 @@
                         </div>
                         {% endif %}
 
-
-
-
-                        {# #############################################################
-                        // TRANSLATION PROGRESS IS HERE
-                        // ############################################################# #}
-
-
-
-
-
                         {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions and (asset.assetInstances_id != null or "ASSETS:EDIT:ANY_ASSET_TYPE"|serverPermissions) and ASSET_INSTANCE.instances_id == USERDATA.instance.instances_id  %}
                         <div class="tab-pane" style="padding:0"  id="settings">
                             <div class="card" style="margin-bottom:0;">
                                 <div class="card-header p-2">
                                     <ul class="nav nav-pills">
-                                        <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab">Details</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#fields" data-toggle="tab">Custom Fields</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#thumbnail" data-toggle="tab">Thumbnails</a></li>
+                                        <li class="nav-item"><a class="nav-link active" href="#details" data-toggle="tab">Részletek</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#fields" data-toggle="tab">Egyedi mezők</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#thumbnail" data-toggle="tab">Miniatűrök</a></li>
                                     </ul>
                                 </div><!-- /.card-header -->
                                 <div class="card-body" style="padding: 0;">
@@ -1069,15 +1058,15 @@
                                             </style>
                                             <form id="addNewForm">
                                             <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text">Name</span></div>
+                                                <div class="input-group-prepend"><span class="input-group-text">Név</span></div>
                                                 <input type="text" class="form-control" name="assetTypes_name" value="{{ asset.assetTypes_name}}" id="addNewType-name" />
                                             </div>
                                             <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text">Description</span></div>
+                                                <div class="input-group-prepend"><span class="input-group-text">Leírás</span></div>
                                                 <textarea class="form-control" rows="3" name="assetTypes_description" id="addNewType-description"  placeholder="">{{ asset.assetTypes_description}}</textarea>
                                             </div>
                                             <div class="input-group">
-                                                <div class="input-group-prepend"><span class="input-group-text">Product Link</span></div>
+                                                <div class="input-group-prepend"><span class="input-group-text">Eszköz link</span></div>
                                                 <input type="url" class="form-control" name="assetTypes_productLink" value="{{ asset.assetTypes_productLink }}" id="addNewType-productLink" maxlength="499" />
                                             </div>
                                             <div class="input-group">
@@ -1095,7 +1084,7 @@
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">
-                                                        Value - {{ moneySymbol() }}
+                                                            Érték - {{ moneySymbol() }}
                                                         </span>
                                                     </div>
                                                     <input type="number" step="0.001" min="0" name="assetTypes_value" value="{{ asset.assetTypes_value|moneyDecimal }}" class="form-control" id="addNewType-value" />
@@ -1104,59 +1093,60 @@
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">
-                                                        Day Rate - {{ moneySymbol() }}
+                                                            Napi díj - {{ moneySymbol() }}
                                                         </span>
                                                     </div>
                                                     <input type="number" step="0.001" min="0" name="assetTypes_dayRate" value="{{ asset.assetTypes_dayRate|moneyDecimal }}" class="form-control" id="addNewType-dayRate" />
                                                     <div class="input-group-append">
-                                                        <div class="input-group-text" id="addNewType-dayRate-guide">Guide 2% of value</div>
+                                                        <div class="input-group-text" id="addNewType-dayRate-guide">Útmutató: 2% az értékből</div>
                                                     </div>
                                                 </div>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">
-                                                        Weekly Rate - {{ moneySymbol() }}
+                                                            Heti díj - {{ moneySymbol() }}
                                                         </span>
                                                     </div>
                                                     <input type="number" step="0.001" min="0" name="assetTypes_weekRate" class="form-control" value="{{ asset.assetTypes_weekRate|moneyDecimal }}" id="addNewType-weekRate" />
                                                     <div class="input-group-append">
-                                                        <div class="input-group-text" id="addNewType-weekRate-guide">Guide 6% of value</div>
+                                                        <div class="input-group-text" id="addNewType-weekRate-guide">Útmutató: 6% az értékből</div>
                                                     </div>
                                                 </div>
                                             {% endif %}
+
                                             <div class="form-group">
-                                                <label>Category</label>
-                                                <select class="form-control  select2bs4 assetSelect2" id="category" name="assetCategories_id">
+                                                <label>Kategória</label>
+                                                <select class="form-control select2bs4 assetSelect2" id="category" name="assetCategories_id">
                                                     {% for category in categories %}
-                                                        <option  {%  if category.assetCategories_id == asset.assetCategories_id %} selected {% endif %} value="{{ category.assetCategories_id }}">{{ category.assetCategoriesGroups_name }} - {{ category.assetCategories_name }}</option>
+                                                        <option {% if category.assetCategories_id == asset.assetCategories_id %} selected {% endif %} value="{{ category.assetCategories_id }}">{{ category.assetCategoriesGroups_name }} - {{ category.assetCategories_name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
-                                            <label>Manufacturer</label>
-                                            <select class="form-control  select2bs4 assetSelect2" id="manufacturer">
+                                            <label>Gyártó</label>
+                                            <select class="form-control select2bs4 assetSelect2" id="manufacturer">
                                                 {% for manufacturer in manufacturers %}
-                                                    <option {%  if manufacturer.manufacturers_id == asset.manufacturers_id %} selected {% endif %} value="{{ manufacturer.manufacturers_id }}">{{ manufacturer.manufacturers_name }}</option>
+                                                    <option {% if manufacturer.manufacturers_id == asset.manufacturers_id %} selected {% endif %} value="{{ manufacturer.manufacturers_id }}">{{ manufacturer.manufacturers_name }}</option>
                                                 {% endfor %}
                                             </select>
                                             </form>
-                                            <button class="btn btn-default float-right" id="saveSettingsButton" style="margin-top:10px;margin-bottom:10px;">Save</button>
-                                        </div>
-                                        <div class="tab-pane" style="padding: 1.25rem" id="fields">
-                                            <div class="callout callout-info">
-                                                <p>Definable fields are specific attributes for assets of this type - for a lighting fixture this might be the lens fitted</p>
+                                            <button class="btn btn-default float-right" id="saveSettingsButton" style="margin-top:10px;margin-bottom:10px;">Mentés</button>
                                             </div>
-                                            <form id="editDefinableFieldsType">
-                                            {% for field in asset.fields %}
-                                                <div class="input-group definableFieldsGroup" data-fieldcount="{{loop.index}}">
-                                                    <div class="input-group-prepend"><span class="input-group-text">Definable Field {{loop.index}}</span></div>
-                                                    <input type="text" class="definableFieldsInput form-control" name="asset_definableFields_{{ loop.index }}" value="{{field}}" data-fieldcount="{{loop.index}}" />
+                                            <div class="tab-pane" style="padding: 1.25rem" id="fields">
+                                                <div class="callout callout-info">
+                                                    <p>A definálható mezők olyan speciális attribútumok, amelyek ennek a típusnak az eszközeihez tartoznak – például egy világítótest esetén ez lehet a felszerelt lencse</p>
                                                 </div>
-                                            {% endfor %}
+                                                <form id="editDefinableFieldsType">
+                                                {% for field in asset.fields %}
+                                                    <div class="input-group definableFieldsGroup" data-fieldcount="{{loop.index}}">
+                                                        <div class="input-group-prepend"><span class="input-group-text">Definálható Mező {{loop.index}}</span></div>
+                                                        <input type="text" class="definableFieldsInput form-control" name="asset_definableFields_{{ loop.index }}" value="{{field}}" data-fieldcount="{{loop.index}}" />
+                                                    </div>
+                                                {% endfor %}
                                             </form>
                                             <div class="callout callout-danger">
-                                                <p>Leave a field blank to delete it</p>
+                                                <p>Ha egy mezőt üresen hagysz, azt törölni fogjuk</p>
                                             </div>
-                                            <button class="btn btn-default float-right" id="saveTypeDefinableFieldButton" style="margin-top:10px;margin-bottom:10px;">Save</button>
+                                            <button class="btn btn-default float-right" id="saveTypeDefinableFieldButton" style="margin-top:10px;margin-bottom:10px;">Mentés</button>
                                         </div>
                                         <div class="tab-pane" style="padding: 1.25rem" id="thumbnail">
 {% if CONFIG.FILES_ENABLED == "Enabled" and USERDATA.instance.instances_storageEnabled == 1 and "ASSETS:ASSET_TYPE_FILE_ATTACHMENTS:CREATE"|instancePermissions %}
@@ -1183,8 +1173,9 @@
                         {% elseif "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                         <div class="tab-pane" style="padding: 1.25rem" id="settings">
                             <div class="alert alert-info" role="alert">
-<h4 class="alert-heading">Asset type maintained by the {{ CONFIG.PROJECT_NAME }}</h4>Sorry - this asset type is shared between a number of different businesses as a pre-defined template, to edit it please
-<a href="{{ CONFIG.LINKS_SUPPORTURL }}">get in touch with support</a>
+<h4 class="alert-heading">A {{ CONFIG.PROJECT_NAME }} által karbantartott eszköztípus</h4>Ne haragudj - ez az eszköztípus több különböző vállalkozás között megosztott, mint előre definiált sablon, ha szerkeszteni szeretnéd, kérlek 
+<a href="{{ CONFIG.LINKS_SUPPORTURL }}">lépj kapcsolatba a támogatással</a>
+
 
                             </div>
                         </div>
@@ -1195,8 +1186,9 @@
                         <div class="tab-pane" style="padding: 1.25rem"  id="typeFiles">
                             {% if "ASSETS:ASSET_TYPE_FILE_ATTACHMENTS:CREATE"|instancePermissions %}
                             <div class="callout callout-default">
-                                Use this area to store files relevant to all assets of this type such as instruction manuals
+                                Használd ezt a területet az ehhez az eszköztípushoz tartozó fájlok tárolására, például használati útmutatók.
                             </div>
+
 {% embed 'assets/templates/uppy.twig' with {'type': 'ASSET-TYPE-FILE', 'paste': false, 'typeId': 3, 'subTypeId': asset.assetTypes_id, 'imagesOnly': false } %}
 
 
@@ -1217,11 +1209,12 @@
                                 <div class="card" style="margin-bottom:0;">
                                     <div class="card-header p-2">
                                         <ul class="nav nav-pills">
-                                            <li class="nav-item"><a class="nav-link" href="#maintenance-newJob" data-toggle="tab">New Job</a></li>
-                                            <li class="nav-item"><a class="nav-link active" href="#maintenance-flags" data-toggle="tab">Blocks &amp; Flags</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#maintenance-jobsOutstanding" data-toggle="tab">Jobs Outstanding</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#maintenance-jobsCompleted" data-toggle="tab">Jobs Completed</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#maintenance-newJob" data-toggle="tab">Új munka</a></li>
+                                            <li class="nav-item"><a class="nav-link active" href="#maintenance-flags" data-toggle="tab">Blokkok és zászlók</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#maintenance-jobsOutstanding" data-toggle="tab">Függőben lévő munkák</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#maintenance-jobsCompleted" data-toggle="tab">Befejezett munkák</a></li>
                                         </ul>
+
                                     </div><!-- /.card-header -->
                                     <div class="card-body" style="padding: 0;">
                                         <div class="tab-content">
@@ -1233,21 +1226,21 @@
                                                 </style>
                                                 <form id="addNewJobForm">
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text">Asset</span></div>
+                                                        <div class="input-group-prepend"><span class="input-group-text">Eszköz</span></div>
                                                         <input type="text" class="form-control" disabled value="{{ assets[0].assets_tag|aTag }}" />
                                                     </div>
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text">Title</span></div>
-                                                        <input type="text" class="form-control" name="maintenanceJobs_title" id="maintenanceJobstitle" placeholder="Drum revolve key missing" />
+                                                        <div class="input-group-prepend"><span class="input-group-text">Cím</span></div>
+                                                        <input type="text" class="form-control" name="maintenanceJobs_title" id="maintenanceJobstitle" placeholder="Hiányzó dobforgató kulcs" />
                                                     </div>
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend"><span class="input-group-text">Fault Description</span></div>
-                                                        <textarea class="form-control" rows="5" name="maintenanceJobs_faultDescription" id="maintenanceJobsfaultDescription" placeholder="Details of the fault"></textarea>
+                                                        <div class="input-group-prepend"><span class="input-group-text">Hiba leírása</span></div>
+                                                        <textarea class="form-control" rows="5" name="maintenanceJobs_faultDescription" id="maintenanceJobsfaultDescription" placeholder="A hiba részletezése"></textarea>
                                                     </div>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">
-                                                              Priority
+                                                            Prioritás
                                                             </span>
                                                         </div>
                                                         <select class="form-control" name="maintenanceJobs_priority">
@@ -1257,13 +1250,12 @@
                                                         </select>
                                                     </div>
                                                     <div class="input-group">
-                                                        <label>Tag Users</label>
-                                                        <select class="form-control" multiple="multiple" placeholder="Select users to be tagged for updates in the job" id="tagUserInJob">
+                                                        <label>Felhasználók címkézése</label>
+                                                        <select class="form-control" multiple="multiple" placeholder="Válaszd ki a felhasználókat, akiket értesíteni szeretnél a munkával kapcsolatban" id="tagUserInJob">
                                                         </select>
                                                     </div>
                                                 </form>
-
-                                                <button class="btn btn-default float-right" id="addNewJobButton" style="margin-top:10px;margin-bottom:10px;">Save</button>
+                                                <button class="btn btn-default float-right" id="addNewJobButton" style="margin-top:10px;margin-bottom:10px;">Mentés</button>
                                             </div>
                                             <div class="active tab-pane" style="padding: 1.25rem" id="maintenance-flags">
                                                 {% for flag in assets[0].flagsblocks.BLOCK %}
@@ -1289,19 +1281,19 @@
                                                             #
                                                         </th>
                                                         <th>
-                                                            Title
+                                                            Cím
                                                         </th>
                                                         <th style="width: 5%">
-                                                            Creator
+                                                            Létrehozó
                                                         </th>
                                                         <th style="width: 5%">
-                                                            Assigned
+                                                            Kijelölt
                                                         </th>
                                                         <th style="width: 8%" class="text-center">
-                                                            Priority
+                                                            Prioritás
                                                         </th>
                                                         <th style="width: 8%" class="text-center">
-                                                            Status
+                                                            Állapot
                                                         </th>
                                                         <th style="width: 1%" class="text-center">
                                                             <i class="fas fa-flag"></i>
@@ -1324,7 +1316,7 @@
                                                                 </a>
                                                                 <br/>
                                                                 <small>
-                                                                    Created {{job.maintenanceJobs_timestamp_added|date("d M Y h:i:sa")}}
+                                                                    Létrehozva: {{job.maintenanceJobs_timestamp_added|date("Y.m.d H:i")}}
                                                                 </small>
                                                             </td>
                                                             <td>
@@ -1385,19 +1377,19 @@
                                                             #
                                                         </th>
                                                         <th>
-                                                            Title
+                                                            Cím
                                                         </th>
                                                         <th style="width: 5%">
-                                                            Creator
+                                                            Létrehozó
                                                         </th>
                                                         <th style="width: 5%">
-                                                            Assigned
+                                                            Kijelölt
                                                         </th>
                                                         <th style="width: 8%" class="text-center">
-                                                            Priority
+                                                            Prioritás
                                                         </th>
                                                         <th style="width: 8%" class="text-center">
-                                                            Status
+                                                            Állapot
                                                         </th>
                                                         <th style="width: 1%" class="text-center">
                                                             <i class="fas fa-flag"></i>
@@ -1420,7 +1412,7 @@
                                                                     </a>
                                                                     <br/>
                                                                     <small>
-                                                                        Created {{job.maintenanceJobs_timestamp_added|date("d M Y h:i:sa")}}
+                                                                        Létrehozva: {{job.maintenanceJobs_timestamp_added|date("Y.m.d H:i")}}
                                                                     </small>
                                                                 </td>
                                                                 <td>
@@ -1490,20 +1482,20 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Set Asset Location to another Asset</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h4 class="modal-title">Állítsd be az eszköz helyét egy másik eszközre</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Bezárás">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Set this asset's location to another asset - for example if it is stored within a flight case or storage box</p>
+                    <p>Állítsd be ennek az eszköznek a helyét egy másik eszközre - például ha egy repülőtokban vagy tároló dobozban van tárolva</p>
                     <div class="input-group my-3">
-                        <select class="form-control" multiple="multiple" id="setAssetLocationAssetModal-assets" placeholder="Enter asset tags here"></select>
+                        <select class="form-control" multiple="multiple" id="setAssetLocationAssetModal-assets" placeholder="Add meg az eszközcímkéket itt"></select>
                     </div>
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="setAssetLocationAssetModal-button">Set location</button>
+                    <button type="button" class="btn btn-primary" id="setAssetLocationAssetModal-button">Hely beállítása</button>
                 </div>
             </div>
         </div>
@@ -1542,7 +1534,7 @@
                 $(".deleteAssetButton").click(function () {
                     var assetid = $(this).data("assetid");
                     bootbox.confirm({
-                        message: "Are you sure you wish to delete this asset?",
+                        message: "Biztosan törölni szeretnéd ezt az eszközt?",
                         buttons: {
                             confirm: {
                                 label: 'Igen',
@@ -1568,29 +1560,29 @@
                     var assetid = $(this).data("assetid");
                     var date;
                     bootbox.prompt({
-                        title: "When would you like the asset to be archived?",
+                        title: "Mikor szeretnéd archiválni az eszközt?",
                         inputType: 'date',
                         callback: function (result) {
                             if (result) {
                                 date = result;
                                 bootbox.prompt({
-                                    title: "Why is this asset being archived?",
+                                    title: "Miért kerül archiválásra ez az eszköz?",
                                     inputType: 'select',
                                     inputOptions: [
                                         {
-                                            text: 'Being Sold',
+                                            text: 'Eladásra kerül',
                                             value: 'sold',
                                         },
                                         {
-                                            text: 'End of Life - being destroyed',
+                                            text: 'Élettartam vége - megsemmisítésre kerül',
                                             value: 'destroyed',
                                         },
                                         {
-                                            text: 'Missing/Lost',
+                                            text: 'Eltűnt/Elveszett',
                                             value: 'lost',
                                         },
                                         {
-                                            text: 'Permanent Loan',
+                                            text: 'Állandó kölcsön',
                                             value: 'loaned permanently',
                                         }
                                     ],
@@ -1611,7 +1603,7 @@
                 $(".deleteBarcodeButton").click(function () {
                     var barcodeid = $(this).data("barcodeid");
                     bootbox.confirm({
-                        message: "Are you sure you wish to delete this barcode? All scan history for this barcode will be lost",
+                        message: "Biztosan törölni szeretnéd ezt a vonalkódot? Minden szkennelési előzmény elvész ezzel a vonalkóddal kapcsolatban.",
                         buttons: {
                             confirm: {
                                 label: 'Igen',
@@ -1685,7 +1677,7 @@
                     minimumInputLength: 1,
                     width: '100%',
                     minimumResultsForSearch: 1,
-                    placeholder: "Search for asset types",
+                    placeholder: "Eszköztípusok keresése",
                     ajax: {
                         url: "{{ CONFIG.ROOTURL }}/api/assets/searchType.php",
                         dataType: "json",
@@ -1737,7 +1729,7 @@
                     minimumInputLength: 1,
                     width: '100%',
                     minimumResultsForSearch: 1,
-                    placeholder: "Search for assets",
+                    placeholder: "Eszközök keresése",
                     ajax: {
                         url: "{{ CONFIG.ROOTURL }}/api/assets/searchAssets.php",
                         dataType: "json",
@@ -1810,7 +1802,7 @@
                     minimumInputLength: 1,
                     width: '100%',
                     minimumResultsForSearch: 1,
-                    placeholder: "Enter group name to search",
+                    placeholder: "Írd be a csoport nevét a kereséshez",
                     ajax: {
                         url: "{{ CONFIG.ROOTURL }}/api/groups/search.php",
                         dataType: "json",
@@ -1861,7 +1853,7 @@
                     minimumInputLength: 1,
                     width: '100%',
                     minimumResultsForSearch: 1,
-                    placeholder: "Enter name to search for users",
+                    placeholder: "Írd be a nevet a felhasználók kereséséhez",
                     ajax: {
                         url: "{{ CONFIG.ROOTURL }}/api/maintenance/searchUser.php",
                         dataType: "json",
@@ -1906,7 +1898,7 @@
                     minimumInputLength: 0,
                     width: '100%',
                     minimumResultsForSearch: 1,
-                    placeholder: "Search for a Business",
+                    placeholder: "Vállalkozás keresése",
                     ajax: {
                         url: "{{ CONFIG.ROOTURL }}/api/instances/list.php",
                         dataType: "json",
@@ -1951,7 +1943,7 @@
                         minimumInputLength: 0,
                         width: '100%',
                         minimumResultsForSearch: 1,
-                        placeholder: "Search for an Asset Type",
+                        placeholder: "Eszköztípus keresése",
                         ajax: {
                             url: "{{ CONFIG.ROOTURL }}/api/assets/searchType.php?other_instances_id=" + id,
                             dataType: "json",
@@ -1965,23 +1957,23 @@
                             processResults: function (data) {
                                 if (data && data.result && data.response) {
                                     const responseData = $.map(data.response, function (item) {
-                                            return {
-                                                text: item.manufacturers_name + " - " + item.assetTypes_name,
-                                                id: item.assetTypes_id
-                                            }
-                                        });
+                                        return {
+                                            text: item.manufacturers_name + " - " + item.assetTypes_name,
+                                            id: item.assetTypes_id
+                                        }
+                                    });
                                     return {
                                         // add "Other" to the end of the list
                                         results: [...responseData, {
-                                            text: "Copy the existing asset type ({{asset.assetTypes_name|escape("js")}}) into business",
+                                            text: "Másolatot készít a meglévő eszköztípusról ({{asset.assetTypes_name|escape('js')}}) és áthelyezi a vállalkozásba",
                                             id: "-1"
                                         }]
                                     };
                                 } else return {
                                     results: [{
-                                            text: "Copy the existing asset type ({{asset.assetTypes_name|escape("js")}}) into business",
-                                            id: "-1"
-                                        }]
+                                        text: "Másolatot készít a meglévő eszköztípusról ({{asset.assetTypes_name|escape('js')}}) és áthelyezi a vállalkozásba",
+                                        id: "-1"
+                                    }]
                                 };
                             }
                         }
@@ -2007,7 +1999,7 @@
                             minimumInputLength: 0,
                             width: '100%',
                             minimumResultsForSearch: 1,
-                            placeholder: "Search for a Manufacturer",
+                            placeholder: "Gyártó keresése",
                             ajax: {
                                 url: "{{ CONFIG.ROOTURL }}/api/manufacturer/search.php?other_instances_id=" + instanceId,
                                 dataType: "json",
@@ -2021,21 +2013,21 @@
                                 processResults: function (data) {
                                     if (data && data.result && data.response) {
                                         const responseData = $.map(data.response, function (item) {
-                                                return {
-                                                    text: item.manufacturers_name,
-                                                    id: item.manufacturers_id
-                                                }
-                                            })
+                                            return {
+                                                text: item.manufacturers_name,
+                                                id: item.manufacturers_id
+                                            }
+                                        })
                                         return {
-                                        // add "Other" to the end of the list
-                                        results: [...responseData,{
-                                            text: "Copy {{ asset.manufacturers_name|escape("js") }} into business",
-                                            id: "-1"
-                                        }]
-                                    };
+                                            // add "Other" to the end of the list
+                                            results: [...responseData, {
+                                                text: "Másolatot készít {{ asset.manufacturers_name|escape('js') }}-ról/-ról és áthelyezi a vállalkozásba",
+                                                id: "-1"
+                                            }]
+                                        };
                                     } else return {
                                         results: [{
-                                            text: "Copy {{ asset.manufacturers_name|escape("js") }} into business",
+                                            text: "Másolatot készít {{ asset.manufacturers_name|escape('js') }}-ról/-ról és áthelyezi a vállalkozásba",
                                             id: "-1"
                                         }]
                                     };
@@ -2049,7 +2041,7 @@
                             minimumInputLength: 0,
                             width: '100%',
                             minimumResultsForSearch: 1,
-                            placeholder: "Search for a Category",
+                            placeholder: "Kategória keresése",
                             ajax: {
                                 url: "{{ CONFIG.ROOTURL }}/api/categories/search.php?other_instances_id=" + instanceId,
                                 dataType: "json",
@@ -2109,7 +2101,7 @@
                         }
                     }
                     bootbox.confirm({
-                        message: "Are you sure you wish to transfer this asset?",
+                        message: "Biztosan át szeretnéd helyezni ezt az eszközt?",
                         buttons: {
                             confirm: {
                                 label: 'Igen',
@@ -2136,7 +2128,7 @@
                 {% if "LOCATIONS:VIEW"|instancePermissions and assets[0].barcodes[0] %}
                 $("#setAssetLocationButton").on("click", function () {
                     bootbox.prompt({
-                        title: "Set Asset Location",
+                        title: "Eszköz helyének beállítása",
                         inputType: "select",
                         inputOptions: [
                         {% for location in locations %}
@@ -2163,7 +2155,7 @@
                 });
                 $("#setCustomLocationButton").on("click", function () {
                     bootbox.prompt({
-                        title: "Set Custom Location for Asset",
+                        title: "Egyedi hely beállítása az eszközhöz",
                         callback: function (result) {
                             if(result ){
                                 const args = {
@@ -2190,7 +2182,7 @@
                     width: '100%',
 
                     minimumResultsForSearch: 1,
-                    placeholder: "Enter asset numbers to search for assets",
+                    placeholder: "Írd be az eszköz számokat az eszközök kereséséhez",
                     ajax: {
                         url: "{{ CONFIG.ROOTURL }}/api/assets/searchAssets.php",
                         dataType: "json",

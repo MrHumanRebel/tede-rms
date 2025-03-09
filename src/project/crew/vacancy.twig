@@ -89,7 +89,7 @@
                 </div>                    
                 <hr />
                 {% if role.projectsVacantRoles_description %}
-                    <h4>Description</h4>
+                    <h4>Leírás</h4>
                     <p>{{ role.projectsVacantRoles_description|nl2br }}</p>
                 {% endif %}
                 {% if role.projectsVacantRoles_personSpecification %}
@@ -116,7 +116,7 @@
                     <input type="hidden" name="projectsVacantRoles_id" value="{{ role.projectsVacantRoles_id }}"/>
                     <div class="input-group" style="margin-bottom: 5px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Name</span>
+                            <span class="input-group-text">Név</span>
                         </div>
                         <input type="text" disabled class="form-control" value="{{ USERDATA.users_name1 }} {{ USERDATA.users_name2 }}">
                     </div>
