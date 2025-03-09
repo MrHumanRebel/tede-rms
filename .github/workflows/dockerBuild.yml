@@ -40,6 +40,10 @@ jobs:
           tags: |
             type=semver,pattern=${{ github.event.release.tag_name }}
 
+      - name: Debug tag name
+        run: |
+          echo "Release tag name: ${{ github.event.release.tag_name }}"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -68,7 +72,8 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm64/v8
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ghcr.io/MrHumanRebel/adam-rms-hun:${{ github.event.release.tag_name }}  # Manually set tag
+          # Fallback to use the release tag or commit SHA if empty
+          tags: ghcr.io/MrHumanRebel/adam-rms-hun:${{ github.event.release.tag_name || github.sha }} 
           labels: ${{ steps.docker_github_meta.outputs.labels }}
           annotations: ${{ steps.docker_github_meta.outputs.annotations }}
           cache-from: type=local,src=/tmp/.buildx-cache
