@@ -936,13 +936,13 @@
                                     <td>{{ thisasset['assets_notes']|nl2br }}</td>
                                     {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                         <td> 
-                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_value ?: asset.assetTypes_value)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                            {{ (thisasset.assets_value ?: asset.assetTypes_value)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }} {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}
                                         </td>
                                         <td>
-                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                            {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }} {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}
                                         </td>
                                         <td>
-                                            {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}{{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                            {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }} {{ moneySymbol(ASSET_INSTANCE['instances_config_currency']) }}
                                         </td>
                                     {% endif %}
                                     <td>{{ thisasset.files|length > 0 ?: "" }}</td>
