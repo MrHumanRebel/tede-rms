@@ -1053,16 +1053,18 @@
                 var relatedTarget = $(e.relatedTarget);
 
                 if (relatedTarget.data('quote') === 'true') {
-                    targetModal.find('.modal-title').text("Create Quote");
+                    targetModal.find('.modal-title').text("Árajánlat Létrehozása");
                     targetModal.find('input[name="quote"]').val("true");
-                } else if (relatedTarget.data('quote') === 'false') {
-                    targetModal.find('.modal-title').text("Create Invoice");
-                    targetModal.find('input[name="quote"]').val("false");
+                } else if (relatedTarget.data('quote') === 'truck') {
+                    targetModal.find('.modal-title').text("Pakolási lista Létrehozása");
+                    targetModal.find('input[name="quote"]').val("true"); // Truck típusú modalok esetén
                 } else {
-                    targetModal.find('.modal-title').text("Create Packing List");
-                    targetModal.find('input[name="quote"]').val("false"); // For truck related modals
+                    targetModal.find('.modal-title').text("Számla Létrehozása");
+                    targetModal.find('input[name="quote"]').val("false");
                 }
             });
+
+
             $("#assetAssignmentCheckboxAll").click(function () {
                 $(".assetAssignmentCheckbox").prop('checked', $(this).prop('checked'));
             });

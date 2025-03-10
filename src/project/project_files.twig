@@ -158,7 +158,7 @@
                                 <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
                             </span>
                             <span class="text">
-                                {{ "Bepak"|concat(file.s3files_name) }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
+                                {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
                             </span>
                             <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
                             <div class="tools">
@@ -170,7 +170,7 @@
             </div>
             <div class="card-footer">
                 <div class="btn-group float-right">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalTruck" data-quote="true">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalTruck" data-quote="truck">
                         Pakolási lista Létrehozása
                     </button>
                 </div>
