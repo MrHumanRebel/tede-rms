@@ -8,7 +8,7 @@
                     {% if event.auditLog_actionType in ['QUICKCOMMENT', 'INSERT', 'ARCHIVE','UNARCHIVE','CHANGE-MANAGER','UPDATE-NAME','UPDATE-STATUS','CHANGE-DATE','CHANGE-DATE-FINANCE','UPDATE-DESCRIPTION','CHANGE-CLIENT'] %}
                         {% if event.auditLog_timestamp|date("Y-m-d") != currentDate %}
                             <div class="time-label">
-                                <span class="bg-red">{{ event.auditLog_timestamp|date("D jS M Y") }}</span>
+                                <span class="bg-red">{{ event.auditLog_timestamp|date("Y.m.d.") }}</span>
                             </div>
                             {% set currentDate = event.auditLog_timestamp|date("Y-m-d") %}
                         {% endif %}
@@ -21,7 +21,7 @@
                                 <i class="fas fa-info bg-gray-light"></i>
                             {% endif %}
                             <div class="timeline-item">
-                                <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("h:i:sa") }}</span>
+                                <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("H:i") }}</span>
                                 <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2}} </a>
                                     {% if event.auditLog_actionType == "QUICKCOMMENT" %}
                                         hozzászólt

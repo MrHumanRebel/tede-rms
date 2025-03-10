@@ -70,7 +70,7 @@
                         <div class="btn-group">
                             <a type="button" class="btn btn-default btn-sm" href="{{CONFIG.ROOTURL}}/project/crew/vacancy.php?id={{ role.projectsVacantRoles_id }}">More Info</a>
                             {% if role.users_userid == USERDATA.users_userid %}
-                                <a href="vacantCrew.php?id={{ role.projects_id }}" class="btn btn-secondary btn-sm">Manage</a>
+                                <a href="vacantCrew.php?id={{ role.projects_id }}" class="btn btn-secondary btn-sm">Kezelés</a>
                             {% endif %}
                             {% if role.application %}
                                 <button type="button" class="btn btn-default btn-sm" disabled>Applied</button>
@@ -138,7 +138,7 @@
                             <div class="btn-group">
                                 <a type="button" class="btn btn-default btn-sm" href="{{CONFIG.ROOTURL}}/project/crew/vacancy.php?id={{ role.projectsVacantRoles_id }}">More Info</a>
                                 {% if role.users_userid == USERDATA.users_userid %}
-                                    <a href="vacantCrew.php?id={{ role.projects_id }}" class="btn btn-secondary btn-sm">Manage</a>
+                                    <a href="vacantCrew.php?id={{ role.projects_id }}" class="btn btn-secondary btn-sm">Kezelés</a>
                                 {% endif %}
                                 {% if role.application %}
                                     <button type="button" class="btn btn-default btn-sm" disabled>Applied</button>

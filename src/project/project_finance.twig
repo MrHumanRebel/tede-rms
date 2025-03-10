@@ -98,13 +98,13 @@
                 {% if project.projects_invoiceNotes|nl2br %}
                     {{ project.projects_invoiceNotes|nl2br }}
                 {% else %}
-                    <i>None Set</i>
+                    <i>Nincs beállítva</i>
                 {% endif %}
             </div>
             <div class="card-footer">
                 <div class="btn-group float-right">
                     {% if "PROJECTS:EDIT:INVOICE_NOTES"|instancePermissions %}
-                        <button type="button" class="btn btn-default editProjectInvoiceNotes" title="Edit">Edit Invoice Notes</button>
+                        <button type="button" class="btn btn-default editProjectInvoiceNotes" title="Szerkesztés">Számlamegjegyzések szerkesztése</button>
                     {% endif %}
                 </div>
             </div>

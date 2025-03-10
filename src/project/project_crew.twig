@@ -2,17 +2,15 @@
     <div class="col">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="card-title">Crew</h3>
+                <h3 class="card-title">Stáb</h3>
                     <div class="btn-group ml-auto">
-                    {% if "PROJECTS:PROJECT_CREW:CREATE"|instancePermissions %}
-                        <button type="button" class="btn btn-default btn-small" data-toggle="modal" data-target="#addCrewModal">Add Crew</button>
-                    {% endif %}
-                    {% if "PROJECTS:PROJECT_CREW:VIEW:EMAIL_CREW"|instancePermissions and project.crewAssignments|length > 0 %}
-                        <button type="button" class="btn btn-default btn-small" data-toggle="modal" data-target="#emailCrewModal">Email Crew</button>
-                    {% endif %}
-<a href="{{ CONFIG.LINKS_USERGUIDEURL }}projects/crew/" target="_blank" type="button" class="btn btn-info btn-small">Help</a>
-
-                </div>
+                        {% if "PROJECTS:PROJECT_CREW:CREATE"|instancePermissions %}
+                            <button type="button" class="btn btn-default btn-small" data-toggle="modal" data-target="#addCrewModal">Stáb hozzáadása</button>
+                        {% endif %}
+                        {% if "PROJECTS:PROJECT_CREW:VIEW:EMAIL_CREW"|instancePermissions and project.crewAssignments|length > 0 %}
+                            <button type="button" class="btn btn-default btn-small" data-toggle="modal" data-target="#emailCrewModal">Stáb e-mail küldése</button>
+                        {% endif %}
+                    </div>
             </div>
             <div class="card-body p-0">
                 <ul id="crewList" class="todo-list">
@@ -50,9 +48,9 @@
                             {% endif %}
                             <div class="tools">
                                 {% if "PROJECTS:PROJECT_CREW:EDIT"|instancePermissions %}
-                                    <i class="far fa-edit editCrewAssignment" data-assignment="{{ crew.crewAssignments_id }}" data-role="{{crew.crewAssignments_role|escape('html_attr')}}" data-comment="{{crew.crewAssignments_comment|escape('html_attr')}}" title="Edit"></i>
-                                    <i class="far fa-comment editCrewAssignmentComment" data-assignment="{{ crew.crewAssignments_id }}" data-comment="{{crew.crewAssignments_comment|escape('html_attr')}}" title="Edit comment"></i>
-                                    <i class="fas fa-trash deleteCrewAssignment" data-assignment="{{ crew.crewAssignments_id }}" title="Delete crew"></i>
+                                    <i class="far fa-edit editCrewAssignment" data-assignment="{{ crew.crewAssignments_id }}" data-role="{{crew.crewAssignments_role|escape('html_attr')}}" data-comment="{{crew.crewAssignments_comment|escape('html_attr')}}" title="Szerkesztés"></i>
+                                    <i class="far fa-comment editCrewAssignmentComment" data-assignment="{{ crew.crewAssignments_id }}" data-comment="{{crew.crewAssignments_comment|escape('html_attr')}}" title="Komment szerkesztése"></i>
+                                    <i class="fas fa-trash deleteCrewAssignment" data-assignment="{{ crew.crewAssignments_id }}" title="Stáb törlése"></i>
                                 {% endif %}
                             </div>
                         </li>
@@ -66,7 +64,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h3 class="card-title">Szabad Személyzet Pozíciók</h3>
                 {% if "PROJECTS:PROJECT_CREW:EDIT:CREW_RECRUITMENT"|instancePermissions %}
-                <a href="{{ CONFIG.ROOTURL }}/project/crew/vacantCrew.php?id={{ project.projects_id }}" type="button" class="btn btn-secondary btn-sm ml-auto">Manage</a>
+                <a href="{{ CONFIG.ROOTURL }}/project/crew/vacantCrew.php?id={{ project.projects_id }}" type="button" class="btn btn-secondary btn-sm ml-auto">Kezelés</a>
                 {% endif %}
             </div>
         </div>

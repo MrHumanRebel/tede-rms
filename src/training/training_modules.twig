@@ -102,7 +102,7 @@
                         <div class="text-right">
                             <div class="btn-group">
                                 {% if "TRAINING:EDIT"|instancePermissions %}
-                                    <button data-toggle="modal" data-target="#editModuleModal{{ module.modules_id }}" class="btn btn-sm btn-default" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button data-toggle="modal" data-target="#editModuleModal{{ module.modules_id }}" class="btn btn-sm btn-default" title="Szerkesztés"><i class="fas fa-edit"></i></button>
                                     {% if module.modules_type != 3 %}
                                     <a href="{{ CONFIG.ROOTURL }}/training/module.php?id={{ module.modules_id }}&steps" class="btn btn-sm btn-default" title="Edit Module Steps">
                                         <i class="fas fa-chalkboard-teacher"></i>

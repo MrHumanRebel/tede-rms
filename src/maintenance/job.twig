@@ -181,7 +181,7 @@
                             <div class="dropdown-menu" role="menu">
                                 {% if "MAINTENANCE_JOBS:EDIT:NAME"|instancePermissions %}<a class="dropdown-item" id="editJobName" href="#">Edit Name</a>{% endif %}
                                 <div class="dropdown-divider"></div>
-                                {% if "MAINTENANCE_JOBS:DELETE"|instancePermissions %}<a class="dropdown-item" id="deleteJob" href="#">Delete</a>{% endif %}
+                                {% if "MAINTENANCE_JOBS:DELETE"|instancePermissions %}<a class="dropdown-item" id="deleteJob" href="#">Törlés</a>{% endif %}
                             </div>
                         </button>
                         {% endif %}
@@ -374,7 +374,7 @@
                                                 <div class="timeline-body" style="font-style: italic;">{{event.auditLog_actionData|nl2br }}</div>
                                                 {#<div class="timeline-footer">
                                                     <a class="btn btn-primary btn-sm">Read more</a>
-                                                    <a class="btn btn-danger btn-sm">Delete</a>
+                                                    <a class="btn btn-danger btn-sm">Törlés</a>
                                                 </div>#}
                                             {% endif %}
                                         </div>

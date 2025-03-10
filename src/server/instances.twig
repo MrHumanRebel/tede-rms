@@ -154,7 +154,7 @@
                                             {% endif %}
                                             {% if "INSTANCES:DELETE"|serverPermissions %}
                                                 {% if instance.instances_deleted == 0 %}
-                                                <button type="button" class="btn btn-danger deleteInstanceButton" data-instanceid="{{ instance.instances_id }}">Delete</button>
+                                                <button type="button" class="btn btn-danger deleteInstanceButton" data-instanceid="{{ instance.instances_id }}">Törlés</button>
                                                 {% else %}
                                                 <button type="button" class="btn btn-success restoreInstanceButton" data-instanceid="{{ instance.instances_id }}">Undo Delete</button>
                                                 {% endif %}
