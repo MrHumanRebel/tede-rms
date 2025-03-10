@@ -19,7 +19,7 @@ foreach ($_POST['formData'] as $item) {
 if (strlen($array['projects_id']) < 1) finish(false, ["code" => "PARAM-ERROR", "message" => "No data for action"]);
 
 // Convert the date to the proper format
-$array['payments_date'] = date("Y-m-d H:i:s", strtotime($array['payments_date']));
+$array['payments_date'] = date("Y. m. d. H:i", strtotime($array['payments_date']));
 
 // Ensure payments_quantity has a default value if not provided
 if (!$array['payments_quantity']) $array['payments_quantity'] = 1;
