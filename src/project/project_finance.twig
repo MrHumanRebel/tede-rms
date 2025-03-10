@@ -62,12 +62,6 @@
                         <td style="width: 15%;text-align: right;">
                             &#8209;{{ FINANCIALS.payments.received.total|money|replace({'.00':''}) }}
                         </td>
-                        <td style="width: 35%;">
-                            Nyereség
-                        </td>
-                        <td style="width: 15%;text-align: right;"> 
-                            {{ (FINANCIALS.payments.subTotal - FINANCIALS.payments.staff.total - FINANCIALS.payments.subHire.total)|money|replace({'.00':''}) }}
-                        </td>
                     </tr>
                     <tr>
                         <td style="width: 35%;">  
