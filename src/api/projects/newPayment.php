@@ -19,10 +19,15 @@ foreach ($_POST['formData'] as $item) {
 if (strlen($array['projects_id']) < 1) finish(false, ["code" => "PARAM-ERROR", "message" => "No data for action"]);
 
 // Convert the date to the proper format
-$array['payments_date'] = date("Y-m-d H:i:s", strtotime(str_replace(".", "", $array['payments_date'])));
+$array['payments_date'] = date("Y-m-d H:i:s", strtotime(str_replace(".", "", $array['payments_date']))); // Fix for Hungarian date format
 
 // Ensure payments_quantity has a default value if not provided
 if (!$array['payments_quantity']) $array['payments_quantity'] = 1;
+
+// Handle empty values for payments_method, payments_reference, and payments_comment
+$array['payments_method'] = $array['payments_method'] ?? null;
+$array['payments_reference'] = $array['payments_reference'] ?? null;
+$array['payments_comment'] = $array['payments_comment'] ?? null;
 
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
