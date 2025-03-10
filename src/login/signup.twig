@@ -5,15 +5,15 @@
     </div>
     <form id="signupForm">
         <div id="errorMessageBox" class="alert alert-danger"></div>
-        <input class="form-control form-control-lg" id="signupForm_users_email" maxlength="100" required placeholder="Enter your email address" autocomplete="email" type="email" style="margin-top: 10px; margin-bottom: 10px;">
-        <input class="form-control form-control-lg" id="signupForm_users_username" minlength="6" maxlength="100" required placeholder="Choose a username" autocomplete="username"  type="text" style="margin-top: 10px; margin-bottom: 10px;">
-        <input class="form-control form-control-lg" id="signupForm_users_password" minlength="10" maxlength="100" required placeholder="Choose a password" autocomplete="new-password"  type="password" style="margin-top: 10px; margin-bottom: 10px;">
-        <input class="form-control form-control-lg" id="signupForm_users_name1" minlength="1" maxlength="100" required autocomplete="given-name" placeholder="First Name" type="text" style="margin-top: 10px; margin-bottom: 10px;">
-        <input class="form-control form-control-lg" id="signupForm_users_name2" minlength="1" maxlength="100" required autocomplete="family-name" placeholder="Last Name" type="text" style="margin-top: 10px; margin-bottom: 10px;">
-        <button class="btn btn-secondary" type="submit" value="Submit">Sign Up</button>
+        <input class="form-control form-control-lg" id="signupForm_users_email" maxlength="100" required placeholder="Adja meg az email címét" autocomplete="email" type="email" style="margin-top: 10px; margin-bottom: 10px;">
+        <input class="form-control form-control-lg" id="signupForm_users_username" minlength="6" maxlength="100" required placeholder="Válasszon felhasználónevet" autocomplete="username"  type="text" style="margin-top: 10px; margin-bottom: 10px;">
+        <input class="form-control form-control-lg" id="signupForm_users_password" minlength="10" maxlength="100" required placeholder="Válasszon jelszót" autocomplete="new-password"  type="password" style="margin-top: 10px; margin-bottom: 10px;">
+        <input class="form-control form-control-lg" id="signupForm_users_name1" minlength="1" maxlength="100" required autocomplete="given-name" placeholder="Keresztnév" type="text" style="margin-top: 10px; margin-bottom: 10px;">
+        <input class="form-control form-control-lg" id="signupForm_users_name2" minlength="1" maxlength="100" required autocomplete="family-name" placeholder="Vezetéknév" type="text" style="margin-top: 10px; margin-bottom: 10px;">
+        <button class="btn btn-secondary" type="submit" value="Submit">Regisztráció</button>
     </form>
 	<script>
-		$( document ).ready(function() {
+        $( document ).ready(function() {
             $("#signupForm").submit(function(e){
                 e.preventDefault();
                 $("#signupForm").hide();
@@ -48,7 +48,7 @@
                                 error: function(){
                                     $("#signupForm").show();
                                     $("#loadingOverlay").hide();
-                                    $("#errorMessageBox").html("Account created, but login unsuccessful: please refresh the page and check your internet connection");
+                                    $("#errorMessageBox").html("Fiók létrehozva, de a bejelentkezés nem sikerült: kérjük frissítse az oldalt és ellenőrizze az internetkapcsolatát");
                                     $("#errorMessageBox").show();
                                 }
                             });
@@ -61,14 +61,14 @@
                     }, error: function () {
                         $("#signupForm").show();
                         $("#loadingOverlay").hide();
-                        $("#errorMessageBox").html("Please refresh the page and check your internet connection");
+                        $("#errorMessageBox").html("Kérjük frissítse az oldalt és ellenőrizze az internetkapcsolatát");
                         $("#errorMessageBox").show();
                     }
                 });
             });
             
             function formVerifyEmail() {
-                //They want us to send out another verification email
+                //Ha újabb megerősítő email-t akarnak küldeni
                 if (initialData.hasOwnProperty("error") && initialData.error.hasOwnProperty("userid")) {
                     var userid = initialData.error.userid;
                 } else {
@@ -82,15 +82,16 @@
                         "userid": userid
                     }, success: function (result) {
                         if (result.result) {
-                            toastr.success("E-Mail re-sent");
+                            toastr.success("Újra elküldve az email");
                         } else {
-                            toastr.error("Error verifying email address - please contact support");
+                            toastr.error("Hiba a email cím megerősítésében - kérjük lépjen kapcsolatba a támogatási csapattal");
                         }
                     }, error: function () {
-                        toastr.error("Please refresh the page and check your internet connection");
+                        toastr.error("Kérjük frissítse az oldalt és ellenőrizze az internetkapcsolatát");
                     }
                 });
             }
         });
-	</script>
+    </script>
+
 {% endblock %}

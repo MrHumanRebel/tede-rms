@@ -83,8 +83,8 @@
                     {% if project.projectsStatuses_assetsReleased == 1 %}
                     <div class="col-12">
                         <div class="alert alert-danger">
-                            <h5><i class="fas fa-exclamation-triangle"></i> Assets not locked - assets are released</h5>
-                            Assets assigned to this project can be assigned to other projects that clash with this one, as the project is no longer active.
+                            <h5><i class="fas fa-exclamation-triangle"></i> Az eszközök nincsenek lezárva - az eszközök felszabadítva</h5>
+                            Az ehhez a projekthez rendelt eszközök más projektekhez rendelhetők, amelyek ütközhetnek ezzel, mivel a projekt már nem aktív.
                         </div>
                     </div>
                     {% endif %}
@@ -96,24 +96,24 @@
                             <ul class="nav nav-pills" id="nav-bar">
                                 <li class="nav-item"><a class="nav-link active" href="#details-view" data-toggle="tab" style="font-weight:bold;">{{project.projects_name}}</a></li>
                                 {% if project.projectsTypes_config_assets == 1 and project.projects_dates_deliver_start and project.projects_archived != 1 and "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN"|instancePermissions %}
-                                    <li class="nav-item"><a class="nav-link" href="{{CONFIG.ROOTURL}}/assets.php?project={{project.projects_id}}&project_referer={{project.projects_id}}"><i class="fas fa-plus"></i> Add Assets</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{CONFIG.ROOTURL}}/assets.php?project={{project.projects_id}}&project_referer={{project.projects_id}}"><i class="fas fa-plus"></i> Eszközök hozzáadása</a></li>
                                 {% endif %}
                                 {% if (FINANCIALS['assetsAssigned'] or FINANCIALS['assetsAssignedSUB']) and project.projectsTypes_config_assets == 1 %}
-                                    <li class="nav-item"><a class="nav-link" href="#assets-view" data-toggle="tab"><i class="fas fa-list"></i> Assets List</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#assets-board" data-toggle="tab"><i class="fas fa-shipping-fast"></i> Asset Dispatch</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#assets-view" data-toggle="tab"><i class="fas fa-list"></i> Eszközök listája</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#assets-board" data-toggle="tab"><i class="fas fa-shipping-fast"></i> Eszközök kiszállítása</a></li>
                                 {% endif %}
-                                <li class="nav-item"><a class="nav-link" href="#file-view" data-toggle="tab"><i class="fas fa-file-alt"></i> {% if CONFIG.FILES_ENABLED == "Enabled" and USERDATA.instance.instances_storageEnabled == 1 and project.projectsTypes_config_files == 1 %}Files, {% endif %}{% if project.projectsTypes_config_notes == 1 %}Notes, {% endif %} Invoices & Quotes</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#file-view" data-toggle="tab"><i class="fas fa-file-alt"></i> {% if CONFIG.FILES_ENABLED == "Enabled" and USERDATA.instance.instances_storageEnabled == 1 and project.projectsTypes_config_files == 1 %}Fájlok, {% endif %}{% if project.projectsTypes_config_notes == 1 %}Jegyzetek, {% endif %} Számlák & Árajánlatok</a></li>
                                 {% if "PROJECTS:PROJECT_PAYMENTS:VIEW"|instancePermissions and project.projectsTypes_config_finance == 1 %}
-                                    <li class="nav-item"><a class="nav-link" href="#payments-view" data-toggle="tab"><i class="fas fa-pound-sign"></i> Finance</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#payments-view" data-toggle="tab"><i class="fas fa-pound-sign"></i> Pénzügyek</a></li>
                                 {% endif %}
                                 {% if "PROJECTS:PROJECT_CREW:VIEW"|instancePermissions and project.projectsTypes_config_crew == 1 %}
-                                    <li class="nav-item"><a class="nav-link" href="#crew-view" data-toggle="tab"><i class="fas fa-users"></i> Crew</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#crew-view" data-toggle="tab"><i class="fas fa-users"></i> Csapat</a></li>
                                 {% endif %}
                                 {% if project.subProjects %}
-                                    <li class="nav-item"><a class="nav-link" href="#calendar-view" data-toggle="tab"><i class="fas fa-calendar-alt"></i> Sub Projects</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#calendar-view" data-toggle="tab"><i class="fas fa-calendar-alt"></i> Alprojektek</a></li>
                                 {% endif %}
                                 {% if project.auditLog|length > 0 %}
-                                <li class="nav-item"><a class="nav-link" href="#log-view" data-toggle="tab"><i class="fas fa-comments"></i> Comments & History</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#log-view" data-toggle="tab"><i class="fas fa-comments"></i> Megjegyzések & Történet</a></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -127,7 +127,7 @@
                                             <h3 class="card-title">{{ project.projectsTypes_name }}</h3>
                                             <div class="card-tools">
                                                 {% if project.projectsTypes_config_assets == 1 and project.projects_dates_deliver_start and project.projects_archived != 1 and "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_ALL_BUSINESS_ASSETS"|instancePermissions %}
-                                                    <button type="button" class="btn btn-tool" title="Add all assets to Project" id="addAllAssetsToProject"><i class="fas fa-dolly"></i></button>
+                                                    <button type="button" class="btn btn-tool" title="Minden eszköz hozzáadása a projekthez" id="addAllAssetsToProject"><i class="fas fa-dolly"></i></button>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -142,8 +142,8 @@
                                                 <div class="col-12" id="projectDetailBox">
                                                     {% if project.projects_archived == 1 %}
                                                         <div class="alert alert-danger">
-                                                            <h5><i class="icon fas fa-ban"></i> Archived</h5>
-                                                            This project has been moved to archive
+                                                            <h5><i class="icon fas fa-ban"></i> Archíválva</h5>
+                                                            Ez a projekt archiválásra került.
                                                         </div>
                                                     {% endif %}
                                                     <h3 class="text-primary">{{project.projects_name}}</h3>
@@ -443,19 +443,19 @@
                     <input type="hidden" name="projects_id" value="{{ project.projects_id }}"/>
                     <div class="input-group newPaymentModal-paymentOnly" style="margin-bottom: 5px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Date</span>
+                            <span class="input-group-text">Dátum</span>
                         </div>
                         <input type="text" class="form-control" name="payments_date" id="newPaymentModal-form-date">
                     </div>
                     <div class="input-group newPaymentModal-paymentOnly" style="margin-bottom: 5px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Reference</span>
+                            <span class="input-group-text">Hivatkozás</span>
                         </div>
                         <input type="text" class="form-control" name="payments_reference">
                     </div>
                     <div class="input-group newPaymentModal-paymentOnly" style="margin-bottom: 5px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">Payment Method</span>
+                            <span class="input-group-text">Fizetési Módszer</span>
                         </div>
                         <select class="form-control" name="payments_method">
                             <option selected></option>
@@ -505,7 +505,7 @@
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Edit {{ note.projectsNotes_title }}</h4>
+                            <h4 class="modal-title">Szerkesztés: {{ note.projectsNotes_title }}</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -514,8 +514,8 @@
                             <div class="summernote" data-noteid="{{ note.projectsNotes_id }}">{{ note.projectsNotes_text|raw }}</div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default btn-sm noteModal-save" data-noteid="{{ note.projectsNotes_id }}" data-callback="print"><i class="fas fa-print"></i> Save & Print</button>
-                            <button type="button" class="btn btn-default btn-sm noteModal-save" data-noteid="{{ note.projectsNotes_id }}" data-callback="none"><i class="far fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-default btn-sm noteModal-save" data-noteid="{{ note.projectsNotes_id }}" data-callback="print"><i class="fas fa-print"></i> Mentés és Nyomtatás</button>
+                            <button type="button" class="btn btn-default btn-sm noteModal-save" data-noteid="{{ note.projectsNotes_id }}" data-callback="none"><i class="far fa-save"></i> Mentés</button>
                         </div>
                     </div>
                 </div>
@@ -808,7 +808,7 @@
                     message: '<div id="editor"></div>',
                     buttons: {
                         ok: {
-                            label: "Save",
+                            label: "Mentés",
                             className: "btn btn-info",
                             callback: function () {
                                 let content = $('#editor').summernote('code');

@@ -13,13 +13,13 @@
     </div>
     <form id="loginForm">
         <div id="errorMessageBox" class="alert alert-danger"></div>
-		<input class="form-control form-control-lg" id="emailInput" autocomplete="username" placeholder="Login with Username or Email" type="text" required style="margin-top: 10px; margin-bottom: 10px;" autofocus>
-        <input class="form-control form-control-lg" id="passwordInput" placeholder="Password" autocomplete="current-password" type="password" required style="margin-top: 10px; margin-bottom: 10px;">
-		<div style="width: 100%; text-align:right;">
-            <button type="button" class="btn btn-default" id="passwordResetButton">Reset my password</button>
-            <button class="btn btn-secondary" type="submit" value="Submit">Login</button>
-		</div>
-	</form>
+        <input class="form-control form-control-lg" id="emailInput" autocomplete="username" placeholder="Jelentkezzen be felhasználónévvel vagy email címmel" type="text" required style="margin-top: 10px; margin-bottom: 10px;" autofocus>
+        <input class="form-control form-control-lg" id="passwordInput" placeholder="Jelszó" autocomplete="current-password" type="password" required style="margin-top: 10px; margin-bottom: 10px;">
+        <div style="width: 100%; text-align:right;">
+            <button type="button" class="btn btn-default" id="passwordResetButton">Állítsa vissza a jelszavát</button>
+            <button class="btn btn-secondary" type="submit" value="Submit">Bejelentkezés</button>
+        </div>
+    </form>
 	<script>
         $("#loginForm").submit(function(e){
             e.preventDefault();
@@ -43,14 +43,14 @@
                 error: function(){
                     $("#loginForm").show();
                     $("#loadingOverlay").hide();
-                    $("#errorMessageBox").html("Please refresh the page and check your internet connection");
+                    $("#errorMessageBox").html("Kérjük frissítse az oldalt és ellenőrizze az internetkapcsolatát");
                     $("#errorMessageBox").show();
                 }
             });
         });
         $('#passwordResetButton').click(function(){
             if ($("#emailInput").val().length <= 0) {
-                $("#errorMessageBox").html("Please enter your username/email into the address box to reset your password.");
+                $("#errorMessageBox").html("Kérjük adja meg felhasználónevét/email címét a jelszó visszaállításához.");
                 $("#errorMessageBox").show();
                 return;
             }
@@ -66,20 +66,21 @@
                     $("#loginForm").show();
                     $("#loadingOverlay").hide();
                     if (result.result) {
-                        $("#errorMessageBox").html("If an account exists with the email address you entered, a password reset link has been sent to that address. Please check your email and follow the instructions provided.");
+                        $("#errorMessageBox").html("Ha létezik fiók a megadott email címmel, egy jelszó visszaállító linket küldtünk erre az email címre. Kérjük ellenőrizze az emailt és kövesse az utasításokat.");
                         $("#errorMessageBox").show();
                     } else {
-                        $("#errorMessageBox").html("Please contact the support team for a new password");
+                        $("#errorMessageBox").html("Kérjük vegye fel a kapcsolatot a támogatói csapattal egy új jelszóért");
                         $("#errorMessageBox").show();
                     }
                 }, error: function(){
                     $("#loginForm").show();
                     $("#loadingOverlay").hide();
-                    $("#errorMessageBox").html("Please refresh the page and check your internet connection");
+                    $("#errorMessageBox").html("Kérjük frissítse az oldalt és ellenőrizze az internetkapcsolatát");
                     $("#errorMessageBox").show();
                 }
             });
 
         });
-	</script>
+    </script>
+
 {% endblock %}
