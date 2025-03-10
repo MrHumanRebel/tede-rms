@@ -15,33 +15,34 @@
             const Calendar = FullCalendar.Calendar;
             
             const calendar{{ calendarId }} = new Calendar(document.getElementById('calendar{{ calendarId }}'), {
-                editable  : false,
-                droppable : false,
+                editable: false,
+                droppable: false,
                 themeSystem: 'bootstrap',
                 initialView: '{{USERDATA['instance']['calendarSettings'].defaultView ?: "dayGridMonth"}}',
                 nextDayThreshold: '05:00:00',
                 height: 800,
                 firstDay: 1,
-                buttonText:  {
-                    today:    'Today',
-                    month:    'Month',
-                    week:     'Week',
-                    day:      'Day',
-                    list:     'List'
+                buttonText: {
+                    today: 'Ma',
+                    month: 'Hónap',
+                    week: 'Hét',
+                    day: 'Nap',
+                    list: 'Lista'
                 },
                 headerToolbar: {
-                    left  : 'prev,next today',
+                    left: 'prev,next today',
                     center: 'title',
-                    right : 'dayGridMonth,timeGridWeek,timeGridDay,listYear'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listYear'
                 },
                 titleFormat: function(date) {
-                    const monthNames = ["January", "February", "March", "April", "May", "June",
-                        "July", "August", "September", "October", "November", "December"
+                    const monthNames = ["Január", "Február", "Március", "Április", "Május", "Június",
+                        "Július", "Augusztus", "Szeptember", "Október", "November", "December"
                     ]
-                    const prefix = "{{LOCATION ? LOCATION.locations_name ~ ': ' : USER ? 'Your Calendar: ' : '' }}"
+                    const prefix = "{{LOCATION ? LOCATION.locations_name ~ ': ' : USER ? 'Naptárad: ' : '' }}"
 
                     return prefix + monthNames[date['date']['month']] + " " + date['date']['year'];
                 },
+
                 events : [
                     {% set startDate = false %}
                     {% for project in projects %}

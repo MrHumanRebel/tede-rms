@@ -4,15 +4,15 @@
 
 <div class="card statsWidget" data-widgetname="{{ THISWIDGETNAME }}">
     <div class="card-header">
-        <h3 class="card-title">My Maintenance Jobs</h3>
+        <h3 class="card-title">Saját karbantartási feladataim</h3>
 
         <div class="card-tools">
             {% if WIDGETS.checkUser(THISWIDGETNAME) %}
-                <button type="button" class="btn btn-tool removeWidgetButton" data-card-widget="collapse" data-widgetname="{{ THISWIDGETNAME }}" title="Remove from Dashboard">
+                <button type="button" class="btn btn-tool removeWidgetButton" data-card-widget="collapse" data-widgetname="{{ THISWIDGETNAME }}" title="Eltávolítás a vezérlőpultról">
                     <i class="fas fa-times"></i>
                 </button>
             {% else %}
-                <button type="button" class="btn btn-tool addWidgetButton" data-widgetname="{{ THISWIDGETNAME }}" title="Add to Dashboard">
+                <button type="button" class="btn btn-tool addWidgetButton" data-widgetname="{{ THISWIDGETNAME }}" title="Hozzáadás a vezérlőpulthoz">
                     <i class="fas fa-plus"></i>
                 </button>
             {% endif %}

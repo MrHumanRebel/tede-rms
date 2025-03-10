@@ -5,7 +5,7 @@
             var id = $(this).data("s3fileid");
             var filename = $(this).data("s3filename");
             bootbox.prompt({
-                title: "Edit file name",
+                title: "Fájl név szerkesztése",
                 inputType: 'textarea',
                 value: filename,
                 callback: function (result) {
@@ -25,7 +25,7 @@
         $(".deleteFile").click(function () {
             var id = $(this).data("s3fileid");
             bootbox.confirm({
-                message: "Are you sure you wish to delete this file?",
+                message: "Biztosan törölni szeretnéd ezt a fájlt?",
                 buttons: {
                     confirm: {
                         label: 'Igen',
@@ -52,12 +52,12 @@
         {% if "FILES:FILE_ATTACHMENTS:EDIT:SHARING_SETTINGS"|instancePermissions %}
         function showShareKeyDialog(file,shareKey) {
             bootbox.dialog({
-                title: 'Shared File',
-                message: '<p>This file has been shared, which makes it visible to everyone on the web - be careful when publishing private or sensitive information.</p><div class="input-group"><input type="text" class="form-control" value="' + "{{ CONFIG.ROOTURL }}/api/file/?r&f=" + file + "&key=" + shareKey + '" disabled><span class="input-group-btn"><button class="btn btn-default copybutton" type="button" title="Copy to Clipboard">Copy</button></span></div>',
+                title: 'Megosztott fájl',
+                message: '<p>Ez a fájl meg lett osztva, így mindenki számára látható a weben - légy óvatos, amikor privát vagy érzékeny információkat osztasz meg.</p><div class="input-group"><input type="text" class="form-control" value="' + "{{ CONFIG.ROOTURL }}/api/file/?r&f=" + file + "&key=" + shareKey + '" disabled><span class="input-group-btn"><button class="btn btn-default copybutton" type="button" title="Másolás vágólapra">Másolás</button></span></div>',
                 size: 'large',
                 buttons: {
                     disableshare: {
-                        label: "Disable Sharing for this File",
+                        label: "A fájl megosztásának letiltása",
                         className: 'btn-danger',
                         callback: function(){
                             ajaxcall("file/removeShare.php", {
@@ -69,7 +69,7 @@
                         }
                     },
                     regenerateshare: {
-                        label: "Generate replacement share link",
+                        label: "Csere megosztási link generálása",
                         className: 'btn-warning',
                         callback: function(){
                             ajaxcall("file/share.php", {
@@ -81,7 +81,7 @@
                         }
                     },
                     ok: {
-                        label: "Close",
+                        label: "Bezárás",
                         className: 'btn-default',
                         callback: function(){
                             return true;
@@ -97,8 +97,8 @@
                 showShareKeyDialog(id,shareKey);
             } else {
                 bootbox.confirm({
-                    title: "Share File?",
-                    message: "Are you sure you wish to share this file - it will be accessible to anyone with the link",
+                    title: "Fájl megosztása?",
+                    message: "Biztosan meg szeretnéd osztani ezt a fájlt? Bárki számára hozzáférhető lesz, akinek megvan a link.",
                     buttons: {
                         confirm: {
                             label: 'Share File',

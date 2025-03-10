@@ -3,14 +3,14 @@
 {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
     <div class="card statsWidget" data-widgetname="inventoryTotal">
         <div class="card-header">
-            <h3 class="card-title">Assets</h3>
+            <h3 class="card-title">Eszközök</h3>
             <div class="card-tools">
                 {% if WIDGETS.checkUser('inventoryTotal') %}
-                    <button type="button" class="btn btn-sm btn-tool removeWidgetButton" data-card-widget="collapse" data-widgetname="inventoryTotal" title="Remove from Dashboard">
+                    <button type="button" class="btn btn-sm btn-tool removeWidgetButton" data-card-widget="collapse" data-widgetname="inventoryTotal" title="Eltávolítás a vezérlőpultról">
                         <i class="fas fa-times"></i>
                     </button>
                 {% else %}
-                    <button type="button" class="btn btn-sm btn-tool addWidgetButton" data-widgetname="inventoryTotal" title="Add to Dashboard">
+                    <button type="button" class="btn btn-sm btn-tool addWidgetButton" data-widgetname="inventoryTotal" title="Hozzáadás a vezérlőpulthoz">
                         <i class="fas fa-plus"></i>
                     </button>
                 {% endif %}
@@ -22,10 +22,10 @@
                     <i class="ion ion-ios-cart-outline"></i>
                 </p>
                 <p class="d-flex flex-column text-right">
-                        <span class="font-weight-bold">
-                        <i class="ion ion-android-arrow-up text-warning"></i> {{ THISWIDGET.VALUE|money(USERDATA.instance['instances_config_currency']) }}
-                        </span>
-                    <span class="text-muted">TOTAL VALUE</span>
+                    <span class="font-weight-bold">
+                        <i class="ion ion-android-arrow-up text-warning"></i> {{ THISWIDGET.VALUE|money(USERDATA.instance['instances_config_currency'])|replace({'.00':''}) }}
+                    </span>
+                    <span class="text-muted">ÖSSZÉRTÉK</span>
                 </p>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -36,7 +36,7 @@
                         <span class="font-weight-bold">
                         <i class="ion ion-android-arrow-up text-warning"></i> {{ THISWIDGET.MASS|round(2, 'ceil')|number_format(2) }}kg
                         </span>
-                    <span class="text-muted">TOTAL MASS</span>
+                    <span class="text-muted">ÖSSZTÖMEG</span>
                 </p>
             </div>
         </div>
