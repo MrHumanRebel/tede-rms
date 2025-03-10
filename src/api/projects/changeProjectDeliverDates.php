@@ -87,11 +87,12 @@ if ($projectFinanceCacher->save()) {
     // Update project with the new dates in the required format
     $projectUpdate = $DBLIB->update("projects", $newDates);
     if (!$projectUpdate) finish(false);
-    $bCMS->auditLog("CHANGE-DATE", "projects", "Set the deliver start date to ". date ("D jS M Y h:i:sa", strtotime($_POST['projects_dates_deliver_start'])) . "\nSet the deliver end date to ". date ("D jS M Y h:i:sa", strtotime($_POST['projects_dates_deliver_end'])), $AUTH->data['users_userid'], null, $_POST['projects_id']);
+    $bCMS->auditLog("CHANGE-DATE", "projects", "A szállítási kezdő dátumot erre állították: ". date ("Y-m-d H:i", strtotime($_POST['projects_dates_deliver_start'])) . "\nA szállítási vég dátumot erre állították: ". date ("Y-m-d H:i", strtotime($_POST['projects_dates_deliver_end'])), $AUTH->data['users_userid'], null, $_POST['projects_id']);
     finish(true, null, ["changed" => true]);
 } else {
-    finish(false, ["message" => "Cannot modify finances to change dates"]);
+    finish(false, ["message" => "Nem lehet módosítani a pénzügyeket a dátumok változtatásához"]);
 }
+
 
 /** @OA\Post(
  *     path="/projects/changeProjectDeliverDates.php", 

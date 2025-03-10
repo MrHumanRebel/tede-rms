@@ -159,7 +159,7 @@
         <div class="card card-solid">
             <div class="card-header">
                 <h3 class="card-title" style="margin-top: 0.4rem;">
-                    {{ searchResults.PAGINATION.OFFSET > 0 ? 'A ' ~ searchResults.PAGINATION.OFFSET ~ '-' ~ (searchResults.PAGINATION.OFFSET + (searchResults.ASSETS|length)) ~ ' találatot mutatunk' : searchResults.ASSETS|length ~ ' találat' }} a {{ searchResults.PAGINATION.COUNT }} találatból
+                    {{ searchResults.PAGINATION.OFFSET > 0 ? 'A ' ~ searchResults.PAGINATION.OFFSET ~ '-' ~ (searchResults.PAGINATION.OFFSET + (searchResults.ASSETS|length)) ~ ' találatot mutatunk' : searchResults.ASSETS|length ~ ' találat' }} a(z) {{ searchResults.PAGINATION.COUNT }} eszközből
                 </h3>
                 <div class="card-tools pull-right">
                 {% if searchResults.PAGINATION['TOTAL-PAGES'] > 1 %}
@@ -217,8 +217,8 @@
                                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                             <li class="small">
                                                 <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ (asset.tags[0]['assets_value'] ?: asset.assetTypes_value)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}<br/>
-                                                {{ (asset.tags[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/day<br/>
-                                                {{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/week
+                                                {{ (asset.tags[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/nap<br/>
+                                                {{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/hét
                                             </li>
                                             {% endif %}
                                         {% else %}
@@ -282,8 +282,8 @@
                                                                             {% endfor %}
                                                                             <th>Notes</th>
                                                                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-                                                                                <th>Cost/day</th>
-                                                                                <th>Cost/week</th>
+                                                                                <th>Költség/nap</th>
+                                                                                <th>Költség/hét</th>
                                                                             {% endif %}
                                                                             <th style="width:1%"><i class="fas fa-flag"></i></th>
                                                                             <th style="width:30px;">

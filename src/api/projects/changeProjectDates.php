@@ -26,7 +26,7 @@ if (!$project) {
     finish(false);
 }
 
-$bCMS->auditLog("CHANGE-DATE", "projects", "A kezdő dátumot erre állította: " . $start_date->format("D jS M Y h:i:sa") . "\nA befejező dátumot erre állította: " . $end_date->format("D jS M Y h:i:sa"), $AUTH->data['users_userid'], null, $_POST['projects_id']);
+$bCMS->auditLog("CHANGE-DATE", "projects", "A kezdő dátumot erre állította: " . $start_date->format("Y-m-d H:i") . "\nA befejező dátumot erre állította: " . $end_date->format("Y-m-d H:i"), $AUTH->data['users_userid'], null, $_POST['projects_id']);
 finish(true);
 
 /** @OA\Post(
