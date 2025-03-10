@@ -272,20 +272,20 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 			<nav class="main-header navbar navbar-expand {% if USERDATA.users_dark_mode %}navbar-dark{% else %}navbar-white navbar-light{% endif %}">
 				<ul class="navbar-nav">
 					{% if pageConfig.NOMENU != true %}
-						<li class="nav-item">
-							<a class="nav-link" data-widget="pushmenu" href="#">
-								<i class="fas fa-bars"></i>
-							</a>
-						</li>
+					<li class="nav-item">
+						<a class="nav-link" data-widget="pushmenu" href="#">
+							<i class="fas fa-bars"></i>
+						</a>
+					</li>
 					{% endif %}
 					{% if USERDATA.viewSiteAs != false %}
-						<li class="nav-item">
-							<a href="{{ CONFIG.ROOTURL }}/api/account/viewSiteAs_terminate.php" class="nav-link">Back to Admin</a>
-						</li>
+					<li class="nav-item">
+						<a href="{{ CONFIG.ROOTURL }}/api/account/viewSiteAs_terminate.php" class="nav-link">Vissza az Admin felületre</a>
+					</li>
 					{% else %}
-						<li class="nav-item">
-							<a href="{{ CONFIG.ROOTURL }}/login/?logout" class="nav-link">Logout</a>
-						</li>
+					<li class="nav-item">
+						<a href="{{ CONFIG.ROOTURL }}/login/?logout" class="nav-link">Kijelentkezés</a>
+					</li>
 					{% endif %}
 				</ul>
 				{% if USERDATA.instances|length > 0 and pageConfig.NOMENU != true %}
@@ -313,7 +313,7 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 								</a>
 								<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 									{% if USERDATA.instances|length > 1 %}
-										<span class="dropdown-header">Your Businesses</span>
+										<span class="dropdown-header">Vállalkozásaid</span>
 										{% for instance in USERDATA.instances %}
 											<a href="{{ CONFIG.ROOTURL }}?i={{instance.instances_id}}" class="dropdown-item changeInstanceActionButton" data-newinstance="{{instance.instances_id}}">
 												{{instance.instances_name}}
@@ -334,9 +334,9 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 										</a>
 										<div class="dropdown-divider"></div>
 									{% endfor %}
-									<a href="{{CONFIG.ROOTURL}}/instances/join.php" class="dropdown-item dropdown-footer">Join business</a>
+									<a href="{{CONFIG.ROOTURL}}/instances/join.php" class="dropdown-item dropdown-footer">Csatlakozás vállalkozáshoz</a>
 									{% if CONFIG["NEW_INSTANCE_ENABLED"] == "Enabled" or "INSTANCES:CREATE"|serverPermissions %}
-										<a href="{{CONFIG.ROOTURL}}/instances/new.php" class="dropdown-item dropdown-footer">Create new business</a>
+										<a href="{{CONFIG.ROOTURL}}/instances/new.php" class="dropdown-item dropdown-footer">Új vállalkozás létrehozása</a>
 									{% else %}
 										<a href="#" class="dropdown-item dropdown-footer">
 											<i>Lépj kapcsolatba a támogatással új vállalkozások hozzáadásához</i>
