@@ -54,7 +54,7 @@
     </span>
                                 <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
                                 <div class="tools">
-                                    <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Download File"><i class="fas fa-cloud-download-alt"></i></a>
+                                    <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
                                 </div>
                             </li>
                         {% endfor %}
@@ -89,7 +89,7 @@
                             </span>
                             <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
                             <div class="tools">
-                                <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Download File"><i class="fas fa-cloud-download-alt"></i></a>
+                                <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
                             </div>
                         </li>
                     {% endfor %}
@@ -97,7 +97,7 @@
             </div>
             <div class="card-footer">
                 <div class="btn-group float-right">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModal">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalInvoice">
                         Számla Létrehozása
                     </button>
                 </div>
@@ -126,7 +126,7 @@
                             </span>
                             <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
                             <div class="tools">
-                                <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Download File"><i class="fas fa-cloud-download-alt"></i></a>
+                                <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
                             </div>
                         </li>
                     {% endfor %}
@@ -134,11 +134,48 @@
             </div>
             <div class="card-footer">
                 <div class="btn-group float-right">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModal" data-quote="true">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalQuote" data-quote="true">
                         Árajánlat Létrehozása
                     </button>
                 </div>
             </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Pakolási lista</h3>
+                {% if quotes %}
+                <div class="card-tools">
+                    <a data-toggle="modal" data-target="#projectQuotesModal" type="button" class="btn btn-tool">
+                        <i class="fas fa-external-link-alt"></i></a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-body p-0">
+                <ul class="todo-list">
+                    {% for file in quotes %}
+                        <li>
+                            <span class="handle">
+                                <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
+                            </span>
+                            <span class="text">
+                                {{ "Bepak"|concat(file.s3files_name) }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
+                            </span>
+                            <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
+                            <div class="tools">
+                                <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group float-right">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalTruck" data-quote="true">
+                        Pakolási lista Létrehozása
+                    </button>
+                </div>
+            </div>
+
         </div>
         {% endif %}
     </div>

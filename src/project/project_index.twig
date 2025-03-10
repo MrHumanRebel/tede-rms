@@ -670,7 +670,14 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="pdfGenerateModal">
+
+    {#
+    #######################
+    Invoice
+    #######################    
+    #}
+
+    <div class="modal fade" id="pdfGenerateModalInvoice">
         <div class="modal-dialog">
             <form id="pdfGenerate" method="GET" action="{{CONFIG.ROOTURL}}/project/projectInvoice.php" target="_blank">
                 <div class="modal-content">
@@ -787,15 +794,273 @@
             </form>
         </div>
     </div>
+
+    {#
+    #######################
+    Quote
+    #######################    
+    #}
+
+    <div class="modal fade" id="pdfGenerateModalQuote">
+        <div class="modal-dialog">
+            <form id="pdfGenerate" method="GET" action="{{CONFIG.ROOTURL}}/project/projectInvoice.php" target="_blank">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="pdf" value="true">
+                        <input type="hidden" name="quote" value="">
+                        <input type="hidden" name="id" value="{{ project.projects_id }}">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="instancelogo" {% if USERDATA.instance.instances_logo %}checked{% else %}disabled{% endif %}>
+                                <label class="form-check-label">Vállalati logó</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="addresses" checked>
+                                <label class="form-check-label">Címek</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="pmdetails" checked>
+                                <label class="form-check-label">Projektmenedzser</label>
+                            </div>
+                            {% if project.projectsTypes_config_assets == 1 %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="totalmass" checked>
+                                    <label class="form-check-label">Teljes tömeg</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="totalvalue" checked>
+                                    <label class="form-check-label">Teljes érték</label>
+                                </div>
+                            {% endif %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="venue" checked>
+                                <label class="form-check-label">Helyszín</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="invoiceNotes" checked>
+                                <label class="form-check-label">Számla megjegyzések</label>
+                            </div>
+                            {% if project.projectsTypes_config_assets == 1 %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="assets" checked>
+                                    <label class="form-check-label">Berendezések listája</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="showAll">
+                                    <label class="form-check-label">Egyéni tételek a berendezés listájában</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="flagsBlocks" checked>
+                                    <label class="form-check-label">Zászlók és blokkok a berendezés listájában</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="checkboxes">
+                                    <label class="form-check-label">Berendezés jelölőnégyzetek</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="comments">
+                                    <label class="form-check-label">Berendezés megjegyzések</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="masses" checked>
+                                    <label class="form-check-label">Berendezés tömegei</label>
+                                </div>
+                            {% endif %}
+
+                            {% if "PROJECTS:PROJECT_PAYMENTS:VIEW"|instancePermissions and project.projectsTypes_config_finance == 1  %}
+                                <hr/>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="finance" checked>
+                                    <label class="form-check-label">Pénzügyi összegek</label>
+                                </div>
+                                {% if project.projectsTypes_config_assets == 1 %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="prices" checked>
+                                        <label class="form-check-label">Árak</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="discounts" checked>
+                                        <label class="form-check-label">Berendezések kedvezményei</label>
+                                    </div>
+                                {% endif %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="subHires" checked>
+                                    <label class="form-check-label">További bérlemények</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="sales" checked>
+                                    <label class="form-check-label">Értékesítés</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="staff" checked>
+                                    <label class="form-check-label">Munkavállalók</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="paymentTerms" checked>
+                                    <label class="form-check-label">Fizetési feltételek</label>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="submit" name="draft" value="true" class="btn btn-default">Piszkozat nyomtatás</button>
+                        <button type="submit" name="upload" value="true" class="btn btn-success">PDF generálása</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    {#
+    #######################
+    Truck
+    #######################    
+    #}
+
+    <div class="modal fade" id="pdfGenerateModalTruck">
+        <div class="modal-dialog">
+            <form id="pdfGenerate" method="GET" action="{{CONFIG.ROOTURL}}/project/projectInvoice.php" target="_blank">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="pdf" value="true">
+                        <input type="hidden" name="quote" value="">
+                        <input type="hidden" name="id" value="{{ project.projects_id }}">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="instancelogo" {% if USERDATA.instance.instances_logo %}checked{% else %}disabled{% endif %}>
+                                <label class="form-check-label">Vállalati logó</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="addresses" checked>
+                                <label class="form-check-label">Címek</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="pmdetails" checked>
+                                <label class="form-check-label">Projektmenedzser</label>
+                            </div>
+                            {% if project.projectsTypes_config_assets == 1 %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="totalmass" checked>
+                                    <label class="form-check-label">Teljes tömeg</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="totalvalue">
+                                    <label class="form-check-label">Teljes érték</label>
+                                </div>
+                            {% endif %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="venue" checked>
+                                <label class="form-check-label">Helyszín</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="invoiceNotes" checked>
+                                <label class="form-check-label">Számla megjegyzések</label>
+                            </div>
+                            {% if project.projectsTypes_config_assets == 1 %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="assets" checked>
+                                    <label class="form-check-label">Berendezések listája</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="showAll" checked>
+                                    <label class="form-check-label">Egyéni tételek a berendezés listájában</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="flagsBlocks" checked>
+                                    <label class="form-check-label">Zászlók és blokkok a berendezés listájában</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="checkboxes" checked>
+                                    <label class="form-check-label">Berendezés jelölőnégyzetek</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="comments" checked>
+                                    <label class="form-check-label">Berendezés megjegyzések</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="masses" checked>
+                                    <label class="form-check-label">Berendezés tömegei</label>
+                                </div>
+                            {% endif %}
+
+                            {% if "PROJECTS:PROJECT_PAYMENTS:VIEW"|instancePermissions and project.projectsTypes_config_finance == 1  %}
+                                <hr/>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="finance">
+                                    <label class="form-check-label">Pénzügyi összegek</label>
+                                </div>
+                                {% if project.projectsTypes_config_assets == 1 %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="prices">
+                                        <label class="form-check-label">Árak</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="discounts">
+                                        <label class="form-check-label">Berendezések kedvezményei</label>
+                                    </div>
+                                {% endif %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="subHires">
+                                    <label class="form-check-label">További bérlemények</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="sales">
+                                    <label class="form-check-label">Értékesítés</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="staff">
+                                    <label class="form-check-label">Munkavállalók</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="paymentTerms">
+                                    <label class="form-check-label">Fizetési feltételek</label>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="submit" name="draft" value="true" class="btn btn-default">Piszkozat nyomtatás</button>
+                        <button type="submit" name="upload" value="true" class="btn btn-success">PDF generálása</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
     <script>
         $(document).ready(function () {
-            $('#pdfGenerateModal').on('show.bs.modal', function (e) {
-                if ($(e.relatedTarget).data('quote')) {
-                    $("#pdfGenerateModal .modal-title").text("Create Quote");
-                    $('#pdfGenerateModal input[name="quote"]').val("true");
+            $('#pdfGenerateModalInvoice, #pdfGenerateModalQuote, #pdfGenerateModalTruck').on('show.bs.modal', function (e) {
+                var targetModal = $(this);
+                var relatedTarget = $(e.relatedTarget);
+
+                if (relatedTarget.data('quote') === 'true') {
+                    targetModal.find('.modal-title').text("Create Quote");
+                    targetModal.find('input[name="quote"]').val("true");
+                } else if (relatedTarget.data('quote') === 'false') {
+                    targetModal.find('.modal-title').text("Create Invoice");
+                    targetModal.find('input[name="quote"]').val("false");
                 } else {
-                    $("#pdfGenerateModal .modal-title").text("Create Invoice");
-                    $('#pdfGenerateModal input[name="quote"]').val("false");
+                    targetModal.find('.modal-title').text("Create Packing List");
+                    targetModal.find('input[name="quote"]').val("false"); // For truck related modals
                 }
             });
             $("#assetAssignmentCheckboxAll").click(function () {
