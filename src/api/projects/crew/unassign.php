@@ -19,7 +19,7 @@ else {
             str_replace(
                 ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], 
                 ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], 
-                $name . " eltávolított téged a projekt " . $projectName . " stábjából, a " . $assignment["crewAssignments_role"] . " szerepből"
+                $name . " eltávolított téged a projekt " .  $assignment['projects_name'] . " stábjából, a " . $assignment["crewAssignments_role"] . " szerepből"
             )
         );
     }
