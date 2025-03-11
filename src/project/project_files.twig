@@ -140,13 +140,14 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Pakolási lista</h3>
                 {% if trucks %}
                 <div class="card-tools">
-                    <a data-toggle="modal" data-target="#projectQuotesModal" type="button" class="btn btn-tool">
+                    <a data-toggle="modal" data-target="#projectTrucksModal" type="button" class="btn btn-tool">
                         <i class="fas fa-external-link-alt"></i></a>
                 </div>
                 {% endif %}
@@ -177,6 +178,6 @@
                 </div>
             </div>
         </div>
-        {% endif %}
+        
     </div>
 </div>

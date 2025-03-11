@@ -670,6 +670,22 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="projectTrucksModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Projekt Pakolási listák</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% embed 'assets/templates/fileBox.twig' with {'files': trucks } %}
+                    {% endembed %}
+                </div>
+            </div>
+        </div>
+    </div>
     {#
     Invoice
     #}
