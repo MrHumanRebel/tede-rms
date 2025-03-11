@@ -564,7 +564,7 @@
                     formData.append("fileNumber", "{{ fileNumber|escape("js") }}");
                     formData.append("id", "{{ project['projects_id'] }}");
                     var oReq = new XMLHttpRequest();
-                    oReq.open("POST", "{{CONFIG.ROOTURL}}/api/s3files/uploadProjectFile.php", true);
+                    oReq.open("POST", "{{CONFIG.ROOTURL}}/api/s3files/uploadProjectInvoice.php", true);
                     oReq.onload = function (oEvent) {
                         var response = JSON.parse(oReq.responseText);
                         console.log(response);
