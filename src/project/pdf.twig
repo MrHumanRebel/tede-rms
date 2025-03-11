@@ -561,8 +561,13 @@
                     var formData = new FormData();
                     formData.append("file", blob, {type: "application/pdf"});
                     formData.append("quote", "{{ GET['quote'] }}");
-                    formData.append("fileNumber", "{{ fileNumber|escape("js") }}");
+                    formData.append("fileNumber", "{{ fileNumber|escape('js') }}");
                     formData.append("id", "{{ project['projects_id'] }}");
+
+                    // Log all formData key-value pairs
+                    for (var pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
                     var oReq = new XMLHttpRequest();
                     oReq.open("POST", "{{CONFIG.ROOTURL}}/api/s3files/uploadProjectInvoice.php", true);
                     oReq.onload = function (oEvent) {

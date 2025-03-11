@@ -67,121 +67,54 @@
     
     <div class="col-sm-12 col-md-12 {% if project.projectsTypes_config_files == 1 or project.projectsTypes_config_notes == 1 %}col-lg-6{% else %}col-lg-12{% endif %}">
         {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Számlák</h3>
-                {% if invoices %}
-                <div class="card-tools">
-                    <a data-toggle="modal" data-target="#projectInvoicesModal" type="button" class="btn btn-tool">
-                        <i class="fas fa-external-link-alt"></i></a>
+        {% macro render_card(title, files, type, modal_target, pdf_target) %}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ title }}</h3>
+                    {% if files %}
+                    <div class="card-tools">
+                        <a data-toggle="modal" data-target="{{ modal_target }}" type="button" class="btn btn-tool">
+                            <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-            </div>
-            <div class="card-body p-0">
-                <ul class="todo-list">
-                    {% for file in invoices %}
-                        {% if file.s3files_meta_type == 20 %}
-                            <li>
-                                <span class="handle">
-                                    <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
-                                </span>
-                                <span class="text">
-                                    {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
-                                </span>
-                                <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
-                                <div class="tools">
-                                    <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
-                                </div>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="card-footer">
-                <div class="btn-group float-right">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalInvoice">
-                        Számla Létrehozása
-                    </button>
+                <div class="card-body p-0">
+                    <ul class="todo-list">
+                        {% for file in files %}
+                            {% if file.s3files_meta_type == type %}
+                                <li>
+                                    <span class="handle">
+                                        <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
+                                    </span>
+                                    <span class="text">
+                                        {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
+                                    </span>
+                                    <i class="fas fa-info-circle" data-toggle="popover" title="File Details" 
+                                    data-content="Generated {{ file.s3files_meta_uploaded|date('Y. m. d. H:i') }}. 
+                                    File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
+                                    <div class="tools">
+                                        <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" 
+                                        title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                 </div>
-            </div>
-        </div>
-    
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Árajánlatok</h3>
-                {% if quotes %}
-                <div class="card-tools">
-                    <a data-toggle="modal" data-target="#projectQuotesModal" type="button" class="btn btn-tool">
-                        <i class="fas fa-external-link-alt"></i></a>
-                </div>
-                {% endif %}
-            </div>
-            <div class="card-body p-0">
-                <ul class="todo-list">
-                    {% for file in quotes %}
-                        {% if file.s3files_meta_type == 21 %}
-                            <li>
-                                <span class="handle">
-                                    <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
-                                </span>
-                                <span class="text">
-                                    {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
-                                </span>
-                                <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
-                                <div class="tools">
-                                    <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
-                                </div>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="card-footer">
-                <div class="btn-group float-right">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalQuote" data-quote="true">
-                        Árajánlat Létrehozása
-                    </button>
+                <div class="card-footer">
+                    <div class="btn-group float-right">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="{{ pdf_target }}">
+                            {{ title }} Létrehozása
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endmacro %}
 
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Pakolási lista</h3>
-                {% if trucks %}
-                <div class="card-tools">
-                    <a data-toggle="modal" data-target="#projectQuotesModal" type="button" class="btn btn-tool">
-                        <i class="fas fa-external-link-alt"></i></a>
-                </div>
-                {% endif %}
-            </div>
-            <div class="card-body p-0">
-                <ul class="todo-list">
-                    {% for file in trucks %}
-                        {% if file.s3files_meta_type == 22 %}
-                            <li>
-                                <span class="handle">
-                                    <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
-                                </span>
-                                <span class="text">
-                                    {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
-                                </span>
-                                <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
-                                <div class="tools">
-                                    <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
-                                </div>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="card-footer">
-                <div class="btn-group float-right">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalTruck" data-quote="truck">
-                        Pakolási lista Létrehozása
-                    </button>
-                </div>
-            </div>
+        <div>
+            {{ render_card('Számlák', invoices, 20, '#projectInvoicesModal', '#pdfGenerateModalInvoice') }}
+            {{ render_card('Árajánlatok', quotes, 21, '#projectQuotesModal', '#pdfGenerateModalQuote') }}
+            {{ render_card('Pakolási lista', trucks, 22, '#projectQuotesModal', '#pdfGenerateModalTruck') }}
         </div>
         {% endif %}
     </div>

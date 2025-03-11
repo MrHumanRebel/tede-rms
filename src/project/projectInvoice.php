@@ -6,9 +6,18 @@ require_once __DIR__ . '/../api/projects/data.php'; //Where most of the data com
 $PAGEDATA['GET'] = $_GET;
 $PAGEDATA['GET']['generate'] = true;
 
-$isQuote = $_GET['quote'] == "true";
-$PAGEDATA['GET']['quote'] = $isQuote;
-$typeId = $isQuote ? 21 : ($_GET['quote'] == "truck" ? 22 : 20); // Truck típus hozzáadva
+$isQuote = $_GET['quote'] === "true"; // Ha 'true', akkor árajánlat
+$isTruck = $_GET['quote'] === "truck"; // Ha 'truck', akkor teherautó
+$isInvoice = $_GET['quote'] === "false"; // Ha 'false', akkor számla
+
+// Állítsuk be a $typeId értékét
+if ($isQuote) {
+    $typeId = 21; // Árajánlat
+} elseif ($isTruck) {
+    $typeId = 22; // Teherautó
+} elseif ($isInvoice) {
+    $typeId = 20; // Számla
+}
 
 $PAGEDATA['GET']['draft'] = $_GET['draft'] == "true";
 
