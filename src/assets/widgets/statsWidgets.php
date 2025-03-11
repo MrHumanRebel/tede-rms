@@ -16,7 +16,7 @@ class statsWidgets
     protected $widgetsArray = [];
     protected $userWidgetsExcludeArray = [];
     protected $showAll = false;
-    protected $widgetsList = ["inventoryValueGraph", "inventoryTotal", "storageUsage", "userCount", "maintenanceOutstanding", "myMaintenance", "myCalendar"];
+    protected $widgetsList = ["inventoryValueGraph", "inventoryTotal", "storageUsage", "userCount", "projectCount", "maintenanceOutstanding", "myMaintenance", "myCalendar"];
     public function __construct($userWidgetsExcludeArray = [],$showAll=false) {
         $this->showAll = $showAll;
         foreach ($userWidgetsExcludeArray as $widgetName) {
@@ -53,6 +53,18 @@ class statsWidgets
         $DBLIB->where("(userInstances.userInstances_archived IS NULL OR userInstances.userInstances_archived >= '" . date('Y-m-d H:i:s') . "')");
         return ["COUNT" => $DBLIB->getValue ("userInstances", "count(*)")];
     }
+
+    private function projectCount($arguments = []) {
+        global $DBLIB;
+        if (!$arguments['instanceid']) return [];
+
+        $DBLIB->join("instancePositions","instancePositions.instancePositions_id=userInstances.instancePositions_id","LEFT");
+        $DBLIB->where("instancePositions.instances_id", $arguments['instanceid']);
+        $DBLIB->where("userInstances.userInstances_deleted",  0);
+        $DBLIB->where("(userInstances.userInstances_archived IS NULL OR userInstances.userInstances_archived >= '" . date('Y-m-d H:i:s') . "')");
+        return ["COUNT" => $DBLIB->getValue ("userInstances", "count(*)")];
+    }
+
     private function inventoryValueGraph($arguments = []) {
         global $DBLIB,$AUTH;
         if (!$arguments['instanceid']) return [];
