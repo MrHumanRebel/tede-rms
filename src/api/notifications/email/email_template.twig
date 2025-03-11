@@ -37,6 +37,7 @@
             padding: 0 !important;
             height: 100% !important;
             width: 100% !important;
+            color: black; /* All text is black */
         }
 
         /* What it does: Stops email clients resizing small text. */
@@ -78,6 +79,7 @@
         /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
         a {
             text-decoration: none;
+            color: black; /* Links will be black */
         }
 
         /* What it does: A work-around for email clients meddling in triggered links. */
@@ -175,15 +177,15 @@
 
 </head>
 <!--
-	The email background color (#222222) is defined in three places:
-	1. body tag: for most email clients
-	2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr
-	3. mso conditional: For Windows 10 Mail
+    The email background color (#222222) is defined in three places:
+    1. body tag: for most email clients
+    2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr
+    3. mso conditional: For Windows 10 Mail
 -->
-<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #222222;">
-<center style="width: 100%; background-color: #222222;">
+<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #ffffff;">
+<center style="width: 100%; background-color: #ffffff;">
     <!--[if mso | IE]>
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #222222;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff;">
         <tr>
             <td>
     <![endif]-->
@@ -254,29 +256,18 @@
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                         <tr>
                             <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
-                                <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;">{{ INSTANCE.instances_name ?: "AdamRMS" }}</h1>
-                                <p style="margin: 0;">{{ SUBJECT }}</p>
+                                <h1 style="margin: 0; padding: 0; font-size: 24px; line-height: 32px; font-family: sans-serif; color: #333333;">{{ SUBJECT }}</h1>
+                                <p style="font-size: 15px; line-height: 20px; margin: 10px 0;">{{ BODY }}</p>
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
-            {% endif %}
             <!-- 1 Column Text + Button : END -->
+            {% endif %}
+
         </table>
         <!-- Email Body : END -->
-
-        <!-- Email Footer : BEGIN -->
-        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            <tr>
-                <td style="padding: 20px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;">
-                    <br/>
-                    {% if INSTANCE %}Küldve a {{ INSTANCE.instances_name }} által<br/>{% endif %}
-                    <br/>
-                </td>
-            </tr>
-        </table>
-        <!-- Email Footer : END -->
 
         <!--[if mso]>
         </td>
@@ -289,6 +280,7 @@
     </tr>
     </table>
     <![endif]-->
+
 </center>
 </body>
 </html>

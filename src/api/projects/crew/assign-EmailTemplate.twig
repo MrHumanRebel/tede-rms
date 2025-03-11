@@ -6,18 +6,19 @@
                 <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
                     <h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;">{{SUBJECT}}</h1>
                     <p style="margin: 0;">
-                        The project runs from {{ DATA.project.projects_dates_use_start|date('d M Y h:ia') }} to {{ DATA.project.projects_dates_use_end|date('d M Y h:ia') }}<br/>
+                        A projekt {{ DATA.project.projects_dates_use_start|date('Y-m-d H:i') }}-tól {{ DATA.project.projects_dates_use_end|date('Y-m-d H:i') }}-ig tart<br/>
                     </p>
-                    <p style="margin: 0;">Please get in touch with the project manager {{ DATA.project.users_name1 ~ " " ~ DATA.project.users_name2 ~ " (" ~ DATA.project.users_email ~ ")" }} if you're unsure about your role</p>
+                    <p style="margin: 0;">Kérjük, lépj kapcsolatba a projektvezetővel, {{ DATA.project.users_name1 ~ " " ~ DATA.project.users_name2 ~ " (" ~ DATA.project.users_email ~ ")" }}, ha nem biztos a szerepedben.</p>
                 </td>
             </tr>
+
             <tr>
                 <td style="padding: 0 20px;">
                     <!-- Button : BEGIN -->
                     <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
                         <tr>
                             <td class="button-td button-td-primary" style="border-radius: 4px; background: #222222;">
-                                <a class="button-a button-a-primary" href="{{CONFIG.ROOTURL}}/project/?id={{ DATA.project.projects_id }}" style="background: #222222; border: 1px solid #000000; font-family: sans-serif; font-size: 15px; line-height: 15px; text-decoration: none; padding: 13px 17px; color: #ffffff; display: block; border-radius: 4px;">View {{ DATA.project.projects_name }}</a>
+                                <a class="button-a button-a-primary" href="{{CONFIG.ROOTURL}}/project/?id={{ DATA.project.projects_id }}" style="background: #222222; border: 1px solid #000000; font-family: sans-serif; font-size: 15px; line-height: 15px; text-decoration: none; padding: 13px 17px; color: #ffffff; display: block; border-radius: 4px;">Megtekintés: {{ DATA.project.projects_name }}</a>
                             </td>
                         </tr>
                     </table>
@@ -28,7 +29,7 @@
             {% if DATA.clashes %}
             <tr>
                 <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
-                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 22px; color: #333333; font-weight: bold;">This project clashes with {{ DATA.clashes|length > 0 ? "other projects" : "another project" }} that you're already assigned to:</h2>
+                    <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 22px; color: #333333; font-weight: bold;">Ez a projekt ütközik {{ DATA.clashes|length > 0 ? "más projektekkel" : "egy másik projekttel" }} amire már hozzárendelve vagy:</h2>
                     <ul style="padding: 0; margin: 0 0 10px 0; list-style-type: disc;">
                         {% for clash in DATA.clashes %}
                         <li style="margin:0 0 10px 30px;" class="list-item-first">{{clash.projects_name}} ({{ clash.crewAssignments_role }})</li>
@@ -46,8 +47,8 @@
                                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                     <tr>
                                         <td style="text-align: left; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding: 10px 10px 0;">
-                                            <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 22px; color: #333333; font-weight: bold;">Role Comments</h2>
-                                            <p style="margin: 0;">{{  DATA.assignment.crewAssignments_comment|nl2br }}</p>
+                                            <h2 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 18px; line-height: 22px; color: #333333; font-weight: bold;">Szerepkör megjegyzések</h2>
+                                            <p style="margin: 0;">{{ DATA.assignment.crewAssignments_comment|nl2br }}</p>
                                         </td>
                                     </tr>
                                 </table>
