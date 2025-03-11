@@ -56,8 +56,11 @@
                 {% endif %}
                 " ",
                 { text: "{{ project.projects_name|escape("js") }}", style: { bold: true, fontSize: 25 } },
-                {% if GET['quote'] %}
+                {% if GET['quote'] == 'true' %}
                     { text: "Árajánlat", style: { fontSize: 16 } },
+                {% endif %}
+                {% if GET['quote'] == 'truck' %}
+                    { text: "Pakolási lista", style: { fontSize: 16 } },
                 {% endif %}
                 {
                     table: {
