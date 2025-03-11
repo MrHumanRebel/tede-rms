@@ -818,10 +818,12 @@
 
                         </div>
                     </div>
+                    {% if "ASSETS:CREATE"|instancePermissions %}
                     <div class="modal-footer justify-content-between">
                         <button type="submit" name="draft" value="true" class="btn btn-default">Piszkozat nyomtatás</button>
                         <button type="submit" name="upload" value="true" class="btn btn-success">PDF generálása</button>
                     </div>
+                    {% endif %}
                 </div>
             </form>
         </div>
@@ -938,10 +940,12 @@
 
                         </div>
                     </div>
+                    {% if "ASSETS:CREATE"|instancePermissions %}
                     <div class="modal-footer justify-content-between">
                         <button type="submit" name="draft" value="true" class="btn btn-default">Piszkozat nyomtatás</button>
                         <button type="submit" name="upload" value="true" class="btn btn-success">PDF generálása</button>
                     </div>
+                    {% endif %}
                 </div>
             </form>
         </div>
@@ -1058,10 +1062,12 @@
 
                         </div>
                     </div>
+                    {% if "ASSETS:CREATE"|instancePermissions %}
                     <div class="modal-footer justify-content-between">
                         <button type="submit" name="draft" value="true" class="btn btn-default">Piszkozat nyomtatás</button>
                         <button type="submit" name="upload" value="true" class="btn btn-success">PDF generálása</button>
                     </div>
+                    {% endif %}
                 </div>
             </form>
         </div>
