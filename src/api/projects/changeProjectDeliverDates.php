@@ -8,9 +8,10 @@ if (!$AUTH->instancePermissionCheck("PROJECTS:EDIT:DATES") or !isset($_POST['pro
 
 // Parse the dates from the new format
 $newDates = [
-    "projects_dates_deliver_start" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_start']))),
-    "projects_dates_deliver_end" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_end'])))
+    "projects_dates_deliver_start" => date("Y-m-d H:i:s", strtotime(str_replace(".", "-", $_POST['projects_dates_deliver_start']))),
+    "projects_dates_deliver_end" => date("Y-m-d H:i:s", strtotime(str_replace(".", "-", $_POST['projects_dates_deliver_end'])))
 ];
+
 
 // Validate if dates are valid after parsing
 if (!$newDates['projects_dates_deliver_start'] || !$newDates['projects_dates_deliver_end']) {
