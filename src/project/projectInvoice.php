@@ -10,7 +10,7 @@ $isQuote = $_GET['quote'] == "true";
 $isTruck = $_GET['quote'] == "truck";
 $isInvoice = $_GET['quote'] == "false";
 
-$PAGEDATA['GET']['quote'] = $isQuote ? "true" : ($isTruck ? "truck" : ($isInvoice ? "false" : "")));
+$PAGEDATA['GET']['quote'] = $isQuote ? "true" : ($isTruck ? "truck" : ($isInvoice ? "false" : ""));
 
 $typeId = $isQuote ? 21 : ($isTruck ? 22 : 20);
 
