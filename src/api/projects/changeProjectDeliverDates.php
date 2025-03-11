@@ -12,13 +12,6 @@ $newDates = [
     "projects_dates_deliver_end" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_end'])))
 ];
 
-// Validate if dates are valid after parsing
-if (!$newDates['projects_dates_deliver_start'] || !$newDates['projects_dates_deliver_end']) {
-    // Send the error message to JavaScript console
-    echo "<script>console.error('Érvénytelen dátum formátum: Kezdő dátum - " . $_POST['projects_dates_deliver_start'] . ", Vég dátum - " . $_POST['projects_dates_deliver_end'] . "');</script>";
-    finish(false, ["message" => "Érvénytelen dátum formátum."]);
-}
-
 $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where("projects.projects_deleted", 0);
 $DBLIB->where("projects.projects_id", $_POST['projects_id']);

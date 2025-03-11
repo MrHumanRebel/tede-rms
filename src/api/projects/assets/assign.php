@@ -15,9 +15,6 @@ if (!$project) finish(false,["message"=>"Project not found"]);
 if ($project["projects_dates_deliver_start"] == null or $project["projects_dates_deliver_end"] == null or (strtotime($project["projects_dates_deliver_start"]) >= strtotime($project["projects_dates_deliver_end"]))) finish(false,["message"=>"Please set the dates for the project before attempting to assign assets"]);
 
 
-echo "<script>console.log('projects_dates_deliver_start: " . $project['projects_dates_deliver_start'] . "');</script>";
-echo "<script>console.log('projects_dates_deliver_end: " . $project['projects_dates_deliver_end'] . "');</script>";
-
 
 
 $projectFinanceHelper = new projectFinance();
