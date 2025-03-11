@@ -1035,20 +1035,25 @@
 
     <script>
         $(document).ready(function () {
-            $('#pdfGenerateModalInvoice, #pdfGenerateModalQuote, #pdfGenerateModalTruck').on('show.bs.modal', function (e) {
-                var targetModal = $(this);
-                var relatedTarget = $(e.relatedTarget);
 
-                if (relatedTarget.data('quote') === 'true') {
-                    targetModal.find('.modal-title').text("Árajánlat Létrehozása");
-                    targetModal.find('input[name="quote"]').val("true");
-                } else if (relatedTarget.data('quote') === 'truck') {
-                    targetModal.find('.modal-title').text("Pakolási lista Létrehozása");
-                    targetModal.find('input[name="quote"]').val("truck");
-                } else {
-                    targetModal.find('.modal-title').text("Számla Létrehozása");
-                    targetModal.find('input[name="quote"]').val("false");
-                }
+
+            $('#pdfGenerateModalQuote').on('show.bs.modal', function (e) {
+                if ($(e.relatedTarget).data('quote') === "true") {
+                    $("#pdfGenerateModalQuote .modal-title").text("Árajánlat Létrehozása");
+                    $('#pdfGenerateModalQuote input[name="quote"]').val("true");
+                } 
+            });
+            $('#pdfGenerateModalInvoice').on('show.bs.modal', function (e) {
+                if ($(e.relatedTarget).data('quote') === "false") {
+                    $("#pdfGenerateModalInvoice .modal-title").text("Számla Létrehozása");
+                    $('#pdfGenerateModalInvoice input[name="quote"]').val("false");
+                } 
+            });
+            $('#pdfGenerateModalTruck').on('show.bs.modal', function (e) {
+                if ($(e.relatedTarget).data('quote') === "truck") {
+                    $("#pdfGenerateModalTruck .modal-title").text("Pakolási lista Létrehozása");
+                    $('#pdfGenerateModalTruck input[name="quote"]').val("truck");
+                } 
             });
 
             $("#assetAssignmentCheckboxAll").click(function () {
