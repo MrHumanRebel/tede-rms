@@ -79,6 +79,7 @@
             </div>
             <div class="card-body p-0">
                 <ul class="todo-list">
+                    {% if s3files_meta_type == 20 %}
                     {% for file in invoices %}
                         <li>
                             <span class="handle">
@@ -93,6 +94,7 @@
                             </div>
                         </li>
                     {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
             <div class="card-footer">
@@ -116,6 +118,7 @@
             </div>
             <div class="card-body p-0">
                 <ul class="todo-list">
+                    {% if s3files_meta_type == 21 %}
                     {% for file in quotes %}
                         <li>
                             <span class="handle">
@@ -130,6 +133,7 @@
                             </div>
                         </li>
                     {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
             <div class="card-footer">
@@ -144,7 +148,7 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Pakolási lista</h3>
-                {% if quotes %}
+                {% if trucks %}
                 <div class="card-tools">
                     <a data-toggle="modal" data-target="#projectQuotesModal" type="button" class="btn btn-tool">
                         <i class="fas fa-external-link-alt"></i></a>
@@ -153,7 +157,8 @@
             </div>
             <div class="card-body p-0">
                 <ul class="todo-list">
-                    {% for file in quotes %}
+                    {% if s3files_meta_type == 22 %}
+                    {% for file in trucks %}
                         <li>
                             <span class="handle">
                                 <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
@@ -167,6 +172,7 @@
                             </div>
                         </li>
                     {% endfor %}
+                    {% endif %}
                 </ul>
             </div>
             <div class="card-footer">

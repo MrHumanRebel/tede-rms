@@ -14,14 +14,17 @@ if (isset($_FILES['file'])) {
             'secret' => $CONFIGCLASS->get('AWS_S3_SECRET'),
         )
     ]);
-    $isQuote = $_POST['quote'] == "true";
-    $filename = sprintf("%s-", $isQuote ? "quote" : "invoice") . time() . "-" . (floor(rand())) . "." . "pdf";
-    $s3Path = $isQuote ? "uploads/PROJECT_QUOTES" : "uploads/PROJECT_INVOICES";
+
+    $type = $_POST['quote'];
+    $filename = sprintf("%s-", $type === "true" ? "quote" : ($type === "truck" ? "truck" : "invoice")) . time() . "-" . (floor(rand())) . "." . "pdf";
+    $s3Path = $type === "true" ? "uploads/PROJECT_QUOTES" : ($type === "truck" ? "uploads/PROJECT_TRUCKS" : "uploads/PROJECT_INVOICES");
+
     $result = $s3->putObject([
         'Bucket' => $CONFIGCLASS->get('AWS_S3_BUCKET'),
         'Key'    => $s3Path . "/" . $filename,
         'SourceFile' => $temp_file_location
     ]);
+
     $code = $result['@metadata']['statusCode'];
     $uri = $result['@metadata']['effectiveUri'];
     if ($code === 200) {
@@ -29,10 +32,10 @@ if (isset($_FILES['file'])) {
             "s3files_extension" => "pdf",
             "s3files_path" => $s3Path,
             "s3files_meta_size" => $_FILES['file']['size'],
-            "s3files_meta_type" => $isQuote ? 21 : 20,
+            "s3files_meta_type" => $type === "true" ? 21 : ($type === "truck" ? 22 : 20),
             "s3files_meta_subType" => $_POST['id'],
             "users_userid" => $AUTH->data['users_userid'],
-            "s3files_original_name" => $isQuote ? "quote.pdf" : "invoice.pdf",
+            "s3files_original_name" => $type === "true" ? "quote.pdf" : ($type === "truck" ? "truck.pdf" : "invoice.pdf"),
             "s3files_filename" => pathinfo($filename, PATHINFO_FILENAME),
             "s3files_name" => "v" . $bCMS->sanitizeString($_POST['fileNumber']),
             "s3files_meta_public" => 0,
@@ -45,6 +48,7 @@ if (isset($_FILES['file'])) {
     } else finish(false, ["code" => null, "message" => "S3 Upload Error"]);
 }
 finish(false, ["code" => null, "message" => "HTTP Upload Error"]);
+
 /** @OA\Post(
  *     path="/s3files/uploadProjectInvoice.php", 
  *     summary="Upload Project Invoice", 
