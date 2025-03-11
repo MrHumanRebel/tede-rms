@@ -36,23 +36,15 @@ foreach ($iCalProjects as $event) {
         ->setDtStart(new \DateTime($event['projects_dates_use_start']))
         ->setDtEnd(new \DateTime($event['projects_dates_use_end']))
         ->setNoTime(false)
-        ->setSummary(str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projects_name']) . ($event['clients_name'] ? " (" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['clients_name']) . ")" : ""))
-        ->setCategories(['events', 'TeDeRMS'])
-        ->setLocation(
-            str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_name']) . "\n" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_address']), 
-            str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_name']) . "\n" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_address'])
-        )
-        ->setDescription(
-            "Event Status: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projectsStatuses_name']) . "\n" . 
-            "Description: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projects_description']) . "\n" . 
-            "Project Manager: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['pm_name1']) . " " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['pm_name2'])
-        )
+        ->setSummary($event['projects_name'] . ($event['clients_name'] ? " (" . $event['clients_name'] . ")" : ""))
+        ->setCategories(['events', 'AdamRMS'])
+        ->setLocation($event['locations_name'] . "\n" . $event['locations_address'], $event['locations_name'] . "\n" . $event['locations_address'])
+        ->setDescription("Event Status: " . $event['projectsStatuses_name'] . "\n" . "Description: ". $event['projects_description'] . "\n" . "Project Manager: " . $event['pm_name1'] . " " . $event['pm_name2'])
     ;
     $vCalendar->addComponent($vEvent);
 }
 
 echo $vCalendar->render();
-
 
 /**
  *  @OA\Post(
