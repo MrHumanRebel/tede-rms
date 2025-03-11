@@ -133,14 +133,14 @@ class statsWidgets
         $DBLIB->where("assets_deleted", 0);
         $DBLIB->where("(assets.assets_endDate IS NULL OR assets.assets_endDate >= CURRENT_TIMESTAMP())");
         $DBLIB->join("assetTypes", "assets.assetTypes_id=assetTypes.assetTypes_id", "LEFT");
-        $assets= $DBLIB->get("assets", null, ["assets_inserted", "assets_value","assetTypes_value", "assetTypes_mass"]);
+        $assets= $DBLIB->get("assets", null, ["assets_inserted", "assets_value","assetTypes_value", "assetTypes_mass", "assets.assetTypes_id"]);
         if (!$assets) return [];
 
         $return = [
             "VALUE" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency'])),
             "MASS" => 0.0,
             "COUNT" => count($assets),
-            "TYPES" => count(array_unique(array_column($assets, 'assets_inserted')))
+            "TYPES" => count(array_unique(array_column($assets, 'assetTypes_id')))
         ];
         foreach ($assets as $asset) {
             $return['VALUE'] = $return['VALUE']->add(new Money(($asset['assets_value'] === null ? $asset['assetTypes_value'] : $asset['assets_value']),new Currency($AUTH->data['instance']['instances_config_currency'])));
