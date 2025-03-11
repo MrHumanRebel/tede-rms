@@ -15,10 +15,16 @@ if (isset($_FILES['file'])) {
         )
     ]);
 
-    $type = $_POST['quote'];
+    $type = $_POST['quote']; // Ez már 'truck' vagy 'true' lesz
     $filename = sprintf("%s-", $type === "true" ? "quote" : ($type === "truck" ? "truck" : "invoice")) . time() . "-" . (floor(rand())) . "." . "pdf";
-    $s3Path = $type === "true" ? "uploads/PROJECT_QUOTES" : ($type === "truck" ? "uploads/PROJECT_TRUCKS" : "uploads/PROJECT_INVOICES");
-
+    $s3Path = "";
+    if ($type === "true") {
+        $s3Path = "uploads/PROJECT_QUOTES";
+    } elseif ($type === "truck") {
+        $s3Path = "uploads/PROJECT_TRUCKS"; // Ha truck, akkor a Pakolási lista
+    } else {
+        $s3Path = "uploads/PROJECT_INVOICES"; // Ha más, akkor Számla
+    }
     $result = $s3->putObject([
         'Bucket' => $CONFIGCLASS->get('AWS_S3_BUCKET'),
         'Key'    => $s3Path . "/" . $filename,
