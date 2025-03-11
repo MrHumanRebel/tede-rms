@@ -271,10 +271,8 @@
             <tr>
                 <td style="padding: 20px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;">
                     <br/>
-                    {% if INSTANCE %}Delivered for {{ INSTANCE.instances_name }} by AdamRMS.<br/>{% endif %}
-                    If you don't want to receive emails like these you can disable them in your account settings.
+                    {% if INSTANCE %}Küldve a {{ INSTANCE.instances_name }} által<br/>{% endif %}
                     <br/>
-                    {{ FOOTER|raw }}
                 </td>
             </tr>
         </table>

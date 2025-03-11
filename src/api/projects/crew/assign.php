@@ -7,7 +7,7 @@ $array = [];
 foreach ($_POST['formData'] as $item) {
     $array[$item['name']] = $item['value'];
 }
-//Duplicated in application section for vacancies
+//Duplicálva az alkalmazás szekcióban az üres helyekhez
 $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where("projects.projects_deleted", 0);
 $DBLIB->where("projects.projects_id", $array['projects_id']);
@@ -22,7 +22,7 @@ foreach ($_POST['users'] as $user) {
         "crewAssignments_role" => $array["crewAssignments_role"]
     ];
     if (is_numeric($user)) {
-        //Find the user
+        //Felhasználó keresése
         $DBLIB->where("users.users_userid", $user);
         $DBLIB->join("userInstances", "users.users_userid=userInstances.users_userid","LEFT");
         $DBLIB->join("instancePositions", "userInstances.instancePositions_id=instancePositions.instancePositions_id","LEFT");
@@ -30,9 +30,9 @@ foreach ($_POST['users'] as $user) {
         $DBLIB->where("userInstances.userInstances_deleted",  0);
         $DBLIB->where("(userInstances.userInstances_archived IS NULL OR userInstances.userInstances_archived >= '" . date('Y-m-d H:i:s') . "')");
         $usersql = $DBLIB->getone("users", ["users.users_userid", "users.users_name1"]);
-        if (!$usersql) continue; //User not found - let's skip this for now
+        if (!$usersql) continue; //Felhasználó nem található - ugorjuk át ezt a részt
         else $data['users_userid'] = $usersql['users_userid'];
-        //Search for clashes for that user - (duplicated in the clash checker system for the frontend)
+        //Ütközések keresése az adott felhasználó számára - (duplikálva a frontend ütközés-ellenőrző rendszerében)
         if ($project["projects_dates_use_start"] and $project["projects_dates_use_end"]) {
             $DBLIB->where("users_userid", $usersql['users_userid']);
             $DBLIB->where("crewAssignments.crewAssignments_deleted", 0);
@@ -44,7 +44,7 @@ foreach ($_POST['users'] as $user) {
             $DBLIB->where("((projects_dates_use_start >= '" . $project["projects_dates_use_start"] . "' AND projects_dates_use_start <= '" . $project["projects_dates_use_end"] . "') OR (projects_dates_use_end >= '" . $project["projects_dates_use_start"] . "' AND projects_dates_use_end <= '" . $project["projects_dates_use_end"] . "') OR (projects_dates_use_end >= '" . $project["projects_dates_use_end"] . "' AND projects_dates_use_start <= '" . $project["projects_dates_use_start"] . "'))");
             $existingAssignments = $DBLIB->get("crewAssignments", null, ["crewAssignments.projects_id", "projects.projects_name", "crewAssignments.crewAssignments_role"]);
         } else $existingAssignments = [];
-        //Allow crew to be clashed - but it'll warn them in the notification.
+        //A Stáb engedélyezése, hogy ütközhessen - de figyelmeztetést kapnak az értesítésben.
     } else {
         $data['crewAssignments_personName'] = $user;
         $usersql = false;
@@ -52,19 +52,25 @@ foreach ($_POST['users'] as $user) {
     $insert = $DBLIB->insert("crewAssignments", $data);
     if (!$insert) finish(false);
     else {
-        $bCMS->auditLog("ASSIGN-CREW", "crewAssignments", $insert, $AUTH->data['users_userid'],null, $project['projects_id']);
-        if ($usersql and ($usersql['users_userid'] != $AUTH->data['users_userid'])) { //Email if it's a real user, but don't email if they assigned themselves
-            $data =
-                [
-                    "project" => $project,
-                    "clashes" => $existingAssignments,
-                    "assignment" => $data
-                ];
-            notify(11, $usersql['users_userid'], $AUTH->data['instance']['instances_id'], $AUTH->data['users_name1'] . " " . $AUTH->data['users_name2'] . " added you as " . $bCMS->sanitizeString($array["crewAssignments_role"]) . " for the project " . $project['projects_name'],false, "api/projects/crew/assign-EmailTemplate.twig", $data);
+        $bCMS->auditLog("ASSIGN-CREW", "crewAssignments", $insert, $AUTH->data['users_userid'], null, $project['projects_id']);
+        if ($usersql and ($usersql['users_userid'] != $AUTH->data['users_userid'])) { // E-mail küldése, ha valódi felhasználó, de nem küldünk, ha saját maguknak rendelik hozzá
+            $data = [
+                "project" => $project,
+                "clashes" => $existingAssignments,
+                "assignment" => $data
+            ];
+            $message = str_replace(
+                ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], 
+                ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], 
+                $AUTH->data['users_name1'] . " " . $AUTH->data['users_name2'] . " hozzáadott téged " . $bCMS->sanitizeString($array["crewAssignments_role"]) . " szerepkörben a projektbe: " . $project['projects_name']
+            );
+            notify(11, $usersql['users_userid'], $AUTH->data['instance']['instances_id'], $message, false, "api/projects/crew/assign-EmailTemplate.twig", $data);
         }
     }
+    
 }
 finish(true);
+
 
 /** @OA\Post(
  *     path="/projects/crew/assign.php", 
