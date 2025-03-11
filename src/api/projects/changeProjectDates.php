@@ -6,24 +6,21 @@ if (!$AUTH->instancePermissionCheck("PROJECTS:EDIT:DATES") or !isset($_POST['pro
 }
 
 // Parse the date in "YYYY. MM. DD. HH:mm" format to a valid MySQL datetime format
-//$start_date = DateTime::createFromFormat('Y. m. d. H:i', $_POST['projects_dates_use_start']);
-//$end_date = DateTime::createFromFormat('Y. m. d. H:i', $_POST['projects_dates_use_end']);
+$start_date = DateTime::createFromFormat('Y. m. d. H:i', $_POST['projects_dates_use_start']);
+$end_date = DateTime::createFromFormat('Y. m. d. H:i', $_POST['projects_dates_use_end']);
 
 // Check if the dates are valid
-//if (!$start_date || !$end_date) {
-//    die("Invalid date format");
-//}
+if (!$start_date || !$end_date) {
+    die("Invalid date format");
+}
 
 $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where("projects.projects_deleted", 0);
 $DBLIB->where("projects.projects_id", $_POST['projects_id']);
-//$project = $DBLIB->update("projects", [
-//    "projects.projects_dates_use_start" => $start_date->format("Y-m-d H:i:s"),
-//    "projects.projects_dates_use_end" => $end_date->format("Y-m-d H:i:s")
-//]);
-
-$project = $DBLIB->update("projects", ["projects.projects_dates_use_start" => date ("Y-m-d H:i:s", strtotime($_POST['projects_dates_use_start'])), "projects.projects_dates_use_end" => date ("Y-m-d H:i:s", strtotime($_POST['projects_dates_use_end']))]);
-
+$project = $DBLIB->update("projects", [
+    "projects.projects_dates_use_start" => $start_date->format("Y-m-d H:i:s"),
+    "projects.projects_dates_use_end" => $end_date->format("Y-m-d H:i:s")
+]);
 
 if (!$project) {
     finish(false);

@@ -1321,7 +1321,7 @@
                 {% endif %}
             });
             $('#datePickerInput').on('apply.daterangepicker', function(ev, picker) {
-                ajaxcall("projects/changeProjectDates.php", {"projects_id": "{{ project.projects_id }}","projects_dates_use_start":picker.startDate.format('DD MMM YYYY hh:mm A'),"projects_dates_use_end":picker.endDate.format('DD MMM YYYY hh:mm A')}, function (data) {
+                ajaxcall("projects/changeProjectDates.php", {"projects_id": "{{ project.projects_id }}", "projects_dates_use_start": picker.startDate.format('YYYY. MM. DD. HH:mm'), "projects_dates_use_end": picker.endDate.format('YYYY. MM. DD. HH:mm')}, function (data) {
                     location.reload();
                 });
             });
@@ -1381,12 +1381,12 @@
                     }
                 });
             }
-
             $('#datePickerInputDeliver').on('apply.daterangepicker', function(ev, picker) {
-                changeProjectDeliverDates(picker.startDate.format('DD MMM YYYY hh:mm A'),picker.endDate.format('DD MMM YYYY hh:mm A'));
+                changeProjectDeliverDates(picker.startDate.format('YYYY.MM.DD. HH:mm'), picker.endDate.format('YYYY.MM.DD. HH:mm'));
             });
+
             $("#copyProjectDatesToDeliverDates").click(function () {
-                changeProjectDeliverDates($("#datePickerInput").data('daterangepicker').startDate.format('DD MMM YYYY hh:mm A'),$("#datePickerInput").data('daterangepicker').endDate.format('DD MMM YYYY hh:mm A'));
+                changeProjectDeliverDates($("#datePickerInput").data('daterangepicker').startDate.format('YYYY.MM.DD. HH:mm'), $("#datePickerInput").data('daterangepicker').endDate.format('YYYY.MM.DD. HH:mm'));
             });
 
             function setFinanceDurationMathsHetek(weeks, days) {

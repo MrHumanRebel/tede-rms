@@ -39,22 +39,30 @@ foreach ($assignments as $assignment) {
 
 $vCalendar = new \Eluceo\iCal\Component\Calendar($CONFIG['ROOTURL']);
 foreach ($iCalAssignments as $event) {
+    $startDate = DateTime::createFromFormat('Y. m. d. H:i', $event['projects_dates_use_start']);
+    $endDate = DateTime::createFromFormat('Y. m. d. H:i', $event['projects_dates_use_end']);
+
+    if (!$startDate || !$endDate) {
+        console.error('Hibás dátumformátum: startDate vagy endDate hiányzik vagy érvénytelen.');
+        continue;
+    } // Skip invalid date formats
+
     $vEvent = new \Eluceo\iCal\Component\Event();
     $vEvent->setUseTimezone(true);
     $vEvent
-        ->setDtStart(new \DateTime($event['projects_dates_use_start']))
-        ->setDtEnd(new \DateTime($event['projects_dates_use_end']))
+        ->setDtStart($startDate)
+        ->setDtEnd($endDate)
         ->setNoTime(false)
         ->setSummary($event['projects_name'] . ($event['clients_name'] ? " (" . $event['clients_name'] . ")" : ""))
-        ->setCategories(['events', 'AdamRMS'])
+        ->setCategories(['events', 'TeDeRMS'])
         ->setLocation($event['locations_name'] . "\n" . $event['locations_address'], $event['locations_name'] . "\n" . $event['locations_address'])
-        ->setDescription('Role: ' . $event['crewAssignments_role'] . "\n" . "Event Status: " . $event['projectsStatuses_name'] . "\n" . "Description: ". $event['projects_description'] . "\n" . "Project Manager: " . $event['pm_name1'] . " " . $event['pm_name2'])
-        ->setMsBusyStatus("FREE")
-    ;
+        ->setDescription('Szerep: ' . $event['crewAssignments_role'] . "\n" . "Esemény státusz: " . $event['projectsStatuses_name'] . "\n" . "Projekt leírás: " . $event['projects_description']);
+
     $vCalendar->addComponent($vEvent);
 }
 
 echo $vCalendar->render();
+
 
 /** @OA\Get(
  *     path="/account/calendar-export.php", 
