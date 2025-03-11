@@ -96,11 +96,13 @@
                 </ul>
             </div>
             <div class="card-footer">
+                {% if "ASSETS:CREATE"|instancePermissions %}
                 <div class="btn-group float-right">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalInvoice">
                         Számla Létrehozása
                     </button>
                 </div>
+                {% endif %}
             </div>
         </div>
     
@@ -133,11 +135,13 @@
                 </ul>
             </div>
             <div class="card-footer">
+                {% if "ASSETS:CREATE"|instancePermissions %}
                 <div class="btn-group float-right">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalQuote" data-quote="true">
                         Árajánlat Létrehozása
                     </button>
                 </div>
+                {% endif %}
             </div>
         </div>
         {% endif %}
@@ -171,11 +175,13 @@
                 </ul>
             </div>
             <div class="card-footer">
+                {% if "ASSETS:CREATE"|instancePermissions %}
                 <div class="btn-group float-right">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#pdfGenerateModalTruck" data-quote="truck">
                         Pakolási Lista Létrehozása
                     </button>
                 </div>
+                {% endif %}
             </div>
         </div>
         
