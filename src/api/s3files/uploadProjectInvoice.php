@@ -16,6 +16,8 @@ if (isset($_FILES['file'])) {
     ]);
 
     $type = $_POST['quote']; // Ez már 'truck' vagy 'true' lesz
+    $typeId = $type === "true" ? 21 : ($type === "truck" ? 22 : 20);  // Ensure proper file categorization
+
     $filename = sprintf("%s-", $type === "true" ? "quote" : ($type === "truck" ? "truck" : "invoice")) . time() . "-" . (floor(rand())) . "." . "pdf";
     $s3Path = "";
     if ($type === "true") {
@@ -38,7 +40,7 @@ if (isset($_FILES['file'])) {
             "s3files_extension" => "pdf",
             "s3files_path" => $s3Path,
             "s3files_meta_size" => $_FILES['file']['size'],
-            "s3files_meta_type" => $type === "true" ? 21 : ($type === "truck" ? 22 : 20),
+            "s3files_meta_type" => $typeId,
             "s3files_meta_subType" => $_POST['id'],
             "users_userid" => $AUTH->data['users_userid'],
             "s3files_original_name" => $type === "true" ? "quote.pdf" : ($type === "truck" ? "truck.pdf" : "invoice.pdf"),
