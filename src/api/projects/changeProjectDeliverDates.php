@@ -7,17 +7,21 @@ use Money\Money;
 if (!$AUTH->instancePermissionCheck("PROJECTS:EDIT:DATES") or !isset($_POST['projects_id'])) die("404");
 
 // Parse the dates from the new format
-$newDates = [
-    "projects_dates_deliver_start" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_start']))),
-    "projects_dates_deliver_end" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_end'])))
-];
+//newDates = [
+//    "projects_dates_deliver_start" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_start']))),
+//    "projects_dates_deliver_end" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_end'])))
+//];
+
+$newDates = ["projects_dates_deliver_start" => date ("Y-m-d H:i:s", strtotime($_POST['projects_dates_deliver_start'])), "projects_dates_deliver_end" => date ("Y-m-d H:i:s", strtotime($_POST['projects_dates_deliver_end']))];
+
+
 
 // Validate if dates are valid after parsing
-if (!$newDates['projects_dates_deliver_start'] || !$newDates['projects_dates_deliver_end']) {
-    // Send the error message to JavaScript console
-    echo "<script>console.error('Érvénytelen dátum formátum: Kezdő dátum - " . $_POST['projects_dates_deliver_start'] . ", Vég dátum - " . $_POST['projects_dates_deliver_end'] . "');</script>";
-    finish(false, ["message" => "Érvénytelen dátum formátum."]);
-}
+//if (!$newDates['projects_dates_deliver_start'] || !$newDates['projects_dates_deliver_end']) {
+//    // Send the error message to JavaScript console
+//    echo "<script>console.error('Érvénytelen dátum formátum: Kezdő dátum - " . $_POST['projects_dates_deliver_start'] . ", Vég dátum - " . $_POST['projects_dates_deliver_end'] . "');</script>";
+//    finish(false, ["message" => "Érvénytelen dátum formátum."]);
+//}
 
 $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where("projects.projects_deleted", 0);

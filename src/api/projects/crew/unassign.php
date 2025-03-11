@@ -15,11 +15,13 @@ else {
     if ($assignment["users_userid"]) {
         $name = $AUTH->data['users_name1'] . " " . $AUTH->data['users_name2'];
         // Notification message updated for better readability
+        $message = $name . " eltávolított téged a projekt " .  $assignment['projects_name'] . " stábjából, a " . $assignment["crewAssignments_role"] . " szerepből";
+        // Remove Hungarian characters and pass the clean message
         notify(10, $assignment["users_userid"], $AUTH->data['instance']['instances_id'], 
             str_replace(
                 ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], 
                 ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], 
-                $name . " eltávolított téged a projekt " .  $assignment['projects_name'] . " stábjából, a " . $assignment["crewAssignments_role"] . " szerepből"
+                $message
             )
         );
     }
@@ -27,6 +29,7 @@ else {
     if ($DBLIB->update("crewAssignments", ["crewAssignments_deleted" => 1])) finish(true);
     else finish(false);
 }
+
 
 
 
