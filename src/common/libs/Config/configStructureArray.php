@@ -253,7 +253,7 @@ $configStructureArray = [
       }
     ],
     "specialRequest" => true,
-    "default" => "<br/>AdamRMS is a fully-featured asset, project and rental management platform for Theatre, AV & Broadcast. To find out more about what it could do for your business, visit <a href=\"https://adam-rms.com\">adam-rms.com</a>.",
+    "default" => "<br/>TeDe Rendezvenyek (link:https://tederendezvenyek.hu)",
     "envFallback" => false,
   ],
   "ERRORS_PROVIDERS_SENTRY" => [

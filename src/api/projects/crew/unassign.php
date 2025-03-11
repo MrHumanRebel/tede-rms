@@ -15,7 +15,7 @@ else {
     if ($assignment["users_userid"]) {
         $name = $AUTH->data['users_name1'] . " " . $AUTH->data['users_name2'];
         // Notification message updated for better readability
-        $message = $name . " eltavolitott teged a projekt " .  $assignment['projects_name'] . " stabjabol, a " . $assignment["crewAssignments_role"] . " szerepbol";
+        $message = $name . " eltavolitott teged a projekt \"" .  $assignment['projects_name'] . "\" stabjabol, a \"" . $assignment["crewAssignments_role"] . "\" szerepbol";
         // Remove Hungarian characters and pass the clean message
         notify(10, $assignment["users_userid"], $AUTH->data['instance']['instances_id'], 
             str_replace(

@@ -366,7 +366,7 @@ class bID
         );
         if (!$DBLIB->insert('passwordResetCodes', $data)) throw new Exception('Fatal Error sending a reset E-Mail');
         require_once __DIR__ . '/../../../api/notifications/main.php';
-        if (notify(1,$userid,false,  "Reset your password", '<h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;">Someone requested to reset your password</h1><p style="margin: 0;">If this was not you, please contact our support team urgently.<br /><br /><a href="' . $CONFIG['ROOTURL'] . '/api/account/passwordReset.php?code=' . $code . '">Reset account password for ' . $CONFIG['PROJECT_NAME'] . '</a></p><br/><i><b>N.B.</b>The link in this E-Mail will only last for 48 hours!</i>')) return true;
+        if (notify(1,$userid,false,  "Jelszo visszaallitas", '<h1 style="margin: 0 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;">Valaki jelszo visszaallitasat kert</h1><p style="margin: 0;">Ha nem te voltal, kerlek azonnal vedd fel a kapcsolatot a tamogatasi csapatunkkal.<br /><br /><a href="' . $CONFIG['ROOTURL'] . '/api/account/passwordReset.php?code=' . $code . '">Jelszo visszaallitas a(z) ' . $CONFIG['PROJECT_NAME'] . ' fiókhoz</a></p><br/><i><b>N.B.</b>Az ebben az e-mailben talalhato link csak 48 orat ervenyes!</i>')) return true;
         else return false;
     }
     function destroyTokens($userid = null) {

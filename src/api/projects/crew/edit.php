@@ -19,9 +19,10 @@ else {
                 str_replace(
                     ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], 
                     ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], 
-                    $AUTH->data['users_name1'] . " " . $AUTH->data['users_name2'] . " megvaltoztatta a szereped a projektben (" . $assignment['projects_name'] . ") es mostantol " . $bCMS->sanitizeString($_POST['crewAssignments_role'])
+                    $AUTH->data['users_name1'] . " " . $AUTH->data['users_name2'] . " megvaltoztatta a szereped a projektben \"(" . $assignment['projects_name'] . ")\" es mostantol \"" . $bCMS->sanitizeString($_POST['crewAssignments_role']) . "\""
                 )
             );
+
         }
         $DBLIB->where("crewAssignments_id", $assignment['crewAssignments_id']);
         if (!($DBLIB->update("crewAssignments", ["crewAssignments_role" => $_POST['crewAssignments_role']]))) finish(false, ["code"=> "ROLE_UPDATE_FAIL", "message" => "Nem sikerült a szerep frissítése"]);

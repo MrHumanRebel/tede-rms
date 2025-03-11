@@ -62,11 +62,11 @@ foreach ($_POST['users'] as $user) {
             $message = str_replace(
                 ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], 
                 ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], 
-                $AUTH->data['users_name1'] . " " . $AUTH->data['users_name2'] . " hozzáadott téged " . $bCMS->sanitizeString($array["crewAssignments_role"]) . " szerepkörben a projektbe: " . str_replace(
+                $AUTH->data['users_name1'] . " " . $AUTH->data['users_name2'] . " hozzadott teged \"" . $bCMS->sanitizeString($array["crewAssignments_role"]) . "\" szerepkorben a projektbe: \"" . str_replace(
                     ['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], 
                     ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], 
                     $project['projects_name']
-                )
+                ) . "\""
             );
             notify(11, $usersql['users_userid'], $AUTH->data['instance']['instances_id'], $message, false, "api/projects/crew/assign-EmailTemplate.twig", $data);
         }
