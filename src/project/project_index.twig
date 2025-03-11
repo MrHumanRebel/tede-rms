@@ -296,6 +296,12 @@
                                                 {% endif %}
                                                 <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                     <span class="sr-only">Legördülő menü váltása</span>
+                                                    <style>
+                                                        .dropdown-menu {
+                                                            z-index: 2000;
+                                                            position: absolute;
+                                                        }
+                                                    </style>
                                                     <div class="dropdown-menu" role="menu">
                                                         {% if "PROJECTS:CREATE"|instancePermissions %}
                                                             {% if project.subProjects == null %}

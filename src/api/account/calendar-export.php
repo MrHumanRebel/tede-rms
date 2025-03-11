@@ -56,7 +56,7 @@ foreach ($iCalAssignments as $event) {
         ->setSummary($event['projects_name'] . ($event['clients_name'] ? " (" . $event['clients_name'] . ")" : ""))
         ->setCategories(['events', 'TeDeRMS'])
         ->setLocation($event['locations_name'] . "\n" . $event['locations_address'], $event['locations_name'] . "\n" . $event['locations_address'])
-        ->setDescription('Szerep: ' . $event['crewAssignments_role'] . "\n" . "Esemény státusz: " . $event['projectsStatuses_name'] . "\n" . "Projekt leírás: " . $event['projects_description']);
+        ->setDescription('Szerep: ' . $event['crewAssignments_role'] . "\n" . "Esemény státusz: " . $event['projectsStatuses_name'] . "\n" . "Projekt leírás: " . $event['projects_description'])
         ->setMsBusyStatus("FREE")
     ;
     $vCalendar->addComponent($vEvent);
