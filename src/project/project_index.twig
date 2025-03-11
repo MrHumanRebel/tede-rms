@@ -269,7 +269,7 @@
                                                                         <span class="input-group-text">Hetek</span>
                                                                     </div>
                                                                     <input type="number" min="0" step="1" max="256" value="{{ FINANCIALS['priceMaths']["weeks"] }}" class="form-control float-right" required id="financeDurationMathsHetek">
-                                                                    <span class="input-group-text">Days</span>
+                                                                    <span class="input-group-text">Napok</span>
                                                                     <input type="number" min="0" step="1" max="256" value="{{ FINANCIALS['priceMaths']["days"] }}" class="form-control float-right" required id="financeDurationMathsDays">
                                                                     <div class="input-group-append">
                                                                         <button class="btn btn-default" type="button" id="financeDurationMathsSave">Mentés</button>
@@ -307,6 +307,7 @@
                                                 {% if "PROJECTS:EDIT:STATUS"|instancePermissions and not( project.projects_parent_project_id and project.projects_status_follow_parent) %}
                                                     <button type="button" class="btn btn-secondary" id="editProjectStatus">Állapot módosítása</button>
                                                 {% endif %}
+                                                {% if "ASSETS:CREATE"|instancePermissions %}
                                                 <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                     <span class="sr-only">Legördülő menü váltása</span>
                                                     <div class="dropdown-menu" role="menu">
@@ -353,6 +354,7 @@
                                                         {% endif %}
                                                     </div>
                                                 </button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -694,7 +696,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Projekt Pakolási listák</h4>
+                    <h4 class="modal-title">Projekt Bepakolási listák</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1093,7 +1095,7 @@
             });
             $('#pdfGenerateModalTruck').on('show.bs.modal', function (e) {
                 if ($(e.relatedTarget).data('quote') === "truck") {
-                    $("#pdfGenerateModalTruck .modal-title").text("Pakolási lista Létrehozása");
+                    $("#pdfGenerateModalTruck .modal-title").text("Bepakolási lista Létrehozása");
                     $('#pdfGenerateModalTruck input[name="quote"]').val("truck");
                 } 
             });
