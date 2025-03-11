@@ -80,7 +80,6 @@
             <div class="card-body p-0">
                 <ul class="todo-list">
                     {% for file in invoices %}
-                        {% if file.s3files_meta_type == 20 %}
                             <li>
                                 <span class="handle">
                                     <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
@@ -93,7 +92,6 @@
                                     <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
                                 </div>
                             </li>
-                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
@@ -119,7 +117,6 @@
             <div class="card-body p-0">
                 <ul class="todo-list">
                     {% for file in quotes %}
-                        {% if file.s3files_meta_type == 21 %}
                             <li>
                                 <span class="handle">
                                     <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
@@ -132,7 +129,6 @@
                                     <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
                                 </div>
                             </li>
-                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
@@ -158,7 +154,6 @@
             <div class="card-body p-0">
                 <ul class="todo-list">
                     {% for file in trucks %}
-                        {% if file.s3files_meta_type == 22 %}
                             <li>
                                 <span class="handle">
                                     <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
@@ -171,7 +166,6 @@
                                     <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
                                 </div>
                             </li>
-                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
