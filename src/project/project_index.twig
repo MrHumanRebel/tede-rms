@@ -199,7 +199,7 @@
                                                                 </b>
                                                             </p>
                                                         {% endif %}
-                                                        {% if "PROJECTS:EDIT:ADDRESS"|instancePermissions and project.projectsTypes_config_venue == 1  %}
+                                                        {% if "PROJECTS:EDIT:ADDRESS"|instancePermissions and project.projectsTypes_config_venue == 1 %}
                                                             <p class="text-sm">Helyszín</p>
                                                             <select class="form-control select2bs4" multiple id="editProjectAddress">
                                                                 {% if project.locations_id == "" %}
@@ -216,7 +216,17 @@
                                                             </select>
                                                         {% elseif project.projectsTypes_config_venue == 1 %}
                                                             <p class="text-sm">Helyszín
-                                                                <b class="d-block"><a  style="color: inherit; text-decoration: inherit;"  {% if "LOCATIONS:VIEW"|instancePermissions %}href="{{ CONFIG.ROOTURL }}/location/"{% endif %}>{{ project.locations_name }}</a></b>
+                                                                <b class="d-block">
+                                                                    {% if "LOCATIONS:VIEW"|instancePermissions %}
+                                                                        {% if project.locations_address %}
+                                                                            <a href="https://www.google.com/maps/search/?api=1&query={{ project.locations_name ~ "," ~ project.locations_address|replace({ "\r\n":', ', "\n":', ', "\r":', '})|url_encode }}" target="_blank" style="color: inherit; text-decoration: inherit;">
+                                                                                {{ project.locations_name }}
+                                                                            </a>
+                                                                        {% else %}
+                                                                            {{ project.locations_name }}
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                </b>
                                                             </p>
                                                         {% endif %}
                                                         <p class="text-sm">Dátumok

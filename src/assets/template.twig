@@ -483,6 +483,7 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 													</a>
 												</li>
 											{% endif %}
+											{% if "ASSETS:CREATE"|instancePermissions %}
 											<li class="nav-item">
 												<a href="{{ CONFIG.ROOTURL }}/manufacturers.php" class="nav-link">
 													<i class="nav-icon fas fa-industry"></i>
@@ -491,6 +492,7 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 													</p>
 												</a>
 											</li>
+											{% endif %}
 											{% if "CMS:CMS_PAGES:CREATE"|instancePermissions %}
 												<li class="nav-item">
 													<a href="{{ CONFIG.ROOTURL }}/cms/list.php" class="nav-link">
@@ -553,6 +555,7 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 											{% endif %}
 										{% endfor %}
 									{% endif %}
+									{% if "ASSETS:CREATE"|instancePermissions %}
 									<li class="nav-header">Eszközök</li>
 									<li class="nav-item">
 										<a href="{{ CONFIG.ROOTURL}}/assets.php" class="nav-link">
@@ -560,6 +563,7 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 											<p>Eszközök</p>
 										</a>
 									</li>
+									{% endif %}
 									{% if "ASSETS:CREATE"|instancePermissions %}
 										<li class="nav-item">
 											<a href="{{ CONFIG.ROOTURL}}/newAsset.php" class="nav-link">
@@ -568,12 +572,14 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 											</a>
 										</li>
 									{% endif %}
+									{% if "ASSETS:CREATE"|instancePermissions %}
 									<li class="nav-item">
 										<a href="{{ CONFIG.ROOTURL }}/instances/groups.php" class="nav-link">
 											<i class="nav-icon fas fa-layer-group"></i>
 											<p>Csoportok</p>
 										</a>
 									</li>
+									{% endif %}
 									{% if "MAINTENANCE_JOBS:VIEW"|instancePermissions %}
 										<li class="nav-item">
 											<a href="{{ CONFIG.ROOTURL }}/maintenance/" class="nav-link">
