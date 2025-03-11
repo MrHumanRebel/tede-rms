@@ -39,26 +39,40 @@ foreach ($assignments as $assignment) {
 
 $vCalendar = new \Eluceo\iCal\Component\Calendar($CONFIG['ROOTURL']);
 foreach ($iCalAssignments as $event) {
-    $startDate = DateTime::createFromFormat('Y. m. d. H:i', $event['projects_dates_use_start']);
-    $endDate = DateTime::createFromFormat('Y. m. d. H:i', $event['projects_dates_use_end']);
-
-    if (!$startDate || !$endDate) {
-        console.error('Hibás dátumformátum: startDate vagy endDate hiányzik vagy érvénytelen.');
-        continue;
-    } // Skip invalid date formats
-
     $vEvent = new \Eluceo\iCal\Component\Event();
     $vEvent->setUseTimezone(true);
+    
+    // Query the asset list for this event's project
+    $DBLIB->where("assets.projects_id", $event['projects_id']);
+    $assets = $DBLIB->get("assets", null, ["assets_name"]);
+    $assetList = "";
+    if ($assets) {
+        $assetNames = array_map(function($a) {
+            return $a['assets_name'];
+        }, $assets);
+        $assetList = "Eszkozok: " . implode(", ", $assetNames) . "\n";
+    }
+    
     $vEvent
-        ->setDtStart($startDate)
-        ->setDtEnd($endDate)
+        ->setDtStart(new \DateTime($event['projects_dates_use_start']))
+        ->setDtEnd(new \DateTime($event['projects_dates_use_end']))
         ->setNoTime(false)
-        ->setSummary($event['projects_name'] . ($event['clients_name'] ? " (" . $event['clients_name'] . ")" : ""))
+        ->setSummary(str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projects_name']) . ($event['clients_name'] ? " (" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['clients_name']) . ")" : ""))
         ->setCategories(['events', 'TeDeRMS'])
-        ->setLocation($event['locations_name'] . "\n" . $event['locations_address'], $event['locations_name'] . "\n" . $event['locations_address'])
-        ->setDescription('Szerep: ' . $event['crewAssignments_role'] . "\n" . "Esemény státusz: " . $event['projectsStatuses_name'] . "\n" . "Projekt leírás: " . $event['projects_description'])
+        ->setLocation(
+            str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_name']) . "\n" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_address']), 
+            str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_name']) . "\n" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_address'])
+        )
+        ->setDescription(
+            'Szerep: ' . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['crewAssignments_role']) . "\n" .
+            "Esemény statusza: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projectsStatuses_name']) . "\n" .
+            "Leiras: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projects_description']) . "\n" .
+            "Projektvezeto: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['pm_name1']) . " " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['pm_name2']) . "\n" .
+            $assetList
+        )
         ->setMsBusyStatus("FREE")
     ;
+    
     $vCalendar->addComponent($vEvent);
 }
 

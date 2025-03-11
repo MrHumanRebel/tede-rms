@@ -30,29 +30,29 @@ $iCalProjects = $DBLIB->get("projects", null, ["pmusers.users_name1 AS pm_name1"
 $vCalendar = new \Eluceo\iCal\Component\Calendar($CONFIG['ROOTURL']);
 
 foreach ($iCalProjects as $event) {
-    $startDate = DateTime::createFromFormat('Y. m. d. H:i', $event['projects_dates_use_start']);
-    $endDate = DateTime::createFromFormat('Y. m. d. H:i', $event['projects_dates_use_end']);
-
-    if (!$startDate || !$endDate) {
-        console.error('Hibás dátumformátum: startDate vagy endDate hiányzik vagy érvénytelen.');
-        continue;
-    } // Skip invalid date formats
-
     $vEvent = new \Eluceo\iCal\Component\Event();
     $vEvent->setUseTimezone(true);
     $vEvent
-        ->setDtStart($startDate)
-        ->setDtEnd($endDate)
+        ->setDtStart(new \DateTime($event['projects_dates_use_start']))
+        ->setDtEnd(new \DateTime($event['projects_dates_use_end']))
         ->setNoTime(false)
-        ->setSummary($event['projects_name'] . ($event['clients_name'] ? " (" . $event['clients_name'] . ")" : ""))
+        ->setSummary(str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projects_name']) . ($event['clients_name'] ? " (" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['clients_name']) . ")" : ""))
         ->setCategories(['events', 'TeDeRMS'])
-        ->setLocation($event['locations_name'] . "\n" . $event['locations_address'], $event['locations_name'] . "\n" . $event['locations_address'])
-        ->setDescription("Esemény státusz: " . $event['projectsStatuses_name'] . "\n" . "Projekt leírás: ". $event['projects_description'] . "\n" . "Projektvezető: " . $event['pm_name1'] . " " . $event['pm_name2'])
+        ->setLocation(
+            str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_name']) . "\n" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_address']), 
+            str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_name']) . "\n" . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['locations_address'])
+        )
+        ->setDescription(
+            "Event Status: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projectsStatuses_name']) . "\n" . 
+            "Description: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['projects_description']) . "\n" . 
+            "Project Manager: " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['pm_name1']) . " " . str_replace(['á', 'é', 'í', 'ó', 'ö', 'ő', 'ú', 'ü', 'ű'], ['a', 'e', 'i', 'o', 'o', 'o', 'u', 'u', 'u'], $event['pm_name2'])
+        )
     ;
     $vCalendar->addComponent($vEvent);
 }
 
 echo $vCalendar->render();
+
 
 /**
  *  @OA\Post(
