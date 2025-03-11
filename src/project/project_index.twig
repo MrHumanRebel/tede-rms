@@ -1311,11 +1311,11 @@
                 timePicker: true,
                 timePickerIncrement: 15,
                 locale: {
-                    format: 'DD MMM YYYY hh:mm A'
+                    format: 'YYYY. MM. DD. HH:mm'
                 },
                 {% if project.projects_dates_use_start %}
-                startDate: "{{ project.projects_dates_use_start|date("Y. m. d. H:i") }}",
-                endDate: "{{ project.projects_dates_use_end|date("Y. m. d. H:i") }}"
+                startDate: "{{ project.projects_dates_use_start|date("j M Y h:i:sa") }}",
+                endDate: "{{ project.projects_dates_use_end|date("j M Y h:i:sa") }}"
                 {% else %}
                 autoUpdateInput: false,
                 {% endif %}
@@ -1329,11 +1329,11 @@
                 timePicker: true,
                 timePickerIncrement: 15,
                 locale: {
-                    format: 'DD MMM YYYY hh:mm A'
+                    format: 'YYYY. MM. DD. HH:mm'
                 },
                 {% if project.projects_dates_deliver_start %}
-                startDate: "{{ project.projects_dates_deliver_start|date("Y. m. d. H:i") }}",
-                endDate: "{{ project.projects_dates_deliver_end|date("Y. m. d. H:i") }}"
+                startDate: "{{ project.projects_dates_deliver_start|date("j M Y h:i:sa") }}",
+                endDate: "{{ project.projects_dates_deliver_end|date("j M Y h:i:sa") }}"
                 {% else %}
                 autoUpdateInput: false,
                 {% endif %}
