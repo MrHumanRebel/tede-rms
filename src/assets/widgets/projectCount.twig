@@ -1,0 +1,60 @@
+{% set THISWIDGET = WIDGETS.widget('projectCount', {'instanceid': USERDATA.instance.instances_id}) %}
+
+{% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+    <div class="card statsWidget" data-widgetname="projectCount">
+        <div class="card-header">
+            <h3 class="card-title">Project Statisztika</h3> 
+            <div class="card-tools">
+                {% if WIDGETS.checkUser('projectCount') %}
+                    <button type="button" class="btn btn-sm btn-tool removeWidgetButton" data-card-widget="collapse" data-widgetname="projectCount" title="Eltávolítás a vezérlőpultról">
+                        <i class="fas fa-times"></i>
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-sm btn-tool addWidgetButton" data-widgetname="projectCount" title="Hozzáadás a vezérlőpulthoz">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        {# Számoljuk meg hány projekt van aktív ami NEM archivált és azt írjuk ki #}
+        {% set activeProjects = 0 %}
+        {% for project in projects %}
+            {% if project.projects_archived != 1 %}
+                {% set activeProjects = activeProjects + 1 %}
+            {% endif %}
+        {% endfor %}
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="text-warning text-xl">
+                    <i class="ion ion-ios-cart-outline"></i>
+                </p>
+                <p class="d-flex align-items-center text-right">
+                    <span class="text-muted">Jelenleg aktív projektek: </span>
+                    <span class="font-weight-bold ml-1">
+                        <i class="ion ion-android-arrow-up text-warning"></i> {{ activeProjects }}
+                    </span>
+                </p>
+            </div>
+        </div>
+        {# Számoljuk meg hány projekt van aktív ami archivált és azt írjuk ki #}
+        {% set archiveProjects = 0 %}
+        {% for project in projects %}
+            {% if project.projects_archived == 1 %}
+                {% set archiveProjects = archiveProjects + 1 %}
+            {% endif %}
+        {% endfor %}
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="text-warning text-xl">
+                    <i class="ion ion-ios-cart-outline"></i>
+                </p>
+                <p class="d-flex align-items-center text-right">
+                    <span class="text-muted">Kész projektek: </span>
+                    <span class="font-weight-bold ml-1">
+                        <i class="ion ion-android-arrow-up text-warning"></i> {{ archiveProjects }}
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -25,43 +25,7 @@
                         <span class="font-weight-bold">
                         <i class="ion ion-android-arrow-up text-warning"></i> {{ THISWIDGET.COUNT }}
                         </span>
-                    <span class="text-muted">ÖSSZESEN</span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="card statsWidget" data-widgetname="userCount">
-        <div class="card-header">
-            <h3 class="card-title">Jelenleg aktív projektek</h3> 
-            <div class="card-tools">
-                {% if WIDGETS.checkUser('userCount') %}
-                    <button type="button" class="btn btn-sm btn-tool removeWidgetButton" data-card-widget="collapse" data-widgetname="userCount" title="Eltávolítás a vezérlőpultról">
-                        <i class="fas fa-times"></i>
-                    </button>
-                {% else %}
-                    <button type="button" class="btn btn-sm btn-tool addWidgetButton" data-widgetname="userCount" title="Hozzáadás a vezérlőpulthoz">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                {% endif %}
-            </div>
-        </div>
-        {# Számoljuk meg hány projekt van aktív ami NEM archivált és azt írjuk ki #}
-        {% set activeProjects = 0 %}
-        {% for project in projects %}
-            {% if project.projects_archived != 1 %}
-                {% set activeProjects = activeProjects + 1 %}
-            {% endif %}
-        {% endfor %}
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="text-warning text-xl">
-                    <i class="ion ion-ios-cart-outline"></i>
-                </p>
-                <p class="d-flex flex-column text-right">
-                        <span class="font-weight-bold">
-                        <i class="ion ion-android-arrow-up text-warning"></i> {{ activeProjects }}
-                        </span>
-                    <span class="text-muted">ÖSSZESEN</span>
+                    <span class="text-muted">Összesen</span>
                 </p>
             </div>
         </div>
