@@ -83,7 +83,7 @@
                                             ['Átvétel:',"{{ project.projects_dates_deliver_end|date("Y. m. d. H:i")|escape("js") }}"],
                                         {% endif %}
                                         {% if GET['totalmass'] and project.projectsTypes_config_assets == 1 %}
-                                            ['Tömeg becslés:', "{{ FINANCIALS.mass|mass|escape('js')|replace('kg', '') }} kg"],
+                                            ['Tömeg becslés:',"{{FINANCIALS.mass|mass|escape("js") }}"],
                                         {% endif %}
                                         {% if GET['totalvalue'] and project.projectsTypes_config_assets == 1 %}
                                             ['Értékbecslés:',"{{FINANCIALS.value|money|replace({'.00':''})|escape('js') }}"],
