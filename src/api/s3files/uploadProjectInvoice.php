@@ -15,23 +15,10 @@ if (isset($_FILES['file'])) {
         )
     ]);
 
-    $type = $_POST['quote']; 
-    $typeId = $type === "true" ? 21 : ($type === "truck" ? 22 : 20);  // Ensure proper file categorization
-    
-    // A fájl neve, amely a megfelelő típus alapján jön létre
+    $type = $_POST['quote']; // Ez már 'truck' vagy 'true' lesz
     $filename = sprintf("%s-", $type === "true" ? "quote" : ($type === "truck" ? "truck" : "invoice")) . time() . "-" . (floor(rand())) . "." . "pdf";
-    
-    // A megfelelő könyvtár beállítása
-    $s3Path = "";
-    if ($type === "true") {
-        $s3Path = "uploads/PROJECT_QUOTES"; // Árajánlatok könyvtár
-    } elseif ($type === "truck") {
-        $s3Path = "uploads/PROJECT_TRUCKS"; // Pakolási lista könyvtár
-    } else
-        $s3Path = "uploads/PROJECT_INVOICES"; // Számlák könyvtár
-    }
-    
-    // Fájl feltöltése az S3-ra
+    $s3Path = $type === "true" ? "uploads/PROJECT_QUOTES" : ($type === "truck" ? "uploads/PROJECT_TRUCKS" : "uploads/PROJECT_INVOICES");
+
     $result = $s3->putObject([
         'Bucket' => $CONFIGCLASS->get('AWS_S3_BUCKET'),
         'Key'    => $s3Path . "/" . $filename,
@@ -45,7 +32,7 @@ if (isset($_FILES['file'])) {
             "s3files_extension" => "pdf",
             "s3files_path" => $s3Path,
             "s3files_meta_size" => $_FILES['file']['size'],
-            "s3files_meta_type" => $typeId,
+            "s3files_meta_type" => $type === "true" ? 21 : ($type === "truck" ? 22 : 20),
             "s3files_meta_subType" => $_POST['id'],
             "users_userid" => $AUTH->data['users_userid'],
             "s3files_original_name" => $type === "true" ? "quote.pdf" : ($type === "truck" ? "truck.pdf" : "invoice.pdf"),

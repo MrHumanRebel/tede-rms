@@ -6,34 +6,26 @@ require_once __DIR__ . '/../api/projects/data.php'; //Where most of the data com
 $PAGEDATA['GET'] = $_GET;
 $PAGEDATA['GET']['generate'] = true;
 
-$isQuote = $_GET['quote'] === "true";  // If 'true', then it's a quote
-$isTruck = $_GET['quote'] === "truck"; // If 'truck', then it's a truck
+$isQuote = $_GET['quote'] == "true";
+$isTruck = $_GET['quote'] == "truck";
+$isInvoice = $_GET['quote'] == "false";
 
-// Set typeId based on quote type
-if ($isQuote) {
-    $typeId = 21; // Quote type
-} elseif ($isTruck) {
-    $typeId = 22; // Truck type
-} else {
-    $typeId = 20; // Default type (invoice)
-}
+$PAGEDATA['GET']['quote'] = $isQuote ? "true" : ($isTruck ? "truck" : ($isInvoice ? "false" : "")));
 
-$PAGEDATA['GET']['quote'] = $_GET['quote']; // Save the original quote value
-$PAGEDATA['GET']['draft'] = $_GET['draft'] == "true"; // Check if it's a draft
+$typeId = $isQuote ? 21 : ($isTruck ? 22 : 20);
 
-// Get file number for the type
+$PAGEDATA['GET']['draft'] = $_GET['draft'] == "true";
+
 $DBLIB->where("s3files_meta_type", $typeId);
-$DBLIB->where("instances_id", $AUTH->data['instance']['instances_id']);
-$DBLIB->where("s3files_meta_subType", $_GET['id']);
-$count = $DBLIB->getValue("s3files", "count(*)");
-$fileNumber = $count ? ($count + 1) : 1;
+$DBLIB->where("instances_id",$AUTH->data['instance']['instances_id']);
+$DBLIB->where("s3files_meta_subType",$_GET['id']);
+$count = $DBLIB->getValue ("s3files", "count(*)");
+if ($count) $fileNumber = ($count+1);
+else $fileNumber = 1;
 $PAGEDATA['fileNumber'] = $fileNumber;
 
-// Set the instance logo if available
-if ($PAGEDATA['USERDATA']['instance']['instances_logo'] && $PAGEDATA['GET']['instancelogo']) {
+if ($PAGEDATA['USERDATA']['instance']['instances_logo'] and $PAGEDATA['GET']['instancelogo']) {
     $PAGEDATA['INSTANCELOGO'] = $bCMS->s3DataUri($PAGEDATA['USERDATA']['instance']['instances_logo']);
-} else {
-    $PAGEDATA['INSTANCELOGO'] = false;
-}
+} else $PAGEDATA['INSTANCELOGO'] = false;
 
 echo $TWIG->render('project/pdf.twig', $PAGEDATA);
