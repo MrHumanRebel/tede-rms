@@ -140,7 +140,7 @@ class statsWidgets
             "VALUE" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency'])),
             "MASS" => 0.0,
             "COUNT" => count($assets),
-            "TYPES" => count(array_unique(array_column($assets, 'assetTypes_id')))
+            "TYPES" => count($assetTypes),
         ];
         foreach ($assets as $asset) {
             $return['VALUE'] = $return['VALUE']->add(new Money(($asset['assets_value'] === null ? $asset['assetTypes_value'] : $asset['assets_value']),new Currency($AUTH->data['instance']['instances_config_currency'])));
