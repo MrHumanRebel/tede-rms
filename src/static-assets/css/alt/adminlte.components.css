@@ -889,7 +889,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-switch.custom-switch-off-pink .custom-control-input ~ .custom-control-label::before {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #ac145a;
 }
 
@@ -902,7 +902,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-switch.custom-switch-on-pink .custom-control-input:checked ~ .custom-control-label::before {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #ac145a;
 }
 
@@ -1845,7 +1845,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-range.custom-range-pink::-webkit-slider-thumb {
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .custom-range.custom-range-pink::-webkit-slider-thumb:active {
@@ -1853,7 +1853,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-range.custom-range-pink::-moz-range-thumb {
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .custom-range.custom-range-pink::-moz-range-thumb:active {
@@ -1861,7 +1861,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-range.custom-range-pink::-ms-thumb {
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .custom-range.custom-range-pink::-ms-thumb:active {
@@ -2672,7 +2672,7 @@ body.text-sm .input-group-text {
 
 .custom-control-input-pink:checked ~ .custom-control-label::before {
   border-color: #e83e8c;
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .custom-control-input-pink.custom-control-input-outline:checked[type="checkbox"] ~ .custom-control-label::after {
@@ -3704,7 +3704,7 @@ body.text-sm .input-group-text {
 }
 
 .dark-mode .custom-range.custom-range-pink::-webkit-slider-thumb {
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .dark-mode .custom-range.custom-range-pink::-webkit-slider-thumb:active {
@@ -3712,7 +3712,7 @@ body.text-sm .input-group-text {
 }
 
 .dark-mode .custom-range.custom-range-pink::-moz-range-thumb {
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .dark-mode .custom-range.custom-range-pink::-moz-range-thumb:active {
@@ -3720,7 +3720,7 @@ body.text-sm .input-group-text {
 }
 
 .dark-mode .custom-range.custom-range-pink::-ms-thumb {
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .dark-mode .custom-range.custom-range-pink::-ms-thumb:active {
@@ -4530,7 +4530,7 @@ body.text-sm .input-group-text {
 }
 
 .dark-mode .custom-switch.custom-switch-off-pink .custom-control-input ~ .custom-control-label::before {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #ac145a;
 }
 
@@ -4543,7 +4543,7 @@ body.text-sm .input-group-text {
 }
 
 .dark-mode .custom-switch.custom-switch-on-pink .custom-control-input:checked ~ .custom-control-label::before {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #ac145a;
 }
 
@@ -5233,7 +5233,7 @@ body.text-sm .input-group-text {
 
 .dark-mode .custom-control-input-pink:checked ~ .custom-control-label::before {
   border-color: #e83e8c;
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .dark-mode .custom-control-input-pink.custom-control-input-outline:checked[type="checkbox"] ~ .custom-control-label::after {
@@ -6754,7 +6754,7 @@ body.text-sm .input-group-text {
 }
 
 .card-pink:not(.card-outline) > .card-header {
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .card-pink:not(.card-outline) > .card-header,
@@ -9165,7 +9165,7 @@ html.maximized-card {
 }
 
 .dark-mode .card-pink:not(.card-outline) > .card-header {
-  background-color: #e83e8c;
+  background-color: #F7921C;
 }
 
 .dark-mode .card-pink:not(.card-outline) > .card-header,

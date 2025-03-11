@@ -13709,7 +13709,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 
 .sidebar-dark-pink .nav-sidebar > .nav-item > .nav-link.active,
 .sidebar-light-pink .nav-sidebar > .nav-item > .nav-link.active {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   color: #fff;
 }
 
@@ -14581,7 +14581,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 
 .dark-mode .sidebar-dark-pink .nav-sidebar > .nav-item > .nav-link.active,
 .dark-mode .sidebar-light-pink .nav-sidebar > .nav-item > .nav-link.active {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   color: #fff;
 }
 
@@ -17797,7 +17797,7 @@ body.text-sm .control-sidebar {
 }
 
 .navbar-pink {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   color: #fff;
 }
 
@@ -20672,7 +20672,7 @@ body.text-sm .control-sidebar {
 }
 
 .dark-mode .navbar-pink {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   color: #fff;
 }
 
@@ -25730,12 +25730,12 @@ a.text-muted:hover {
 }
 
 .accent-pink .dropdown-item:active, .accent-pink .dropdown-item.active {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   color: #fff;
 }
 
 .accent-pink .custom-control-input:checked ~ .custom-control-label::before {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #ac145a;
 }
 
@@ -25756,7 +25756,7 @@ a.text-muted:hover {
 
 .accent-pink .page-item.active a,
 .accent-pink .page-item.active .page-link {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #e83e8c;
   color: #fff;
 }
@@ -28857,12 +28857,12 @@ a.text-muted:hover {
 }
 
 .dark-mode .accent-pink .dropdown-item:active, .dark-mode .accent-pink .dropdown-item.active {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   color: #fff;
 }
 
 .dark-mode .accent-pink .custom-control-input:checked ~ .custom-control-label::before {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #ac145a;
 }
 
@@ -28883,7 +28883,7 @@ a.text-muted:hover {
 
 .dark-mode .accent-pink .page-item.active a,
 .dark-mode .accent-pink .page-item.active .page-link {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #e83e8c;
   color: #fff;
 }

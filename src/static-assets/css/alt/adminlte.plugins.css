@@ -1586,7 +1586,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .select2-container--default .select2-pink .select2-results__option--highlighted,
 .select2-pink .select2-container--default .select2-results__option--highlighted {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   color: #fff;
 }
 
@@ -1604,7 +1604,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .select2-container--default .select2-pink .select2-selection--multiple .select2-selection__choice,
 .select2-pink .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #e5277e;
   color: #fff;
 }
@@ -3170,7 +3170,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .select2-container--default .dark-mode .select2-pink .select2-results__option--highlighted,
 .dark-mode .select2-pink .select2-container--default .select2-results__option--highlighted {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   color: #fff;
 }
 
@@ -3188,7 +3188,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .select2-container--default .dark-mode .select2-pink .select2-selection--multiple .select2-selection__choice,
 .dark-mode .select2-pink .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #e5277e;
   color: #fff;
 }
@@ -4238,7 +4238,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .icheck-pink > input:first-child:checked + label::before,
 .icheck-pink > input:first-child:checked + input[type="hidden"] + label::before {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #e83e8c;
 }
 
@@ -4675,7 +4675,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .dark-mode .icheck-pink > input:first-child:checked + label::before,
 .dark-mode .icheck-pink > input:first-child:checked + input[type="hidden"] + label::before {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   border-color: #e83e8c;
 }
 
@@ -7344,7 +7344,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-mac-osx-pink .pace .pace-progress {
-  background-color: #e83e8c;
+  background-color: #F7921C;
   box-shadow: inset -1px 0 #e83e8c, inset 0 -1px #e83e8c, inset 0 2px rgba(255, 255, 255, 0.5), inset 0 6px rgba(255, 255, 255, 0.3);
 }
 

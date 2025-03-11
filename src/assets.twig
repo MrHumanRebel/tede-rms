@@ -131,7 +131,7 @@
                             
                             <style>
                                 .mb-1 {
-                                    margin-left: 15px;
+                                    margin-left: 20px;
                                 }
                             </style>
                             <div class="mb-1">
@@ -230,8 +230,8 @@
                                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                             <li class="small">
                                                 <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ asset.assetTypes_value|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}<br/>
-                                                {{ asset.assetTypes_dayRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/day<br/>
-                                                {{ asset.assetTypes_weekRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/week
+                                                {{ asset.assetTypes_dayRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/nap<br/>
+                                                {{ asset.assetTypes_weekRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/hét
                                             </li>
                                             {% endif %}
                                             <li class="small" title="Number owned"><span class="fa-li"><i class="fas fa-boxes"></i></span> {{asset.count}}</li>
@@ -362,8 +362,8 @@
                                                                             {% endfor %}
                                                                             <th>Notes</th>
                                                                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-                                                                                <th>Cost/day</th>
-                                                                                <th>Cost/week</th>
+                                                                                <th>Költség/nap</th>
+                                                                                <th>Költség/hét</th>
                                                                             {% endif %}
                                                                             <th style="width:1%"><i class="fas fa-flag"></i></th>
                                                                             <th style="width:30px;"></th>
