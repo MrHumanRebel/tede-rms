@@ -2671,7 +2671,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-control-input-pink:checked ~ .custom-control-label::before {
-  border-color: #e83e8c;
+  border-color: #F7921C;
   background-color: #F7921C;
 }
 
@@ -5232,7 +5232,7 @@ body.text-sm .input-group-text {
 }
 
 .dark-mode .custom-control-input-pink:checked ~ .custom-control-label::before {
-  border-color: #e83e8c;
+  border-color: #F7921C;
   background-color: #F7921C;
 }
 
@@ -6767,7 +6767,7 @@ body.text-sm .input-group-text {
 }
 
 .card-pink.card-outline {
-  border-top: 3px solid #e83e8c;
+  border-top: 3px solid #F7921C;
 }
 
 .card-pink.card-outline-tabs > .card-header a:hover {
@@ -6775,7 +6775,7 @@ body.text-sm .input-group-text {
 }
 
 .card-pink.card-outline-tabs > .card-header a.active {
-  border-top: 3px solid #e83e8c;
+  border-top: 3px solid #F7921C;
 }
 
 .bg-pink > .card-header .btn-tool,
@@ -7904,7 +7904,7 @@ html.maximized-card {
 }
 
 .todo-list .pink {
-  border-left-color: #e83e8c;
+  border-left-color: #F7921C;
 }
 
 .todo-list .red {
@@ -9178,7 +9178,7 @@ html.maximized-card {
 }
 
 .dark-mode .card-pink.card-outline {
-  border-top: 3px solid #e83e8c;
+  border-top: 3px solid #F7921C;
 }
 
 .dark-mode .card-pink.card-outline-tabs > .card-header a:hover {
@@ -9186,7 +9186,7 @@ html.maximized-card {
 }
 
 .dark-mode .card-pink.card-outline-tabs > .card-header a.active {
-  border-top: 3px solid #e83e8c;
+  border-top: 3px solid #F7921C;
 }
 
 .dark-mode .bg-pink > .card-header .btn-tool,
@@ -9988,7 +9988,7 @@ html.maximized-card {
 }
 
 .dark-mode .todo-list .pink {
-  border-left-color: #e83e8c;
+  border-left-color: #F7921C;
 }
 
 .dark-mode .todo-list .red {

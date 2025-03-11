@@ -15,7 +15,7 @@
   --blue: #007bff;
   --indigo: #6610f2;
   --purple: #6f42c1;
-  --pink: #e83e8c;
+  --pink: #F7921C;
   --red: #dc3545;
   --orange: #fd7e14;
   --yellow: #ffc107;
@@ -510,7 +510,7 @@ mark,
 
 code {
   font-size: 87.5%;
-  color: #e83e8c;
+  color: #F7921C;
   word-wrap: break-word;
 }
 
@@ -11109,7 +11109,7 @@ a.text-dark:hover, a.text-dark:focus {
   --blue: #3f6791;
   --indigo: #6610f2;
   --purple: #6f42c1;
-  --pink: #e83e8c;
+  --pink: #F7921C;
   --red: #e74c3c;
   --orange: #fd7e14;
   --yellow: #f39c12;
@@ -13715,7 +13715,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 
 .sidebar-dark-pink .nav-sidebar.nav-legacy > .nav-item > .nav-link.active,
 .sidebar-light-pink .nav-sidebar.nav-legacy > .nav-item > .nav-link.active {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .sidebar-dark-red .nav-sidebar > .nav-item > .nav-link.active,
@@ -14587,7 +14587,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 
 .dark-mode .sidebar-dark-pink .nav-sidebar.nav-legacy > .nav-item > .nav-link.active,
 .dark-mode .sidebar-light-pink .nav-sidebar.nav-legacy > .nav-item > .nav-link.active {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .dark-mode .sidebar-dark-red .nav-sidebar > .nav-item > .nav-link.active,
@@ -22555,7 +22555,7 @@ blockquote.quote-purple h6 {
 }
 
 blockquote.quote-pink {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 blockquote.quote-pink h1,
@@ -22564,7 +22564,7 @@ blockquote.quote-pink h3,
 blockquote.quote-pink h4,
 blockquote.quote-pink h5,
 blockquote.quote-pink h6 {
-  color: #e83e8c;
+  color: #F7921C;
 }
 
 blockquote.quote-red {
@@ -22947,7 +22947,7 @@ blockquote.quote-gray-dark h6 {
 }
 
 .dark-mode blockquote.quote-pink {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .dark-mode blockquote.quote-pink h1,
@@ -22956,7 +22956,7 @@ blockquote.quote-gray-dark h6 {
 .dark-mode blockquote.quote-pink h4,
 .dark-mode blockquote.quote-pink h5,
 .dark-mode blockquote.quote-pink h6 {
-  color: #e83e8c;
+  color: #F7921C;
 }
 
 .dark-mode blockquote.quote-red {
@@ -23189,7 +23189,7 @@ blockquote.quote-gray-dark h6 {
 }
 
 .text-pink {
-  color: #e83e8c !important;
+  color: #F7921C !important;
 }
 
 .text-red {
@@ -23269,7 +23269,7 @@ blockquote.quote-gray-dark h6 {
 }
 
 .dark-mode .text-pink {
-  color: #e83e8c !important;
+  color: #F7921C !important;
 }
 
 .dark-mode .text-red {
@@ -23673,7 +23673,7 @@ blockquote.quote-gray-dark h6 {
 }
 
 .bg-pink {
-  background-color: #e83e8c !important;
+  background-color: #F7921C !important;
 }
 
 .bg-pink,
@@ -24267,7 +24267,7 @@ blockquote.quote-gray-dark h6 {
 }
 
 .bg-gradient-pink {
-  background: #e83e8c linear-gradient(180deg, #eb5b9d, #e83e8c) repeat-x !important;
+  background: #F7921C linear-gradient(180deg, #eb5b9d, #F7921C) repeat-x !important;
   color: #fff;
 }
 
@@ -24277,13 +24277,13 @@ blockquote.quote-gray-dark h6 {
 }
 
 .bg-gradient-pink.btn:hover {
-  background: #e83e8c linear-gradient(180deg, #e83e8c, #e41c78) repeat-x !important;
+  background: #F7921C linear-gradient(180deg, #F7921C, #e41c78) repeat-x !important;
   border-color: #d91a72;
   color: #ececec;
 }
 
 .bg-gradient-pink.btn:not(:disabled):not(.disabled):active, .bg-gradient-pink.btn:not(:disabled):not(.disabled).active, .bg-gradient-pink.btn:active, .bg-gradient-pink.btn.active {
-  background: #e83e8c linear-gradient(180deg, #df3c87, #d91a72) repeat-x !important;
+  background: #F7921C linear-gradient(180deg, #df3c87, #d91a72) repeat-x !important;
   border-color: #ce196c;
   color: #fff;
 }
@@ -25720,7 +25720,7 @@ a.text-muted:hover {
 .accent-pink .btn-link,
 .accent-pink a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.btn),
 .accent-pink .nav-tabs .nav-link {
-  color: #e83e8c;
+  color: #F7921C;
 }
 
 .accent-pink .btn-link:hover,
@@ -25751,13 +25751,13 @@ a.text-muted:hover {
 }
 
 .accent-pink .page-item .page-link {
-  color: #e83e8c;
+  color: #F7921C;
 }
 
 .accent-pink .page-item.active a,
 .accent-pink .page-item.active .page-link {
   background-color: #F7921C;
-  border-color: #e83e8c;
+  border-color: #F7921C;
   color: #fff;
 }
 
@@ -26812,7 +26812,7 @@ a.text-muted:hover {
 }
 
 .dark-mode .bg-pink {
-  background-color: #e83e8c !important;
+  background-color: #F7921C !important;
 }
 
 .dark-mode .bg-pink,
@@ -27386,7 +27386,7 @@ a.text-muted:hover {
 }
 
 .dark-mode .bg-gradient-pink {
-  background: #e83e8c linear-gradient(180deg, #eb5b9d, #e83e8c) repeat-x !important;
+  background: #F7921C linear-gradient(180deg, #eb5b9d, #F7921C) repeat-x !important;
   color: #fff;
 }
 
@@ -27396,13 +27396,13 @@ a.text-muted:hover {
 }
 
 .dark-mode .bg-gradient-pink.btn:hover {
-  background: #e83e8c linear-gradient(180deg, #e83e8c, #e41c78) repeat-x !important;
+  background: #F7921C linear-gradient(180deg, #F7921C, #e41c78) repeat-x !important;
   border-color: #d91a72;
   color: #ececec;
 }
 
 .dark-mode .bg-gradient-pink.btn:not(:disabled):not(.disabled):active, .dark-mode .bg-gradient-pink.btn:not(:disabled):not(.disabled).active, .dark-mode .bg-gradient-pink.btn:active, .dark-mode .bg-gradient-pink.btn.active {
-  background: #e83e8c linear-gradient(180deg, #df3c87, #d91a72) repeat-x !important;
+  background: #F7921C linear-gradient(180deg, #df3c87, #d91a72) repeat-x !important;
   border-color: #ce196c;
   color: #fff;
 }
@@ -28847,7 +28847,7 @@ a.text-muted:hover {
 .dark-mode .accent-pink .btn-link,
 .dark-mode .accent-pink a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.btn),
 .dark-mode .accent-pink .nav-tabs .nav-link {
-  color: #e83e8c;
+  color: #F7921C;
 }
 
 .dark-mode .accent-pink .btn-link:hover,
@@ -28878,13 +28878,13 @@ a.text-muted:hover {
 }
 
 .dark-mode .accent-pink .page-item .page-link {
-  color: #e83e8c;
+  color: #F7921C;
 }
 
 .dark-mode .accent-pink .page-item.active a,
 .dark-mode .accent-pink .page-item.active .page-link {
   background-color: #F7921C;
-  border-color: #e83e8c;
+  border-color: #F7921C;
   color: #fff;
 }
 

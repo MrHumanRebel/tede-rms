@@ -3802,7 +3802,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .slider-pink .slider .slider-selection {
-  background: #e83e8c;
+  background: #F7921C;
 }
 
 .slider-red .slider .slider-selection {
@@ -3915,7 +3915,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .dark-mode .slider-pink .slider .slider-selection {
-  background: #e83e8c;
+  background: #F7921C;
 }
 
 .dark-mode .slider-red .slider .slider-selection {
@@ -4228,18 +4228,18 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .icheck-pink > input:first-child:not(:checked):not(:disabled):hover + label::before,
 .icheck-pink > input:first-child:not(:checked):not(:disabled):hover + input[type="hidden"] + label::before {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .icheck-pink > input:first-child:not(:checked):not(:disabled):focus + label::before,
 .icheck-pink > input:first-child:not(:checked):not(:disabled):focus + input[type="hidden"] + label::before {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .icheck-pink > input:first-child:checked + label::before,
 .icheck-pink > input:first-child:checked + input[type="hidden"] + label::before {
   background-color: #F7921C;
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .icheck-red > input:first-child:not(:checked):not(:disabled):hover + label::before,
@@ -4665,18 +4665,18 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .dark-mode .icheck-pink > input:first-child:not(:checked):not(:disabled):hover + label::before,
 .dark-mode .icheck-pink > input:first-child:not(:checked):not(:disabled):hover + input[type="hidden"] + label::before {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .dark-mode .icheck-pink > input:first-child:not(:checked):not(:disabled):focus + label::before,
 .dark-mode .icheck-pink > input:first-child:not(:checked):not(:disabled):focus + input[type="hidden"] + label::before {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .dark-mode .icheck-pink > input:first-child:checked + label::before,
 .dark-mode .icheck-pink > input:first-child:checked + input[type="hidden"] + label::before {
   background-color: #F7921C;
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .dark-mode .icheck-red > input:first-child:not(:checked):not(:disabled):hover + label::before,
@@ -7227,7 +7227,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-pink .pace .pace-progress {
-  background: #e83e8c;
+  background: #F7921C;
 }
 
 .pace-barber-shop-pink .pace {
@@ -7235,7 +7235,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-barber-shop-pink .pace .pace-progress {
-  background: #e83e8c;
+  background: #F7921C;
 }
 
 .pace-barber-shop-pink .pace .pace-activity {
@@ -7247,7 +7247,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-bounce-pink .pace .pace-activity {
-  background: #e83e8c;
+  background: #F7921C;
 }
 
 .pace-center-atom-pink .pace-progress {
@@ -7256,7 +7256,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-center-atom-pink .pace-progress::before {
-  background: #e83e8c;
+  background: #F7921C;
   color: #fff;
   font-size: .8rem;
   line-height: .7rem;
@@ -7264,11 +7264,11 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-center-atom-pink .pace-activity {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .pace-center-atom-pink .pace-activity::after, .pace-center-atom-pink .pace-activity::before {
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .pace-center-circle-pink .pace .pace-progress {
@@ -7277,28 +7277,28 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-center-radar-pink .pace .pace-activity {
-  border-color: #e83e8c transparent transparent;
+  border-color: #F7921C transparent transparent;
 }
 
 .pace-center-radar-pink .pace .pace-activity::before {
-  border-color: #e83e8c transparent transparent;
+  border-color: #F7921C transparent transparent;
 }
 
 .pace-center-simple-pink .pace {
   background: #fff;
-  border-color: #e83e8c;
+  border-color: #F7921C;
 }
 
 .pace-center-simple-pink .pace .pace-progress {
-  background: #e83e8c;
+  background: #F7921C;
 }
 
 .pace-material-pink .pace {
-  color: #e83e8c;
+  color: #F7921C;
 }
 
 .pace-corner-indicator-pink .pace .pace-activity {
-  background: #e83e8c;
+  background: #F7921C;
 }
 
 .pace-corner-indicator-pink .pace .pace-activity::after,
@@ -7321,31 +7321,31 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-flash-pink .pace .pace-progress {
-  background: #e83e8c;
+  background: #F7921C;
 }
 
 .pace-flash-pink .pace .pace-progress-inner {
-  box-shadow: 0 0 10px #e83e8c, 0 0 5px #e83e8c;
+  box-shadow: 0 0 10px #F7921C, 0 0 5px #F7921C;
 }
 
 .pace-flash-pink .pace .pace-activity {
-  border-top-color: #e83e8c;
-  border-left-color: #e83e8c;
+  border-top-color: #F7921C;
+  border-left-color: #F7921C;
 }
 
 .pace-loading-bar-pink .pace .pace-progress {
-  background: #e83e8c;
-  color: #e83e8c;
+  background: #F7921C;
+  color: #F7921C;
   box-shadow: 120px 0 #fff, 240px 0 #fff;
 }
 
 .pace-loading-bar-pink .pace .pace-activity {
-  box-shadow: inset 0 0 0 2px #e83e8c, inset 0 0 0 7px #fff;
+  box-shadow: inset 0 0 0 2px #F7921C, inset 0 0 0 7px #fff;
 }
 
 .pace-mac-osx-pink .pace .pace-progress {
   background-color: #F7921C;
-  box-shadow: inset -1px 0 #e83e8c, inset 0 -1px #e83e8c, inset 0 2px rgba(255, 255, 255, 0.5), inset 0 6px rgba(255, 255, 255, 0.3);
+  box-shadow: inset -1px 0 #F7921C, inset 0 -1px #F7921C, inset 0 2px rgba(255, 255, 255, 0.5), inset 0 6px rgba(255, 255, 255, 0.3);
 }
 
 .pace-mac-osx-pink .pace .pace-activity {
@@ -7354,7 +7354,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .pace-progress-color-pink .pace-progress {
-  color: #e83e8c;
+  color: #F7921C;
 }
 
 .pace-red .pace .pace-progress {
@@ -8704,7 +8704,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-pink,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-pink {
-  background: #e83e8c;
+  background: #F7921C;
   color: #fff;
 }
 
@@ -8963,7 +8963,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .dark-mode .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-pink,
 .dark-mode .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-pink {
-  background: #e83e8c;
+  background: #F7921C;
   color: #fff;
 }
 
