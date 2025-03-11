@@ -8,10 +8,9 @@ if (!$AUTH->instancePermissionCheck("PROJECTS:EDIT:DATES") or !isset($_POST['pro
 
 // Parse the dates from the new format
 $newDates = [
-    "projects_dates_deliver_start" => date("Y-m-d H:i:s", strtotime(str_replace(".", "-", $_POST['projects_dates_deliver_start']))),
-    "projects_dates_deliver_end" => date("Y-m-d H:i:s", strtotime(str_replace(".", "-", $_POST['projects_dates_deliver_end'])))
+    "projects_dates_deliver_start" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_start']))),
+    "projects_dates_deliver_end" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_end'])))
 ];
-
 
 // Validate if dates are valid after parsing
 if (!$newDates['projects_dates_deliver_start'] || !$newDates['projects_dates_deliver_end']) {
@@ -95,7 +94,14 @@ if ($projectFinanceCacher->save()) {
     // Update project with the new dates in the required format
     $projectUpdate = $DBLIB->update("projects", $newDates);
     if (!$projectUpdate) finish(false);
-    $bCMS->auditLog("CHANGE-DATE", "projects", "A szállítási kezdő dátumot erre állították: ". date ("Y-m-d H:i", strtotime($_POST['projects_dates_deliver_start'])) . "\nA szállítási vég dátumot erre állították: ". date ("Y-m-d H:i", strtotime($_POST['projects_dates_deliver_end'])), $AUTH->data['users_userid'], null, $_POST['projects_id']);
+    $bCMS->auditLog(
+        "CHANGE-DATE", 
+        "projects", 
+        "A szállítási kezdő dátumot erre állították: ". date("Y-m-d H:i", strtotime($newDates['projects_dates_deliver_start'])) . "\nA szállítási vég dátumot erre állították: ". date("Y-m-d H:i", strtotime($newDates['projects_dates_deliver_end'])), 
+        $AUTH->data['users_userid'], 
+        null, 
+        $_POST['projects_id']
+    );
     finish(true, null, ["changed" => true]);
 } else {
     finish(false, ["message" => "Nem lehet módosítani a pénzügyeket a dátumok változtatásához"]);
