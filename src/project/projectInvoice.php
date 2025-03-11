@@ -8,7 +8,7 @@ $PAGEDATA['GET']['generate'] = true;
 
 $isQuote = $_GET['quote'] == "true";
 $PAGEDATA['GET']['quote'] = $isQuote;
-$typeId = $isQuote ? 21 : 20;
+$typeId = $isQuote ? 21 : ($_GET['quote'] == "truck" ? 22 : 20); // Truck típus hozzáadva
 
 $PAGEDATA['GET']['draft'] = $_GET['draft'] == "true";
 

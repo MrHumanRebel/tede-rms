@@ -79,22 +79,22 @@
             </div>
             <div class="card-body p-0">
                 <ul class="todo-list">
-                    {% if s3files_meta_type == 20 %}
                     {% for file in invoices %}
-                        <li>
-                            <span class="handle">
-                                <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
-                            </span>
-                            <span class="text">
-                                {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
-                            </span>
-                            <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
-                            <div class="tools">
-                                <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
-                            </div>
-                        </li>
+                        {% if file.s3files_meta_type == 20 %}
+                            <li>
+                                <span class="handle">
+                                    <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
+                                </span>
+                                <span class="text">
+                                    {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
+                                </span>
+                                <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
+                                <div class="tools">
+                                    <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
+                                </div>
+                            </li>
+                        {% endif %}
                     {% endfor %}
-                    {% endif %}
                 </ul>
             </div>
             <div class="card-footer">
@@ -118,22 +118,22 @@
             </div>
             <div class="card-body p-0">
                 <ul class="todo-list">
-                    {% if s3files_meta_type == 21 %}
                     {% for file in quotes %}
-                        <li>
-                            <span class="handle">
-                                <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
-                            </span>
-                            <span class="text">
-                                {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
-                            </span>
-                            <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
-                            <div class="tools">
-                                <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
-                            </div>
-                        </li>
+                        {% if file.s3files_meta_type == 21 %}
+                            <li>
+                                <span class="handle">
+                                    <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
+                                </span>
+                                <span class="text">
+                                    {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
+                                </span>
+                                <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
+                                <div class="tools">
+                                    <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
+                                </div>
+                            </li>
+                        {% endif %}
                     {% endfor %}
-                    {% endif %}
                 </ul>
             </div>
             <div class="card-footer">
@@ -157,22 +157,22 @@
             </div>
             <div class="card-body p-0">
                 <ul class="todo-list">
-                    {% if s3files_meta_type == 22 %}
                     {% for file in trucks %}
-                        <li>
-                            <span class="handle">
-                                <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
-                            </span>
-                            <span class="text">
-                                {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
-                            </span>
-                            <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
-                            <div class="tools">
-                                <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
-                            </div>
-                        </li>
+                        {% if file.s3files_meta_type == 22 %}
+                            <li>
+                                <span class="handle">
+                                    <i class="fa {{ file.s3files_extension|fontAwesomeFile }}"></i>
+                                </span>
+                                <span class="text">
+                                    {{ file.s3files_name }} - {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}
+                                </span>
+                                <i class="fas fa-info-circle" data-toggle="popover" title="File Details" data-content="Generated {{ file.s3files_meta_uploaded|date("Y. m. d. H:i") }}. File Size {{ file.s3files_meta_size|formatsize }}. File Type {{ file.s3files_extension }}"></i>
+                                <div class="tools">
+                                    <a href="{{ file.s3files_id|s3URL }}" style="color: #495057;" target="_blank" title="Fájl letöltése"><i class="fas fa-cloud-download-alt"></i></a>
+                                </div>
+                            </li>
+                        {% endif %}
                     {% endfor %}
-                    {% endif %}
                 </ul>
             </div>
             <div class="card-footer">
