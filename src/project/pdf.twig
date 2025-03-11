@@ -83,7 +83,7 @@
                                             ['Átvétel:',"{{ project.projects_dates_deliver_end|date("Y. m. d. H:i")|escape("js") }}"],
                                         {% endif %}
                                         {% if GET['totalmass'] and project.projectsTypes_config_assets == 1 %}
-                                            ['Tömeg becslés:',"{{FINANCIALS.mass|mass|escape("js") }}"],
+                                            ['Tömeg becslés:', "{{ FINANCIALS.mass|mass|escape('js')|replace('kg', '') }} kg"],
                                         {% endif %}
                                         {% if GET['totalvalue'] and project.projectsTypes_config_assets == 1 %}
                                             ['Értékbecslés:',"{{FINANCIALS.value|money|replace({'.00':''})|escape('js') }}"],
@@ -269,7 +269,7 @@
                             margin: [ 0, 10, 0, 10 ]
                         },
                     {% endfor %}{% endif %}
-                    { text: "Összesen: {{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) }} darab elem", style: { fontSize: 16, bold: true, alignment: 'right' } },
+                    { text: "Összesen: {{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) }} féle elem", style: { fontSize: 16, bold: true, alignment: 'right' } },
                 {% endif %}
                 {% if FINANCIALS.payments.subHire.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['subHires']  %}
                     { text: "További bérleti elemek", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
