@@ -16,11 +16,16 @@
                 {% endif %}
             </div>
         </div>
-        {# Számoljuk meg hány projekt van aktív ami NEM archivált és azt írjuk ki #}
         {% set activeProjects = 0 %}
         {% for project in projects %}
             {% if project.projects_archived != 1 %}
                 {% set activeProjects = activeProjects + 1 %}
+            {% endif %}
+        {% endfor %}
+        {% set archiveProjects = 0 %}
+        {% for project in projects %}
+            {% if project.projects_archived == 1 %}
+                {% set archiveProjects = archiveProjects + 1 %}
             {% endif %}
         {% endfor %}
         <div class="card-body">
@@ -34,17 +39,6 @@
                         <i class="ion ion-android-arrow-up text-warning"></i> {{ activeProjects }}
                     </span>
                 </p>
-            </div>
-        </div>
-        {# Számoljuk meg hány projekt van aktív ami archivált és azt írjuk ki #}
-        {% set archiveProjects = 0 %}
-        {% for project in projects %}
-            {% if project.projects_archived == 1 %}
-                {% set archiveProjects = archiveProjects + 1 %}
-            {% endif %}
-        {% endfor %}
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
                 <p class="text-warning text-xl">
                     <i class="ion ion-ios-cart-outline"></i>
                 </p>
