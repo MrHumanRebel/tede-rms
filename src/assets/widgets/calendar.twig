@@ -48,7 +48,7 @@
                     {% for project in projects %}
                         {% if project.projects_dates_use_start != null and project.projects_dates_use_end != null %}
                         {
-                            title          : "{% if USERDATA['instance']['calendarSettings'].showProjectStatus %}[{{ project.projectsStatuses_name|escape("js") }}] {% endif %}{{ project.clients_name ? project.clients_name|escape("js") ~ " - " }}{{ project.projects_name|escape("js") }}{{ USER ? ' (' ~ project.crewAssignments_role ~ ')' : ''}}",
+                            title : "{{ project.projects_name|escape("js") }}",
                             start          : {{ project.projects_dates_use_start|date('U') }}*1000,
                             end            : {{ project.projects_dates_use_end|date('U') }}*1000,
                             url            : '{{CONFIG.ROOTURL}}/project/?id={{ project.projects_id }}',
@@ -63,7 +63,7 @@
                             {%  for subProject in project.subProjects %}
                                 {% if subProject.projects_dates_use_start != null and subProject.projects_dates_use_end != null %}
                                     {
-                                        title          : "↳ {% if USERDATA['instance']['calendarSettings'].showProjectStatus %}[{{ subProject.projectsStatuses_name|escape("js") }}] {% endif %}{{ subProject.clients_name ? subProject.clients_name|escape("js") ~ " - " }}{{ subProject.projects_name|escape("js") }}",
+                                        title : "↳ {{ subProject.projects_name|escape("js") }}",
                                         start          : {{ subProject.projects_dates_use_start|date('U') }}*1000,
                                         end            : {{ subProject.projects_dates_use_end|date('U') }}*1000,
                                         url            : '{{CONFIG.ROOTURL}}/project/?id={{ subProject.projects_id }}',
