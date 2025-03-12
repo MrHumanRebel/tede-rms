@@ -298,8 +298,14 @@
                                                                             {% endif %}
                                                                             <th style="width:1%"><i class="fas fa-flag"></i></th>
                                                                             <th style="width:30px;">
+                                                                                {% set not_valid = 0 %}
+                                                                                {% for thisasset in asset.tags %}
+                                                                                    {% if thisasset.assignment and searchResults.PROJECT.ID != thisasset.assignment[0].projects_id %}
+                                                                                        {% set not_valid = 1 %}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
                                                                                 <button class="btn btn-success addToBasketAssetTypeButton" {% if asset.countAvailable < 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
-                                                                                <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count or project.projects_id != searchResults.PROJECT.ID %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
+                                                                                <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count or not_valid == 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
                                                                             </th>
                                                                         </tr>
                                                                         {% for thisasset in asset.tags %}
