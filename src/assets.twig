@@ -146,6 +146,10 @@
                                 <input type="checkbox" name="hideimages" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.HIDEIMAGES ? "checked" : "" }}>
                                 <span>Eszköz képek elrejtése</span>
                             </div>
+                            <div class="mb-1">
+                                <input type="checkbox" name="hidenostock" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.HIDENOSTOCK ? "checked" : "" }}>
+                                <span>Nincs elérhető készlen elrejtése</span>
+                            </div>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -187,6 +191,7 @@
             <div class="card-body">
                 <div class="row d-flex align-items-stretch">
                     {% for asset in searchResults.ASSETS %}
+                        {% if asset.countAvailable > 0 and searchResults.SEARCH.SETTINGS.HIDENOSTOCK != true %}
                         <div class="col-auto d-flex align-items-stretch" style="padding: 10px;">
                             <div class="card bg-light">
                                 <div class="card-body" style="max-width: 250px;">
@@ -455,6 +460,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
