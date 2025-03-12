@@ -881,24 +881,23 @@
                 <div class="card-header p-2">
                     <ul class="nav nav-pills">
                         {% if asset.oneasset %}
-                            <li class="nav-item"><a class="nav-link" href="?id={{asset.assetTypes_id}}&instance={{ASSET_INSTANCE.instances_id}}">View All</a></li>
+                            <li class="nav-item"><a class="nav-link" href="?id={{asset.assetTypes_id}}&instance={{ASSET_INSTANCE.instances_id}}">Minden megtekintése</a></li>
                         {% elseif assets|length > 1 %}
                             <li class="nav-item"><a class="nav-link" href="#assets" data-toggle="tab">Eszközök</a></li>
                         {% endif %}
 
                         {% if assets|length > 1 and ASSET_INSTANCE.instances_id == USERDATA.instance.instances_id %}
-                        <li class="nav-item"><a class="nav-link active" href="#calendarBox" data-toggle="tab"><i class="far fa-calendar-alt"></i></a></li>
+                            <li class="nav-item"><a class="nav-link active" href="#calendarBox" data-toggle="tab"><i class="far fa-calendar-alt"></i></a></li>
                         {% endif %}
 
-
-                        {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions and ASSET_INSTANCE.instances_id == USERDATA.instance.instances_id  %}
-                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Edit Type</a></li>
+                        {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions and ASSET_INSTANCE.instances_id == USERDATA.instance.instances_id %}
+                            <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Típus szerkesztése</a></li>
                         {% endif %}
-                        {% if CONFIG.FILES_ENABLED == "Enabled" and USERDATA.instance.instances_storageEnabled == 1 and "ASSETS:ASSET_TYPE_FILE_ATTACHMENTS:VIEW"|instancePermissions and ASSET_INSTANCE.instances_id == USERDATA.instance.instances_id  %}
-                            <li class="nav-item"><a class="nav-link" href="#typeFiles" data-toggle="tab">Type Files</a></li>
+                        {% if CONFIG.FILES_ENABLED == "Enabled" and USERDATA.instance.instances_storageEnabled == 1 and "ASSETS:ASSET_TYPE_FILE_ATTACHMENTS:VIEW"|instancePermissions and ASSET_INSTANCE.instances_id == USERDATA.instance.instances_id %}
+                            <li class="nav-item"><a class="nav-link" href="#typeFiles" data-toggle="tab">Típus fájlok</a></li>
                         {% endif %}
                         {% if "ASSETS:ASSET_BARCODES:VIEW"|instancePermissions  and ASSET_INSTANCE.instances_id == USERDATA.instance.instances_id %}
-                            <li class="nav-item"><a class="nav-link" href="{{ CONFIG.ROOTURL }}/maintenance/barcodeGenerator.php?type={{ asset.assetTypes_id }}">Generate/Export Barcodes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ CONFIG.ROOTURL }}/maintenance/barcodeGenerator.php?type={{ asset.assetTypes_id }}">Vonalkódok generálása/exportálása</a></li>
                         {% endif %}
                     </ul>
                 </div><!-- /.card-header -->

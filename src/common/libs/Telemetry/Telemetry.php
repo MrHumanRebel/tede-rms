@@ -6,34 +6,33 @@ class Telemetry
     {
         global $CONFIGCLASS, $bCMS, $DBLIB;
         $limitedMode = $CONFIGCLASS->get("TELEMETRY_MODE") == 'Limited';
+        
+        // Create an empty data structure to send empty or dummy data
         $data = [
-            "rootUrl" => $CONFIGCLASS->get("ROOTURL"),
-            "nanoid" => $CONFIGCLASS->get("TELEMETRY_NANOID"),
-            "version" => $bCMS->getVersionNumber(),
-            "devMode" => $CONFIGCLASS->get("DEV"),
-            "hidden" => $CONFIGCLASS->get("TELEMETRY_SHOW_URL") == 'Disabled',
-            "userDefinedString" => $CONFIGCLASS->get("TELEMETRY_NOTES"),
+            "rootUrl" => "",
+            "nanoid" => "",
+            "version" => "",
+            "devMode" => false,
+            "hidden" => true,
+            "userDefinedString" => "",
             "metaData" => [
-                "instances" => false,
-                "users" => false,
-                "assetsCount" => false,
-                "assetsValueUSD" => false,
-                "assetsMassKg" => false,
+                "instances" => 0,
+                "users" => 0,
+                "assetsCount" => 0,
+                "assetsValueUSD" => 0,
+                "assetsMassKg" => 0,
             ],
         ];
-        $DBLIB->where("instances_deleted", 0);
-        $data['metaData']['instances'] = $DBLIB->getValue("instances", "COUNT(instances_id)");
-        if (!$limitedMode) {
-            $DBLIB->where("users_deleted", 0);
-            $data['metaData']['users'] = $DBLIB->getValue("users", "COUNT(users_userid)");
 
-            $DBLIB->where("assets_deleted", 0);
-            $DBLIB->join("assetTypes", "assets.assetTypes_id=assetTypes.assetTypes_id", "LEFT");
-            $assetValues = $DBLIB->getOne("assets", ["COUNT(assets_id) AS count", "SUM(assetTypes_value) AS value", "SUM(assetTypes_mass) AS mass"]);
-            $data['metaData']['assetsCount'] = $assetValues['count'];
-            //$data['metaData']['assetsValueUSD'] = round($assetValues['value'],0); // This value is not adjusted for currency so is considered unreliable
-            $data['metaData']['assetsMassKg'] = round($assetValues['mass'], 0);
+        // Skip gathering database information and send dummy values
+        if (!$limitedMode) {
+            // Avoid making any actual database queries or collecting real data
+            $data['metaData']['instances'] = 0;
+            $data['metaData']['users'] = 0;
+            $data['metaData']['assetsCount'] = 0;
+            $data['metaData']['assetsMassKg'] = 0;
         }
+
         try {
             if ($CONFIGCLASS->get("DEV") !== true) { // Skip telemetry in dev mode, but only at the last minute to ensure bugs are caught in dev with the above
                 $curl = curl_init();

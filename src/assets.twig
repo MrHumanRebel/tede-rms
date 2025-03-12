@@ -223,9 +223,9 @@
                                             {% endif %}
                                             {# Írd ki az eszközök számát #}
                                             {% if not searchResults.PROJECT.ID %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban: {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
+                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
                                             {% else %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban: {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
+                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
                                             {% endif %}
                                         {% else %}
                                             {% if asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 %}
@@ -242,9 +242,9 @@
                                             {% endif %}
                                             {# Írd ki az eszközök számát #}
                                             {% if not searchResults.PROJECT.ID %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban: {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
+                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
                                             {% else %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban: {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
+                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
                                             {% endif %}
                                         {% endif %}
 
