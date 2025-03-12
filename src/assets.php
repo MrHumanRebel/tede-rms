@@ -23,7 +23,7 @@ $SEARCH = [
         "SHOWLINKED" => ($_GET['showlinked'] == 1 ? true : false),
         "SHOWARCHIVED" => ($_GET['showarchived'] == 1 ? true : false),
         "HIDEIMAGES" => ($_GET['hideimages'] == 1 ? true : false),
-        "NOSTOCK" => ($_GET['hidenostock'] == 1 ? true : false),
+        "HIDENOSTOCK" => ($_GET['hidenostock'] == 1 ? true : false),
     ],
     "TERMS" => [
         "CATEGORY" => is_array($_GET['category']) ? $_GET['category'] : [],
