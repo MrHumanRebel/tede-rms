@@ -811,7 +811,7 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 				<!-- /.content-wrapper -->
 				<footer class="main-footer" id="main-footer">
 					<div class="float-right d-none d-sm-block">
-						<a href="https://github.com/MrHumanRebel/adam-rms-hun" target="_blank">{{ VERSION if VERSION else 'Latest' }}</a>
+						<a href="https://github.com/MrHumanRebel/adam-rms-hun" target="_blank">{{ VERSION is not empty ? VERSION : 'Latest' }}</a>
 					</div>
 					<strong>&copy; {{ "now"|date("Y") }}</strong> - Minden jog fenntartva. - <a href="https://szekedani.duckdns.org/">Made by Danci</a>
 				</footer>
