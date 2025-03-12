@@ -228,11 +228,11 @@
                                                 <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.countAvailable == 0 %}
-                                                <li class="small" title="Nincs elérhető készlet">
-                                                    <span class="fa-li">
+                                                <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
+                                                    <span class="fa-li" style="margin-right: 10px;">
                                                         <i class="fas fa-exclamation-circle" style="color: red; font-size: 30px;"></i>
                                                     </span>
-                                                    <strong style="font-size: larger; color: red; border: 2px solid red; padding: 5px; border-radius: 10px;">Nincs elérhető készlet!</strong>
+                                                    <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
                                                 </li>
                                             {% endif %}
                                         {% else %}
@@ -255,11 +255,27 @@
                                                 <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.countAvailable == 0 %}
-                                                <li class="small" title="Nincs elérhető készlet">
-                                                    <span class="fa-li">
+                                                <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
+                                                    <span class="fa-li" style="margin-right: 10px;">
                                                         <i class="fas fa-exclamation-circle" style="color: red; font-size: 30px;"></i>
                                                     </span>
-                                                    <strong style="font-size: larger; color: red; border: 2px solid red; padding: 5px; border-radius: 10px;">Nincs elérhető készlet!</strong>
+                                                    <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
+                                                </li>
+                                            {% endif %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 1 %}
+                                                <li class="small" title="Utolsó darab" style="margin-top: 10px;">
+                                                    <span class="fa-li" style="margin-right: 10px;">
+                                                        <i class="fas fa-exclamation-circle" style="color: orange; font-size: 30px;"></i>
+                                                    </span>
+                                                    <strong style="font-size: larger; color: orange; border: 2px solid orange; padding: 3px 10px; border-radius: 10px;">Utolsó darab!</strong>
+                                                </li>
+                                            {% endif %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable <= 2 %}
+                                                <li class="small" title="Utolsó darabok" style="margin-top: 10px;">
+                                                    <span class="fa-li" style="margin-right: 10px;">
+                                                        <i class="fas fa-exclamation-circle" style="color: yellow; font-size: 30px;"></i>
+                                                    </span>
+                                                    <strong style="font-size: larger; color: yellow; border: 2px solid yellow; padding: 3px 10px; border-radius: 10px;">Utolsó darabok!</strong>
                                                 </li>
                                             {% endif %}
                                         {% endif %}
