@@ -9,7 +9,7 @@ $DBLIB->where("projects.projects_id", $_POST['projects_id']);
 $project = $DBLIB->update("projects", ["projects.projects_name" => $_POST['projects_name']]);
 if (!$project) finish(false);
 
-$bCMS->auditLog("UPDATE-NAME", "projects", "Set the name to ". $_POST['projects_name'], $AUTH->data['users_userid'],null, $_POST['projects_id']);
+$bCMS->auditLog("UPDATE-NAME", "projects", "Név beállítva: ". $_POST['projects_name'], $AUTH->data['users_userid'], null, $_POST['projects_id']);
 finish(true);
 
 /** @OA\Post(

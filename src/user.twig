@@ -9,52 +9,45 @@
 
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
-                        <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle"
-                                 src="{{ CONFIG.FILES_ENABLED == "Enabled" and user.users_thumbnail ? user.users_thumbnail|s3URL("small") : CONFIG.ROOTURL ~ '/api/file/avatarGen.php?users_userid=' ~ user.users_userid }}"
-                                 loading="lazy"
-                                 alt="{{ user.users_name1 }} {{ user.users_name2 }}">
-                        </div>
+                    <div class="text-center">
+                        <img class="profile-user-img img-fluid img-circle"
+                            src="{{ CONFIG.FILES_ENABLED == 'Enabled' and user.users_thumbnail ? user.users_thumbnail|s3URL('small') : CONFIG.ROOTURL ~ '/api/file/avatarGen.php?users_userid=' ~ user.users_userid }}"
+                            loading="lazy"
+                            alt="{{ user.users_name1 }} {{ user.users_name2 }}">
+                    </div>
                     <h3 class="profile-username text-center">{{ user.users_name1 }} {{ user.users_name2 }}</h3>
                     <p class="text-muted text-center">{{ user.users_email }}</p>
 
                     <ul class="list-group list-group-unbordered mb-3">
                         <li class="list-group-item">
-                            <b>Crew Roles</b> <a href="#roles" data-toggle="tab"
-                                    class="float-right">{{ user.crewAssignments|length }}</a>
+                            <b>Stáb szerepek</b> <a href="#roles" data-toggle="tab" class="float-right">{{ user.crewAssignments|length }}</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Projects Managed</b> <a href="#projects" data-toggle="tab"
-                                    class="float-right">{{ user.projectManagement|length }}</a>
+                            <b>Kezelt a projektek</b> <a href="#projects" data-toggle="tab" class="float-right">{{ user.projectManagement|length }}</a>
                         </li>
                         {% if user.users_social_facebook != "" %}
                         <li class="list-group-item">
-                            <b>Facebook</b> <a href="https://www.facebook.com/{{ user.users_social_facebook }}"
-                                    class="float-right" target="_blank">{{ user.users_social_facebook }}</a>
+                            <b>Facebook</b> <a href="https://www.facebook.com/{{ user.users_social_facebook }}" class="float-right" target="_blank">{{ user.users_social_facebook }}</a>
                         </li>
                         {% endif %}
                         {% if user.users_social_twitter != "" %}
                             <li class="list-group-item">
-                                <b>Twitter</b> <a href="https://www.twitter.com/{{ user.users_social_twitter }}"
-                                                   class="float-right" target="_blank">@{{ user.users_social_twitter }}</a>
+                                <b>Twitter</b> <a href="https://www.twitter.com/{{ user.users_social_twitter }}" class="float-right" target="_blank">@{{ user.users_social_twitter }}</a>
                             </li>
                         {% endif %}
                         {% if user.users_social_linkedin != "" %}
                             <li class="list-group-item">
-                                <b>LinkedIn</b> <a href="https://www.linkedin.com/in/{{ user.users_social_linkedin }}"
-                                                  class="float-right" target="_blank">{{ user.users_social_linkedin }}</a>
+                                <b>LinkedIn</b> <a href="https://www.linkedin.com/in/{{ user.users_social_linkedin }}" class="float-right" target="_blank">{{ user.users_social_linkedin }}</a>
                             </li>
                         {% endif %}
                         {% if user.users_social_instagram != "" %}
                             <li class="list-group-item">
-                                <b>Instagram</b> <a href="https://www.instagram.com/{{ user.users_social_instagram }}"
-                                                  class="float-right" target="_blank">@{{ user.users_social_instagram }}</a>
+                                <b>Instagram</b> <a href="https://www.instagram.com/{{ user.users_social_instagram }}" class="float-right" target="_blank">@{{ user.users_social_instagram }}</a>
                             </li>
                         {% endif %}
                         {% if user.users_social_snapchat != "" %}
                             <li class="list-group-item">
-                                <b>Snapchat</b> <a href="https://www.snapchat.com/add/{{ user.users_social_snapchat }}"
-                                                  class="float-right" target="_blank">{{ user.users_social_snapchat }}</a>
+                                <b>Snapchat</b> <a href="https://www.snapchat.com/add/{{ user.users_social_snapchat }}" class="float-right" target="_blank">{{ user.users_social_snapchat }}</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -78,20 +71,20 @@
                 <div class="card-header p-2">
                     <ul class="nav nav-pills">
                         {% if user.users_userid == USERDATA.users_userid or "USERS:EDIT"|serverPermissions %}
-                            <li class="nav-item"><a class="nav-link" href="#account" data-toggle="tab">Account Settings</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#notifications" data-toggle="tab">Notifications</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#profilepicture" data-toggle="tab">Profile Picture</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#account" data-toggle="tab">Fiók beállítások</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#notifications" data-toggle="tab">Értesítések</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#profilepicture" data-toggle="tab">Profilkép</a></li>
                         {% endif %}
                         {% if user.users_userid == USERDATA.users_userid %}
-                            <li class="nav-item"><a class="nav-link" href="#passwordsocial" data-toggle="tab">Password & Sign-in</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#passwordsocial" data-toggle="tab">Jelszó és bejelentkezés</a></li>
                         {% endif %}
                         {% if (16|serverPermissions and user.users_userid == USERDATA.users_userid) or "USERS:EDIT"|serverPermissions %}
-                            <li class="nav-item"><a class="nav-link" href="#positions" data-toggle="tab">{{ CONFIG.PROJECT_NAME }} Positions</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#positions" data-toggle="tab">{{ CONFIG.PROJECT_NAME }} pozíciók</a></li>
                         {% endif %}
-                        {% if user.crewAssignments|length > 0 %}<li class="nav-item"><a class="nav-link" href="#roles" data-toggle="tab">Crew Roles</a></li>{% endif %}
-                        {% if user.projectManagement|length > 0 %}<li class="nav-item"><a class="nav-link" href="#projects" data-toggle="tab">Projects Managed</a></li>{% endif %}
+                        {% if user.crewAssignments|length > 0 %}<li class="nav-item"><a class="nav-link" href="#roles" data-toggle="tab">Stáb szerepek</a></li>{% endif %}
+                        {% if user.projectManagement|length > 0 %}<li class="nav-item"><a class="nav-link" href="#projects" data-toggle="tab">Kezelem a projekteket</a></li>{% endif %}
                         {% if user.users_userid == USERDATA.users_userid %}
-                        <li class="nav-item"><a class="nav-link" href="#export" data-toggle="tab">Export Calendar</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#export" data-toggle="tab">Naptár exportálása</a></li>
                         {% endif %}
                         <li class="nav-item"><a class="nav-link active" href="#calendar" data-toggle="tab"><i class="far fa-calendar-alt"></i></a></li>
                     </ul>
@@ -102,22 +95,22 @@
                             <div class="tab-pane p-3" id="account">
                                 <form id="account-form">
                                     <div class="form-group">
-                                        <label for="username">Username:</label>
-                                        <input type="username" class="form-control" name="users_username" required  value="{{user['users_username']}}" />
+                                        <label for="username">Felhasználónév:</label>
+                                        <input type="username" class="form-control" name="users_username" required value="{{user['users_username']}}" />
                                     </div>
                                     <div class="form-group">
-                                        <label>First Name:</label>
+                                        <label>Vezetéknév:</label>
                                         <input type="text" class="form-control" name="users_name1" required value="{{user['users_name1']}}" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Last Name:</label>
-                                        <input type="text" class="form-control" name="users_name2" required  value="{{user['users_name2']}}" />
+                                        <label>Keresztnév:</label>
+                                        <input type="text" class="form-control" name="users_name2" required value="{{user['users_name2']}}" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Email address:</label>
+                                        <label>E-mail cím:</label>
                                         <input type="email" class="form-control" name="users_email" required value="{{user['users_email']}}" />
                                     </div>
-                                    <p>Share links to your social media profiles to be displayed on your user profile page</p>
+                                    <p>Oszd meg a közösségi média profiljaid linkjeit, hogy megjelenjenek a felhasználói profilodon</p>
                                     <label>Facebook</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -140,7 +133,7 @@
                                         </div>
                                         <input type="text" class="form-control" name="users_social_instagram" value="{{ user.users_social_instagram }}">
                                     </div><br/>
-                                    <label>Linkedin</label>
+                                    <label>LinkedIn</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">https://linkedin.com/ln/</span>
@@ -241,17 +234,17 @@
                         {% endif %}
                         {% if user.users_userid == USERDATA.users_userid %}
                         <div class="tab-pane p-3" id="passwordsocial">
-                            <h2>Password</h2>
+                            <h2>Jelszó</h2>
                             <div class="form-group">
-                                <label for="username">Current Password</label>
-                                <input type="password" placeholder="Current Password" class="form-control" id="current_pass" />
+                                <label for="username">Jelenlegi jelszó</label>
+                                <input type="password" placeholder="Jelenlegi jelszó" class="form-control" id="current_pass" />
                             </div>
                             <div class="form-group">
-                                <label for="username">New Password</label>
-                                <input type="password" placeholder="New Password" class="form-control" id="passnew" /><br/>
-                                <input type="password" placeholder="Confirm New Password" class="form-control" id="passconf" />
+                                <label for="username">Új jelszó</label>
+                                <input type="password" placeholder="Új jelszó" class="form-control" id="passnew" /><br/>
+                                <input type="password" placeholder="Új jelszó megerősítése" class="form-control" id="passconf" />
                             </div>
-                            <button id="save-password-settings" class="btn btn-default">Change Password</button>
+                            <button id="save-password-settings" class="btn btn-default">Jelszó módosítása</button>
                             <script>
                                 $(document).ready(function() {
                                     $('#save-password-settings').on('click', function() {
@@ -271,7 +264,7 @@
                                 });
                             </script>
                             <hr/>
-                            <h2>Authentication Providers</h2>
+                            <h2>Hitelesítési szolgáltatók</h2>
                             {% if googleAuthAvailable %}
                                 <h4>Google</h4>
                                 {% if user.users_oauth_googleid %}
@@ -509,43 +502,33 @@
                         </div>
                         <!-- /.tab-pane -->
                         {% if user.users_userid == USERDATA.users_userid %}
-                        <div class="tab-pane" style="padding: 1.25rem" id="export">
-                            <input type="url" class="form-control" disabled value="{{ CONFIG.ROOTURL }}/api/account/calendar-export.php?uid={{ user.users_userid }}&key={{ user.users_calendarHash }}" />
-                            <br/>
-                            <h2>Google Calendar</h2>
-                            <ol>
-                                <li>Copy the URL at the top.</li>
-                                <li><a href="https://calendar.google.com" target="_blank">Open Google Calendar</a>,
-                                    click the <em>+</em> above <em>My calendars</em> and choose <em>From URL</em>.
-                                </li>
-                                <li>Paste the URL into the field named <em>URL of calendar</em> that appears and click
-                                    <em>Add calendar</em>.
-                                </li>
-                                <li>After a few seconds, it should appear in your calendar. If it does not, try
-                                    reloading Google Calendar.
-                                </li>
-                            </ol>
-                            <h2>Apple Calendar</h2>
-                            <ol>
-                                <li>Copy the URL at the top.</li>
-                                <li>In Apple Calendar, click the <em>File</em> menu and choose <em>New Calendar
-                                        Subscription…</em>.
-                                </li>
-                                <li>Paste the URL into the dialog that appears and click <em>Subscribe</em>.</li>
-                                <li>A window with settings of the calendar subscription will appear. Set <em>Auto-refresh</em>
-                                    to <em>Every hour</em> to keep your calendar up to date and click <em>OK</em>.
-                                </li>
-                            </ol>
-                            <h2>Outlook</h2>
-                            <ol>
-                                <li>Copy the URL at the top.</li>
-                                <li>In Outlook, click <em>Open Calendar</em> and choose <em>From Internet…</em>.</li>
-                                <li>Paste the URL into the Outlook dialog that appears and click <em>OK</em>.</li>
-                                <li>After a few seconds, Outlook will ask if the internet calendar should be added.
-                                    Click <em>Yes</em>.
-                                </li>
-                            </ol>
-                        </div>
+                            <div class="tab-pane" style="padding: 1.25rem" id="export">
+                                <input type="url" class="form-control" disabled value="{{ CONFIG.ROOTURL }}/api/account/calendar-export.php?uid={{ user.users_userid }}&key={{ user.users_calendarHash }}" />
+                                <br/>
+                                <h2>Google Naptár</h2>
+                                <ol>
+                                    <li>Másold ki a fenti URL-t.</li>
+                                    <li><a href="https://calendar.google.com" target="_blank">Nyisd meg a Google Naptárat</a>,
+                                        kattints a <em>+</em> gombra a <em>Saját naptárak</em> fölött, és válaszd a <em>URL-ből</em> lehetőséget.
+                                    </li>
+                                    <li>Illeszd be az URL-t az <em>Naptár URL-je</em> mezőbe, amely megjelenik, majd kattints az <em>Naptár hozzáadása</em> gombra.</li>
+                                    <li>Pár másodperc múlva meg kell jelennie a naptáradban. Ha nem, próbáld meg újratölteni a Google Naptárt.</li>
+                                </ol>
+                                <h2>Apple Naptár</h2>
+                                <ol>
+                                    <li>Másold ki a fenti URL-t.</li>
+                                    <li>Az Apple Naptárban kattints a <em>Fájl</em> menüre, és válaszd az <em>Új naptár előfizetés…</em> lehetőséget.</li>
+                                    <li>Illeszd be az URL-t az előugró párbeszédablakba, és kattints a <em>Feliratkozás</em> gombra.</li>
+                                    <li>Megjelenik a naptár előfizetési beállításait tartalmazó ablak. Állítsd be az <em>Automatikus frissítés</em>-t <em>Óránként</em> a naptárad naprakészen tartásához, majd kattints az <em>OK</em> gombra.</li>
+                                </ol>
+                                <h2>Outlook</h2>
+                                <ol>
+                                    <li>Másold ki a fenti URL-t.</li>
+                                    <li>Az Outlookban kattints az <em>Új naptár megnyitása</em> lehetőségre, és válaszd a <em>Internetről…</em> lehetőséget.</li>
+                                    <li>Illeszd be az URL-t az Outlook párbeszédablakába, és kattints az <em>OK</em> gombra.</li>
+                                    <li>Pár másodperc múlva az Outlook megkérdezi, hogy hozzá szeretnéd-e adni az internetes naptárat. Kattints az <em>Igen</em> gombra.</li>
+                                </ol>
+                            </div>
                         {% endif %}
                     </div>
                 </div>

@@ -15,7 +15,7 @@ $DBLIB->where("projects.projects_id", $_POST['projects_id']);
 $project = $DBLIB->update("projects", ["projects.clients_id" => $client['clients_id']]);
 if (!$project) finish(false);
 
-$bCMS->auditLog("CHANGE-CLIENT", "projects", "Set the client to ". $client['clients_name'], $AUTH->data['users_userid'],null, $_POST['projects_id']);
+$bCMS->auditLog("CHANGE-CLIENT", "projects", "Ügyfél beállítva: ". $client['clients_name'], $AUTH->data['users_userid'], null, $_POST['projects_id']);
 finish(true);
 
 /** @OA\Post(

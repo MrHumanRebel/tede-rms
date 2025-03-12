@@ -5,15 +5,13 @@
         <h3 class="card-title">Maintenance Jobs</h3>
 
         <div class="card-tools btn-group pull-right">
-<a href="{{ CONFIG.LINKS_USERGUIDEURL }}assets/maintenance" target="_blank" type="button" class="btn btn-info btn-sm">Help</a>
-
             {% if showCompleted %}
-                <a href="?" class="btn btn-sm btn-default">Show Outstanding Jobs</a>
+                <a href="?" class="btn btn-sm btn-default">Függő munkák megjelenítése</a>
             {% else %}
-                <a href="?completed" class="btn btn-sm btn-default">Show Completed Jobs</a>
+                <a href="?completed" class="btn btn-sm btn-default">Befejezett munkák megjelenítése</a>
             {% endif %}
             {% if "MAINTENANCE_JOBS:VIEW"|instancePermissions %}
-                <a href="job.php" class="btn btn-sm btn-success">New Job</a>
+                <a href="job.php" class="btn btn-sm btn-success">Új munka</a>
             {% endif %}
         </div>
     </div>
@@ -25,22 +23,22 @@
                     #
                 </th>
                 <th style="width: 20%">
-                    Title
+                    Cím
                 </th>
                 <th style="width: 5%">
-                    Creator
+                    Létrehozó
                 </th>
                 <th style="width: 5%">
-                    Assigned
+                    Kiosztva
                 </th>
                 <th>
-                    Deadline
+                    Határidő
                 </th>
                 <th style="width: 8%" class="text-center">
-                    Priority
+                    Prioritás
                 </th>
                 <th style="width: 8%" class="text-center">
-                    Status
+                    Státusz
                 </th>
                 <th style="width: 1%" class="text-center">
                     <i class="fas fa-flag"></i>
@@ -107,7 +105,7 @@
                     {% if job.maintenanceJobsStatuses_name %}
                     <span class="badge badge-default">{{ job.maintenanceJobsStatuses_name }}</span>
                     {% else %}
-                        <span class="badge badge-default">Awaiting Sorting</span>
+                        <span class="badge badge-default">Rendezésre vár</span>
                     {% endif %}
                 </td>
                 <td >

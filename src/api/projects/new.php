@@ -33,7 +33,7 @@ $project = $DBLIB->insert("projects", [
 if (!$project) finish(false, ["code" => "CREATE-PROJECT-FAIL", "message"=> "Could not create new project"]);
 
 $bCMS->auditLog("INSERT", "projects",null, $AUTH->data['users_userid'],null, $project);
-$bCMS->auditLog("UPDATE-NAME", "projects", "Set the name to ". $_POST['projects_name'], $AUTH->data['users_userid'],null, $project);
+$bCMS->auditLog("UPDATE-NAME", "projects", "Név beállítva: ". $_POST['projects_name'], $AUTH->data['users_userid'], null, $project);
 finish(true, null, ["projects_id" => $project]);
 
 

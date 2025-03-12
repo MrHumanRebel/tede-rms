@@ -295,7 +295,7 @@
                                                     <div class="alert alert-info mb-1"><p>Ez az alprojekt a szülőprojekt állapotát követi</p></div> 
                                                     {% endif %}
                                                     <div class="alert" style="background-color: {{ project.projectsStatuses_backgroundColour }}; color: {{ project.projectsStatuses_foregroundColour }};">
-                                                        <h5><b>Status: </b>{{ project.projectsStatuses_name }}</h5>
+                                                        <h5><b>Állapot: </b>{{ project.projectsStatuses_name }}</h5>
                                                         {{ project.projectsStatuses_description }}
                                                     </div>
                                                 </div>
@@ -398,8 +398,6 @@
                                                         <div>
                                                             <i class="fas fa-clock bg-gray"></i>
                                                         </div>
-                                                    {% else %}
-                                                        <i>Még senki sem kommentálta ezt a projektet</i>
                                                     {% endif %}
                                                 </div>
                                             </div>

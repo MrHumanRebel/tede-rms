@@ -57,7 +57,7 @@ function changeStatus($projectID, $status) {
     $DBLIB->where("projects.projects_id", $project['projects_id']);
     $projectupdate =  $DBLIB->update("projects", ["projects.projectsStatuses_id" => $status]);
     if (!$projectupdate) finish(false);
-    $bCMS->auditLog("UPDATE-STATUS", "projects", "Set the status to ". $newStatus['projectsStatuses_name'], $AUTH->data['users_userid'],null, $projectID);
+    $bCMS->auditLog("UPDATE-STATUS", "projects", "Állapot beállítva: ". $newStatus['projectsStatuses_name'], $AUTH->data['users_userid'], null, $projectID);
 }
 
 //update this project
