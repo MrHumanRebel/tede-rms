@@ -191,7 +191,13 @@
             <div class="card-body">
                 <div class="row d-flex align-items-stretch">
                     {% for asset in searchResults.ASSETS %}
-                        {% if asset.countAvailable > 0 and searchResults.SEARCH.SETTINGS.HIDENOSTOCK != true %}
+
+                        {% set stock_based_render = false %}
+                        {% if asset.countAvailable <= 0 and searchResults.SEARCH.SETTINGS.HIDENOSTOCK == true %}
+                            {% set stock_based_render = true %}
+                        {% endif %}
+
+                        {% if stock_based_render == false %}
                         <div class="col-auto d-flex align-items-stretch" style="padding: 10px;">
                             <div class="card bg-light">
                                 <div class="card-body" style="max-width: 250px;">
