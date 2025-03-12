@@ -14,44 +14,14 @@ if (!$project) finish(false,["message"=>"Project not found"]);
 
 if ($project["projects_dates_deliver_start"] == null or $project["projects_dates_deliver_end"] == null or (strtotime($project["projects_dates_deliver_start"]) >= strtotime($project["projects_dates_deliver_end"]))) finish(false,["message"=>"Please set the dates for the project before attempting to assign assets"]);
 
+
+$count = isset($_POST['count']) ? (int)$_POST['count'] : 0;  // Default to 0 if not provided
+
 $projectFinanceHelper = new projectFinance();
 $projectFinanceCacher = new projectFinanceCacher($project['projects_id']);
 $priceMaths = $projectFinanceHelper->durationMaths($project['projects_id']);
 
 $assetRequiredFields = ["assetTypes_name","assets_tag","assets_id","assets_dayRate","assets_weekRate","assetTypes_dayRate","assetTypes_weekRate","assetTypes_mass","assetTypes_value","assets_value","assets_mass","assets_assetGroups"];
-
-// ###### COUNT ADD ###########
-// Check the number of assets to assign
-$count = isset($_POST['count']) ? (int)$_POST['count'] : 0;  // Default to 0 if not provided
-$assetTypeId = $_POST['assetTypes_id'];  // Asset Type ID from the request
-
-$DBLIB->where("assets.assetTypes_id", $assetTypeId);
-$DBLIB->where("assets.assets_deleted", 0);
-$asset = $DBLIB->getOne("assets", ["assets_id", "assetTypes_id"]);
-
-if ($asset and $count != 0) {
-    // Loop through and assign the correct number of assets
-    for ($i = 0; $i < $count; $i++) {
-        $insertData = [
-            "projects_id" => $project['projects_id'],
-            "assets_id" => $asset['assets_id'],
-            "assetsAssignments_deleted" => 0,
-            "assetsAssignments_timestamp" => date('Y-m-d H:i:s')
-        ];
-
-        $insert = $DBLIB->insert("assetsAssignments", $insertData);
-        if (!$insert) {
-            finish(false, ["message" => "Asset assignment failed"]);
-        }
-
-        // Handle financial adjustments
-        $projectFinanceCacher->adjust('projectsFinanceCache_value', new Money($asset['assets_value'], new Currency($AUTH->data['instance']['instances_config_currency'])));
-    }
-    finish(true, null);
-} else {
-    finish(false, ["message" => "Asset not found"]);
-}
-// ###### COUNT ADD ###########
 
 if (isset($_POST['assetGroups_id'])) {
     $DBLIB->where("(users_userid IS NULL OR users_userid = '" . $AUTH->data['users_userid'] . "')");

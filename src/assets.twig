@@ -287,7 +287,7 @@
                                                                 <div class="modal-body" style="padding:0;text-align:left;overflow-x: auto;">
                                                                     <table class="table table-striped">
                                                                         <tr>
-                                                                            <th style="width:50px;">ID</th>
+                                                                            <th style="width:70px;">ID</th>
                                                                             {% for field in asset.fields %}
                                                                                 <th>{{ field }}</th>
                                                                             {% endfor %}
@@ -299,17 +299,18 @@
                                                                             <th style="width:1%"><i class="fas fa-flag"></i></th>
                                                                             <th>Összes hozzáadása vagy eltávolítása</th>
                                                                             <th style="width:30px;">
-                                                                                
-                                                                                <button class="btn btn-success addToBasketAssetTypeButton" {% if asset.countAvailable < 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
-                                                                                <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
-                                                                                
-                                                                            
+                                                                                <div class="asset-action-buttons">
+                                                                                    <button class="btn btn-success addToBasketAssetTypeButton" {% if asset.countAvailable < 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
+                                                                                    <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count or searchResults.PROJECT.ID != project.projects_id %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
+                                                                                </div>
                                                                             </th>
                                                                             <th>Darabszám hozzáadása vagy eltávolítása</th>
                                                                             <th style="width:30px;">
-                                                                                <input type="number" class="assetCountInput" min="1" max="{{ asset.countAvailable }}" value="1" data-assetTypeId="{{ asset.assetTypes_id }}" />
-                                                                                <button class="btn btn-success addToBasketAssetTypeCountedButton" data-assetTypeId="{{ asset.assetTypes_id }}">Hozzáadás</button>
-                                                                                <button class="btn btn-danger removeFromBasketAssetTypeCountedButton" data-assetTypeId="{{ asset.assetTypes_id }}">Eltávolítás</button>
+                                                                                <div class="asset-action-buttons">
+                                                                                    <input type="number" class="assetCountInput" min="1" max="{{ asset.countAvailable }}" value="0" data-assetTypeId="{{ asset.assetTypes_id }}" />
+                                                                                    <button class="btn btn-success addToBasketAssetTypeCountedButton" {% if asset.countAvailable < 1 %} disabled {% endif %} title="Adott darab ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}">Hozzáadás</button>
+                                                                                    <button class="btn btn-danger removeFromBasketAssetTypeCountedButton" {% if asset.countAvailable == asset.count or searchResults.PROJECT.ID != project.projects_id %} disabled {% endif %} title="Adott darab ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}">Eltávolítás</button>
+                                                                                </div>
                                                                             </th>
                                                                         </tr>
                                                                         {% for thisasset in asset.tags %}
@@ -741,7 +742,7 @@ $(document).ready(function () {
         const assetTypeId = thisButton.data("assettypeid");
         const count = parseInt($(`.assetCountInput[data-assettypeid=${assetTypeId}]`).val());
 
-        if (count > 0 && count <= {{ asset.countAvailable }} && count <= {{ asset.count }}) {
+        if (count > 0 && count <= {{ asset.countAvailable }}) {
             ajaxcall("projects/assets/assign.php", {
                 "assetTypes_id": assetTypeId,
                 "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}",
@@ -761,13 +762,12 @@ $(document).ready(function () {
             });
         }
     });
-
     $(".removeFromBasketAssetTypeCountedButton").click(function () {
         const thisButton = $(this);
         const assetTypeId = thisButton.data("assettypeid");
         const count = parseInt($(`.assetCountInput[data-assettypeid=${assetTypeId}]`).val());
 
-        if (count > 0 && count <= {{ asset.countAvailable }} && count <= {{ asset.count }}) {
+        if (count > 0 && count >= {{ asset.countAvailable }}) {
             ajaxcall("projects/assets/unassign.php", {
                 "assetTypes_id": assetTypeId,
                 "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}",

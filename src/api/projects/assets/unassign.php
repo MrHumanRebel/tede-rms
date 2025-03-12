@@ -7,30 +7,9 @@ use Money\Money;
 
 if (!$AUTH->instancePermissionCheck("PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN") or (!isset($_POST['assetsAssignments']) and !isset($_POST['assets_id']) and !isset($_POST['assetTypes_id']))) die("404");
 
-// ###### COUNT REMOVE ###########
-$assignmentsToRemove = isset($_POST['assetsAssignments']) ? $_POST['assetsAssignments'] : [];
-$count = isset($_POST['count']) ? (int)$_POST['count'] : 0;  // Quantity of assets to unassign
 
-if (empty($assignmentsToRemove)) finish(false, ["message" => "No assets selected for removal"]);
+$count = isset($_POST['count']) ? (int)$_POST['count'] : 0;  // Default to 0 if not provided
 
-if ($count != 0) {
-    foreach ($assignmentsToRemove as $assignmentId) {
-        $DBLIB->where("assetsAssignments_id", $assignmentId);
-        $DBLIB->where("assetsAssignments_deleted", 0);
-        $assignment = $DBLIB->getOne("assetsAssignments", ["assetsAssignments_id", "assets_id"]);
-
-        if ($assignment) {
-            $DBLIB->update("assetsAssignments", ["assetsAssignments_deleted" => 1]);
-
-            // Handle financial adjustments
-            $asset = $DBLIB->getOne("assets", ["assets_value", "assetTypes_id"]);
-            if ($asset) {
-                $projectFinanceCacher->adjust('projectsFinanceCache_value', new Money(-$asset['assets_value'], new Currency($AUTH->data['instance']['instances_config_currency'])));
-            }
-        }
-    }
-}
-// ###### COUNT REMOVE ###########
 
 if (isset($_POST['assets_id']) and isset($_POST['projects_id']) and !isset($_POST['assetsAssignments'])) {
     //Convert for where only the asset id and project is known
