@@ -229,7 +229,7 @@
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.countAvailable == 0 %}
                                                 <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
-                                                    <span class="fa-li" style="margin-right: 10px; margin-left: 10px;">
+                                                    <span class="fa-li">
                                                         <i class="fas fa-exclamation-circle" style="color: red; font-size: 30px;"></i>
                                                     </span>
                                                     <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
@@ -256,7 +256,7 @@
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.countAvailable == 0 %}
                                                 <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
-                                                    <span class="fa-li" style="margin-right: 10px; margin-left: 10px;">
+                                                    <span class="fa-li">
                                                         <i class="fas fa-exclamation-circle" style="color: red; font-size: 30px;"></i>
                                                     </span>
                                                     <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
@@ -264,15 +264,15 @@
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.countAvailable == 1 %}
                                                 <li class="small" title="Utolsó darab" style="margin-top: 10px;">
-                                                    <span class="fa-li" style="margin-right: 10px; margin-left: 10px;">
+                                                    <span class="fa-li">
                                                         <i class="fas fa-exclamation-circle" style="color: orange; font-size: 30px;"></i>
                                                     </span>
                                                     <strong style="font-size: larger; color: black; border: 2px solid orange; padding: 3px 10px; border-radius: 10px;">Utolsó darab!</strong>
                                                 </li>
                                             {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable <= 2 and asset.countAvailable != 1 and asset.countAvailable != 0 %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable <= 3 and asset.countAvailable != 1 and asset.countAvailable != 0 %}
                                                 <li class="small" title="Utolsó darabok" style="margin-top: 10px;">
-                                                    <span class="fa-li" style="margin-right: 10px; margin-left: 10px;">
+                                                    <span class="fa-li">
                                                         <i class="fas fa-exclamation-circle" style="color: yellow; font-size: 30px;"></i>
                                                     </span>
                                                     <strong style="font-size: larger; color: black; border: 2px solid yellow; padding: 3px 10px; border-radius: 10px;">Utolsó darabok!</strong>
