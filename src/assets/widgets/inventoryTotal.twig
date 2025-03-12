@@ -46,7 +46,7 @@
                 </p>
                 <p class="d-flex flex-column text-right">
                     <span class="font-weight-bold">
-                        <i class="ion ion-android-arrow-up text-warning"></i> {{ THISWIDGET.COUNT }} db
+                        <i class="ion ion-android-arrow-up text-warning"></i> {{ THISWIDGET.COUNT | default(0) }} db
                     </span>
                     <span class="text-muted">Összes raktárban lévő eszköz</span>
                 </p>
@@ -58,7 +58,7 @@
                 </p>
                 <p class="d-flex flex-column text-right">
                     <span class="font-weight-bold">
-                        <i class="ion ion-android-arrow-up text-warning"></i> {{ THISWIDGET.TYPES }} db
+                        <i class="ion ion-android-arrow-up text-warning"></i> {{ THISWIDGET.TYPES | default(0) }} db
                     </span>
                     <span class="text-muted">Összes eszköz típus</span>
                 </p>

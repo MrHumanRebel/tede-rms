@@ -287,7 +287,7 @@
                                                                 <div class="modal-body" style="padding:0;text-align:left;overflow-x: auto;">
                                                                     <table class="table table-striped">
                                                                         <tr>
-                                                                            <th style="width:70px;">ID</th>
+                                                                            <th style="width:50px;">ID</th>
                                                                             {% for field in asset.fields %}
                                                                                 <th>{{ field }}</th>
                                                                             {% endfor %}
@@ -297,9 +297,19 @@
                                                                                 <th>Költség/hét</th>
                                                                             {% endif %}
                                                                             <th style="width:1%"><i class="fas fa-flag"></i></th>
+                                                                            <th>Összes hozzáadása vagy eltávolítása</th>
                                                                             <th style="width:30px;">
+                                                                                
                                                                                 <button class="btn btn-success addToBasketAssetTypeButton" {% if asset.countAvailable < 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
                                                                                 <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
+                                                                                
+                                                                            
+                                                                            </th>
+                                                                            <th>Darabszám hozzáadása vagy eltávolítása</th>
+                                                                            <th style="width:30px;">
+                                                                                <input type="number" class="assetCountInput" min="1" max="{{ asset.countAvailable }}" value="1" data-assetTypeId="{{ asset.assetTypes_id }}" />
+                                                                                <button class="btn btn-success addToBasketAssetTypeCountedButton" data-assetTypeId="{{ asset.assetTypes_id }}">Hozzáadás</button>
+                                                                                <button class="btn btn-danger removeFromBasketAssetTypeCountedButton" data-assetTypeId="{{ asset.assetTypes_id }}">Eltávolítás</button>
                                                                             </th>
                                                                         </tr>
                                                                         {% for thisasset in asset.tags %}
@@ -725,6 +735,57 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+    $(".addToBasketAssetTypeCountedButton").click(function () {
+        const thisButton = $(this);
+        const assetTypeId = thisButton.data("assettypeid");
+        const count = parseInt($(`.assetCountInput[data-assettypeid=${assetTypeId}]`).val());
+
+        if (count > 0 && count <= {{ asset.countAvailable }} && count <= {{ asset.count }}) {
+            ajaxcall("projects/assets/assign.php", {
+                "assetTypes_id": assetTypeId,
+                "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}",
+                "count": count
+            }, function (data) {
+                Toast.fire({
+                    type: 'success',
+                    title: `${count} eszközt hozzáadva a projekthez: {{ searchResults.PROJECT.NAME }}`
+                });
+                // Optionally, update the UI to reflect the new state
+                thisButton.prop('disabled', true);
+            });
+        } else {
+            Toast.fire({
+                type: 'error',
+                title: 'Hibás szám, próbálja újra!'
+            });
+        }
+    });
+
+    $(".removeFromBasketAssetTypeCountedButton").click(function () {
+        const thisButton = $(this);
+        const assetTypeId = thisButton.data("assettypeid");
+        const count = parseInt($(`.assetCountInput[data-assettypeid=${assetTypeId}]`).val());
+
+        if (count > 0 && count <= {{ asset.countAvailable }} && count <= {{ asset.count }}) {
+            ajaxcall("projects/assets/unassign.php", {
+                "assetTypes_id": assetTypeId,
+                "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}",
+                "count": count
+            }, function (data) {
+                Toast.fire({
+                    type: 'success',
+                    title: `${count} eszközt eltávolítva a projektről: {{ searchResults.PROJECT.NAME }}`
+                });
+                // Optionally, update the UI to reflect the new state
+                thisButton.prop('disabled', true);
+            });
+        } else {
+            Toast.fire({
+                type: 'error',
+                title: 'Hibás szám, próbálja újra!'
+            });
+        }
     });
         
 
