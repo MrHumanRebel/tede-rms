@@ -16,30 +16,13 @@
                 {% endif %}
             </div>
         </div>
-        {# Számoljuk meg hány projekt van aktív ami NEM archivált és azt írjuk ki #}
         {% set activeProjects = 0 %}
+        {% set archiveProjects = 0 %}
+
         {% for project in projects %}
             {% if project.projects_archived != 1 %}
                 {% set activeProjects = activeProjects + 1 %}
-            {% endif %}
-        {% endfor %}
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="text-warning text-xl">
-                    <i class="ion ion-ios-cart-outline"></i>
-                </p>
-                <p class="d-flex flex-column text-right">
-                        <span class="font-weight-bold">
-                        <i class="ion ion-android-arrow-up text-warning"></i> {{ activeProjects }}
-                        </span>
-                    <span class="text-muted">Jelenleg aktív projektek</span>
-                </p>
-            </div>
-        </div>
-        {# Számoljuk meg hány projekt van aktív ami archivált és azt írjuk ki #}
-        {% set archiveProjects = 0 %}
-        {% for project in projects %}
-            {% if project.projects_archived == 1 %}
+            {% else %}
                 {% set archiveProjects = archiveProjects + 1 %}
             {% endif %}
         {% endfor %}
@@ -48,11 +31,20 @@
                 <p class="text-warning text-xl">
                     <i class="ion ion-ios-cart-outline"></i>
                 </p>
-                <p class="d-flex flex-column text-right">
-                        <span class="font-weight-bold">
-                        <i class="ion ion-android-arrow-up text-warning"></i> {{ archiveProjects }}
-                        </span>
-                    <span class="text-muted">Kész projektek</span>
+                <p class="text-right">
+                    <span class="font-weight-bold">
+                        <i class="ion ion-android-arrow-up text-warning"></i> Jelenleg aktív projektek: {{ activeProjects }}
+                    </span>
+                </p>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="text-warning text-xl">
+                    <i class="ion ion-ios-cart-outline"></i>
+                </p>
+                <p class="text-right">
+                    <span class="font-weight-bold">
+                        <i class="ion ion-android-arrow-up text-warning"></i> Kész projektek: {{ archiveProjects }}
+                    </span>
                 </p>
             </div>
         </div>
