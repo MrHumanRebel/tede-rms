@@ -7,10 +7,6 @@ use Money\Money;
 
 if (!$AUTH->instancePermissionCheck("PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN") or (!isset($_POST['assetsAssignments']) and !isset($_POST['assets_id']) and !isset($_POST['assetTypes_id']))) die("404");
 
-
-$count = isset($_POST['count']) ? (int)$_POST['count'] : 0;  // Default to 0 if not provided
-
-
 if (isset($_POST['assets_id']) and isset($_POST['projects_id']) and !isset($_POST['assetsAssignments'])) {
     //Convert for where only the asset id and project is known
     $DBLIB->where("assets_id", $_POST['assets_id']);

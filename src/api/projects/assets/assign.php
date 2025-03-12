@@ -15,7 +15,7 @@ if (!$project) finish(false,["message"=>"Project not found"]);
 if ($project["projects_dates_deliver_start"] == null or $project["projects_dates_deliver_end"] == null or (strtotime($project["projects_dates_deliver_start"]) >= strtotime($project["projects_dates_deliver_end"]))) finish(false,["message"=>"Please set the dates for the project before attempting to assign assets"]);
 
 
-$count = isset($_POST['count']) ? (int)$_POST['count'] : 0;  // Default to 0 if not provided
+
 
 $projectFinanceHelper = new projectFinance();
 $projectFinanceCacher = new projectFinanceCacher($project['projects_id']);
