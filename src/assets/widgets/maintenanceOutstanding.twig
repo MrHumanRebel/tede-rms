@@ -21,18 +21,12 @@
     <div class="card-body">
         {% if THISWIDGET.MY > 0 %}
         <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
-            <p class="text-warning text-xl">
-                <i class="ion ion-ios-cart-outline"></i>
-            </p>
             <p class="text-left">
                 <i class="ion ion-android-arrow-up text-warning"></i> Hozzád rendelve: {{ THISWIDGET.MY }}
             </p>
         </div>
         {% endif %}
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <p class="text-warning text-xl">
-                <i class="ion ion-ios-cart-outline"></i>
-            </p>
             <p class="text-left">
                 <i class="ion ion-android-arrow-up text-warning"></i> Függő feladatok: {{ THISWIDGET.TOTAL }}
             </p>

@@ -811,11 +811,9 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
 				<!-- /.content-wrapper -->
 				<footer class="main-footer" id="main-footer">
 					<div class="float-right d-none d-sm-block">
-						<a href="https://github.com/adam-rms/adam-rms/releases" target="_blank">{{ VERSION }}</a>
+						<a href="https://github.com/MrHumanRebel/adam-rms-hun" target="_blank">{{ VERSION if VERSION else 'Latest' }}</a>
 					</div>
-					<strong>&copy; {{ "now"|date("Y") }}</strong>
-					All rights reserved.
-					<p><a href="https://szekedani.duckdns.org/">Made by Danci</a></p>
+					<strong>&copy; {{ "now"|date("Y") }}</strong> - Minden jog fenntartva. - <a href="https://szekedani.duckdns.org/">Made by Danci</a>
 				</footer>
 			</div>
 			<script>

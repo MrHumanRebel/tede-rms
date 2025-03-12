@@ -18,33 +18,21 @@
         </div>
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="text-warning text-xl">
-                    <i class="ion ion-ios-cart-outline"></i>
-                </p>
                 <p class="text-left">
                     <i class="ion ion-android-arrow-up text-warning"></i> Összes eszköz értéke: {{ THISWIDGET.VALUE|money(USERDATA.instance['instances_config_currency'])|replace({'.00':''}) }}
                 </p>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="text-warning text-xl">
-                    <i class="ion ion-ios-cart-outline"></i>
-                </p>
                 <p class="text-left">
                     <i class="ion ion-android-arrow-up text-warning"></i> Összes eszköz tömege: {{ THISWIDGET.MASS|round(2, 'ceil')|number_format(2) }} kg
                 </p>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="text-warning text-xl">
-                    <i class="ion ion-ios-cart-outline"></i>
-                </p>
                 <p class="text-left">
                     <i class="ion ion-android-arrow-up text-warning"></i> Összes raktárban lévő eszköz: {{ THISWIDGET.COUNT | default(0) }} db
                 </p>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="text-warning text-xl">
-                    <i class="ion ion-ios-cart-outline"></i>
-                </p>
                 <p class="text-left">
                     <i class="ion ion-android-arrow-up text-warning"></i> Összes eszköz típus: {{ THISWIDGET.TYPES | default(0) }} db
                 </p>

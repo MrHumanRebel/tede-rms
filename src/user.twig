@@ -82,7 +82,7 @@
                             <li class="nav-item"><a class="nav-link" href="#positions" data-toggle="tab">{{ CONFIG.PROJECT_NAME }} pozíciók</a></li>
                         {% endif %}
                         {% if user.crewAssignments|length > 0 %}<li class="nav-item"><a class="nav-link" href="#roles" data-toggle="tab">Stáb szerepek</a></li>{% endif %}
-                        {% if user.projectManagement|length > 0 %}<li class="nav-item"><a class="nav-link" href="#projects" data-toggle="tab">Kezelem a projekteket</a></li>{% endif %}
+                        {% if user.projectManagement|length > 0 %}<li class="nav-item"><a class="nav-link" href="#projects" data-toggle="tab">Kezelt a projektek</a></li>{% endif %}
                         {% if user.users_userid == USERDATA.users_userid %}
                         <li class="nav-item"><a class="nav-link" href="#export" data-toggle="tab">Naptár exportálása</a></li>
                         {% endif %}
