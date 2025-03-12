@@ -39,9 +39,9 @@
                     const monthNames = ["Január", "Február", "Március", "Április", "Május", "Június",
                         "Július", "Augusztus", "Szeptember", "Október", "November", "December"
                     ]
-                    const prefix = "{{LOCATION ? LOCATION.locations_name ~ ': ' : USER ? 'Naptárad: ' : '' }}"
+                    const prefix = "{{LOCATION ? LOCATION.locations_name ~ ': ' : USER ? 'Saját naptárad: ' : '' }}"
 
-                    return prefix + monthNames[date['date']['month']] + " " + date['date']['year'];
+                    return prefix + date['date']['year'] + " " + monthNames[date['date']['month']];
                 },
 
                 events : [
@@ -100,6 +100,9 @@
                 {% else %}
                 weekNumberCalculation: "ISO",
                 {% endif %}
+                eventTimeFormat: {
+                    allDay: '[egész nap]'
+                },
             });
 
             calendar{{ calendarId }}.render();
