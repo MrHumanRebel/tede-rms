@@ -222,10 +222,18 @@
                                             </li>
                                             {% endif %}
                                             {# Írd ki az eszközök számát #}
-                                            {% if not searchResults.PROJECT.ID %}
+                                            {% if searchResults.PROJECT.ID %}
                                                 <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
                                             {% else %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
+                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
+                                            {% endif %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 0 %}
+                                                <li class="small" title="Nincs elérhető készlet">
+                                                    <span class="fa-li">
+                                                        <i class="fas fa-exclamation-circle" style="color: red; font-size: 30px;"></i>
+                                                    </span>
+                                                    <strong style="font-size: larger; color: red; border: 2px solid red; padding: 5px; border-radius: 10px;">Nincs elérhető készlet!</strong>
+                                                </li>
                                             {% endif %}
                                         {% else %}
                                             {% if asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 %}
@@ -241,10 +249,18 @@
                                             </li>
                                             {% endif %}
                                             {# Írd ki az eszközök számát #}
-                                            {% if not searchResults.PROJECT.ID %}
+                                            {% if searchResults.PROJECT.ID %}
                                                 <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
                                             {% else %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
+                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
+                                            {% endif %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 0 %}
+                                                <li class="small" title="Nincs elérhető készlet">
+                                                    <span class="fa-li">
+                                                        <i class="fas fa-exclamation-circle" style="color: red; font-size: 30px;"></i>
+                                                    </span>
+                                                    <strong style="font-size: larger; color: red; border: 2px solid red; padding: 5px; border-radius: 10px;">Nincs elérhető készlet!</strong>
+                                                </li>
                                             {% endif %}
                                         {% endif %}
 
