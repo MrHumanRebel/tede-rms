@@ -1141,11 +1141,7 @@
                                 "comment_id": comment_id,
                                 "projects_id": projects_id
                             }, function (data) {
-                                if (data.success) {
-                                    location.reload(); // Reload the page to reflect the deletion
-                                } else {
-                                    bootbox.alert("Hiba történt a komment törlésekor.");
-                                }
+                                location.reload();
                             });
                         }
                     }
