@@ -13,20 +13,16 @@ $DBLIB->where("projects.projects_id", $_POST['projects_id']);
 $project = $DBLIB->getone("projects", ["projects.projects_id"]);
 if (!$project) die("404");
 
-// Check if the comment exists
-$DBLIB->where("comments.comment_id", $_POST['comment_id']);
-$DBLIB->where("comments.projects_id", $_POST['projects_id']);
-$comment = $DBLIB->getone("comments", ["comments.comment_id"]);
+// Check if the comment exists in the auditLog
+$DBLIB->where("auditLog.auditLog_targetID", $_POST['comment_id']);
+$DBLIB->where("auditLog.auditLog_type", "QUICKCOMMENT");
+$DBLIB->where("auditLog.auditLog_projectID", $_POST['projects_id']);
+$comment = $DBLIB->getone("auditLog", ["auditLog.auditLog_id"]);
 if (!$comment) die("404");
 
-// Delete the comment
-$DBLIB->where("comment_id", $_POST['comment_id']);
-$DBLIB->where("projects_id", $_POST['projects_id']);
-if ($DBLIB->delete("comments")) {
-    // Log the deletion
-    $bCMS->auditLog("QUICKCOMMENT DELETE", "projects", "Deleted comment ID: " . $_POST['comment_id'], $AUTH->data['users_userid'], null, $_POST['projects_id'], null);
-    finish(true, "Comment deleted successfully", ["projects_id" => $_POST['projects_id']]);
-} else {
-    finish(false, "Failed to delete comment");
-}
-?>
+// Delete the comment from the auditLog
+$DBLIB->where("auditLog_id", $comment['auditLog_id']);
+$DBLIB->delete("auditLog");
+
+// Finish with success
+finish(true, "Comment deleted successfully", ["projects_id" => $project['projects_id']]);
