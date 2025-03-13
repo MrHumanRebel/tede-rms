@@ -399,6 +399,9 @@
                                                                     <button type="button" class="btn btn-tool quickDeleteCommentButton" data-comment-id="{{ event.auditLog_targetID }}" title="Megjegyzés törlése">
                                                                         <i class="fas fa-trash-alt text-danger"></i>
                                                                     </button>
+                                                                    <button type="button" class="btn btn-tool quickEditCommentButton" data-comment-id="{{ event.auditLog_targetID }}" title="Megjegyzés szerkesztése">
+                                                                        <i class="fas fa-pencil-alt text-warning"></i>
+                                                                    </button>
                                                                     {% endif %}
                                                                     <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> hozzászólt
                                                                     </h3>
@@ -1179,6 +1182,48 @@
                                 location.reload();
                             });
                         }
+                    }
+                });
+            });
+
+            $(".quickEditCommentButton").click(function () {
+                var comment_id = $(this).data("comment-id");
+                var projects_id = "{{ project.projects_id }}";
+
+                // Előző komment betöltése AJAX-szal
+                ajaxcall("projects/getComment.php", {
+                    "comment_id": comment_id,
+                    "projects_id": projects_id
+                }, function(data) {
+                    if (data && data.comment_text) {
+                        // Megnyitjuk a bootbox dialogot
+                        bootbox.dialog({
+                            title: "Komment szerkesztése",
+                            size: 'large',
+                            message: '<textarea id="editor" class="form-control">' + data.comment_text + '</textarea>',
+                            buttons: {
+                                ok: {
+                                    label: "Mentés",
+                                    className: "btn btn-info",
+                                    callback: function () {
+                                        let content = $('#editor').val();
+                                        if (content) {
+                                            ajaxcall("projects/editQuickComment.php", { // Itt már editQuickComment.php a mentés
+                                                "comment_id": comment_id,
+                                                "projects_id": projects_id,
+                                                "new_comment_text": content
+                                            }, function (data) {
+                                                location.reload();
+                                            });
+                                        }
+                                    }
+                                },
+                                cancel: {
+                                    label: "Mégsem",
+                                    className: "btn btn-danger"
+                                }
+                            }
+                        });
                     }
                 });
             });
