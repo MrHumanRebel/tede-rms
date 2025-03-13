@@ -23,5 +23,5 @@ if (!$comment) {
 }
 
 // Komment visszaküldése
-echo json_encode(["comment_text" => $comment['auditLog.auditLog_actionData']]);
+echo json_encode(["comment_text" => $comment['auditLog_actionData']]);
 ?>

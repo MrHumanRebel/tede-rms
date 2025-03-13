@@ -1195,12 +1195,12 @@
                     "comment_id": comment_id,
                     "projects_id": projects_id
                 }, function(data) {
-                    if (data && data.comment_text) {
+                        var commentText = (data && data.comment_text) ? data.comment_text : ''; // Ha null, üres mező
                         // Megnyitjuk a bootbox dialogot
                         bootbox.dialog({
                             title: "Komment szerkesztése",
                             size: 'large',
-                            message: '<textarea id="editor" class="form-control">' + data.comment_text + '</textarea>',
+                            message: '<textarea id="editor" class="form-control">' + commentText + '</textarea>',
                             buttons: {
                                 ok: {
                                     label: "Mentés",
@@ -1224,7 +1224,7 @@
                                 }
                             }
                         });
-                    }
+                    
                 });
             });
 
