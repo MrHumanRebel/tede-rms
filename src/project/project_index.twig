@@ -424,11 +424,6 @@
                                                 {"name": "Ford: NIC-478", "id": "3", "type": "truck"}
                                             ] %}
 
-                                            {% set trailers = [
-                                                {"name": "Renault nagy utánfutó: WAV-512", "id": "1", "type": "trailer"},
-                                                {"name": "Színpados utánfutó: XXX-123", "id": "2", "type": "trailer"}
-                                            ] %}
-
                                             {% if "ASSETS:CREATE"|instancePermissions %}
                                                 <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                     Gépjármű kiválasztása
@@ -443,6 +438,11 @@
                                                 </div>
                                             {% endif %}
 
+                                            {% set trailers = [
+                                                {"name": "Renault nagy utánfutó: WAV-512", "id": "1", "type": "trailer"},
+                                                {"name": "Színpados utánfutó: XXX-123", "id": "2", "type": "trailer"}
+                                            ] %}
+
                                             {% if "ASSETS:CREATE"|instancePermissions %}
                                                 <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                     Utánfutó kiválasztása
@@ -451,7 +451,7 @@
                                                 <div class="dropdown-menu" role="menu">
                                                     {% if "PROJECTS:CREATE"|instancePermissions %}
                                                         {% for trailer in trailers %}
-                                                            <a class="dropdown-item addTruck" href="#" data-target="{{ trailer.id }}" data-type="{{ trailer.type }}">{{ trailer.name }}</a>
+                                                            <a class="dropdown-item addTrailer" href="#" data-target="{{ trailer.id }}" data-type="{{ trailer.type }}">{{ trailer.name }}</a>
                                                         {% endfor %}
                                                     {% endif %}
                                                 </div>
@@ -1137,13 +1137,32 @@
 
             $(".addTruck").click(function () {
                 let truckNumber = $(this).data("target");
-                let truckType = $(this).data("type");
-                
+               
                 if (truckNumber) {
                     let uniqueID = Math.floor((Date.now() + Math.random()) % 1000000000);
                     
                     // Determine if it's a truck or trailer and prepend the appropriate label
-                    let logMessage = (truckType === "truck" ? "Gépjármű: " : "Utánfutó: ") + truckNumber;
+                    let logMessage = "Gépjármű: " + truckNumber;
+                    
+                    // Call ajax with the log message
+                    ajaxcall("projects/newQuickComment.php", {
+                        "text": logMessage,
+                        "projects_id": "{{ project.projects_id }}",
+                        "uniqueID": uniqueID
+                    }, function (data) {
+                        location.reload();
+                    });
+                }
+            });
+
+            $(".addTrailer").click(function () {
+                let trailerNumber = $(this).data("target");
+                
+                if (trailerNumber) {
+                    let uniqueID = Math.floor((Date.now() + Math.random()) % 1000000000);
+                    
+                    // Determine if it's a trailer or trailer and prepend the appropriate label
+                    let logMessage = "Utánfutó: " + trailerNumber;
                     
                     // Call ajax with the log message
                     ajaxcall("projects/newQuickComment.php", {
