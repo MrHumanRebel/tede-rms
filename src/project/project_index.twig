@@ -420,9 +420,9 @@
                                             <div class="btn-group float-left">
                                                 <div>
                                                     {% set trucks = [
-                                                        {"name": "Renault: NEA-418", "type": "truck"},
-                                                        {"name": "Dyna: ISE-123", "type": "truck"},
-                                                        {"name": "Ford: NIC-478", "type": "truck"}
+                                                        {"name": "Renault: NEA-418"},
+                                                        {"name": "Dyna: ISE-123"},
+                                                        {"name": "Ford: NIC-478"}
                                                     ] %}
                                                     
                                                     {% if "ASSETS:CREATE"|instancePermissions %}
@@ -433,7 +433,7 @@
                                                         <div class="dropdown-menu" role="menu">
                                                             {% if "PROJECTS:CREATE"|instancePermissions %}
                                                                 {% for truck in trucks %}
-                                                                    <a class="dropdown-item addTruck" href="#" data-target="{{ truck.name }}" data-type="{{ truck.type }}" >{{ truck.name }}</a>
+                                                                    <a class="dropdown-item addTruck" href="#" data-target="{{ truck.name }}" >{{ truck.name }}</a>
                                                                 {% endfor %}
                                                             {% endif %}
                                                         </div>
@@ -441,8 +441,8 @@
                                                 </div>
                                                 <div>
                                                     {% set trailers = [
-                                                        {"name": "Renault nagy utánfutó: WAV-512", "type": "trailer"},
-                                                        {"name": "Színpados utánfutó: XXX-123", "type": "trailer"}
+                                                        {"name": "Renault nagy utánfutó: WAV-512"},
+                                                        {"name": "Színpados utánfutó: XXX-123"}
                                                     ] %}
 
                                                     {% if "ASSETS:CREATE"|instancePermissions %}
@@ -453,7 +453,7 @@
                                                         <div class="dropdown-menu" role="menu">
                                                             {% if "PROJECTS:CREATE"|instancePermissions %}
                                                                 {% for trailer in trailers %}
-                                                                    <a class="dropdown-item addTrailer" href="#" data-target="{{ trailer.name }}" data-type="{{ trailer.type }}">{{ trailer.name }}</a>
+                                                                    <a class="dropdown-item addTrailer" href="#" data-target="{{ trailer.name }}" >{{ trailer.name }}</a>
                                                                 {% endfor %}
                                                             {% endif %}
                                                         </div>
@@ -1140,9 +1140,8 @@
 
             $(".addTruck").click(function () {
                 let truckNumber = $(this).data("target");
-                let truckType = $(this).data("type");
                
-                if (truckNumber && truckType == "truck") {
+                if (truckNumber) {
                     let uniqueID = Math.floor((Date.now() + Math.random()) % 1000000000);
                     let logMessage = "Gépjármű: " + truckNumber;
                     
@@ -1155,16 +1154,12 @@
                         location.reload();
                     });
                 }
-                else{
-                    console.log("truckNumber: " + truckNumber + " truckType: " + truckType);
-                }
             });
 
             $(".addTrailer").click(function () {
                 let trailerNumber = $(this).data("target");
-                let trailerType = $(this).data("type");
                 
-                if (trailerNumber && trailerType == "trailer") {
+                if (trailerNumber) {
                     let uniqueID = Math.floor((Date.now() + Math.random()) % 1000000000);
                     let logMessage = "Utánfutó: " + trailerNumber;
                     
@@ -1176,9 +1171,6 @@
                     }, function (data) {
                         location.reload();
                     });
-                }
-                else{
-                    console.log("trailerNumber: " + trailerNumber + " trailerType: " + trailerType);
                 }
             });
 
