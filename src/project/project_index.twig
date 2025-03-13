@@ -415,22 +415,43 @@
                                                 </div>
                                             </div>
 
-                                            {% set truck1 = "Renault - (NEA-418)" %}
-                                            {% set truck2 = "Renault nagy utánfutóval - (NEA-418 + WAV-512)" %}
-                                            {% set truck3 = "Ford - (NIC-478)" %}
+                                            {% set trucks = [
+                                                {"name": "Renault: NEA-418", "id": "1", "type": "truck"},
+                                                {"name": "Dyna: ISE-123", "id": "2", "type": "truck"},
+                                                {"name": "Ford: NIC-478", "id": "3", "type": "truck"}
+                                            ] %}
+
+                                            {% set trailers = [
+                                                {"name": "Renault nagy utánfutó: WAV-512", "id": "1", "type": "trailer"},
+                                                {"name": "Színpados utánfutó: XXX-123", "id": "2", "type": "trailer"}
+                                            ] %}
 
                                             {% if "ASSETS:CREATE"|instancePermissions %}
-                                            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                                Gépjármű kiválasztása
-                                                <span class="sr-only">Legördülő menü váltása</span>
-                                            </button>
-                                            <div class="dropdown-menu" role="menu">
-                                                {% if "PROJECTS:CREATE"|instancePermissions %}
-                                                    <a class="dropdown-item addTruck" href="#" data-target="{{ truck1 }}">{{ truck1 }}</a>
-                                                    <a class="dropdown-item addTruck" href="#" data-target="{{ truck2 }}">{{ truck2 }}</a>
-                                                    <a class="dropdown-item addTruck" href="#" data-target="{{ truck3 }}">{{ truck3 }}</a>
-                                                {% endif %}
-                                            </div>
+                                                <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                    Gépjármű kiválasztása
+                                                    <span class="sr-only">Legördülő menü váltása</span>
+                                                </button>
+                                                <div class="dropdown-menu" role="menu">
+                                                    {% if "PROJECTS:CREATE"|instancePermissions %}
+                                                        {% for truck in trucks %}
+                                                            <a class="dropdown-item addTruck" href="#" data-target="{{ truck.id }}" data-type="{{ truck.type }}">{{ truck.name }}</a>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+
+                                            {% if "ASSETS:CREATE"|instancePermissions %}
+                                                <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                    Utánfutó kiválasztása
+                                                    <span class="sr-only">Legördülő menü váltása</span>
+                                                </button>
+                                                <div class="dropdown-menu" role="menu">
+                                                    {% if "PROJECTS:CREATE"|instancePermissions %}
+                                                        {% for trailer in trailers %}
+                                                            <a class="dropdown-item addTruck" href="#" data-target="{{ trailer.id }}" data-type="{{ trailer.type }}">{{ trailer.name }}</a>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
                                             {% endif %}
 
                                         </div>
@@ -1113,10 +1134,17 @@
 
             $(".addTruck").click(function () {
                 let truckNumber = $(this).data("target");
+                let truckType = $(this).data("type");
+                
                 if (truckNumber) {
                     let uniqueID = Math.floor((Date.now() + Math.random()) % 1000000000);
+                    
+                    // Determine if it's a truck or trailer and prepend the appropriate label
+                    let logMessage = (truckType === "truck" ? "Gépjármű: " : "Utánfutó: ") + truckNumber;
+                    
+                    // Call ajax with the log message
                     ajaxcall("projects/newQuickComment.php", {
-                        "text": truckNumber,
+                        "text": logMessage,
                         "projects_id": "{{ project.projects_id }}",
                         "uniqueID": uniqueID
                     }, function (data) {
