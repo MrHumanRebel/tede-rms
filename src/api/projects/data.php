@@ -44,7 +44,7 @@ function projectFinancials($project) {
     $return = [];
 
     //create a formatter for money
-    $numberFormatter = new \NumberFormatter('en_GB', \NumberFormatter::CURRENCY);
+    $numberFormatter = new \NumberFormatter('hu_HU', \NumberFormatter::CURRENCY);
     $moneyFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
 
     $DBLIB->where("payments.payments_deleted", 0);

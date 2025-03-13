@@ -19,7 +19,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <p class="text-left">
-                    <i class="ion ion-android-arrow-up text-warning"></i> Összes eszköz értéke: {{ THISWIDGET.VALUE|money(USERDATA.instance['instances_config_currency'])|replace({'.00':''}) }}
+                    <i class="ion ion-android-arrow-up text-warning"></i> Összes eszköz értéke: {{ THISWIDGET.VALUE|money(USERDATA.instance['instances_config_currency'])|replace({',00':''}) }}
                 </p>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-3">

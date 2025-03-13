@@ -225,9 +225,9 @@
                                             {% endif %}
                                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                             <li class="small">
-                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ (asset.tags[0]['assets_value'] ?: asset.assetTypes_value)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}<br/>
-                                                {{ (asset.tags[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/nap<br/>
-                                                {{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/hét
+                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ (asset.tags[0]['assets_value'] ?: asset.assetTypes_value)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}<br/>
+                                                {{ (asset.tags[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/nap<br/>
+                                                {{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/hét
                                             </li>
                                             {% endif %}
                                             {# Írd ki az eszközök számát #}
@@ -249,9 +249,9 @@
                                             {% endif %}
                                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                             <li class="small">
-                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ asset.assetTypes_value|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}<br/>
-                                                {{ asset.assetTypes_dayRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/nap<br/>
-                                                {{ asset.assetTypes_weekRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}/hét
+                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ asset.assetTypes_value|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}<br/>
+                                                {{ asset.assetTypes_dayRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/nap<br/>
+                                                {{ asset.assetTypes_weekRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/hét
                                             </li>
                                             {% endif %}
                                             {# Írd ki az eszközök számát #}
@@ -345,10 +345,10 @@
                                                                                 {% endfor %}
                                                                                 <td>{{ thisasset['assets_notes']|nl2br }}</td>
                                                                                 <td>
-                                                                                    {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                                                                    {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                                                                    {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ thisasset.flagsblocks.COUNT.FLAG > 0 ?: '' }}
@@ -423,10 +423,10 @@
                                                                                 {% endfor %}
                                                                                 <td>{{ thisasset['assets_notes']|nl2br }}</td>
                                                                                 <td>
-                                                                                    {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                                                                    {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                                                                    {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ thisasset.flagsblocks.COUNT.FLAG > 0 ?: '' }}

@@ -86,7 +86,7 @@
                                             ['Tömeg becslés:',"{{FINANCIALS.mass|mass|escape("js") }}"],
                                         {% endif %}
                                         {% if GET['totalvalue'] and project.projectsTypes_config_assets == 1 %}
-                                            ['Értékbecslés:',"{{FINANCIALS.value|money|replace({'.00':''})|escape('js') }}"],
+                                            ['Értékbecslés:',"{{FINANCIALS.value|money|replace({',00':''})|escape('js') }}"],
                                         {% endif %}
                                     ],
                                 },
@@ -117,35 +117,35 @@
                         body: [
                             [
                                 { text: "Felszerelés részösszeg" },
-                                { text: "{{ FINANCIALS.prices.subTotal|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.subTotal|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                                 { text: "Értékesítés" },
-                                { text: "{{ FINANCIALS.payments.sales.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             [
                                 { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}Kedvezmények{% else %}Módosítások{% endif %}" },
-                                { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}-{{ FINANCIALS.prices.discounts|money|replace({'.00':''})|escape('js') }}{% else %}Nincs{% endif %}", style: { alignment: 'right' } },
+                                { text: "{% if FINANCIALS.prices.discounts|moneyPositive %}-{{ FINANCIALS.prices.discounts|money|replace({',00':''})|escape('js') }}{% else %}Nincs{% endif %}", style: { alignment: 'right' } },
                                 { text: "Személyzet" },
-                                { text: "{{ FINANCIALS.payments.staff.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             [
                                 { text: "Felszerelés végösszeg", style: { bold: true } },
-                                { text: "{{ FINANCIALS.prices.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                                 { text: "Albérletek" },
-                                { text: "{{ FINANCIALS.payments.subHire.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.subHire.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             {% if not GET['quote'] %}
                             [
                                 { text: "Részösszeg" },
-                                { text: "{{ FINANCIALS.payments.subTotal|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.subTotal|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                                 { text: "Eddig beérkezett fizetések" },
-                                { text: "-{{ FINANCIALS.payments.received.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "-{{ FINANCIALS.payments.received.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             {% endif %}
                             [
                                 { text: "" },
                                 { text: "", style: { alignment: 'right' } },
                                 { text: "{% if GET['quote'] %}Összesen{% else %}Teljes hátralék{% endif %}", style: { bold: true } },
-                                { text: "{{ FINANCIALS.payments.total|money|replace({'.00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.payments.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                         ],
                     },
@@ -296,11 +296,11 @@
                                     "{{ payment.payments_comment|escape("js") }}",
                                     {% if GET['prices'] %}
                                         {
-                                            text: "{{ payment.payments_amount|money|replace({'.00':''})|escape('js') }}",
+                                            text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                         {
-                                            text: "{{ payment.payments_amountTotal|money|replace({'.00':''})|escape('js') }}",
+                                            text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                     {% endif %}
@@ -322,7 +322,7 @@
                             },
                             {
                                 width: 'auto',
-                                text: "{{ FINANCIALS.payments.subHire.total|money|replace({'.00':''})|escape('js') }}",
+                                text: "{{ FINANCIALS.payments.subHire.total|money|replace({',00':''})|escape('js') }}",
                             },
                             
                         ]
@@ -354,11 +354,11 @@
                                     "{{ payment.payments_comment|escape("js") }}",
                                     {% if GET['prices'] %}
                                         {
-                                            text: "{{ payment.payments_amount|money|replace({'.00':''})|escape('js') }}",
+                                            text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                         {
-                                            text: "{{ payment.payments_amountTotal|money|replace({'.00':''})|escape('js') }}",
+                                            text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                     {% endif %}
@@ -380,7 +380,7 @@
                             },
                             {
                                 width: 'auto',
-                                text: "{{ FINANCIALS.payments.sales.total|money|replace({'.00':''})|escape('js') }}",
+                                text: "{{ FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js') }}",
                             },
                             
                         ]
@@ -412,11 +412,11 @@
                                     "{{ payment.payments_comment|escape("js") }}",
                                     {% if GET['prices'] %}
                                         {
-                                            text: "{{ payment.payments_amount|money|replace({'.00':''})|escape('js') }}",
+                                            text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                         {
-                                            text: "{{ payment.payments_amountTotal|money|replace({'.00':''})|escape('js') }}",
+                                            text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}",
                                             style: {alignment: 'right'}
                                         },
                                     {% endif %}
@@ -438,7 +438,7 @@
                             },
                             {
                                 width: 'auto',
-                                text: "{{ FINANCIALS.payments.staff.total|money|replace({'.00':''})|escape('js') }}",
+                                text: "{{ FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js') }}",
                             },
                             
                         ]

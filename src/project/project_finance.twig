@@ -12,13 +12,13 @@
                             Felszerelés Összesen
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.prices.subTotal|money|replace({'.00':''}) }}
+                            {{ FINANCIALS.prices.subTotal|money|replace({',00':''}) }}
                         </td>
                         <td style="width: 35%;">
                             Értékesítés
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.sales.total|money|replace({'.00':''}) }}
+                            {{ FINANCIALS.payments.sales.total|money|replace({',00':''}) }}
                         </td>
                     </tr>
                     <tr>
@@ -26,13 +26,13 @@
                             {% if FINANCIALS.prices.discounts|moneyPositive %}Kedvezmények{% else %}Módosítások{% endif %}
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {% if FINANCIALS.prices.discounts|moneyPositive %}&#8209;{{ FINANCIALS.prices.discounts|money|replace({'.00':''}) }}{% else %}Nincs{% endif %}
+                            {% if FINANCIALS.prices.discounts|moneyPositive %}&#8209;{{ FINANCIALS.prices.discounts|money|replace({',00':''}) }}{% else %}Nincs{% endif %}
                         </td>
                         <td style="width: 35%;">
                             Munkavállalók
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.staff.total|money|replace({'.00':''}) }}
+                            {{ FINANCIALS.payments.staff.total|money|replace({',00':''}) }}
                         </td>
                     </tr>
                     <tr>
@@ -40,13 +40,13 @@
                             <b>Felszerelés Összesen</b>
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.prices.total|money|replace({'.00':''}) }}
+                            {{ FINANCIALS.prices.total|money|replace({',00':''}) }}
                         </td>
                         <td style="width: 35%;">
                             További bérlemények
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.subHire.total|money|replace({'.00':''}) }}
+                            {{ FINANCIALS.payments.subHire.total|money|replace({',00':''}) }}
                         </td>
                     </tr>
                     <tr style="background-color: rgba(0,0,0,.03);">
@@ -54,13 +54,13 @@
                             Összesen
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.subTotal|money|replace({'.00':''}) }}
+                            {{ FINANCIALS.payments.subTotal|money|replace({',00':''}) }}
                         </td>
                         <td style="width: 35%;">
                             Kifizetések Eddig
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            &#8209;{{ FINANCIALS.payments.received.total|money|replace({'.00':''}) }}
+                            &#8209;{{ FINANCIALS.payments.received.total|money|replace({',00':''}) }}
                         </td>
                     </tr>
                     <tr>
@@ -72,7 +72,7 @@
                             <b>Összes Kintlévőség</b>
                         </td>
                         <td style="width: 15%;text-align: right;">
-                            {{ FINANCIALS.payments.total|money|replace({'.00':''}) }}
+                            {{ FINANCIALS.payments.total|money|replace({',00':''}) }}
                         </td>
                     </tr>
                 </table>
@@ -135,7 +135,7 @@
                             <td>{{ payment.payments_date|date("d/M/Y G:i:s") }}</td>
                             <td>{{ payment.payments_method }}</td>
                             <td>{{ payment.payments_comment|nl2br }}</td>
-                            <td>{{ payment.payments_amount|money|replace({'.00':''}) }}</td>
+                            <td>{{ payment.payments_amount|money|replace({',00':''}) }}</td>
                             <td style="min-width:140px;">
                                 {% if "PROJECTS:PROJECT_PAYMENTS:VIEW:FILE_ATTACHMENTS"|instancePermissions %}
                                     <button data-toggle="modal" data-target="#filesModal{{ payment.payments_id }}" type="button" class="btn btn-outline-secondary btn-sm">{{ (payment.files|length > 0 ? payment.files|length ~ '&nbsp;' : '')|raw }}<i class="fas fa-paperclip" style="display:inline;"></i></button>
@@ -183,8 +183,8 @@
                             <tr>
                                 <td style="width: 10px;">{{ payment.payments_quantity }}x</td>
                                 <td>{{ payment.payments_comment|nl2br }}</td>
-                                <td style="width:100px;">{{ payment.payments_amount|money|replace({'.00':''}) }}</td>
-                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({'.00':''}) }}</td>
+                                <td style="width:100px;">{{ payment.payments_amount|money|replace({',00':''}) }}</td>
+                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({',00':''}) }}</td>
                                 <td>
                                     {% if "PROJECTS:PROJECT_PAYMENTS:VIEW:FILE_ATTACHMENTS"|instancePermissions %}
                                         <button data-toggle="modal" data-target="#filesModal{{ payment.payments_id }}" type="button" class="btn btn-outline-secondary btn-sm">{{ (payment.files|length > 0 ? payment.files|length ~ '&nbsp;' : '')|raw }}<i class="fas fa-paperclip" style="display:inline;"></i></button>
@@ -232,8 +232,8 @@
                             <tr>
                                 <td style="width: 10px;">{{ payment.payments_quantity }}x</td>
                                 <td>{{ payment.payments_comment|nl2br }}</td>
-                                <td style="width:100px;">{{ payment.payments_amount|money|replace({'.00':''}) }}</td>
-                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({'.00':''}) }}</td>
+                                <td style="width:100px;">{{ payment.payments_amount|money|replace({',00':''}) }}</td>
+                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({',00':''}) }}</td>
                                 <td>
                                     {% if "PROJECTS:PROJECT_PAYMENTS:VIEW:FILE_ATTACHMENTS"|instancePermissions %}
                                         <button data-toggle="modal" data-target="#filesModal{{ payment.payments_id }}" type="button" class="btn btn-outline-secondary btn-sm">{{ (payment.files|length > 0 ? payment.files|length ~ '&nbsp;' : '')|raw }}<i class="fas fa-paperclip" style="display:inline;"></i></button>
@@ -274,8 +274,8 @@
                                 <td style="width: 10px;">{{ payment.payments_quantity }}x</td>
                                 <td>{{ payment.payments_supplier|nbsp}}</td>
                                 <td>{{ payment.payments_comment|nl2br }}</td>
-                                <td style="width:100px;">{{ payment.payments_amount|money|replace({'.00':''}) }}</td>
-                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({'.00':''}) }}</td>
+                                <td style="width:100px;">{{ payment.payments_amount|money|replace({',00':''}) }}</td>
+                                <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({',00':''}) }}</td>
                                 <td>
                                     {% if "PROJECTS:PROJECT_PAYMENTS:VIEW:FILE_ATTACHMENTS"|instancePermissions %}
                                         <button data-toggle="modal" data-target="#filesModal{{ payment.payments_id }}" type="button" class="btn btn-outline-secondary btn-sm">{{ (payment.files|length > 0 ? payment.files|length ~ '&nbsp;' : '')|raw }}<i class="fas fa-paperclip" style="display:inline;"></i></button>

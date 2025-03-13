@@ -48,13 +48,13 @@
                             </li>
                             {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                 <li class="list-group-item">
-                                    <b>Érték</b> <span class="float-right text-primary">{{ (assets[0]['assets_value'] ?: asset.assetTypes_value)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
+                                    <b>Érték</b> <span class="float-right text-primary">{{ (assets[0]['assets_value'] ?: asset.assetTypes_value)|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }}</span>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Napi díj</b> <span class="float-right text-primary">{{ (assets[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
+                                    <b>Napi díj</b> <span class="float-right text-primary">{{ (assets[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }}</span>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Heti díj</b> <span class="float-right text-primary">{{ (assets[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
+                                    <b>Heti díj</b> <span class="float-right text-primary">{{ (assets[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }}</span>
                                 </li>
                             {% endif %}
                             {% if assets[0]['storage_location'] %}
@@ -110,13 +110,13 @@
                         </li>
                         {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                             <li class="list-group-item">
-                                <b>Érték</b> <span class="float-right text-primary">{{ asset.assetTypes_value|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
+                                <b>Érték</b> <span class="float-right text-primary">{{ asset.assetTypes_value|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }}</span>
                             </li>
                             <li class="list-group-item">
-                                <b>Napi díj</b> <span class="float-right text-primary">{{ asset.assetTypes_dayRate|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
+                                <b>Napi díj</b> <span class="float-right text-primary">{{ asset.assetTypes_dayRate|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }}</span>
                             </li>
                             <li class="list-group-item">
-                                <b>Heti díj</b> <span class="float-right text-primary">{{ asset.assetTypes_weekRate|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}</span>
+                                <b>Heti díj</b> <span class="float-right text-primary">{{ asset.assetTypes_weekRate|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }}</span>
                             </li>
                         {% endif %}
                         </ul>
@@ -935,13 +935,13 @@
                                     <td>{{ thisasset['assets_notes']|nl2br }}</td>
                                     {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
                                         <td> 
-                                            {{ (thisasset.assets_value ?: asset.assetTypes_value)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                            {{ (thisasset.assets_value ?: asset.assetTypes_value)|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }}
                                         </td>
                                         <td>
-                                            {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }} 
+                                            {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }} 
                                         </td>
                                         <td>
-                                            {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({'.00':''}) }}
+                                            {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(ASSET_INSTANCE['instances_config_currency'])|replace({',00':''}) }}
                                         </td>
                                     {% endif %}
                                     <td>{{ thisasset.files|length > 0 ?: "" }}</td>
