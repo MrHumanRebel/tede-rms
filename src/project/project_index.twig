@@ -405,17 +405,23 @@
                                                 </div>
                                             </div>
 
+                                            {% set truck1 = "Renault - (NEA-418)" %}
+                                            {% set truck2 = "Renault nagy utánfutóval - (NEA-418 + WAV-512)" %}
+                                            {% set truck3 = "Ford - (NIC-478)" %}
+
+                                            {% if "ASSETS:CREATE"|instancePermissions %}
                                             <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                 Gépjármű kiválasztása
                                                 <span class="sr-only">Legördülő menü váltása</span>
                                             </button>
                                             <div class="dropdown-menu" role="menu">
                                                 {% if "PROJECTS:CREATE"|instancePermissions %}
-                                                    <a class="dropdown-item addTruck" href="#" data-target="Renault NEA-418">Renault NEA-418</a>
-                                                    <a class="dropdown-item addTruck" href="#" data-target="Renault NEA-418-WAV-512">Renault NEA-418-WAV-512</a>
-                                                    <a class="dropdown-item addTruck" href="#" data-target="Ford NIC-478">Ford NIC-478</a>
+                                                    <a class="dropdown-item addTruck" href="#" data-target="{{ truck1 }}">{{ truck1 }}</a>
+                                                    <a class="dropdown-item addTruck" href="#" data-target="{{ truck2 }}">{{ truck2 }}</a>
+                                                    <a class="dropdown-item addTruck" href="#" data-target="{{ truck3 }}">{{ truck3 }}</a>
                                                 {% endif %}
                                             </div>
+                                            {% endif %}
 
                                         </div>
                                     {% endif %}
@@ -1159,6 +1165,9 @@
             $(".quickDeleteCommentButton").click(function () {
                 let commentId = $(this).data("comment-id");
                 let projectId = "{{ project.projects_id }}";
+
+                console.log("Comment ID: " + commentId);
+                console.log("Project ID: " + projectId);
 
                 bootbox.confirm({
                     title: "Megjegyzés törlése",
