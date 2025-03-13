@@ -24,8 +24,7 @@ $DBLIB->where("auditLog_targetID", $_POST['comment_id']);
 $DBLIB->where("auditLog.projects_id", $_POST['projects_id']);
 
 $update_data = [
-    "auditLog_text" => $_POST['new_comment_text'], // New comment text
-    "auditLog_updated" => date("Y-m-d H:i:s") // Timestamp of update
+    "auditLog_actionData" => $_POST['new_comment_text']
 ];
 
 if ($DBLIB->update("auditLog", $update_data)) {

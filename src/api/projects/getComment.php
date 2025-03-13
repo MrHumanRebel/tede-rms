@@ -16,12 +16,12 @@ if (!$project) die(json_encode(["error" => "A projekt nem található"]));
 // Komment lekérdezése az auditLog-ból
 $DBLIB->where("auditLog.auditLog_targetID", $_POST['comment_id']);
 $DBLIB->where("auditLog.projects_id", $_POST['projects_id']);
-$comment = $DBLIB->getOne("auditLog", ["auditLog.auditLog_text"]);
+$comment = $DBLIB->getOne("auditLog", ["auditLog.auditLog_actionData"]);
 
 if (!$comment) {
     die(json_encode(["error" => "A komment nem található"]));
 }
 
 // Komment visszaküldése
-echo json_encode(["comment_text" => $comment['auditLog.auditLog_text']]);
+echo json_encode(["comment_text" => $comment['auditLog.auditLog_actionData']]);
 ?>
