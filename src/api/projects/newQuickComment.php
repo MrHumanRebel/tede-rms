@@ -10,7 +10,7 @@ $project = $DBLIB->getone("projects", ["projects.projects_id"]);
 if (!$project) die("404");
 
 // Generate a unique ID based on current timestamp and random string
-$uniqueID = uniqid('log_', true);
+$uniqueID = substr(uniqid('log_', true), 0, 16); // Az első 16 karakter
 
 // Add the uniqueID to the $_POST data or somewhere accessible before calling auditLog
 $_POST['uniqueID'] = $uniqueID;
