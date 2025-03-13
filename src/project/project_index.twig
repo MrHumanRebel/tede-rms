@@ -387,8 +387,10 @@
                                                                 <i class="far fa-comment bg-blue"></i>
                                                                 <div class="timeline-item">
                                                                     <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("H:i") }}</span>
-                                                                    <span class="time">{{ event.auditLog_targetID }}</span>
-                                                                    <button type="button" class="btn btn-tool delete-comment" data-comment-id="{{ event.auditLog_targetID }}" title="Megjegyzés törlése">
+                                                                    <span class="time">
+                                                                        <i class="fas fa-tag"></i> {{ event.auditLog_targetID }} 
+                                                                    </span>
+                                                                    <button type="button" class="btn btn-tool quickDeleteCommentButton" data-comment-id="{{ event.auditLog_targetID }}" title="Megjegyzés törlése">
                                                                         <i class="fas fa-trash-alt text-danger"></i>
                                                                     </button>
                                                                     <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> hozzászólt
@@ -1116,50 +1118,35 @@
                 }
             });
 
-            $(".delete-comment").click(function () {
-                var commentId = $(this).data("comment-id");
-                var projectId = "{{ project.projects_id }}";
-
-                // Ellenőrizzük, hogy megvan-e az ID
-                if (!commentId || !projectId) {
-                    console.log(`Nincs érvényes comment_id ${commentId} vagy project_id ${projectId}`);
-                    return;  // Ha nincs id, ne csináljunk semmit
-                }
+            $(".quickDeleteCommentButton").click(function () {
+                var comment_id = $(this).data("comment-id");
+                var projects_id = "{{ project.projects_id }}";
 
                 bootbox.confirm({
-                    title: "Komment törlése",
-                    message: "Biztosan törölni szeretnéd ezt a megjegyzést?",
+                    title: "Törlés megerősítése",
+                    message: "Biztosan törölni szeretnéd a kommentet?",
                     buttons: {
                         confirm: {
-                            label: 'Igen',
-                            className: 'btn btn-danger'
+                            label: "Igen",
+                            className: "btn btn-success"
                         },
                         cancel: {
-                            label: 'Nem',
-                            className: 'btn btn-secondary'
+                            label: "Nem",
+                            className: "btn btn-danger"
                         }
                     },
-                    callback: function(result) {
+                    callback: function (result) {
                         if (result) {
-                            console.log("Törlés megerősítve. AJAX hívás elindítva.");
-                            // AJAX hívás
-                            $.ajax({
-                                url: "projects/deleteQuickComment.php",
-                                type: "POST",
-                                data: {
-                                    "comment_id": commentId,
-                                    "projects_id": projectId
-                                },
-                                success: function(data) {
-                                    console.log("Törlés sikeres: ", data);
-                                    location.reload(); // Ha sikeres, töltsük újra az oldalt
-                                },
-                                error: function(xhr, status, error) {
-                                    console.log("Hiba történt: ", error);  // Hibakezelés
+                            ajaxcall("projects/deleteQuickComment.php", {
+                                "comment_id": comment_id,
+                                "projects_id": projects_id
+                            }, function (data) {
+                                if (data.success) {
+                                    location.reload(); // Reload the page to reflect the deletion
+                                } else {
+                                    bootbox.alert("Hiba történt a komment törlésekor.");
                                 }
                             });
-                        } else {
-                            console.log("Törlés nem történt.");
                         }
                     }
                 });
