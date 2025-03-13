@@ -387,7 +387,7 @@
                                                                 <i class="far fa-comment bg-blue"></i>
                                                                 <div class="timeline-item">
                                                                     <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("H:i") }}</span>
-                                                                    <button type="button" class="btn btn-tool quickDeleteCommentButton" data-comment-id="{{ event.auditLog_id }}" title="Törlés">
+                                                                    <button type="button" class="btn btn-tool delete-comment" data-comment-id="{{ event.auditLog_id }}" title="Megjegyzés törlése">
                                                                         <i class="fas fa-trash-alt text-danger"></i>
                                                                     </button>
                                                                     <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> hozzászólt
@@ -1162,31 +1162,28 @@
                         }
                     }
                 });
-            $(".quickDeleteCommentButton").click(function () {
-                let commentId = $(this).data("comment-id");
-                let projectId = "{{ project.projects_id }}";
-
-                console.log("Comment ID: " + commentId);
-                console.log("Project ID: " + projectId);
+            $(".delete-comment").click(function () {
+                var commentId = $(this).data("comment-id");
+                var projectId = "{{ project.projects_id }}";
 
                 bootbox.confirm({
-                    title: "Megjegyzés törlése",
+                    title: "Komment törlése",
                     message: "Biztosan törölni szeretnéd ezt a megjegyzést?",
                     buttons: {
                         confirm: {
-                            label: "Igen",
-                            className: "btn-danger"
+                            label: 'Igen',
+                            className: 'btn btn-danger'
                         },
                         cancel: {
-                            label: "Mégsem",
-                            className: "btn-secondary"
+                            label: 'Nem',
+                            className: 'btn btn-secondary'
                         }
                     },
-                    callback: function (result) {
+                    callback: function(result) {
                         if (result) {
                             ajaxcall("projects/deleteQuickComment.php", {
-                                "projects_id": projectId,
-                                "comment_id": commentId
+                                "comment_id": commentId,
+                                "projects_id": projectId
                             }, function (data) {
                                 location.reload(); // Reload the page after successful deletion
                             });
@@ -1194,6 +1191,7 @@
                     }
                 });
             });
+
 
                 $('#editor').summernote({
                     minHeight: 300,             // set minimum height of editor
