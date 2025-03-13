@@ -387,11 +387,11 @@
                                                                 <i class="far fa-comment bg-blue"></i>
                                                                 <div class="timeline-item">
                                                                     <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("H:i") }}</span>
-                                                                    <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> hozzászólt
-                                                                    </h3>
                                                                     <button type="button" class="btn btn-tool delete-comment" data-comment-id="{{ event.auditLog_targetID }}" title="Megjegyzés törlése">
                                                                         <i class="fas fa-trash-alt text-danger"></i>
                                                                     </button>
+                                                                    <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> hozzászólt
+                                                                    </h3>
                                                                     <div class="timeline-body">{{ event.auditLog_actionData|raw }}</div>
                                                                 </div>
                                                             </div>
@@ -1119,7 +1119,7 @@
 
                 // Ellenőrizzük, hogy megvan-e az ID
                 if (!commentId || !projectId) {
-                    console.log("Nincs érvényes comment_id vagy project_id.");
+                    console.log(`Nincs érvényes comment_id ${commentId} vagy project_id ${projectId}`);
                     return;  // Ha nincs id, ne csináljunk semmit
                 }
 
