@@ -3,7 +3,7 @@ require_once __DIR__ . '/../apiHeadSecure.php';
 
 // Jogosultság és paraméterek ellenőrzése
 if (!$AUTH->instancePermissionCheck("PROJECTS:VIEW") || !isset($_POST['projects_id']) || !isset($_POST['comment_id'])) {
-    die(json_encode(["error" => "Hozzáférés megtagadva vagy hiányzó paraméterek"]));
+    die("404");
 }
 
 // Projekt létezésének ellenőrzése
@@ -19,9 +19,9 @@ $DBLIB->where("auditLog.projects_id", $_POST['projects_id']);
 $comment = $DBLIB->getOne("auditLog", ["auditLog.auditLog_actionData"]);
 
 if (!$comment) {
-    die(json_encode(["error" => "A komment nem található"]));
+    die("404");
 }
 
 // Komment visszaküldése
-echo json_encode(["comment_text" => $comment['auditLog.auditLog_actionData']]);
+echo json_encode(["comment_text" => $comment['auditLog.auditLog_actionData'] ?? ""]);
 ?>
