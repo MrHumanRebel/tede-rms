@@ -390,9 +390,11 @@
                                                                     <span class="time">
                                                                         <i class="fas fa-tag"></i> {{ event.auditLog_targetID }} 
                                                                     </span>
+                                                                    {% if "ASSETS:CREATE"|instancePermissions %}
                                                                     <button type="button" class="btn btn-tool quickDeleteCommentButton" data-comment-id="{{ event.auditLog_targetID }}" title="Megjegyzés törlése">
                                                                         <i class="fas fa-trash-alt text-danger"></i>
                                                                     </button>
+                                                                    {% endif %}
                                                                     <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> hozzászólt
                                                                     </h3>
                                                                     <div class="timeline-body">{{ event.auditLog_actionData|raw }}</div>
