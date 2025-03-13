@@ -10,22 +10,22 @@ $project = $DBLIB->getone("projects", ["projects.projects_id"]);
 
 if (!$project) die("404");
 
-// Check if comment exists
-$DBLIB->where("auditLog_id", $_POST['comment_id']);
-$comment = $DBLIB->getone("auditLog", ["auditLog_id", "auditLog_actionType", "auditLog_actionData"]);
+// Ellenőrizd, hogy létezik-e a megadott komment az audit logban
+$DBLIB->where("auditLog_targetID", $_POST['comment_id']);
+$comment = $DBLIB->getone("auditLog", ["auditLog_targetID", "auditLog_actionType", "auditLog_actionData"]);
 
 if (!$comment || $comment['auditLog_actionType'] !== 'QUICKCOMMENT') {
     die("404");
 }
 
-// Delete comment from audit log
-$DBLIB->where("auditLog_id", $_POST['comment_id']);
+// Komment törlése az audit logból
+$DBLIB->where("auditLog_targetID", $_POST['comment_id']);
 if (!$DBLIB->delete("auditLog")) {
-    die("Could not delete comment");
+    die("Nem sikerült törölni a kommentet.");
 }
 
-// Log the deletion in audit log
-$bCMS->auditLog("DELETEQUICKCOMMENT", "projects", "Comment deleted: " . $comment['auditLog_actionData'], $AUTH->data['users_userid'], null, $_POST['projects_id']);
+// A törlést rögzítjük az audit logban
+$bCMS->auditLog("DELETEQUICKCOMMENT", "projects", "Komment törölve: " . $comment['auditLog_actionData'], $AUTH->data['users_userid'], null, $_POST['projects_id']);
 
 finish(true, null, ["projects_id" => $project['projects_id']]);
 ?>
