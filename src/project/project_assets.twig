@@ -56,7 +56,6 @@
                     {% endif %}
                     <button type="button" class="btn btn-tool" title="Mindet kibővíteni" id="expandAll">
                         <i class="fas fa-angle-down"></i> Kiterjesztés</button>
-                    <a type="button" class="btn btn-tool" href="{{ CONFIG.LINKS_USERGUIDEURL }}projects/assets" target="_blank">Segítség</a>
                 </div>
             </li>
         </ul>
@@ -65,11 +64,11 @@
         <div class="tab-content" id="asset-list-tabs-tabContent">
             <div class="tab-pane fade show active p-3" id="asset-list-tabs-home" role="tabpanel" aria-labelledby="asset-list-tabs-home-tab">
                 <p style="font-style: italic;">A projekt ezen eszközeinek megtekintéséhez válasszon egy céget fent</p>
-                <p>{{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) }} Eszköz{{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) != 1 ? 'ök' : '' }} rendelve a {{ project.projects_name }} projekthez ({{FINANCIALS.mass|mass }})</p>
+                <p>{{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) }} féle eszköz{{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) != 1 ? 'ök' : '' }} rendelve a {{ project.projects_name }} projekthez ({{FINANCIALS.mass|mass }})</p>
                 {% if project.projectsTypes_config_finance == 1 %}
-                    <p>A projekt időtartama {{ FINANCIALS['priceMaths']["weeks"] }} hét{{ FINANCIALS['priceMaths']["weeks"] != 1 ? '' : '' }} és {{ FINANCIALS['priceMaths']["days"] }} nap{{ FINANCIALS['priceMaths']["days"] != 1 ? '' : '' }} az eszközárak meghatározásához.</p>
+                    <p>A projekt időtartama {{ FINANCIALS['priceMaths']["weeks"] }} hét{{ FINANCIALS['priceMaths']["weeks"] != 1 ? '' : '' }} és {{ FINANCIALS['priceMaths']["days"] }} nap{{ FINANCIALS['priceMaths']["days"] != 1 ? '' : '' }}</p>
                     {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
-                    <a href="{{ CONFIG.ROOTURL }}/project/?id={{ project.projects_id }}">A projekt időtartamának módosítása</a>.
+                    <a href="{{ CONFIG.ROOTURL }}/project/?id={{ project.projects_id }}">A projekt időtartamának módosítása</a>
                     {% endif %}
                 </p>
                 {% endif %}

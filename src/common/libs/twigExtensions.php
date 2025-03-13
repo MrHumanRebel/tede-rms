@@ -196,7 +196,7 @@ $TWIG->addFilter(new \Twig\TwigFilter('money', function ($variable,$currency = f
     global $AUTH;
     if (!is_object($variable)) $variable = new Money($variable, new Currency(($currency ?: $AUTH->data['instance']['instances_config_currency'])));
     $currencies = new ISOCurrencies();
-    $numberFormatter = new NumberFormatter('en_GB', NumberFormatter::CURRENCY);
+    $numberFormatter = new NumberFormatter('hu_HU', NumberFormatter::CURRENCY);
     $moneyFormatter = new IntlMoneyFormatter($numberFormatter, $currencies);
     return $moneyFormatter->format($variable);
 }));
@@ -216,7 +216,7 @@ $TWIG->addFilter(new \Twig\TwigFilter('moneyPositive', function ($variable) {
 $TWIG->addFunction(new \Twig\TwigFunction('moneySymbol', function ($currency = false) {
     global $AUTH;
     $currencyCode = $currency ?: $AUTH->data['instance']['instances_config_currency'];
-    $numberFormatter = new NumberFormatter('en_GB' . "@currency=$currencyCode", NumberFormatter::CURRENCY);
+    $numberFormatter = new NumberFormatter('hu_HU' . "@currency=$currencyCode", NumberFormatter::CURRENCY);
     $symbol = $numberFormatter->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
     return $symbol;
 }));

@@ -33,7 +33,7 @@ foreach ($products->data as $product) {
   foreach (json_decode(json_encode($priceData->currency_options), true) as $currency => $amount) {
     $moneyAmount = new Money($amount['unit_amount'], new Currency(strtoupper($currency)));
     $currencies = new ISOCurrencies();
-    $numberFormatter = new NumberFormatter('en_GB', NumberFormatter::CURRENCY);
+    $numberFormatter = new NumberFormatter('hu_HU', NumberFormatter::CURRENCY);
     $moneyFormatter = new IntlMoneyFormatter($numberFormatter, $currencies);
     $priceAmount = $moneyFormatter->format($moneyAmount);
     $productReturn['price'][] = [
