@@ -387,7 +387,7 @@
                                                                 <i class="far fa-comment bg-blue"></i>
                                                                 <div class="timeline-item">
                                                                     <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("H:i") }}</span>
-                                                                    <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_targetID }}</span>
+                                                                    <span class="time">{{ event.auditLog_targetID }}</span>
                                                                     <button type="button" class="btn btn-tool delete-comment" data-comment-id="{{ event.auditLog_targetID }}" title="Megjegyzés törlése">
                                                                         <i class="fas fa-trash-alt text-danger"></i>
                                                                     </button>
@@ -1109,7 +1109,7 @@
                     ajaxcall("projects/newQuickComment.php", {
                         "text": truckNumber,
                         "projects_id": "{{ project.projects_id }}",
-                        "unique_id": uniqueID
+                        "uniqueID": uniqueID
                     }, function (data) {
                         location.reload();
                     });
@@ -1203,7 +1203,7 @@
                                     ajaxcall("projects/newQuickComment.php", {
                                         "text": content,
                                         "projects_id": "{{ project.projects_id }}",
-                                        "unique_id": uniqueID
+                                        "uniqueID": uniqueID
                                     }, function (data) {
                                         location.reload();
                                     });
