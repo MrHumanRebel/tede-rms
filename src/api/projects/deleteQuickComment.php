@@ -15,15 +15,14 @@ if (!$project) die("404");
 
 // Check if the comment exists in the auditLog
 $DBLIB->where("auditLog.auditLog_targetID", $_POST['comment_id']);
-$DBLIB->where("auditLog.auditLog_type", "QUICKCOMMENT");
 $DBLIB->where("auditLog.projects_id", $_POST['projects_id']);
 $comment = $DBLIB->getone("auditLog", ["auditLog_targetID"]);
 if (!$comment) die("404");
 
 // Delete the comment from the auditLog using the targetID
 $DBLIB->where("auditLog_targetID", $_POST['comment_id']);
-$DBLIB->where("auditLog.auditLog_type", "QUICKCOMMENT");
 $DBLIB->where("auditLog.projects_id", $_POST['projects_id']);
+
 if ($DBLIB->delete("auditLog")) {
     // Log the deletion in the audit log
     $bCMS->auditLog("DELETEQUICKCOMMENT", "auditLog", "Comment deleted: " . $_POST['comment_id'], $AUTH->data['users_userid'], null, $_POST['projects_id'], $_POST['comment_id']);
