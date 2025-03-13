@@ -9,9 +9,13 @@ $DBLIB->where("projects.projects_id", $_POST['projects_id']);
 $project = $DBLIB->getone("projects", ["projects.projects_id"]);
 if (!$project) die("404");
 
-$targetid = substr(uniqid('comment_' . time() . '_', true), 0, 24);
+// Generate a unique ID based on current timestamp and random string
+$uniqueID = uniqid('log_', true);
 
-$bCMS->auditLog("QUICKCOMMENT", "projects", $bCMS->cleanString($_POST['text']), $AUTH->data['users_userid'], null, $_POST['projects_id'], $targetid);
+// Add the uniqueID to the $_POST data or somewhere accessible before calling auditLog
+$_POST['uniqueID'] = $uniqueID;
+
+$bCMS->auditLog("QUICKCOMMENT", "projects", $bCMS->cleanString($_POST['text']), $AUTH->data['users_userid'], null, $_POST['projects_id'], $_POST['uniqueID']);
 
 finish(true, null, ["projects_id" => $project]);
 

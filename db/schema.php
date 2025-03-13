@@ -3195,7 +3195,7 @@ return array (
           'DATA_TYPE' => 'int',
           'CHARACTER_MAXIMUM_LENGTH' => NULL,
           'CHARACTER_OCTET_LENGTH' => NULL,
-          'NUMERIC_PRECISION' => '10',
+          'NUMERIC_PRECISION' => '20',
           'NUMERIC_SCALE' => '0',
           'DATETIME_PRECISION' => NULL,
           'CHARACTER_SET_NAME' => NULL,
