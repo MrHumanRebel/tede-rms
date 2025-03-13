@@ -9,7 +9,8 @@ $DBLIB->where("projects.projects_id", $_POST['projects_id']);
 $project = $DBLIB->getone("projects", ["projects.projects_id"]);
 if (!$project) die("404");
 
-$uniqueID = isset($_POST['uniqueID']) ? $_POST['uniqueID'] : substr(uniqid('log_', true), 0, 16);
+// Retrieve the uniqueID from the POST request
+$uniqueID = isset($_POST['uniqueID']) ? $_POST['uniqueID'] : null;
 
 $bCMS->auditLog("QUICKCOMMENT", "projects", $bCMS->cleanString($_POST['text']), $AUTH->data['users_userid'], null, $_POST['projects_id'], $uniqueID);
 

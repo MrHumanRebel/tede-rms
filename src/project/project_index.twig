@@ -1104,9 +1104,12 @@
             $(".addTruck").click(function () {
                 let truckNumber = $(this).data("target");
                 if (truckNumber) {
+                    let uniqueID = Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
+                    uniqueID = uniqueID.substr(0, 16);
                     ajaxcall("projects/newQuickComment.php", {
                         "text": truckNumber,
-                        "projects_id": "{{ project.projects_id }}"
+                        "projects_id": "{{ project.projects_id }}",
+                        "unique_id": uniqueID
                     }, function (data) {
                         location.reload();
                     });
@@ -1196,9 +1199,12 @@
                             callback: function () {
                                 let content = $('#editor').summernote('code');
                                 if (content){
+                                    let uniqueID = Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
+                                    uniqueID = uniqueID.substr(0, 16);
                                     ajaxcall("projects/newQuickComment.php", {
                                         "text": content,
-                                        "projects_id": "{{ project.projects_id }}"
+                                        "projects_id": "{{ project.projects_id }}",
+                                        "unique_id": uniqueID
                                     }, function (data) {
                                         location.reload();
                                     });
