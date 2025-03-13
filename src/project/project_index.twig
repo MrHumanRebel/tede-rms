@@ -365,7 +365,7 @@
                                             <div class="card-header">
                                                 <h3 class="card-title">Megjegyzések</h3>
                                                 <div class="card-tools">
-                                                    <button type="button" class="btn btn-tool quickAddCommentButton" title="New Project comment" >
+                                                    <button type="button" class="btn btn-tool quickAddCommentButton" title="Új megjegyzés" >
                                                         <i class="fas fa-plus"></i></button>
                                                 </div>
                                             </div>
@@ -387,6 +387,9 @@
                                                                 <i class="far fa-comment bg-blue"></i>
                                                                 <div class="timeline-item">
                                                                     <span class="time"><i class="fas fa-clock"></i> {{ event.auditLog_timestamp|date("H:i") }}</span>
+                                                                    <button type="button" class="btn btn-tool quickDeleteCommentButton" data-comment-id="{{ event.auditLog_id }}" title="Törlés">
+                                                                        <i class="fas fa-trash-alt text-danger"></i>
+                                                                    </button>
                                                                     <h3 class="timeline-header"><a href="mailto:{{ event.users_email }}">{{ event.users_name1 ~ " " ~ event.users_name2 }} </a> hozzászólt
                                                                     </h3>
                                                                     <div class="timeline-body">{{ event.auditLog_actionData|raw }}</div>
@@ -401,6 +404,19 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
+
+                                            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                Gépjármű kiválasztása
+                                                <span class="sr-only">Legördülő menü váltása</span>
+                                            </button>
+                                            <div class="dropdown-menu" role="menu">
+                                                {% if "PROJECTS:CREATE"|instancePermissions %}
+                                                    <a class="dropdown-item" id="addTruck" href="#" data-target="Renault NEA-418">Renault NEA-418</a>
+                                                    <a class="dropdown-item" id="addTruck" href="#" data-target="Renault NEA-418-WAV-512">Renault NEA-418-WAV-512</a>
+                                                    <a class="dropdown-item" id="addTruck" href="#" data-target="Ford NIC-478">Ford NIC-478</a>
+                                                {% endif %}
+                                            </div>
+
                                         </div>
                                     {% endif %}
                                 </div>
@@ -1076,8 +1092,22 @@
 
 
     <script>
+
+        
+
         $(document).ready(function () {
 
+            $(".addTruck").click(function () {
+                let truckNumber = $(this).data("target");
+                if (truckNumber) {
+                    ajaxcall("projects/newQuickComment.php", {
+                        "text": truckNumber,
+                        "projects_id": "{{ project.projects_id }}"
+                    }, function (data) {
+                        location.reload();
+                    });
+                }
+            });
 
             $('#pdfGenerateModalQuote').on('show.bs.modal', function (e) {
                 if ($(e.relatedTarget).data('quote') === "true") {
@@ -1128,6 +1158,35 @@
                         }
                     }
                 });
+            $(".quickDeleteCommentButton").click(function () {
+                let commentId = $(this).data("comment-id");
+                let projectId = "{{ project.projects_id }}";
+
+                bootbox.confirm({
+                    title: "Megjegyzés törlése",
+                    message: "Biztosan törölni szeretnéd ezt a megjegyzést?",
+                    buttons: {
+                        confirm: {
+                            label: "Igen",
+                            className: "btn-danger"
+                        },
+                        cancel: {
+                            label: "Mégsem",
+                            className: "btn-secondary"
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            ajaxcall("projects/deleteQuickComment.php", {
+                                "projects_id": projectId,
+                                "comment_id": commentId
+                            }, function (data) {
+                                location.reload(); // Reload the page after successful deletion
+                            });
+                        }
+                    }
+                });
+            });
 
                 $('#editor').summernote({
                     minHeight: 300,             // set minimum height of editor
