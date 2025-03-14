@@ -68,6 +68,9 @@ function projectFinancials($project) {
             case 4:
                 $key = 'staff';
                 break;
+            case 5:
+                $key = 'staff';
+                break;
         }
         if ($key) {
             $payment['payments_amount'] = new Money($payment['payments_amount'], new Currency($AUTH->data['instance']['instances_config_currency']));

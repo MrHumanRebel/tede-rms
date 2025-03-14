@@ -546,6 +546,84 @@
                             <option>Egyéb</option>
                         </select>
                     </div>
+
+                    <div>
+                        {% set staffHourMoney = [
+                            {"name": "Epítő - bontó munkaerő", "money": 2500},
+                            {"name": "Technikusi munkaerő", "money": 3500}
+                        ] %}
+
+                        <div class="input-group newPaymentModal-paymentHour" style="margin-bottom: 5px;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Munkaerő típus</span>
+                            </div>
+                            <select class="form-control" id="payments_workforceType" onchange="updateHourlyRate()">
+                                <option selected></option>
+                                {% for staff in staffHourMoney %}
+                                    <option value="{{ staff.money }}">{{ staff.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>    
+
+                        <div class="input-group mb-3 newPaymentModal-paymentHour">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Óra</span>
+                            </div>
+                            <input class="form-control" type="number" step="1" min="1" value="1" id="payments_quantity" name="payments_quantity_hourly" oninput="calculateTotalHourlyRate(); updateDescription();">
+                        </div>
+
+                        <div class="input-group mb-3 newPaymentModal-paymentHour">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Órabér</span>
+                            </div>
+                            <input class="form-control" type="number" step="1" min="0" id="payments_hourlyRate" name="payments_amount_hourly" oninput="calculateTotalHourlyRate()">
+                        </div>
+
+                        <div class="input-group mb-3 newPaymentModal-paymentHour">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Összesen</span>
+                            </div>
+                            <input class="form-control" type="number" step="1" min="0" id="payments_amount" readonly>
+                        </div>
+
+                        <div class="input-group newPaymentModal-paymentHour" style="margin-bottom: 5px;">
+                            <div class="input-group-prepend"><span class="input-group-text">Leírás</span></div>
+                            <textarea class="form-control" rows="3" name="payments_comment_hourly" id="payments_comment" placeholder=""></textarea>
+                        </div>
+
+                        <script>
+                        // Function to update hourly rate based on the selected workforce type
+                        function updateHourlyRate() {
+                            const workforceType = document.getElementById('payments_workforceType');
+                            const hourlyRate = document.getElementById('payments_hourlyRate');
+                            hourlyRate.value = workforceType.value;
+                            calculateTotalHourlyRate(); // Recalculate total when workforce type is selected
+                        }
+
+                        // Function to calculate the total hourly rate
+                        function calculateTotalHourlyRate() {
+                            const quantity = document.getElementById('payments_quantity').value || 1; // Default to 1 if no quantity is entered
+                            const hourlyRate = document.getElementById('payments_hourlyRate').value || 0;
+                            const total = document.getElementById('payments_amount');
+                            total.value = quantity * hourlyRate;
+                        }
+
+                        // Function to update the description with the current quantity value
+                        function updateDescription() {
+                            const quantity = document.getElementById('payments_quantity').value || 1; // Default to 1 if no quantity is entered
+                            const description = document.getElementById('payments_comment');
+                            description.value = `Munkaóra: ${quantity}`; // Set the description text to include the current quantity
+                        }
+
+                        // Call the calculation function once on page load to initialize the total if any value is selected
+                        window.onload = function() {
+                            calculateTotalHourlyRate();
+                            updateDescription(); // Initialize the description field with the current quantity value
+                        }
+                        </script>
+                    </div>
+
+                    
                     <div class="input-group mb-3 newPaymentModal-nonPaymentOnly">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Mennyiség</span>
@@ -558,11 +636,11 @@
                         </div>
                         <input class="form-control" type="text" name="payments_supplier">
                     </div>
-                    <div class="input-group" style="margin-bottom: 5px;">
+                    <div class="input-group newPaymentModal-nonPaymentOnly" style="margin-bottom: 5px;">
                         <div class="input-group-prepend"><span class="input-group-text">Leírás</span></div>
                         <textarea class="form-control" rows="3" name="payments_comment"  placeholder=""></textarea>
                     </div>
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-3 newPaymentModal-nonPaymentOnly newPaymentModal-PaymentOnly">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Összeg {{ moneySymbol() }}</span>
                         </div>
@@ -1773,6 +1851,7 @@
                 $("#newPaymentModal-form-type").val(type);
                 $("#newPaymentModal").modal('show');
                 $(".newPaymentModal-paymentOnly").hide();
+                $(".newPaymentModal-paymentHour").hide();
                 $(".newPaymentModal-nonPaymentOnly").show();
                 switch(type) {
                     case 1:
@@ -1787,7 +1866,12 @@
                         $("#newPaymentModal-title").html("További bérleti költség hozzáadása");
                         break;
                     case 4:
-                        $("#newPaymentModal-title").html("Munkavállalói költség hozzáadása");
+                        $("#newPaymentModal-title").html("Szimpla munkavállalói költség hozzáadása");
+                        break;
+                    case 5:
+                        $("#newPaymentModal-title").html("Órabér alapú munkavállalói költség hozzáadása");
+                        $(".newPaymentModal-nonPaymentOnly").hide();
+                        $(".newPaymentModal-paymentHour").show();
                         break;
                 }
             });

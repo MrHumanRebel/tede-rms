@@ -15,15 +15,38 @@ foreach ($_POST['formData'] as $item) {
     $array[$item['name']] = mb_convert_encoding($item['value'], 'UTF-8', 'auto'); // Ensure UTF-8 encoding
 }
 
-
 // Check if the project ID is provided
 if (strlen($array['projects_id']) < 1) finish(false, ["code" => "PARAM-ERROR", "message" => "No data for action"]);
 
-// Convert the date to the proper format
-$array['payments_date'] = DateTime::createFromFormat('Y. m. d. H:i', $array['payments_date'])->format('Y-m-d H:i:s');
+// Ensure payments_quantity_hourly is set, and if so, assign it the value of payments_quantity
+if (isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourly'] !== '') {
+    // Override payments_quantity with payments_quantity_hourly if it's set
+    $array['payments_quantity'] = $array['payments_quantity_hourly'];
+    // Delete payments_quantity_hourly after overriding
+    unset($array['payments_quantity_hourly']);
+}
 
 // Ensure payments_quantity has a default value if not provided
 if (!$array['payments_quantity']) $array['payments_quantity'] = 1;
+
+// Ensure payments_amount_hourly is set, and if so, assign it the value of payments_amount
+if (isset($array['payments_amount_hourly']) && $array['payments_amount_hourly'] !== '') {
+    // Override payments_amount with payments_amount_hourly if it's set
+    $array['payments_amount'] = $array['payments_amount_hourly'];
+    // Delete payments_amount_hourly after overriding
+    unset($array['payments_amount_hourly']);
+}
+
+// Ensure payments_comment_hourly is set, and if so, assign it the value of payments_comment
+if (isset($array['payments_comment_hourly']) && $array['payments_comment_hourly'] !== '') {
+    // Override payments_comment with payments_comment_hourly if it's set
+    $array['payments_comment'] = $array['payments_comment_hourly'];
+    // Delete payments_comment_hourly after overriding
+    unset($array['payments_comment_hourly']);
+}
+
+// Convert the date to the proper format
+$array['payments_date'] = DateTime::createFromFormat('Y. m. d. H:i', $array['payments_date'])->format('Y-m-d H:i:s');
 
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;

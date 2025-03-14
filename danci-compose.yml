@@ -1,0 +1,59 @@
+services:
+  db:
+    image: index.docker.io/mysql/mysql-server:8.0
+    command: --default-authentication-plugin=mysql_native_password --innodb-thread-concurrency=0 --sort_buffer_size=512K
+    container_name: db
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    environment:
+      - MYSQL_DATABASE=adamrms
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_USER=userDocker
+      - MYSQL_PASSWORD=TeDeDocker
+    env_file:
+      - .env
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$$MYSQL_ROOT_PASSWORD",
+        ]
+      timeout: 20s
+      retries: 10
+
+  s3ninja:
+    image: scireum/s3-ninja:latest
+    container_name: s3ninja
+    ports:
+      - 9444:9000
+    volumes:
+      - ./s3ninja_data:/home/sirius/data
+    restart: always
+
+  adamrms:
+    image: ghcr.io/mrhumanrebel/adam-rms-hun:latest
+    container_name: adamrms
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOSTNAME=db
+      - DB_DATABASE=adamrms
+      - DB_USERNAME=userDocker
+      - DB_PASSWORD=
+      - DB_PORT=3306
+    ports:
+      - 8000:80
+
+volumes:
+  db_data: {}
+  s3ninja_data: {}
