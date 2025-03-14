@@ -45,10 +45,10 @@
                         {# <td style="width: 35%;">
                             További bérlemények
                         </td>
-                        #}
                         <td style="width: 15%;text-align: right;">
                             {{ FINANCIALS.payments.subHire.total|money|replace({',00':''}) }}
                         </td>
+                        #}
                     </tr>
                     <tr style="background-color: rgba(0,0,0,.03);">
                         <td style="width: 35%;">
@@ -203,14 +203,13 @@
             </div>
         </div>
     {% endif %}
+    {#
     {% if FINANCIALS.payments.subHire.ledger %}
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="card">
-                {# 
                 <div class="card-header">
                     <h3 class="card-title">További bérlemények</h3>
                 </div>
-                #}
                 <div class="card-body p-0">
                     <table class="table table-bordered">
                         <thead>
@@ -254,6 +253,7 @@
             </div>
         </div>
     {% endif %}
+    #}
     {% if FINANCIALS.payments.staff.ledger %}
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="card">

@@ -567,28 +567,35 @@
 
                         <div class="input-group mb-3 newPaymentModal-paymentHour">
                             <div class="input-group-prepend">
+                                <span class="input-group-text">Mennyiség</span>
+                            </div>
+                            <input class="form-control" type="number" step="1" min="1" value="1" id="payments_quantity_hourly" name="payments_quantity_hourly" oninput="calculateTotalHourlyRate(); updateDescription();">
+                        </div>
+
+                        <div class="input-group mb-3 newPaymentModal-paymentHour">
+                            <div class="input-group-prepend">
                                 <span class="input-group-text">Óra</span>
                             </div>
-                            <input class="form-control" type="number" step="1" min="1" value="1" id="payments_quantity" name="payments_quantity_hourly" oninput="calculateTotalHourlyRate(); updateDescription();">
+                            <input class="form-control" type="number" step="1" min="1" value="1" id="payments_hours" name="payments_hours" oninput="calculateTotalHourlyRate(); updateDescription();">
                         </div>
 
                         <div class="input-group mb-3 newPaymentModal-paymentHour">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Órabér</span>
                             </div>
-                            <input class="form-control" type="number" step="1" min="0" id="payments_hourlyRate" name="payments_amount_hourly" oninput="calculateTotalHourlyRate()">
+                            <input class="form-control" type="number" step="1" min="0" id="payments_hourlyRate"  oninput="calculateTotalHourlyRate()">
                         </div>
 
                         <div class="input-group mb-3 newPaymentModal-paymentHour">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">Összesen</span>
+                                <span class="input-group-text">Összesen/fő</span>
                             </div>
-                            <input class="form-control" type="number" step="1" min="0" id="payments_amount" readonly>
+                            <input class="form-control" type="number" step="1" min="0" id="payments_amount_hourly" name="payments_amount_hourly" readonly>
                         </div>
 
                         <div class="input-group newPaymentModal-paymentHour" style="margin-bottom: 5px;">
                             <div class="input-group-prepend"><span class="input-group-text">Leírás</span></div>
-                            <textarea class="form-control" rows="3" name="payments_comment_hourly" id="payments_comment" placeholder=""></textarea>
+                            <textarea class="form-control" rows="3" name="payments_comment_hourly" id="payments_comment_hourly" placeholder=""></textarea>
                         </div>
 
                         <script>
@@ -600,28 +607,36 @@
                             calculateTotalHourlyRate(); // Recalculate total when workforce type is selected
                         }
 
-                        // Function to calculate the total hourly rate
+                        // Function to calculate the total hourly rate (Mennyiség * Óra * Órabér)
                         function calculateTotalHourlyRate() {
-                            const quantity = document.getElementById('payments_quantity').value || 1; // Default to 1 if no quantity is entered
+                            const quantity = document.getElementById('payments_quantity_hourly').value || 1; // Default to 1 if no quantity is entered
+                            const hours = document.getElementById('payments_hours').value || 1; // Default to 1 if no hours are entered
                             const hourlyRate = document.getElementById('payments_hourlyRate').value || 0;
-                            const total = document.getElementById('payments_amount');
-                            total.value = quantity * hourlyRate;
+                            const total = document.getElementById('payments_amount_hourly');
+                            total.value = hours * hourlyRate; // Calculate total as Mennyiség * Óra * Órabér
                         }
 
-                        // Function to update the description with the current quantity value
+                        // Function to update the description with the current quantity, hours, and hourly rate
                         function updateDescription() {
-                            const quantity = document.getElementById('payments_quantity').value || 1; // Default to 1 if no quantity is entered
-                            const description = document.getElementById('payments_comment');
-                            description.value = `Munkaóra: ${quantity}`; // Set the description text to include the current quantity
+                            const workforceType = document.getElementById('payments_workforceType');
+                            const selectedType = workforceType.options[workforceType.selectedIndex].text; // Get the name of the selected workforce type
+                            const quantity = document.getElementById('payments_quantity_hourly').value || 1;
+                            const hours = document.getElementById('payments_hours').value || 1;
+                            const description = document.getElementById('payments_comment_hourly');
+                            
+                            if (description) { // Check if the element exists
+                                const totalHours = quantity * hours; // Multiply the quantity and hours
+                                description.value = `${selectedType}: ${totalHours} óra`; // Update description with the calculated total hours
+                            }
                         }
 
                         // Call the calculation function once on page load to initialize the total if any value is selected
                         window.onload = function() {
                             calculateTotalHourlyRate();
-                            updateDescription(); // Initialize the description field with the current quantity value
                         }
                         </script>
                     </div>
+
 
                     
                     <div class="input-group mb-3 newPaymentModal-nonPaymentOnly">
@@ -935,10 +950,12 @@
                                         <label class="form-check-label">Berendezések kedvezményei</label>
                                     </div>
                                 {% endif %}
+                                {#
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="subHires" checked>
                                     <label class="form-check-label">További bérlemények</label>
                                 </div>
+                                #}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="sales" checked>
                                     <label class="form-check-label">Értékesítés</label>
@@ -1057,10 +1074,12 @@
                                         <label class="form-check-label">Berendezések kedvezményei</label>
                                     </div>
                                 {% endif %}
+                                {#
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="subHires" checked>
                                     <label class="form-check-label">További bérlemények</label>
                                 </div>
+                                #}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="sales" checked>
                                     <label class="form-check-label">Értékesítés</label>
@@ -1179,10 +1198,12 @@
                                         <label class="form-check-label">Berendezések kedvezményei</label>
                                     </div>
                                 {% endif %}
+                                {#
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="subHires">
                                     <label class="form-check-label">További bérlemények</label>
                                 </div>
+                                #}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="sales">
                                     <label class="form-check-label">Értékesítés</label>

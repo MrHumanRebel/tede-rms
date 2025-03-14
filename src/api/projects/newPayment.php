@@ -18,11 +18,17 @@ foreach ($_POST['formData'] as $item) {
 // Check if the project ID is provided
 if (strlen($array['projects_id']) < 1) finish(false, ["code" => "PARAM-ERROR", "message" => "No data for action"]);
 
+// Drop not needed stuff
+unset($array['payments_hours']);
+
 // Ensure payments_quantity_hourly is set, and if so, assign it the value of payments_quantity
 if (isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourly'] !== '') {
     // Override payments_quantity with payments_quantity_hourly if it's set
     $array['payments_quantity'] = $array['payments_quantity_hourly'];
     // Delete payments_quantity_hourly after overriding
+    unset($array['payments_quantity_hourly']);
+}
+if (isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourly'] === '') {
     unset($array['payments_quantity_hourly']);
 }
 
@@ -36,12 +42,20 @@ if (isset($array['payments_amount_hourly']) && $array['payments_amount_hourly'] 
     // Delete payments_amount_hourly after overriding
     unset($array['payments_amount_hourly']);
 }
+if (isset($array['payments_amount_hourly']) && $array['payments_amount_hourly'] === '') {
+    unset($array['payments_amount_hourly']);
+}
+
+
 
 // Ensure payments_comment_hourly is set, and if so, assign it the value of payments_comment
 if (isset($array['payments_comment_hourly']) && $array['payments_comment_hourly'] !== '') {
     // Override payments_comment with payments_comment_hourly if it's set
     $array['payments_comment'] = $array['payments_comment_hourly'];
     // Delete payments_comment_hourly after overriding
+    unset($array['payments_comment_hourly']);
+}
+if (isset($array['payments_comment_hourly']) && $array['payments_comment_hourly'] === '') {
     unset($array['payments_comment_hourly']);
 }
 
