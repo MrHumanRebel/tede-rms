@@ -8660,11 +8660,11 @@ return array (
           'GENERATION_EXPRESSION' => '',
           'SRS_ID' => NULL,
         ),
-        'manufacturers_internalAdamRMSNote' => 
+        'manufacturers_internalTeDeRMSNote' => 
         array (
           'TABLE_CATALOG' => 'def',
           'TABLE_NAME' => 'manufacturers',
-          'COLUMN_NAME' => 'manufacturers_internalAdamRMSNote',
+          'COLUMN_NAME' => 'manufacturers_internalTeDeRMSNote',
           'ORDINAL_POSITION' => '4',
           'COLUMN_DEFAULT' => NULL,
           'IS_NULLABLE' => 'YES',

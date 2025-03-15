@@ -530,7 +530,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Hivatkozás</span>
                         </div>
-                        <input type="text" class="form-control" name="payments_reference">
+                        <input type="text" class="form-control" name="payments_reference" value="{{ project.projects_id }}">
                     </div>
                     <div class="input-group newPaymentModal-paymentOnly" style="margin-bottom: 5px;">
                         <div class="input-group-prepend">
@@ -645,7 +645,7 @@
                         </div>
                         <input class="form-control" type="number" step="1" min="0" value="1" name="payments_quantity">
                     </div>
-                    <div class="input-group mb-3 newPaymentModal-nonPaymentOnly">
+                    <div class="input-group mb-3 newPaymentModal-paymentSimple">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Szállító</span>
                         </div>
@@ -1598,8 +1598,15 @@
             $('#datePickerInput').daterangepicker({
                 timePicker: true,
                 timePickerIncrement: 15,
+                timePicker24Hour: true,
                 locale: {
-                    format: 'YYYY. MM. DD. HH:mm'
+                    format: 'YYYY. MM. DD. HH:mm',
+                    applyLabel: 'Alkalmaz', 
+                    cancelLabel: 'Mégsem',
+                    customRangeLabel: 'Egyéni időszak',
+                    daysOfWeek: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+                    monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+                    firstDay: 1
                 },
                 {% if project.projects_dates_use_start %}
                 startDate: "{{ project.projects_dates_use_start|date("Y. m. d. H:i") }}",
@@ -1616,8 +1623,15 @@
             $('#datePickerInputDeliver').daterangepicker({
                 timePicker: true,
                 timePickerIncrement: 15,
+                timePicker24Hour: true,
                 locale: {
-                    format: 'YYYY. MM. DD. HH:mm'
+                    format: 'YYYY. MM. DD. HH:mm',
+                    applyLabel: 'Alkalmaz', 
+                    cancelLabel: 'Mégsem',
+                    customRangeLabel: 'Egyéni időszak',
+                    daysOfWeek: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+                    monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+                    firstDay: 1
                 },
                 {% if project.projects_dates_deliver_start %}
                 startDate: "{{ project.projects_dates_deliver_start|date("Y. m. d. H:i") }}",
@@ -1861,8 +1875,15 @@
                 timePicker: true,
                 timePickerIncrement: 1,
                 singleDatePicker: true,
+                timePicker24Hour: true,
                 locale: {
-                    format: 'YYYY. MM. DD. HH:mm'
+                    format: 'YYYY. MM. DD. HH:mm',
+                    applyLabel: 'Alkalmaz', 
+                    cancelLabel: 'Mégsem',
+                    customRangeLabel: 'Egyéni időszak',
+                    daysOfWeek: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+                    monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+                    firstDay: 1
                 },
                 startDate: "{{ 'now'|date('Y. m. d. H:i') }}",
                 maxDate: "{{ 'now'|date('Y. m. d. H:i') }}",
@@ -1872,27 +1893,37 @@
                 $("#newPaymentModal-form-type").val(type);
                 $("#newPaymentModal").modal('show');
                 $(".newPaymentModal-paymentOnly").hide();
-                $(".newPaymentModal-paymentHour").hide();
+                $(".newPaymentModal-paymentHour").hide();                
                 $(".newPaymentModal-nonPaymentOnly").show();
+                $(".newPaymentModal-paymentSimple").show();
+                
                 switch(type) {
                     case 1:
                         $("#newPaymentModal-title").html("Kifizetés hozzáadása");
                         $(".newPaymentModal-paymentOnly").show();
                         $(".newPaymentModal-nonPaymentOnly").hide();
+                        $(".newPaymentModal-nonPaymentOnly textarea[name='payments_comment']").closest('.input-group').show(); // Megjegyzés (Leírás) megjelenítése
+                        $(".newPaymentModal-nonPaymentOnly input[name='payments_amount']").closest('.input-group').show(); // Összeg megjelenítése
+                        $(".newPaymentModal-paymentSimple input[name='payments_supplier']").closest('.input-group').hide(); // Szállító elrejtése
+
                         break;
                     case 2:
                         $("#newPaymentModal-title").html("Értékesítési tétel hozzáadása");
+                        $(".newPaymentModal-paymentSimple").hide();
                         break;
                     case 3:
                         $("#newPaymentModal-title").html("További bérleti költség hozzáadása");
+                        $(".newPaymentModal-paymentSimple").hide();
                         break;
                     case 4:
                         $("#newPaymentModal-title").html("Szimpla munkavállalói költség hozzáadása");
+                        $(".newPaymentModal-paymentSimple").hide();
                         break;
                     case 5:
                         $("#newPaymentModal-title").html("Órabér alapú munkavállalói költség hozzáadása");
                         $(".newPaymentModal-nonPaymentOnly").hide();
                         $(".newPaymentModal-paymentHour").show();
+                        $(".newPaymentModal-paymentSimple input[name='payments_supplier']").closest('.input-group').hide(); // Szállító elrejtése
                         break;
                 }
             });

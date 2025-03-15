@@ -516,9 +516,16 @@ $(document).ready(function () {
     $('#assetSearchForm input[name ="dates"]').daterangepicker({
         timePicker: true,
         timePickerIncrement: 15,
-        locale: {
-            format: 'YYYY. MM. DD. HH:mm'
-        },
+        timePicker24Hour: true,
+                locale: {
+                    format: 'YYYY. MM. DD. HH:mm',
+                    applyLabel: 'Alkalmaz', 
+                    cancelLabel: 'Mégsem',
+                    customRangeLabel: 'Egyéni időszak',
+                    daysOfWeek: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+                    monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+                    firstDay: 1
+                },
         autoUpdateInput: false,
     });
     $('#assetSearchForm input[name ="dates"]').on('apply.daterangepicker', function(ev, picker) {

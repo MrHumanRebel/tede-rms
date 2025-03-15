@@ -134,7 +134,7 @@
                     {% for payment in FINANCIALS.payments.received.ledger %}
                         <tr>
                             <td>{{ payment.payments_reference }}</td>
-                            <td>{{ payment.payments_date|date("d/M/Y G:i:s") }}</td>
+                            <td>{{ payment.payments_date|date("Y-m-d H:i:s") }}</td>
                             <td>{{ payment.payments_method }}</td>
                             <td>{{ payment.payments_comment|nl2br }}</td>
                             <td>{{ payment.payments_amount|money|replace({',00':''}) }}</td>
@@ -265,7 +265,7 @@
                         <thead>
                         <tr>
                             <th>Mennyiség</th>
-                            <th>Megnevezés</th>
+                            {# <th>Megnevezés</th> #}
                             <th style="width: 100%;">Megjegyzés</th>
                             <th>Összeg</th>
                             <th>Összesen</th>
@@ -276,7 +276,7 @@
                         {% for payment in FINANCIALS.payments.staff.ledger %}
                             <tr>
                                 <td style="width: 10px;">{{ payment.payments_quantity }}x</td>
-                                <td>{{ payment.payments_supplier|nbsp}}</td>
+                                {# <td>{{ payment.payments_supplier|nbsp}}</td> #}
                                 <td>{{ payment.payments_comment|nl2br }}</td>
                                 <td style="width:100px;">{{ payment.payments_amount|money|replace({',00':''}) }}</td>
                                 <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({',00':''}) }}</td>

@@ -7,7 +7,7 @@ $configStructureArray = [
         return 'http://' . $_SERVER['HTTP_HOST'];
       },
       "name" => "Root URL", // The name of the field to be shown to the user
-      "description" => "The URL of the site that is used as a point of reference for all links and emails. This is an important URL, because if it is misconfigured it will prevent you from logging in. It is probably https://yourdomain.com or https://yourdomain.com/adamrms or http://localhost:8080. It must not end in a trailing slash.", // A description of the field to be shown to the user
+      "description" => "The URL of the site that is used as a point of reference for all links and emails. This is an important URL, because if it is misconfigured it will prevent you from logging in. It is probably https://yourdomain.com or https://yourdomain.com/TeDeRMS or http://localhost:8080. It must not end in a trailing slash.", // A description of the field to be shown to the user
       "group" => "General", // The group this field belongs to
       "required" => true, // Is this value required? Or can it be left blank
       "maxlength" => 255, // This is the maximum length of the string (if of string type)
@@ -31,7 +31,7 @@ $configStructureArray = [
       },
       "name" => "Timezone",
       "group" => "General",
-      "description" => "The timezone to use for AdamRMS",
+      "description" => "The timezone to use for TeDeRMS",
       "required" => true,
       "maxlength" => 1000,
       "minlength" => 1,
@@ -52,7 +52,7 @@ $configStructureArray = [
       },
       "name" => "Email sending",
       "group" => "Email",
-      "description" => "Should AdamRMS send emails to users? If this is enabled then a provider must be setup below. Enabling this option will also require users to verify their email addresses on signup.",
+      "description" => "Should TeDeRMS send emails to users? If this is enabled then a provider must be setup below. Enabling this option will also require users to verify their email addresses on signup.",
       "required" => false,
       "maxlength" => 255,
       "minlength" => 5,
@@ -73,7 +73,7 @@ $configStructureArray = [
       },
       "name" => "Email provider",
       "group" => "Email",
-      "description" => "Which provider should AdamRMS use to send emails to users? This option is ignored if email sending is disabled.",
+      "description" => "Which provider should TeDeRMS use to send emails to users? This option is ignored if email sending is disabled.",
       "required" => false,
       "maxlength" => 255,
       "minlength" => 4,
@@ -90,7 +90,7 @@ $configStructureArray = [
     "form" => [
       "type" => "email",
       "default" => function () {
-        return "adamrms@example.com";
+        return "TeDeRMS@example.com";
       },
       "name" => "From email address",
       "group" => "Email",
@@ -264,7 +264,7 @@ $configStructureArray = [
       },
       "name" => "Sentry.io API key",
       "group" => "Error Handling",
-      "description" => "The Sentry.io API key to use to send log errors to Sentry.io - this is normally only used if you are developing AdamRMS",
+      "description" => "The Sentry.io API key to use to send log errors to Sentry.io - this is normally only used if you are developing TeDeRMS",
       "required" => false,
       "maxlength" => 255,
       "minlength" => 0,
@@ -291,7 +291,7 @@ $configStructureArray = [
       },
       "name" => "JWT Key",
       "group" => "Security & Login",
-      "description" => "The JWT key to use for signing JWTs. This should be a random value that you keep secret of 64 characters. If you are setting up AdamRMS for the first time, then the default generated value will be fine. Changing this later will invalidate all existing JWTs.",
+      "description" => "The JWT key to use for signing JWTs. This should be a random value that you keep secret of 64 characters. If you are setting up TeDeRMS for the first time, then the default generated value will be fine. Changing this later will invalidate all existing JWTs.",
       "required" => true,
       "maxlength" => 64,
       "minlength" => 64,
@@ -379,7 +379,7 @@ $configStructureArray = [
       },
       "name" => "Google Auth Scope",
       "group" => "Authentication",
-      "description" => "The scope for Google authentication. You would only usually change this if you are developing AdamRMS.",
+      "description" => "The scope for Google authentication. You would only usually change this if you are developing TeDeRMS.",
       "required" => false,
       "maxlength" => 255,
       "minlength" => 0,
@@ -439,10 +439,10 @@ $configStructureArray = [
     "form" => [
       "type" => "text",
       "default" => function () {
-        return "AdamRMS";
+        return "TeDeRMS";
       },
       "name" => "Whitelabel project name override",
-      "description" => "What do you call AdamRMS within your organisation?",
+      "description" => "What do you call TeDeRMS within your organisation?",
       "group" => "Customisation",
       "required" => false,
       "maxlength" => 20,
@@ -455,7 +455,7 @@ $configStructureArray = [
       }
     ],
     "specialRequest" => false,
-    "default" => "AdamRMS",
+    "default" => "TeDeRMS",
     "envFallback" => "CONFIG_PROJECT_NAME",
   ],
   "LINKS_USERGUIDEURL" => [
@@ -556,7 +556,7 @@ $configStructureArray = [
       },
       "name" => "File storage enabled",
       "group" => "File Storage",
-      "description" => "Whether AWS S3 file storage is enabled or disabled. If disabled, AdamRMS will not allow users to upload files.",
+      "description" => "Whether AWS S3 file storage is enabled or disabled. If disabled, TeDeRMS will not allow users to upload files.",
       "required" => false,
       "maxlength" => 8,
       "minlength" => 7,
@@ -857,7 +857,7 @@ $configStructureArray = [
       },
       "name" => "Reason for suspending new instances",
       "group" => "Billing",
-      "description" => "When a new instance is suspended using the option above, what should AdamRMS prompt the user to do? It could prompt them to setup a plan, or to fix a billing issue using the stripe APIs, or to do something else using the text below.",
+      "description" => "When a new instance is suspended using the option above, what should TeDeRMS prompt the user to do? It could prompt them to setup a plan, or to fix a billing issue using the stripe APIs, or to do something else using the text below.",
       "required" => false,
       "maxlength" => 20,
       "minlength" => 1,

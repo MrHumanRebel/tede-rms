@@ -35,7 +35,7 @@ if (strlen($userProfile->identifier) < 1) {
 
 $DBLIB->where("users_oauth_googleid", $userProfile->identifier);
 $user = $DBLIB->getOne("users", ["users.users_userid"]);
-if (strlen($userProfile->emailVerified) < 1) die('Please verify your email with Google before trying to link it to AdamRMS.' . '<a href="' . $CONFIG['ROOTURL'] . "/user.php" . '">Continue</a>');
+if (strlen($userProfile->emailVerified) < 1) die('Please verify your email with Google before trying to link it to TeDeRMS.' . '<a href="' . $CONFIG['ROOTURL'] . "/user.php" . '">Continue</a>');
 
 if ($user and $user['users_userid'] != $AUTH->data['users_userid']) {
     //If its linked to another account remove the link to link it to this one

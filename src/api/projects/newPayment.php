@@ -22,13 +22,13 @@ if (strlen($array['projects_id']) < 1) finish(false, ["code" => "PARAM-ERROR", "
 unset($array['payments_hours']);
 
 // Ensure payments_quantity_hourly is set, and if so, assign it the value of payments_quantity
-if (isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourly'] !== '') {
+if (isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourly'] !== '' && $array['payments_quantity_hourly'] != 0) {
     // Override payments_quantity with payments_quantity_hourly if it's set
     $array['payments_quantity'] = $array['payments_quantity_hourly'];
     // Delete payments_quantity_hourly after overriding
     unset($array['payments_quantity_hourly']);
 }
-if (isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourly'] === '') {
+if (isset($array['payments_quantity_hourly']) && (empty($array['payments_quantity_hourly']) || $array['payments_quantity_hourly'] == 0)) {
     unset($array['payments_quantity_hourly']);
 }
 
@@ -36,13 +36,13 @@ if (isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourl
 if (!$array['payments_quantity']) $array['payments_quantity'] = 1;
 
 // Ensure payments_amount_hourly is set, and if so, assign it the value of payments_amount
-if (isset($array['payments_amount_hourly']) && $array['payments_amount_hourly'] !== '') {
+if (isset($array['payments_amount_hourly']) && $array['payments_amount_hourly'] !== '' && $array['payments_amount_hourly'] != 0) {
     // Override payments_amount with payments_amount_hourly if it's set
     $array['payments_amount'] = $array['payments_amount_hourly'];
     // Delete payments_amount_hourly after overriding
     unset($array['payments_amount_hourly']);
 }
-if (isset($array['payments_amount_hourly']) && $array['payments_amount_hourly'] === '') {
+if (isset($array['payments_amount_hourly']) && (empty($array['payments_amount_hourly']) || $array['payments_amount_hourly'] == 0)) {
     unset($array['payments_amount_hourly']);
 }
 
