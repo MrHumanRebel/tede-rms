@@ -246,7 +246,6 @@
                                                             <input type="text" class="form-control float-right" id="datePickerInput">
                                                         </div>
 
-                                                        {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
                                                         <p class="text-sm">Építési nap
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
@@ -254,11 +253,14 @@
                                                             </div>
                                                             <input type="text" class="form-control float-right" id="buildDatePickerInput">
                                                         </div>
-                                                        {% endif %}
-
 
                                                     {% else %}
                                                         <b class="d-block">{{ project.projects_dates_use_start ? project.projects_dates_use_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_use_end|date("Y. m. d. H:i") }}</b>
+                                                        
+                                                        {% if "Építési nap" in project.projects_invoiceNotes %}
+                                                            <b class="d-block">{{ project.projects_invoiceNotes ? project.projects_invoiceNotes|date("Y. m. d. H:i")}}</b>
+                                                        {% endif %}
+
                                                         {% endif %}
                                                         </p>
                                                         {% if project.projectsTypes_config_assets == 1 %}
@@ -1622,8 +1624,13 @@
                     firstDay: 1
                 },
                 // Kezdő dátum beállítása, ha van
-                {% if project.projects_dates_use_start %}
-                startDate: "{{ project.projects_dates_use_start|date('Y. m. d.') }}",
+                {% if project.projects_invoiceNotes %}
+                    {% set cleanedDate = project.projects_invoiceNotes | replace({'Építési nap: ': ''}) %}
+                    {% set cleanedDate = cleanedDate | replace({' ': ''}) %}
+                    {% set cleanedDate = cleanedDate | replace({'\n': ''}) %}
+                    {% set cleanedDate = cleanedDate | replace({'\t': ''}) %}
+                    {% set cleanedDate = cleanedDate | slice(0, 10) %}
+                    startDate: "{{ cleanedDate }}",  // Kezdő dátum a számla megjegyzéséből
                 {% else %}
                 autoUpdateInput: false,
                 {% endif %}
@@ -1633,16 +1640,20 @@
                 var selectedDate = picker.startDate.format('YYYY. MM. DD.');
                 $(this).val(selectedDate);  // Beállítja az input mező értékét a választott dátumra
 
-                // Ha kiválasztottak egy dátumot, az hozzáadásra kerül a számla megjegyzéshez
-                var currentInvoiceNotes = `{{ project.projects_invoiceNotes|escape("js") }}`;
-                var updatedNotes = currentInvoiceNotes + "\nÉpítési nap: " + selectedDate;
+                // Az előző megjegyzés törlése és új hozzáadása
+                var updatedNotes = "Építési nap: " + selectedDate;
 
                 // AJAX hívás a projektszámla megjegyzések frissítésére
                 ajaxcall("projects/changeInvoiceNotes.php", {
                     "projects_invoiceNotes": updatedNotes,
                     "projects_id": "{{ project.projects_id }}"
                 }, function (data) {
-                    location.reload();  // Az oldal újratöltése a frissített adatokkal
+                    // Ha sikeres a mentés, akkor közvetlenül frissítjük a dátumot a frontend mezőben
+                    $('#buildDatePickerInput').val(selectedDate); // Frissítjük az input mezőt
+                }, function (error) {
+                    // Ha nem sikeres a mentés, akkor IS frissítjük a dátumot
+                    $('#buildDatePickerInput').val(selectedDate); // Frissítjük az input mezőt
+                    console.error('Hiba történt a mentés során:', error); // Hibajelzés
                 });
             });
 
