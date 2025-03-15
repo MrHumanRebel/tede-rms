@@ -5,22 +5,22 @@
 cd /var/www/html
 
 # Validate expected environment variables
-echo "TeDeRMS - Checking for Environment Variables"
+echo "AdamRMS - Checking for Environment Variables"
 if [[ ! -v DB_HOSTNAME ]] || [[ ! -v DB_DATABASE ]] || [[ ! -v DB_USERNAME ]] || [[ ! -v DB_PASSWORD ]]; then
-    echo "TeDeRMS - Expected Environment Variables not set"
+    echo "AdamRMS - Expected Environment Variables not set"
     exit 1
 fi
 
 # Database migration & seed
-echo "TeDeRMS - Starting Migration Script"
+echo "AdamRMS - Starting Migration Script"
 
 php vendor/bin/phinx migrate -e production
 php vendor/bin/phinx seed:run -e production
 
 if [[ -v DEV_MODE ]] && [[ "${DEV_MODE}" == 'true' ]]; then
-    echo "TeDeRMS - Running in DEV MODE"
+    echo "AdamRMS - Running in DEV MODE"
 fi
 
 # Start Server
-echo "TeDeRMS - Starting Apache2"
+echo "AdamRMS - Starting Apache2"
 apache2-foreground
