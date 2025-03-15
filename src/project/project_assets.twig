@@ -1,9 +1,3 @@
-{% if project.projectsStatuses_assetsReleased %} 
-    <div class="alert alert-danger">
-        <h5>Eszközök nincsenek lezárva - az eszközök fel vannak szabadítva</h5>
-        A projekthez rendelt eszközök nem kizárólagosak (a státusz miatt), és más projekteknél is felhasználhatók, amelyek ütközhetnek ezzel a projekttel. Frissítse a projekt státuszát, mielőtt megerősíti az ügyféllel.
-    </div>
-{% endif %}
 {% for assetAssignment in FINANCIALS.assetsAssigned %}
     {% for flag in assetAssignment.flagsblocks.BLOCK %}
         <div class="alert alert-danger">

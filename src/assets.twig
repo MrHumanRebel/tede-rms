@@ -231,13 +231,20 @@
                                                 {{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/hét
                                             </li>
                                             {% endif %}
+
+
                                             {# Írd ki az eszközök számát #}
-                                            {% if searchResults.PROJECT.ID and project.projectsStatuses_assetsReleased == true %}
+                                            {% if searchResults.PROJECT.ID and not asset.isAssetReleased %}
                                                 <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
                                             {% else %}
                                                 <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
                                             {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and project.projectsStatuses_assetsReleased == true %}
+                                            {% if searchResults.PROJECT.ID and asset.isAssetReleased %}
+                                                <li class="small" title="Feltételesen foglalva" style="margin-top: 10px;">
+                                                    <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">Feltételesen foglalt!</strong>
+                                                </li>
+                                            {% endif %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and not asset.isAssetReleased %}
                                                 <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
                                                     <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
                                                 </li>
@@ -256,22 +263,27 @@
                                             </li>
                                             {% endif %}
                                             {# Írd ki az eszközök számát #}
-                                            {% if searchResults.PROJECT.ID and project.projectsStatuses_assetsReleased == true %}
+                                            {% if searchResults.PROJECT.ID and not asset.isAssetReleased %}
                                                 <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
                                             {% else %}
                                                 <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
                                             {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and project.projectsStatuses_assetsReleased == true %}
+                                            {% if searchResults.PROJECT.ID and asset.isAssetReleased %}
+                                                <li class="small" title="Feltételesen foglalva" style="margin-top: 10px;">
+                                                    <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">Feltételesen foglalt!</strong>
+                                                </li>
+                                            {% endif %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and not asset.isAssetReleased %}
                                                 <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
                                                     <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
                                                 </li>
                                             {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 1 and project.projectsStatuses_assetsReleased == true %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 1 and not asset.isAssetReleased %}
                                                 <li class="small" title="Utolsó darab" style="margin-top: 10px;">
                                                     <strong style="font-size: larger; color: black; border: 2px solid orange; padding: 3px 10px; border-radius: 10px;">Utolsó darab!</strong>
                                                 </li>
                                             {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable <= 3 and asset.countAvailable != 1 and asset.countAvailable != 0 and project.projectsStatuses_assetsReleased == true %}
+                                            {% if searchResults.PROJECT.ID and asset.countAvailable <= 3 and asset.countAvailable != 1 and asset.countAvailable != 0 and not asset.isAssetReleased %}
                                                 <li class="small" title="Utolsó darabok" style="margin-top: 10px;">
                                                     <strong style="font-size: larger; color: black; border: 2px solid yellow; padding: 3px 10px; border-radius: 10px;">Utolsó darabok!</strong>
                                                 </li>

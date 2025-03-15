@@ -215,6 +215,8 @@ foreach ($assets as $asset) {
     $asset['fields'] = explode(",", $asset['assetTypes_definableFields']);
     $asset['thumbnail'] = $bCMS->s3List(2, $asset['assetTypes_id'],'s3files_meta_uploaded','ASC',1);
     $asset['tags'] = [];
+    $asset['isAssetReleased'] = false; // Alapértelmezett érték
+
     foreach ($assetTags as $tag) {
         if ($dateStart and $dateEnd) {
             //Check availability
@@ -228,7 +230,14 @@ foreach ($assets as $asset) {
                 // If a project is being searched for specifically then we need to check if the asset is assigned to that project or if it is assigned to another project
                 $DBLIB->where("(projectsStatuses.projectsStatuses_assetsReleased = 0 OR projects.projects_id = '" . $RETURN['PROJECT']['ID'] . "')");
             } else $DBLIB->where("projectsStatuses.projectsStatuses_assetsReleased", 0);
-            $tag['assignment'] = $DBLIB->get("assetsAssignments", null, ["assetsAssignments.assetsAssignments_id", "assetsAssignments.projects_id", "projects.projects_name"]);
+            $tag['assignment'] = $DBLIB->get("assetsAssignments", null, ["assetsAssignments.assetsAssignments_id", "assetsAssignments.projects_id", "projects.projects_name", "projectsStatuses.projectsStatuses_assetsReleased"]);
+
+            $tag['isAssetReleased'] = !empty($tag['assignment']) && $tag['assignment'][0]['projectsStatuses_assetsReleased'] == 1;
+
+            // Ha bármelyik tag isAssetReleased értéke true, akkor az egész asset isAssetReleased lesz true
+            if ($tag['isAssetReleased']) {
+                $asset['isAssetReleased'] = true;
+            }
         }
         $tag['flagsblocks'] = assetFlagsAndBlocks($tag['assets_id']);
         if ($tag['assignment'] or $tag['flagsblocks']['COUNT']['BLOCK'] > 0) $asset['countBlocked']++;
