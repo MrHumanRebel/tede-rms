@@ -113,7 +113,7 @@ final class FixCollation extends AbstractMigration
             ALTER TABLE `maintenanceJobs` MODIFY COLUMN `maintenanceJobs_user_tagged` varchar(500) NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `maintenanceJobsMessages` MODIFY COLUMN `maintenanceJobsMessages_text` text NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `maintenanceJobsStatuses` MODIFY COLUMN `maintenanceJobsStatuses_name` varchar(200) NOT NULL  COLLATE utf8mb4_0900_ai_ci;
-            ALTER TABLE `manufacturers` MODIFY COLUMN `manufacturers_internalTeDeRMSNote` varchar(500) NULL  COLLATE utf8mb4_0900_ai_ci;
+            ALTER TABLE `manufacturers` MODIFY COLUMN `manufacturers_internalAdamRMSNote` varchar(500) NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `manufacturers` MODIFY COLUMN `manufacturers_name` varchar(500) NOT NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `manufacturers` MODIFY COLUMN `manufacturers_notes` text NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `manufacturers` MODIFY COLUMN `manufacturers_website` varchar(200) NULL  COLLATE utf8mb4_0900_ai_ci;

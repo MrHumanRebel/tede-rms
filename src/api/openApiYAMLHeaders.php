@@ -4,12 +4,12 @@
 
 /**
  * @OA\Info(
- *  title="TeDeRMS API", 
+ *  title="AdamRMS API", 
  *  version="APIVERSION",
- *  description="TeDeRMS is a free, open source advanced Rental Management System for Theatre, AV & Broadcast. This is the API listing for the v1 API, which is currently in Production and active development. You can find out more about TeDeRMS at [https://adam-rms.com](https://adam-rms.com).",
+ *  description="AdamRMS is a free, open source advanced Rental Management System for Theatre, AV & Broadcast. This is the API listing for the v1 API, which is currently in Production and active development. You can find out more about AdamRMS at [https://adam-rms.com](https://adam-rms.com).",
  *  termsOfService="https://adam-rms.com/legal",
  *  @OA\Contact(
- *   name="TeDeRMS Support",
+ *   name="AdamRMS Support",
  *   email="support@adam-rms.com",
  *   url="https://github.com/adam-rms",
  *  ),
@@ -29,7 +29,7 @@
 
 /**
  * @OA\ExternalDocumentation(
- *  description="TeDeRMS Documentation",
+ *  description="AdamRMS Documentation",
  *  url="https://adam-rms.com",
  * )
  */

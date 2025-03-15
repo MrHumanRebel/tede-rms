@@ -59,7 +59,7 @@ if (isset($_POST['assetTypes_id'])) {
         //Create new manufacturer if needed
         if ($oldInstanceManufacturer['instances_id'] != NULL) {
             $oldInstanceManufacturer['instances_id'] = $_POST['new_instances_id'];
-            $oldInstanceManufacturer['manufacturers_internalTeDeRMSNote'] = "Created during asset migration";
+            $oldInstanceManufacturer['manufacturers_internalAdamRMSNote'] = "Created during asset migration";
             unset($oldInstanceManufacturer['manufacturers_id']);
             $manufacturer['manufacturers_id'] = $DBLIB->insert("manufacturers", $oldInstanceManufacturer);
         }

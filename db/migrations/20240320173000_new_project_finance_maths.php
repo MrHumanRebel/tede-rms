@@ -31,7 +31,7 @@ final class NewProjectFinanceMaths extends AbstractMigration
                 continue;
             }
             echo "Starting migration of project " . $project[3] . " dates \n";
-            $return = ["string" => "Project finance migrated in upgrade of TeDeRMS. Project number of days & weeks set manually, calculated based on:", "days" => 0, "weeks" => 0];
+            $return = ["string" => "Project finance migrated in upgrade of AdamRMS. Project number of days & weeks set manually, calculated based on:", "days" => 0, "weeks" => 0];
             $start = strtotime(date("d F Y 00:00:00", strtotime($project[1])));
             $end = strtotime(date("d F Y 23:59:59", strtotime($project[2])));
             if (date("N", $start) == 6) {

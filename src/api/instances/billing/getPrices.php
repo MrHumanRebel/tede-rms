@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../apiHead.php';
 
 $stripe = new \Stripe\StripeClient($CONFIGCLASS->get('STRIPE_KEY'));
 $products = $stripe->products->search([
-  'query' => 'active:\'true\' AND metadata[\'showInDashboard\']:\'true\' AND metadata[\'product\']:\'TeDeRMS\'',
+  'query' => 'active:\'true\' AND metadata[\'showInDashboard\']:\'true\' AND metadata[\'product\']:\'AdamRMS\'',
   'limit' => 100
 ]);
 $productsReturn = [];

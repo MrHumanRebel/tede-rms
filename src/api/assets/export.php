@@ -92,7 +92,7 @@ if (isset($_POST['csv'])) {
         ->setLastModifiedBy($AUTH->data['instance']['instances_name'])
         ->setCompany($AUTH->data['instance']['instances_name'])
         ->setCreated(strtotime($created))
-        ->setTitle("Asset Download from TeDeRMS")
+        ->setTitle("Asset Download from AdamRMS")
         ->setSubject("All assets from " . $AUTH->data['instance']['instances_name']);
     $spreadsheet->getActiveSheet()->setTitle("Assets List");
     $sheet = $spreadsheet->getActiveSheet();

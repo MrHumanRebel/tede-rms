@@ -55,7 +55,7 @@ try {
         'password' => getenv('DB_PASSWORD'),
         'db' => getenv('DB_DATABASE'),
         'port' => getenv('DB_PORT') ?: 3306,
-        //'prefix' => 'TeDeRMS_',
+        //'prefix' => 'AdamRMS_',
         'charset' => 'utf8'
     ]);
 } catch (Exception $e) {

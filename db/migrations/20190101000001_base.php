@@ -2264,7 +2264,7 @@ class Base extends Phinx\Migration\AbstractMigration
                 'limit' => MysqlAdapter::INT_REGULAR,
                 'after' => 'manufacturers_name',
             ])
-            ->addColumn('manufacturers_internalTeDeRMSNote', 'string', [
+            ->addColumn('manufacturers_internalAdamRMSNote', 'string', [
                 'null' => true,
                 'limit' => 500,
                 'collation' => 'latin1_swedish_ci',
@@ -2276,7 +2276,7 @@ class Base extends Phinx\Migration\AbstractMigration
                 'limit' => 200,
                 'collation' => 'latin1_swedish_ci',
                 'encoding' => 'latin1',
-                'after' => 'manufacturers_internalTeDeRMSNote',
+            'after' => 'manufacturers_internalAdamRMSNote',
             ])
             ->addColumn('manufacturers_notes', 'text', [
                 'null' => true,
@@ -4171,7 +4171,7 @@ Rest are set out in corehead
           ],
           [
               "actions_id"=> 19,
-            "actions_name"=> "Edit any asset type - even those written by TeDeRMS",
+                "actions_name" => "Edit any asset type - even those written by AdamRMS",
             "actionsCategories_id"=> 5,
             "actions_dependent"=> null,
             "actions_incompatible"=> null

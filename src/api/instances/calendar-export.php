@@ -37,7 +37,7 @@ foreach ($iCalProjects as $event) {
         ->setDtEnd(new \DateTime($event['projects_dates_use_end']))
         ->setNoTime(false)
         ->setSummary($event['projects_name'] . ($event['clients_name'] ? " (" . $event['clients_name'] . ")" : ""))
-        ->setCategories(['events', 'TeDeRMS'])
+        ->setCategories(['events', 'AdamRMS'])
         ->setLocation($event['locations_name'] . "\n" . $event['locations_address'], $event['locations_name'] . "\n" . $event['locations_address'])
         ->setDescription("Esemény státusza: " . $event['projectsStatuses_name'] . "\n" . "Leírás: ". $event['projects_description'] . "\n" . "Projektvezető: " . $event['pm_name1'] . " " . $event['pm_name2'])
     ;
