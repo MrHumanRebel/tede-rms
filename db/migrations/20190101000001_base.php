@@ -2901,7 +2901,7 @@ class Base extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('projectsFinanceCache_value', 'integer', [
                 'null' => true,
-                'limit' => MysqlAdapter::INT_REGULAR,
+            'limit' => MysqlAdapter::INT_BIG,
                 'after' => 'projectsFinanceCache_grandTotal',
             ])
             ->addColumn('projectsFinanceCache_mass', 'decimal', [

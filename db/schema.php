@@ -11334,7 +11334,7 @@ return array (
           'ORDINAL_POSITION' => '13',
           'COLUMN_DEFAULT' => NULL,
           'IS_NULLABLE' => 'YES',
-          'DATA_TYPE' => 'int',
+          'DATA_TYPE' => 'bigint',
           'CHARACTER_MAXIMUM_LENGTH' => NULL,
           'CHARACTER_OCTET_LENGTH' => NULL,
           'NUMERIC_PRECISION' => '15',
