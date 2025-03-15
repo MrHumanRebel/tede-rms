@@ -9,7 +9,7 @@ $DBLIB->where("projects.projects_id", $_POST['projects_id']);
 $project = $DBLIB->update("projects", ["projects.projects_invoiceNotes" => $_POST['projects_invoiceNotes']]);
 if (!$project) finish(false);
 
-$bCMS->auditLog("UPDATE-INVOICENOTES", "projects", "Set the invoice notes to ". $_POST['projects_invoiceNotes'], $AUTH->data['users_userid'],null, $_POST['projects_id']);
+$bCMS->auditLog("UPDATE-INVOICENOTES", "projects", "" . $_POST['projects_invoiceNotes'], $AUTH->data['users_userid'], null, $_POST['projects_id']);
 finish(true);
 
 /** @OA\Post(
