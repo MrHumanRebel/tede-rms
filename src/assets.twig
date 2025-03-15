@@ -241,7 +241,7 @@
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.isAssetReleased %}
                                                 <li class="small" title="Feltételesen foglalva" style="margin-top: 10px;">
-                                                    <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">Feltételesen foglalt!</strong>
+                                                    <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">{{ asset.countBlocked }} Feltételesen foglalt!</strong>
                                                 </li>
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and not asset.isAssetReleased %}
@@ -270,7 +270,7 @@
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.isAssetReleased %}
                                                 <li class="small" title="Feltételesen foglalva" style="margin-top: 10px;">
-                                                    <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">Feltételesen foglalt!</strong>
+                                                    <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">{{ asset.countBlocked }} Feltételesen foglalt!</strong>
                                                 </li>
                                             {% endif %}
                                             {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and not asset.isAssetReleased %}
