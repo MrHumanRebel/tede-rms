@@ -237,20 +237,32 @@
                                                                 </b>
                                                             </p>
                                                         {% endif %}
-                                                        <p class="text-sm">Dátumok
-                                                            {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
+                                                        {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
+                                                        <p class="text-sm">Esemény időtartama                                                          
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="far fa-clock"></i></span>
                                                             </div>
                                                             <input type="text" class="form-control float-right" id="datePickerInput">
                                                         </div>
+
+                                                        {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
+                                                        <p class="text-sm">Építési nap
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                                            </div>
+                                                            <input type="text" class="form-control float-right" id="buildDatePickerInput">
+                                                        </div>
+                                                        {% endif %}
+
+
                                                     {% else %}
                                                         <b class="d-block">{{ project.projects_dates_use_start ? project.projects_dates_use_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_use_end|date("Y. m. d. H:i") }}</b>
                                                         {% endif %}
                                                         </p>
                                                         {% if project.projectsTypes_config_assets == 1 %}
-                                                            <p class="text-sm">Dátumok amikor az eszközök használva vannak
+                                                            <p class="text-sm">Időtartam amikor az eszközök használva vannak
                                                             {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
                                                                 <div class="input-group">
                                                                     <div class="input-group-prepend">
@@ -260,7 +272,7 @@
                                                                 </div>
                                                                 {% if project.projects_dates_use_start %}
                                                                     <div style="width: 100%;text-align: right;">
-                                                                        <a href="#" id="copyProjectDatesToDeliverDates">Ugyan az mint a projekt dátumai</a>
+                                                                        <a href="#" id="copyProjectDatesToDeliverDates">Ugyan az mint az esemény időtartama</a>
                                                                     </div>
                                                                 {% endif %}
                                                             {% else %}
@@ -421,8 +433,8 @@
                                                 <div>
                                                     {% set vechiles = [
                                                         {"name": "Renault: NEA-418"},
-                                                        {"name": "Dyna: ISE-123"},
-                                                        {"name": "Ford: NIC-478"}
+                                                        {"name": "Dyna: ISE-230"},
+                                                        {"name": "Ford: NIC-477"}
                                                     ] %}
                                                     
                                                     {% if "ASSETS:CREATE"|instancePermissions %}
@@ -441,8 +453,9 @@
                                                 </div>
                                                 <div>
                                                     {% set trailers = [
-                                                        {"name": "Renault nagy utánfutó: WAV-512"},
-                                                        {"name": "Színpados utánfutó: XXX-123"}
+                                                        {"name": "Renault nagy utánfutó: WAV-542"},
+                                                        {"name": "Színpados utánfutó: WCN-677"},
+                                                        {"name": "Kis tetős utánfutó: WBM-746"}
                                                     ] %}
 
                                                     {% if "ASSETS:CREATE"|instancePermissions %}
@@ -1595,6 +1608,48 @@
             });
             {% endif %}
             {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
+
+            $('#buildDatePickerInput').daterangepicker({
+                singleDatePicker: true,  // Csak egyetlen dátum választása
+                timePicker: false,  // Időt nem választunk
+                locale: {
+                    format: 'YYYY. MM. DD.',  // A kívánt dátumformátum
+                    applyLabel: 'Alkalmaz', 
+                    cancelLabel: 'Mégsem',
+                    customRangeLabel: 'Egyéni időszak',
+                    daysOfWeek: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+                    monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+                    firstDay: 1
+                },
+                // Kezdő dátum beállítása, ha van
+                {% if project.projects_dates_use_start %}
+                startDate: "{{ project.projects_dates_use_start|date('Y. m. d.') }}",
+                {% else %}
+                autoUpdateInput: false,
+                {% endif %}
+            });
+
+            $('#buildDatePickerInput').on('apply.daterangepicker', function (ev, picker) {
+                var selectedDate = picker.startDate.format('YYYY. MM. DD.');
+                $(this).val(selectedDate);  // Beállítja az input mező értékét a választott dátumra
+
+                // Ha kiválasztottak egy dátumot, az hozzáadásra kerül a számla megjegyzéshez
+                var currentInvoiceNotes = `{{ project.projects_invoiceNotes|escape("js") }}`;
+                var updatedNotes = currentInvoiceNotes + "\nÉpítési nap: " + selectedDate;
+
+                // AJAX hívás a projektszámla megjegyzések frissítésére
+                ajaxcall("projects/changeInvoiceNotes.php", {
+                    "projects_invoiceNotes": updatedNotes,
+                    "projects_id": "{{ project.projects_id }}"
+                }, function (data) {
+                    location.reload();  // Az oldal újratöltése a frissített adatokkal
+                });
+            });
+
+
+
+
+
             $('#datePickerInput').daterangepicker({
                 timePicker: true,
                 timePickerIncrement: 15,
