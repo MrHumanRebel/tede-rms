@@ -255,7 +255,7 @@
                                                         </div>
 
                                                     {% else %}
-                                                        <b class="d-block">{{ project.projects_dates_use_start ? project.projects_dates_use_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_use_end|date("Y. m. d. H:i") }}</b>
+                                                        <b class="d-block">Esemény időtartama: {{ project.projects_dates_use_start ? project.projects_dates_use_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_use_end|date("Y. m. d. H:i") }}</b>
                                                         <b class="d-block">{{ project.projects_invoiceNotes ? project.projects_invoiceNotes}}</b>
 
                                                         {% endif %}
@@ -300,8 +300,6 @@
                                                                     {% endif %}
                                                                 </div>
                                                                 {% endif %}
-                                                            {% else %}
-                                                                <b class="d-block">{{ FINANCIALS['priceMaths']["weeks"] }} hét{{ FINANCIALS['priceMaths']["weeks"] != 1 ? '' : '' }} és {{ FINANCIALS['priceMaths']["days"] }} nap{{ FINANCIALS['priceMaths']["days"] != 1 ? '' : ''}}</b>
                                                             {% endif %}
                                                             </p>
                                                         {% endif %}

@@ -845,7 +845,7 @@ class Base extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('assetTypes_value', 'integer', [
                 'null' => false,
-                'limit' => MysqlAdapter::INT_REGULAR,
+            'limit' => MysqlAdapter::INT_BIG,
                 'after' => 'assetTypes_weekRate',
             ])
             ->addIndex(['assetCategories_id'], [
