@@ -34,7 +34,7 @@ jobs:
             org.opencontainers.image.documentation=https://github.com/MrHumanRebel/adam-rms-hun
             org.opencontainers.image.url=https://github.com/MrHumanRebel/adam-rms-hun
             org.opencontainers.image.vendor="Danci"
-            org.opencontainers.image.description="AdamRMS"
+            org.opencontainers.image.description="TeDeRMS"
             org.opencontainers.image.licenses=AGPL-3.0
           tags: |
             type=semver,pattern=${{ github.event.release.tag_name }}

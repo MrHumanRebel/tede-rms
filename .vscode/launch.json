@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch AdamRMS with Debugger",
+      "name": "Launch TeDeRMS with Debugger",
       "type": "php",
       "request": "launch",
       "runtimeArgs": [
@@ -21,7 +21,7 @@
       }
     },
     {
-      "name": "Launch AdamRMS with Profiler",
+      "name": "Launch TeDeRMS with Profiler",
       "type": "php",
       "request": "launch",
       "runtimeArgs": [

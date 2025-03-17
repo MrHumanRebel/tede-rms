@@ -112,6 +112,14 @@
                             {% endfor %}
                         </select>
                     </div>
+                    
+                    <div class="form-group">
+                        <label>Al eszközök (Opcionális)</label>
+                        <div id="subAssetsContainer">
+                            <!-- Ide kerülnek a kiválasztott eszközök -->
+                        </div>
+                        <button type="button" class="btn btn-primary mt-2" id="addSubAsset">Al-eszköz hozzáadása</button>
+                    </div>
 
                     <div class="callout callout-info">
                         <p>A definiálható mezők az adott típusú eszközök specifikus tulajdonságai</p>
@@ -193,6 +201,29 @@
             $(".definableFieldsGroup").hide();
             $("#assetGroupsDiv").hide();
             $("#assetTagDiv").hide();
+
+            let subAssets = {{ subAssets | json_encode | raw }}; // Feltételezve, hogy a backenden ezt átadod
+
+            $('#addSubAsset').click(function() {
+                let index = $('.subAssetRow').length + 1; // Egyedi index növelése
+                let newRow = $(`
+                    <div class="subAssetRow d-flex align-items-center mb-2">
+                        <select class="form-control subAssetSelect" name="assetTypes_sub_asset_id_${index}" style="width: 60%;">
+                            <option value="">Válassz egy al-eszközt</option>
+                            ${subAssets.map(asset => `<option value="${asset.assetTypes_id}">${asset.assetTypes_name}</option>`).join('')}
+                        </select>
+                        <input type="number" class="form-control subAssetQuantity ml-2" name="assetTypes_sub_asset_quantity_${index}" min="1" value="1" style="width: 30%;">
+                        <button type="button" class="btn btn-danger ml-2 removeSubAsset">X</button>
+                    </div>
+                `);
+
+                $('#subAssetsContainer').append(newRow);
+                newRow.find('.subAssetSelect').select2({ theme: 'bootstrap4' });
+            });
+
+            $(document).on('click', '.removeSubAsset', function() {
+                $(this).closest('.subAssetRow').remove();
+            });
 
             $("#manufacturer").select2({
                 theme: "bootstrap4",
@@ -285,12 +316,34 @@
 
             $('#saveButton').on('click', function() {
                 var formData = $("#addNewForm").serializeArray();
-                formData.push({"name": "manufacturers_id", "value":$('#manufacturer').val()}, {"name": "assetTypes_id", "value": $('#assetType').val()},{"name":"assets_tag", "value":$('#assetTag').val()});
+
+                // Collect sub-assets and their quantities with indexed keys
+                var subAssets = [];
+                $('.subAssetRow').each(function() {
+                    var subAssetId = $(this).find('.subAssetSelect').val();
+                    var subAssetQuantity = $(this).find('.subAssetQuantity').val();
+                    if (subAssetId) {
+                        subAssets.push({
+                            "id": subAssetId,
+                            "quantity": subAssetQuantity
+                        });
+                    }
+                });
+
+                // Add other fields
+                formData.push(
+                    {"name": "subAssets", "value": JSON.stringify(subAssets)},
+                    {"name": "manufacturers_id", "value": $('#manufacturer').val()},
+                    {"name": "assetTypes_id", "value": $('#assetType').val()},
+                    {"name": "assets_tag", "value": $('#assetTag').val()}
+                );
+
                 if ($('#assetType').val() != null) {
-                    //Existing asset type
+                    // Existing asset type
                     var assetGroups = $("#assetGroups").select2("val");
-                    formData.push({"name": "assets_assetGroups", "value":assetGroups.join(',')});
-                    ajaxcall("assets/newAssetFromType.php", {formData}, function (data) {
+                    formData.push({"name": "assets_assetGroups", "value": assetGroups.join(',')});
+
+                    ajaxcall("assets/newAssetFromType.php", {formData}, function(data) {
                         $("#saveButton").text("Add Another");
                         $('#assetTag').val("");
                         Toast.fire({
@@ -298,13 +351,13 @@
                             title: (counter + 'x Asset&nbsp;<a href="{{ CONFIG.ROOTURL }}/asset.php?id=' + data.response['assetTypes_id'] + '&asset=' + data.response['assets_id'] + '">' + aTag(data.response['assets_tag']) + ' added</a>'),
                             timer: 30000
                         });
-                        counter +=1;
+                        counter += 1;
                     }, false);
                 } else {
-                    //New asset type
-                    ajaxcall("assets/newAssetType.php", {formData}, function (data) {
+                    // New asset type
+                    ajaxcall("assets/newAssetType.php", {formData}, function(data) {
                         $("#assetType").select2("trigger", "select", {
-                            data: { id: data.response['assetTypes_id'], text:$("#addNewType-name").val() }
+                            data: { id: data.response['assetTypes_id'], text: $("#addNewType-name").val() }
                         });
                         Toast.fire({
                             type: 'success',

@@ -44,7 +44,7 @@ services:
       - CONFIG_AWS_CLOUDFRONT_ENDPOINT=http://localhost:8081/localtestingbucket
       - CONFIG_EMAILS_ENABLED=true
       - CONFIG_EMAILS_PROVIDER=SMTP
-      - CONFIG_EMAILS_FROM_EMAIL=adamrms@devcontainer.local
+      - CONFIG_EMAILS_FROM_EMAIL=TeDeRMS@devcontainer.local
       - CONFIG_EMAILS_SMTP_SERVER=mailpit
       - CONFIG_EMAILS_SMTP_PORT=1025
   db:
@@ -104,7 +104,7 @@ services:
       MP_DATABASE: /data/mailpit.db
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
-      MP_LABEL: "AdamRMS Dev Mailpit"
+      MP_LABEL: "TeDeRMS Dev Mailpit"
 
 volumes:
   db_data: null

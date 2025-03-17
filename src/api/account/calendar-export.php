@@ -46,7 +46,7 @@ foreach ($iCalAssignments as $event) {
         ->setDtEnd(new \DateTime($event['projects_dates_use_end']))
         ->setNoTime(false)
         ->setSummary($event['projects_name'] . ($event['clients_name'] ? " (" . $event['clients_name'] . ")" : ""))
-        ->setCategories(['events', 'AdamRMS'])
+        ->setCategories(['events', 'TeDeRMS'])
         ->setLocation($event['locations_name'] . "\n" . $event['locations_address'], $event['locations_name'] . "\n" . $event['locations_address'])
         ->setDescription('Role: ' . $event['crewAssignments_role'] . "\n" . "Event Status: " . $event['projectsStatuses_name'] . "\n" . "Description: ". $event['projects_description'] . "\n" . "Project Manager: " . $event['pm_name1'] . " " . $event['pm_name2'])
         ->setMsBusyStatus("FREE")

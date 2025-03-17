@@ -8,7 +8,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     restart: always
     environment:
-      - MYSQL_DATABASE=adamrms
+      - MYSQL_DATABASE=TeDeRMS
       - MYSQL_ROOT_HOST=%
       - MYSQL_USER=userDocker
       - MYSQL_PASSWORD=TeDeDocker
@@ -38,16 +38,16 @@ services:
       - ./s3ninja_data:/home/sirius/data
     restart: always
 
-  adamrms:
+  TeDeRMS:
     image: ghcr.io/mrhumanrebel/adam-rms-hun:latest
-    container_name: adamrms
+    container_name: TeDeRMS
     restart: always
     depends_on:
       db:
         condition: service_healthy
     environment:
       - DB_HOSTNAME=db
-      - DB_DATABASE=adamrms
+      - DB_DATABASE=TeDeRMS
       - DB_USERNAME=userDocker
       - DB_PASSWORD=
       - DB_PORT=3306

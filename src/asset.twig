@@ -103,6 +103,19 @@
                             <b>Kategória</b> {{ asset.assetCategoriesGroups_name }} - {{ asset.assetCategories_name }}
                         </li>
                         <li class="list-group-item">
+                            <b>Szülő</b> 
+                            {% if asset.assetTypes_id %}
+                                {% set parentAsset = assetTypesSubAssets|filter(a => a.assetTypes_sub_asset_id == asset.assetTypes_id)|first %}
+                                {% if parentAsset %}
+                                    <a href="?id={{ parentAsset.assetTypes_id }}">{{ parentAsset.assetTypes_name }}</a>
+                                {% else %}
+                                    <span class="text-muted">Szülő nem található</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">Nincs szülő</span>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
                             <b>Gyártó</b> {{ asset.manufacturers_name }}
                         </li>
                         <li class="list-group-item">

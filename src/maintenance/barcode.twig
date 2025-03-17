@@ -334,9 +334,9 @@
             }});
         }
         function setScanLocation(value, name, type) {
-            localStorage.setItem("AdamRMS-barcode-scan-location-value", value)
-            localStorage.setItem("AdamRMS-barcode-scan-location-name", name)
-            localStorage.setItem("AdamRMS-barcode-scan-location-type", type)
+            localStorage.setItem("TeDeRMS-barcode-scan-location-value", value)
+            localStorage.setItem("TeDeRMS-barcode-scan-location-name", name)
+            localStorage.setItem("TeDeRMS-barcode-scan-location-type", type)
             barcodeScanLocation = {
                 value: value,
                 name: name,
@@ -349,9 +349,9 @@
             $("#barcodeScanStartButton").html("Start Scanning Assets")
         }
         function clearScanLocation() {
-            localStorage.removeItem("AdamRMS-barcode-scan-location-value")
-            localStorage.removeItem("AdamRMS-barcode-scan-location-name")
-            localStorage.removeItem("AdamRMS-barcode-scan-location-type")
+            localStorage.removeItem("TeDeRMS-barcode-scan-location-value")
+            localStorage.removeItem("TeDeRMS-barcode-scan-location-name")
+            localStorage.removeItem("TeDeRMS-barcode-scan-location-type")
             barcodeScanLocation = {
                 value: null,
                 name: null,
@@ -363,8 +363,8 @@
             $("#currentLocationCard").hide()
         }
         $(document).ready(function () {
-            if (localStorage.getItem("AdamRMS-barcode-scan-location-value") !== null && localStorage.getItem("AdamRMS-barcode-scan-location-name") !== null && localStorage.getItem("AdamRMS-barcode-scan-location-type") !== null) {
-                setScanLocation(localStorage.getItem("AdamRMS-barcode-scan-location-value"), localStorage.getItem("AdamRMS-barcode-scan-location-name"), localStorage.getItem("AdamRMS-barcode-scan-location-type"))
+            if (localStorage.getItem("TeDeRMS-barcode-scan-location-value") !== null && localStorage.getItem("TeDeRMS-barcode-scan-location-name") !== null && localStorage.getItem("TeDeRMS-barcode-scan-location-type") !== null) {
+                setScanLocation(localStorage.getItem("TeDeRMS-barcode-scan-location-value"), localStorage.getItem("TeDeRMS-barcode-scan-location-name"), localStorage.getItem("TeDeRMS-barcode-scan-location-type"))
             } else {
                 clearScanLocation()
             }

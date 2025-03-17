@@ -58,7 +58,29 @@ class AssetCategorySeeder extends AbstractSeed
             ]
         ];
 
-        $categoryData = [];
+        $categoryData = [
+
+            [
+                "assetCategories_id" => 1,
+                "assetCategories_name" => "Lámpa",
+                "assetCategories_fontAwesome" => "far fa-lightbulb",
+                "assetCategories_rank" => 11,
+                "assetCategoriesGroups_id" => 1,
+                "instances_id" => null,
+                "assetCategories_deleted" => 0
+            ],
+            [
+                "assetCategories_id" => 2,
+                "assetCategories_name" => "Hangfal",
+                "assetCategories_fontAwesome" => "fas fa-robot",
+                "assetCategories_rank" => 12,
+                "assetCategoriesGroups_id" => 2,
+                "instances_id" => null,
+                "assetCategories_deleted" => 0
+            ]
+
+
+        ];
 
         $count = $this->fetchRow('SELECT COUNT(*) AS count FROM assetCategoriesGroups');
         if ($count['count'] > 0) {

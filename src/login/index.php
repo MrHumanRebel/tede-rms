@@ -13,7 +13,7 @@ if (isset($_GET['app-oauth'])) {
 	if (isset($_GET['returnHost'])) {
 		$_SESSION['app-oauth'] = 'https://' . $_GET['returnHost'] . '/';
 	} else {
-		$_SESSION['app-oauth'] = "com.bstudios.AdamRMS://";
+		$_SESSION['app-oauth'] = "com.bstudios.TeDeRMS://";
 	}
 	if ($GLOBALS['AUTH']->login) {
 		$AUTH->logout();

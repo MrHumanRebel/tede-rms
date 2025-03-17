@@ -384,7 +384,7 @@ class Base extends Phinx\Migration\AbstractMigration
             ])
             ->addColumn('assets_value', 'integer', [
                 'null' => true,
-                'limit' => MysqlAdapter::INT_REGULAR,
+            'limit' => MysqlAdapter::INT_BIG,
                 'after' => 'assets_weekRate',
             ])
             ->addColumn('assets_mass', 'decimal', [
@@ -2264,7 +2264,7 @@ class Base extends Phinx\Migration\AbstractMigration
                 'limit' => MysqlAdapter::INT_REGULAR,
                 'after' => 'manufacturers_name',
             ])
-            ->addColumn('manufacturers_internalAdamRMSNote', 'string', [
+            ->addColumn('manufacturers_internalTeDeRMSNote', 'string', [
                 'null' => true,
                 'limit' => 500,
                 'collation' => 'latin1_swedish_ci',
@@ -2276,7 +2276,7 @@ class Base extends Phinx\Migration\AbstractMigration
                 'limit' => 200,
                 'collation' => 'latin1_swedish_ci',
                 'encoding' => 'latin1',
-            'after' => 'manufacturers_internalAdamRMSNote',
+            'after' => 'manufacturers_internalTeDeRMSNote',
             ])
             ->addColumn('manufacturers_notes', 'text', [
                 'null' => true,
@@ -4171,7 +4171,7 @@ Rest are set out in corehead
           ],
           [
               "actions_id"=> 19,
-                "actions_name" => "Edit any asset type - even those written by AdamRMS",
+                "actions_name" => "Edit any asset type - even those written by TeDeRMS",
             "actionsCategories_id"=> 5,
             "actions_dependent"=> null,
             "actions_incompatible"=> null
