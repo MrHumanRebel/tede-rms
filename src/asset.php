@@ -209,6 +209,15 @@ if (count($PAGEDATA['assets']) == 1) {
     }
 }
 
+$DBLIB->join("assetTypes", "assetSubAssets.assetSubAssets_sub_asset_id = assetTypes.assetTypes_id", "LEFT");
+
+$DBLIB->where("assetSubAssets.assetSubAssets_id", $asset['assets_id']);
+$subAssets = $DBLIB->get("assetSubAssets");
+$PAGEDATA['assets']['subAssets'] = $subAssets;
+
+
+
+
 $DBLIB->orderBy("assetsAssignmentsStatus_order", "ASC");
 $DBLIB->where("assetsAssignmentsStatus_deleted", 0);
 $DBLIB->where("assetsAssignmentsStatus.instances_id", $PAGEDATA['ASSET_INSTANCE']['instances_id']);

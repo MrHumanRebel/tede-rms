@@ -53,7 +53,25 @@ while (checkDuplicate($assetBarcodeData["assetsBarcodes_value"], $assetBarcodeDa
 $insert = $DBLIB->insert("assetsBarcodes", $assetBarcodeData);
 //We don't really mind if the insert fails, we can always generate another one later...
 
-finish(true, null, ["assets_id" => $result, "assets_tag" => $array['assets_tag'], "assetTypes_id" => $array['assetTypes_id']]);
+// Ellenőrizzük, hogy van-e aleszköz megadva
+if (!empty($array['subAssets'])) {
+    $subAssets = json_decode($array['subAssets'], true);
+    foreach ($subAssets as $subAsset) {
+        $DBLIB->insert("assetSubAssets", [
+            "assetSubAssets_id" => $result,  // Az új eszköz ID-ja
+            "assetSubAssets_sub_asset_id" => $subAsset['id'],
+            "assetSubAssets_sub_asset_quantity" => $subAsset['quantity']
+        ]);
+    }
+}
+
+finish(true, null, [
+    "assets_id" => $result,
+    "assets_tag" => $array['assets_tag'],
+    "assetTypes_id" => $array['assetTypes_id'],
+    "subAssets" => $array['subAssets']
+]);
+
 
 /** @OA\Post(
  *     path="/assets/newAssetFromType.php", 

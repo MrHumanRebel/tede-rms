@@ -103,6 +103,17 @@
                             <b>Kategória</b> {{ asset.assetCategoriesGroups_name }} - {{ asset.assetCategories_name }}
                         </li>
                         <li class="list-group-item">
+                            <b>Al eszközök</b>
+                            <ul>
+                                {% for subAsset in assets.subAssets %}
+                                    <li>ID: {{ subAsset.assetSubAssets_sub_asset_id }} - Név: {{ subAsset.assetTypes_name }} - Mennyiség: {{ subAsset.assetSubAssets_sub_asset_quantity }}</li>
+                                {% else %}
+                                    <li>Nincsenek al eszközök</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+                        <li class="list-group-item">
                             <b>Gyártó</b> {{ asset.manufacturers_name }}
                         </li>
                         <li class="list-group-item">

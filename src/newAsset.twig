@@ -113,14 +113,6 @@
                         </select>
                     </div>
                     
-                    <div class="form-group">
-                        <label>Al eszközök (Opcionális)</label>
-                        <div id="subAssetsContainer">
-                            <!-- Ide kerülnek a kiválasztott eszközök -->
-                        </div>
-                        <button type="button" class="btn btn-primary mt-2" id="addSubAsset">Al-eszköz hozzáadása</button>
-                    </div>
-
                     <div class="callout callout-info">
                         <p>A definiálható mezők az adott típusú eszközök specifikus tulajdonságai</p>
                     </div>
@@ -178,6 +170,13 @@
                     <label>Eszközcímke</label>
                     <input type="text" class="form-control" id="assetTag" placeholder="Alapértelmezés szerint automatikusan generált" />
                 </div>
+                <div class="form-group" id="subAssetsGroup" style="display: none;">
+                        <label>Al eszközök (Opcionális)</label>
+                        <div id="subAssetsContainer">
+                            <!-- Ide kerülnek a kiválasztott eszközök -->
+                        </div>
+                        <button type="button" class="btn btn-primary mt-2" id="addSubAsset">Al-eszköz hozzáadása</button>
+                </div>
                 </form>
             </div>
             <div class="card-footer">
@@ -202,27 +201,66 @@
             $("#assetGroupsDiv").hide();
             $("#assetTagDiv").hide();
 
-            let subAssets = {{ subAssets | json_encode | raw }}; // Feltételezve, hogy a backenden ezt átadod
-
             $('#addSubAsset').click(function() {
                 let index = $('.subAssetRow').length + 1; // Egyedi index növelése
                 let newRow = $(`
                     <div class="subAssetRow d-flex align-items-center mb-2">
-                        <select class="form-control subAssetSelect" name="assetTypes_sub_asset_id_${index}" style="width: 60%;">
-                            <option value="">Válassz egy al-eszközt</option>
-                            ${subAssets.map(asset => `<option value="${asset.assetTypes_id}">${asset.assetTypes_name}</option>`).join('')}
-                        </select>
+                        <select class="form-control subAssetSelect" name="assetTypes_sub_asset_id_${index}" style="width: 60%;"></select>
                         <input type="number" class="form-control subAssetQuantity ml-2" name="assetTypes_sub_asset_quantity_${index}" min="1" value="1" style="width: 30%;">
                         <button type="button" class="btn btn-danger ml-2 removeSubAsset">X</button>
                     </div>
                 `);
 
                 $('#subAssetsContainer').append(newRow);
-                newRow.find('.subAssetSelect').select2({ theme: 'bootstrap4' });
+
+                newRow.find('.subAssetSelect').select2({
+                    tags: false,
+                    multiple: false,
+                    theme: "bootstrap4",
+                    minimumInputLength: 0,
+                    width: '100%',
+                    minimumResultsForSearch: 1,
+                    placeholder: "Válassz egy al-eszközt",
+                    ajax: {
+                        url: "{{ CONFIG.ROOTURL }}/api/assets/searchAssets.php", // API végpont
+                        dataType: "json",
+                        type: "POST",
+                        data: function (params) {
+                            return { term: params.term };
+                        },
+                        processResults: function (data) {
+                            if (data && data.result && data.response) {
+                                return {
+                                    results: $.map(data.response, function (item) {
+                                        return {
+                                            text: item.assetTypes_name,
+                                            id: item.assetTypes_id
+                                        }
+                                    })
+                                };
+                            } else return { results: [] };
+                        }
+                    }
+                });
             });
 
             $(document).on('click', '.removeSubAsset', function() {
                 $(this).closest('.subAssetRow').remove();
+            });
+
+            // Ellenőrizzük, hogy van-e legalább egy eszköztípus
+            if ($('#assetType').children('option').length > 0) {
+                $('#subAssetsGroup').show();  // Ha van eszköztípus, akkor mutatjuk a subAssetsGroup-ot
+            }
+
+            // Figyeljük az #assetType változását
+            $('#assetType').on('change', function() {
+                // Ha az #assetType értéke nem null és nem üres, akkor megjelenítjük a subAssetsGroup-ot
+                if ($('#assetType').val() != null && $('#assetType').val() !== "") {
+                    $('#subAssetsGroup').show();
+                } else {
+                    $('#subAssetsGroup').hide();
+                }
             });
 
             $("#manufacturer").select2({
