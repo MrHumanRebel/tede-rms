@@ -1,0 +1,180 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    background: white;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.container img {
+    max-width: 50%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    background-color: rgb(247, 146, 28);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: rgb(247, 120, 0);
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.stage-diagram {
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+    /* Hide by default */
+}
+
+.copyright {
+    font-size: 12px;
+    margin-top: 15px;
+    color: #888;
+    /* Szürke szín */
+    font-style: italic;
+    /* Dőlt betűtípus */
+}
+
+.rotate-group {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Align items to the left */
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.rotate-group label {
+    display: none;
+    align-items: center;
+}
+
+.rotate-group input[type="checkbox"] {
+    margin-left: 15px;
+    display: none;
+    /* Add margin to the left of the checkbox */
+}
+
+
+
+@media (max-width: 1024px) {
+    .container {
+        padding: 30px;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+    }
+
+    input,
+    button {
+        font-size: 15px;
+        padding: 9px;
+    }
+
+    .container img {
+        max-width: 60%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .input-group {
+        margin-bottom: 10px;
+    }
+
+    input,
+    button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .container img {
+        max-width: 70%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    .input-group {
+        margin-bottom: 10px;
+    }
+
+    input,
+    button {
+        font-size: 13px;
+        padding: 7px;
+    }
+
+    .container img {
+        max-width: 80%;
+    }
+
+    .result {
+        font-size: 14px;
+    }
+}

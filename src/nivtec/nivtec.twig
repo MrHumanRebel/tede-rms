@@ -1,0 +1,43 @@
+{# {% extends "assets/template.twig" %} #}
+
+{% block content %}
+  <div class="container">
+    <link rel="stylesheet" href="style.css">
+    <img src="{{ CONFIG.ROOTURL }}/static-assets/img/logo_trasparent.png" alt="logo" class="brand-image img-circle elevation-3">
+    <h1>{{ title }}</h1>
+
+    <div class="input-group">
+      <label for="length">Színpad szélessége (méterben):</label>
+      <input type="number" id="length" placeholder="Például: 6">
+      <div id="length-error" class="error-message">Kérlek adj meg érvényes szélességet!</div>
+    </div>
+
+    <div class="input-group">
+      <label for="width">Színpad mélysége (méterben):</label>
+      <input type="number" id="width" placeholder="Például: 4">
+      <div id="width-error" class="error-message">Kérlek adj meg érvényes mélységet!</div>
+    </div>
+
+    <div class="rotate-group">
+        <label for="rotate-checkbox">
+            Forgatás
+            <input type="checkbox" id="rotate-checkbox">
+        </label>
+    </div>
+
+    <button onclick="calculate()">Számítás</button>
+    <div class="result" id="result"></div>
+    <div class="stage-diagram" id="diagram"></div>
+    <div class="copyright">
+      Made by Danci - 2024
+    </div>
+
+    <button onclick="window.location.href='{{ CONFIG.ROOTURL }}/'" class="btn btn-primary" style="margin-top: 20px;">
+      <i class="nav-icon fas fa-tachometer-alt"></i>
+      Vissza az irányítópultra
+    </button>
+
+
+  </div>
+  <script src="script.js"></script>
+{% endblock %}
