@@ -3,7 +3,9 @@
 {% block content %}
   <div class="container">
     <link rel="stylesheet" href="style.css">
-    <img src="{{ CONFIG.ROOTURL }}/static-assets/img/logo_trasparent.png" alt="logo" class="brand-image img-circle elevation-3">
+    <a href="{{ CONFIG.ROOTURL }}/">
+      <img src="{{ CONFIG.ROOTURL }}/static-assets/img/logo_trasparent.png" alt="logo" class="brand-image img-circle elevation-3">
+    </a>
     <h1>{{ title }}</h1>
 
     <div class="input-group">
@@ -28,16 +30,33 @@
     <button onclick="calculate()">Számítás</button>
     <div class="result" id="result"></div>
     <div class="stage-diagram" id="diagram"></div>
-    <div class="copyright">
-      Made by Danci - 2024
-    </div>
 
-    <button onclick="window.location.href='{{ CONFIG.ROOTURL }}/'" class="btn btn-primary" style="margin-top: 20px;">
+
+    <button onclick="window.location.href='{{ CONFIG.ROOTURL }}/'" class="btn btn-primary" style="margin-top: 20px; margin-bottom: 10px;">
       <i class="nav-icon fas fa-tachometer-alt"></i>
       Vissza az irányítópultra
     </button>
 
+    <div class="copyright">
+      <strong>&copy; {{ "now"|date("Y") }}</strong> - Minden jog fenntartva. - <a href="https://szekedani.duckdns.org/">Made by Danci</a>
+    </div>
 
   </div>
+
   <script src="script.js"></script>
+
+  <script>
+    document.getElementById('length').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            calculate();
+        }
+    });
+
+    document.getElementById('width').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            calculate();
+        }
+    });
+  </script>
+  
 {% endblock %}
