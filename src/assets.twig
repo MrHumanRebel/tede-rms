@@ -148,6 +148,14 @@
                                 <input type="checkbox" name="hidenostock" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.HIDENOSTOCK ? "checked" : "" }}>
                                 <span>Nincs elérhető készleten elrejtése</span>
                             </div>
+                            <div class="mb-1">
+                                <input type="checkbox" name="hidesubassets" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.HIDESUBASSETS ? "checked" : "" }} id="hidesubassets">
+                                <span>Aleszközök elrejtése</span>
+                            </div>
+                            <div class="mb-1">
+                                <input type="checkbox" name="showsubassets" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.SHOWSUBASSETS ? "checked" : "" }} id="showsubassets">
+                                <span>Csak aleszközök megjelenítése</span>
+                            </div>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -196,287 +204,308 @@
                             {% set stock_based_render = true %}
                         {% endif %}
 
+                        {% set subasset_based_render = false %}
+                        {% if not asset.hasSubAssets and searchResults.SEARCH.SETTINGS.HIDESUBASSETS == true %}
+                            {% set subasset_based_render = true %}
+                        {% elseif asset.hasSubAssets and searchResults.SEARCH.SETTINGS.SHOWSUBASSETS == true %}
+                            {% set subasset_based_render = true %}
+                        {% endif %}
+
                         {% if stock_based_render == false %}
-                        <div class="col-auto d-flex align-items-stretch" style="padding: 10px;">
-                            <div class="card bg-light">
-                                <div class="card-body" style="max-width: 250px;">
-                                    <h2 class="lead"><b>{{ asset.assetTypes_name }}</b></h2>
-                                    {% if CONFIG.FILES_ENABLED == "Enabled" and USERDATA.instance.instances_storageEnabled == 1 and asset.thumbnail|length > 0 and searchResults.SEARCH.SETTINGS.HIDEIMAGES != true %}
-                                        <div class="{% if asset.thumbnail|length > 1 %}slick{% endif %}" style="text-align:center;height:200px;">
-                                            {% for thumb in asset.thumbnail %}
-                                                <div>
-                                                    <a href="{{ CONFIG.ROOTURL }}/asset.php?id={{ asset.assetTypes_id }}{{ asset.count == 1 ? '&asset=' ~ asset.tags[0]['assets_id'] : '' }}{{ SEARCH["SETTINGS"]["SHOWARCHIVED"] ? '&showArchived' : ''}}&instance={{ searchResults.SEARCH.INSTANCE_ID }}" target="_blank">
-                                                    <img class="img-fluid" loading="lazy" style="max-height: 200px;"
-                                                        src="{{ thumb.s3files_id|s3URL("small") }}"
-                                                        fetchpriority="low" alt="{{asset.assetTypes_name}}"></a>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                    <p class="text-muted text-sm">{{ asset.assetTypes_description|length > 60 ? (asset.assetTypes_description|slice(0, 60) ~ '...')|nl2br : asset.assetTypes_description|nl2br  }}</p>
-                                    <ul class="ml-4 mb-0 fa-ul text-muted">
-                                        <li class="small"><span class="fa-li"><i class="{{ asset.assetCategories_fontAwesome }}"></i></span> {{ asset.assetCategoriesGroups_name }} - {{ asset.assetCategories_name }}</li>
-                                        {% if asset.manufacturers_id != 1 %}<li class="small"><span class="fa-li"><i class="fas fa-industry"></i></span> {{ asset.manufacturers_name }}</li>{% endif %}
-                                        {% if asset.count == 1 %}
-                                            {# Because there's just one asset it might have a load of specific overrides so we had better show those #}
-                                            {% if asset.tags[0]['assets_mass'] != 0 or asset.assetTypes_mass != 0 %}
-                                            <li class="small">
-                                                <span class="fa-li"><i class="fas fa-weight"></i></span> {{ (asset.tags[0]['assets_mass'] ? asset.tags[0]['assets_mass']|number_format(2) : (asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 ? asset.assetTypes_mass|mass : '?')) }}
-                                            </li>
-                                            {% endif %}
-                                            {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-                                            <li class="small">
-                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ (asset.tags[0]['assets_value'] ?: asset.assetTypes_value)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}<br/>
-                                                {{ (asset.tags[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/nap<br/>
-                                                {{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/hét
-                                            </li>
-                                            {% endif %}
-
-
-                                            {# Írd ki az eszközök számát #}
-                                            {% if searchResults.PROJECT.ID and not asset.isAssetReleased %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
-                                            {% else %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
-                                            {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.isAssetReleased %}
-                                                <li class="small" title="Feltételesen foglalva" style="margin-top: 10px;">
-                                                    <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">{{ asset.countBlocked }} Feltételesen foglalt!</strong>
-                                                </li>
-                                            {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and not asset.isAssetReleased %}
-                                                <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
-                                                    <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
-                                                </li>
-                                            {% endif %}
-                                        {% else %}
-                                            {% if asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 %}
-                                            <li class="small">
-                                                <span class="fa-li"><i class="fas fa-weight"></i></span> {{ asset.assetTypes_mass|mass }}
-                                            </li>
-                                            {% endif %}
-                                            {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-                                            <li class="small">
-                                                <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ asset.assetTypes_value|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}<br/>
-                                                {{ asset.assetTypes_dayRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/nap<br/>
-                                                {{ asset.assetTypes_weekRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/hét
-                                            </li>
-                                            {% endif %}
-                                            {# Írd ki az eszközök számát #}
-                                            {% if searchResults.PROJECT.ID and not asset.isAssetReleased %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
-                                            {% else %}
-                                                <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
-                                            {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.isAssetReleased %}
-                                                <li class="small" title="Feltételesen foglalva" style="margin-top: 10px;">
-                                                    <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">{{ asset.countBlocked }} Feltételesen foglalt!</strong>
-                                                </li>
-                                            {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and not asset.isAssetReleased %}
-                                                <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
-                                                    <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
-                                                </li>
-                                            {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable == 1 and not asset.isAssetReleased %}
-                                                <li class="small" title="Utolsó darab" style="margin-top: 10px;">
-                                                    <strong style="font-size: larger; color: black; border: 2px solid orange; padding: 3px 10px; border-radius: 10px;">Utolsó darab!</strong>
-                                                </li>
-                                            {% endif %}
-                                            {% if searchResults.PROJECT.ID and asset.countAvailable <= 3 and asset.countAvailable != 1 and asset.countAvailable != 0 and not asset.isAssetReleased %}
-                                                <li class="small" title="Utolsó darabok" style="margin-top: 10px;">
-                                                    <strong style="font-size: larger; color: black; border: 2px solid yellow; padding: 3px 10px; border-radius: 10px;">Utolsó darabok!</strong>
-                                                </li>
-                                            {% endif %}
-                                        {% endif %}
-
-                                        {% if searchResults.SEARCH.INSTANCE_ID != USERDATA.instance.instances_id %}
-                                            {% for instance in USERDATA.instances %}
-                                                {% if searchResults.SEARCH.INSTANCE_ID == instance.instances_id %}
-                                                    <li class="small"><span class="fa-li"><i class="fas fa-exclamation-triangle"></i></span> Vállalkozás: {{instance.instances_name}}</li>
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endif %}
-
-                                    </ul>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="text-right">
-                                        <div class="btn-group">
-                                            {% if searchResults.PROJECT.ID and "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN"|instancePermissions %}
-                                                {% if asset.count == 1 %}
-                                                    {% if asset.tags[0].assets_endDate != null and asset.tags[0].assets_endDate < searchResults.PROJECT['DATEEND'] %}
-                                                        <button title="Eszközt archíválni kell" class="btn btn-sm btn-success" disabled><i class="fa fa-shopping-basket"></i></button>
-                                                    {% elseif asset.tags[0].flagsblocks.COUNT.BLOCK < 1 %}
-                                                        <button title="Eltávolítás a projektről" {% if (not asset.tags[0].assignment) or searchResults.PROJECT.ID != asset.tags[0].assignment[0].projects_id %}style="display:none;"{% endif %} class="btn btn-sm btn-warning removeFromBasketAssetButton" data-assetid="{{ asset.tags[0]['assets_id'] }}"><i class="fa fa-shopping-basket"></i></button>
-                                                        {% if asset.tags[0].assignment and searchResults.PROJECT.ID != asset.tags[0].assignment[0].projects_id %}
-                                                            <button title="Hozzárendelve a {{ asset.tags[0].assignment[0]['projects_name'] }} projekthez" class="btn btn-sm btn-success" disabled><i class="fa fa-shopping-basket"></i></button>
-                                                        {% endif %}
-                                                        <button title="Hozzáadás a projekthez" {% if asset.tags[0].assignment %} style="display:none;"{% endif %} class="btn btn-sm btn-success addToBasketAssetButton" data-assetid="{{ asset.tags[0]['assets_id'] }}"><i class="fa fa-shopping-basket"></i></button>
-                                                    {% else %}
-                                                        <button class="btn btn-sm btn-danger" title="Az eszköz hozzárendelését karbantartási feladat blokkolja" disabled><i class="fas fa-ban"></i></button>
-                                                    {% endif %}
-                                                {% else %}
-                                                    <div class="modal fade" id="assetDetailsModal{{ asset.assetTypes_id }}">
-                                                        <div class="modal-dialog modal-xl">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title">{{ asset.assetTypes_name }}</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body" style="padding:0;text-align:left;overflow-x: auto;">
-                                                                    <table class="table table-striped">
-                                                                        <tr>
-                                                                            <th style="width:70px;">ID</th>
-                                                                            {% for field in asset.fields %}
-                                                                                <th>{{ field }}</th>
-                                                                            {% endfor %}
-                                                                            <th>Megjegyzések</th>
-                                                                            {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-                                                                                <th>Díj/nap</th>
-                                                                                <th>Díj/hét</th>
-                                                                            {% endif %}
-                                                                            <th style="width:1%"><i class="fas fa-flag"></i></th>
-                                                                            <th style="width:30px;">
-                                                                                {% set not_valid = 0 %}
-                                                                                {% for thisasset in asset.tags %}
-                                                                                    {% if thisasset.assignment and searchResults.PROJECT.ID != thisasset.assignment[0].projects_id %}
-                                                                                        {% set not_valid = 1 %}
-                                                                                    {% endif %}
-                                                                                {% endfor %}
-                                                                                <button class="btn btn-success addToBasketAssetTypeButton" {% if asset.countAvailable < 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
-                                                                                <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count or not_valid == 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
-                                                                            </th>
-                                                                        </tr>
-                                                                        {% for thisasset in asset.tags %}
-                                                                            <tr>
-                                                                                <td>{{ thisasset.assets_tag|aTag }}</td>
-                                                                                {% for field in asset.fields %}
-                                                                                    <td>{{ thisasset['asset_definableFields_' ~ loop.index] }}</td>
-                                                                                {% endfor %}
-                                                                                <td>{{ thisasset['assets_notes']|nl2br }}</td>
-                                                                                <td>
-                                                                                    {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ thisasset.flagsblocks.COUNT.FLAG > 0 ?: '' }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="btn-group">
-                                                                                        {% if thisasset.assets_endDate != null and thisasset.assets_endDate < searchResults.PROJECT['DATEEND'] %}
-                                                                                            <button title="Eszköz eltávolításra kerül" class="btn btn-sm btn-success" disabled><i class="fa fa-shopping-basket"></i></button>
-                                                                                        {% elseif thisasset.flagsblocks.COUNT.BLOCK < 1 %}
-                                                                                            <button title="Eltávolítás a projektből" {% if (not thisasset.assignment) or searchResults.PROJECT.ID != thisasset.assignment[0].projects_id %}style="display:none;"{% endif %} class="btn btn-sm btn-warning removeFromBasketAssetButton" data-assetid="{{ thisasset['assets_id'] }}" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
-                                                                                            {% if thisasset.assignment and searchResults.PROJECT.ID != thisasset.assignment[0].projects_id %}
-                                                                                                <button title="Hozzárendelve ehhez: {{ thisasset.assignment[0]['projects_name'] }}" class="btn btn-sm btn-success" disabled><i class="fa fa-shopping-basket"></i></button>
-                                                                                            {% endif %}
-                                                                                            <button title="Hozzáadás a projekthez" {% if thisasset.assignment %} style="display:none;"{% endif %} class="btn btn-sm btn-success addToBasketAssetButton" data-assetid="{{ thisasset['assets_id'] }}" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
-                                                                                        {% else %}
-                                                                                            <button class="btn btn-sm btn-danger" title="Az eszköz karbantartási munka miatt blokkolva van" disabled><i class="fas fa-ban"></i></button>
-                                                                                        {% endif %}
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        {% endfor %}
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                        {% if subasset_based_render == false %}
+                            <div class="col-auto d-flex align-items-stretch" style="padding: 10px;">
+                                <div class="card bg-light">
+                                    <div class="card-body" style="max-width: 250px;">
+                                        <h2 class="lead"><b>{{ asset.assetTypes_name }}</b></h2>
+                                        {% if CONFIG.FILES_ENABLED == "Enabled" and USERDATA.instance.instances_storageEnabled == 1 and asset.thumbnail|length > 0 and searchResults.SEARCH.SETTINGS.HIDEIMAGES != true %}
+                                            <div class="{% if asset.thumbnail|length > 1 %}slick{% endif %}" style="text-align:center;height:200px;">
+                                                {% for thumb in asset.thumbnail %}
+                                                    <div>
+                                                        <a href="{{ CONFIG.ROOTURL }}/asset.php?id={{ asset.assetTypes_id }}{{ asset.count == 1 ? '&asset=' ~ asset.tags[0]['assets_id'] : '' }}{{ SEARCH["SETTINGS"]["SHOWARCHIVED"] ? '&showArchived' : ''}}&instance={{ searchResults.SEARCH.INSTANCE_ID }}" target="_blank">
+                                                        <img class="img-fluid" loading="lazy" style="max-height: 200px;"
+                                                            src="{{ thumb.s3files_id|s3URL("small") }}"
+                                                            fetchpriority="low" alt="{{asset.assetTypes_name}}"></a>
                                                     </div>
-                                                    <button type="button" class="btn btn-sm {{ asset.countAvailable > 0 ? 'btn-success' : 'btn-warning' }}" data-toggle="modal" data-target="#assetDetailsModal{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        <p class="text-muted text-sm">{{ asset.assetTypes_description|length > 60 ? (asset.assetTypes_description|slice(0, 60) ~ '...')|nl2br : asset.assetTypes_description|nl2br  }}</p>
+                                        <ul class="ml-4 mb-0 fa-ul text-muted">
+                                            <li class="small"><span class="fa-li"><i class="{{ asset.assetCategories_fontAwesome }}"></i></span> {{ asset.assetCategoriesGroups_name }} - {{ asset.assetCategories_name }}</li>
+                                            {% if asset.manufacturers_id != 1 %}<li class="small"><span class="fa-li"><i class="fas fa-industry"></i></span> {{ asset.manufacturers_name }}</li>{% endif %}
+                                            {% if asset.count == 1 %}
+                                                {# Because there's just one asset it might have a load of specific overrides so we had better show those #}
+                                                {% if asset.tags[0]['assets_mass'] != 0 or asset.assetTypes_mass != 0 %}
+                                                <li class="small">
+                                                    <span class="fa-li"><i class="fas fa-weight"></i></span> {{ (asset.tags[0]['assets_mass'] ? asset.tags[0]['assets_mass']|number_format(2) : (asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 ? asset.assetTypes_mass|mass : '?')) }}
+                                                </li>
                                                 {% endif %}
-                                            {% elseif searchResults.PROJECT.DATESTART and searchResults.PROJECT.DATEEND %}
-                                                {% if asset.count == 1 %}
-                                                    {% if asset.tags[0].assets_endDate != null and asset.tags[0].assets_endDate < searchResults.PROJECT['DATEEND'] %}
-                                                        <button title="Eszköz archiválásra kerül" class="btn btn-sm btn-danger" disabled><i class="fa fa-times"></i></button>
-                                                    {% elseif asset.tags[0].flagsblocks.COUNT.BLOCK < 1 %}
-                                                        {% if asset.tags[0].assignment %}
-                                                            <button title="Hozzárendelve ehhez: {{ asset.tags[0].assignment[0]['projects_name'] }}" class="btn btn-sm btn-danger" disabled><i class="fa fa-times"></i></button>
+                                                {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                                                <li class="small">
+                                                    <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ (asset.tags[0]['assets_value'] ?: asset.assetTypes_value)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}<br/>
+                                                    {{ (asset.tags[0]['assets_dayRate'] ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/nap<br/>
+                                                    {{ (asset.tags[0]['assets_weekRate'] ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/hét
+                                                </li>
+                                                {% endif %}
+                                                {# Írd ki az eszközök számát #}
+                                                {% if searchResults.PROJECT.ID and not asset.isAssetReleased %}
+                                                    <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
+                                                {% else %}
+                                                    <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
+                                                {% endif %}
+                                                {% if searchResults.PROJECT.ID and asset.isAssetReleased %}
+                                                    <li class="small" title="Feltételesen foglalva" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">{{ asset.countBlocked }} Feltételesen foglalt!</strong>
+                                                    </li>
+                                                {% endif %}
+                                                {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and not asset.isAssetReleased %}
+                                                    <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
+                                                    </li>
+                                                {% endif %}
+                                                {% if asset.hasSubAssets %}
+                                                    <li class="small" title="Aleszközöket tartalmaz" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: green; border: 2px solid green; padding: 3px 10px; border-radius: 10px;">
+                                                            {{ asset.countSubAssets }} Aleszközt tartalmaz!
+                                                        </strong>
+                                                    </li>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 %}
+                                                <li class="small">
+                                                    <span class="fa-li"><i class="fas fa-weight"></i></span> {{ asset.assetTypes_mass|mass }}
+                                                </li>
+                                                {% endif %}
+                                                {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                                                <li class="small">
+                                                    <span class="fa-li"><i class="fas fa-money-bill-wave"></i></span> {{ asset.assetTypes_value|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}<br/>
+                                                    {{ asset.assetTypes_dayRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/nap<br/>
+                                                    {{ asset.assetTypes_weekRate|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}/hét
+                                                </li>
+                                                {% endif %}
+                                                {# Írd ki az eszközök számát #}
+                                                {% if searchResults.PROJECT.ID and not asset.isAssetReleased %}
+                                                    <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban <br> {{ asset.count }} -ból {{ asset.countAvailable }} elérhető</strong></li>
+                                                {% else %}
+                                                    <li class="small" title="Birtokolt eszközök száma"><span class="fa-li"><i class="fas fa-boxes"></i></span><strong style="font-size: larger;">A raktárban összesen {{ asset.count }} elérhető</strong></li>
+                                                {% endif %}
+                                                {% if searchResults.PROJECT.ID and asset.isAssetReleased %}
+                                                    <li class="small" title="Feltételesen foglalva" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: blue; border: 2px solid blue; padding: 3px 10px; border-radius: 10px;">{{ asset.countBlocked }} Feltételesen foglalt!</strong>
+                                                    </li>
+                                                {% endif %}
+                                                {% if searchResults.PROJECT.ID and asset.countAvailable == 0 and not asset.isAssetReleased %}
+                                                    <li class="small" title="Nincs elérhető készlet" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">Nincs elérhető készlet!</strong>
+                                                    </li>
+                                                {% endif %}
+                                                {% if searchResults.PROJECT.ID and asset.countAvailable == 1 and not asset.isAssetReleased %}
+                                                    <li class="small" title="Utolsó darab" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: black; border: 2px solid orange; padding: 3px 10px; border-radius: 10px;">Utolsó darab!</strong>
+                                                    </li>
+                                                {% endif %}
+                                                {% if searchResults.PROJECT.ID and asset.countAvailable <= 3 and asset.countAvailable != 1 and asset.countAvailable != 0 and not asset.isAssetReleased %}
+                                                    <li class="small" title="Utolsó darabok" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: black; border: 2px solid yellow; padding: 3px 10px; border-radius: 10px;">Utolsó darabok!</strong>
+                                                    </li>
+                                                {% endif %}
+                                                {% if asset.hasSubAssets %}
+                                                    <li class="small" title="Aleszközöket tartalmaz" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: green; border: 2px solid green; padding: 3px 10px; border-radius: 10px;">
+                                                            {{ asset.countSubAssets }} Aleszközt tartalmaz!
+                                                        </strong>
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if searchResults.SEARCH.INSTANCE_ID != USERDATA.instance.instances_id %}
+                                                {% for instance in USERDATA.instances %}
+                                                    {% if searchResults.SEARCH.INSTANCE_ID == instance.instances_id %}
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-exclamation-triangle"></i></span> Vállalkozás: {{instance.instances_name}}</li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="text-right">
+                                            <div class="btn-group">
+                                                {% if searchResults.PROJECT.ID and "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN"|instancePermissions %}
+                                                    {% if asset.count == 1 %}
+                                                        {% if asset.tags[0].assets_endDate != null and asset.tags[0].assets_endDate < searchResults.PROJECT['DATEEND'] %}
+                                                            <button title="Eszközt archíválni kell" class="btn btn-sm btn-success" disabled><i class="fa fa-shopping-basket"></i></button>
+                                                        {% elseif asset.tags[0].flagsblocks.COUNT.BLOCK < 1 %}
+                                                            <button title="Eltávolítás a projektről" {% if (not asset.tags[0].assignment) or searchResults.PROJECT.ID != asset.tags[0].assignment[0].projects_id %}style="display:none;"{% endif %} class="btn btn-sm btn-warning removeFromBasketAssetButton" data-assetid="{{ asset.tags[0]['assets_id'] }}"><i class="fa fa-shopping-basket"></i></button>
+                                                            {% if asset.tags[0].assignment and searchResults.PROJECT.ID != asset.tags[0].assignment[0].projects_id %}
+                                                                <button title="Hozzárendelve a {{ asset.tags[0].assignment[0]['projects_name'] }} projekthez" class="btn btn-sm btn-success" disabled><i class="fa fa-shopping-basket"></i></button>
+                                                            {% endif %}
+                                                            <button title="Hozzáadás a projekthez" {% if asset.tags[0].assignment %} style="display:none;"{% endif %} class="btn btn-sm btn-success addToBasketAssetButton" data-assetid="{{ asset.tags[0]['assets_id'] }}"><i class="fa fa-shopping-basket"></i></button>
                                                         {% else %}
-                                                            <button title="Elérhető" class="btn btn-sm btn-success" disabled><i class="fa fa-check"></i></button>
+                                                            <button class="btn btn-sm btn-danger" title="Az eszköz hozzárendelését karbantartási feladat blokkolja" disabled><i class="fas fa-ban"></i></button>
                                                         {% endif %}
                                                     {% else %}
-                                                        <button class="btn btn-sm btn-danger" title="Az eszköz karbantartási munka miatt blokkolva van" disabled><i class="fas fa-ban"></i></button>
-                                                    {% endif %}
-                                                {% else %}
-                                                    <div class="modal fade" id="assetDetailsModal{{ asset.assetTypes_id }}">
-                                                        <div class="modal-dialog modal-xl">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title">{{ asset.assetTypes_name }}</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body" style="padding:0;text-align:left;overflow-x: auto;">
-                                                                    <table class="table table-striped">
-                                                                        <tr>
-                                                                            <th style="width:70px;">ID</th>
-                                                                            {% for field in asset.fields %}
-                                                                                <th>{{ field }}</th>
-                                                                            {% endfor %}
-                                                                            <th>Notes</th>
-                                                                            {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
-                                                                                <th>Díj/nap</th>
-                                                                                <th>Díj/hét</th>
-                                                                            {% endif %}
-                                                                            <th style="width:1%"><i class="fas fa-flag"></i></th>
-                                                                            <th style="width:30px;"></th>
-                                                                        </tr>
-                                                                        {% for thisasset in asset.tags %}
+                                                        <div class="modal fade" id="assetDetailsModal{{ asset.assetTypes_id }}">
+                                                            <div class="modal-dialog modal-xl">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">{{ asset.assetTypes_name }}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body" style="padding:0;text-align:left;overflow-x: auto;">
+                                                                        <table class="table table-striped">
                                                                             <tr>
-                                                                                <td>{{ thisasset.assets_tag|aTag }}</td>
+                                                                                <th style="width:70px;">ID</th>
                                                                                 {% for field in asset.fields %}
-                                                                                    <td>{{ thisasset['asset_definableFields_' ~ loop.index] }}</td>
+                                                                                    <th>{{ field }}</th>
                                                                                 {% endfor %}
-                                                                                <td>{{ thisasset['assets_notes']|nl2br }}</td>
-                                                                                <td>
-                                                                                    {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ thisasset.flagsblocks.COUNT.FLAG > 0 ?: '' }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="btn-group">
-                                                                                        {% if thisasset.assets_endDate != null and thisasset.assets_endDate < searchResults.PROJECT['DATEEND'] %}
-                                                                                            <button title="Eszköz eltávolításra kerül" class="btn btn-sm btn-danger" disabled><i class="fa fa-times"></i></button>
-                                                                                        {% elseif thisasset.flagsblocks.COUNT.BLOCK < 1 %}
-                                                                                            {% if thisasset.assignment %}
-                                                                                                <button title="Hozzárendelve ehhez: {{ thisasset.assignment[0]['projects_name'] }}" class="btn btn-sm btn-danger" disabled><i class="fa fa-times"></i></button>
-                                                                                            {% else %}
-                                                                                                <button title="Elérhető" class="btn btn-sm btn-success" disabled><i class="fa fa-check"></i></button>
-                                                                                            {% endif %}
-                                                                                        {% else %}
-                                                                                            <button class="btn btn-sm btn-danger" title="Az eszköz karbantartási munka miatt blokkolva van" disabled><i class="fas fa-ban"></i></button>
+                                                                                <th>Megjegyzések</th>
+                                                                                {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                                                                                    <th>Díj/nap</th>
+                                                                                    <th>Díj/hét</th>
+                                                                                {% endif %}
+                                                                                <th style="width:1%"><i class="fas fa-flag"></i></th>
+                                                                                <th style="width:30px;">
+                                                                                    {% set not_valid = 0 %}
+                                                                                    {% for thisasset in asset.tags %}
+                                                                                        {% if thisasset.assignment and searchResults.PROJECT.ID != thisasset.assignment[0].projects_id %}
+                                                                                            {% set not_valid = 1 %}
                                                                                         {% endif %}
-                                                                                    </div>
-                                                                                </td>
+                                                                                    {% endfor %}
+                                                                                    <button class="btn btn-success addToBasketAssetTypeButton" {% if asset.countAvailable < 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
+                                                                                    <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count or not_valid == 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
+                                                                                </th>
                                                                             </tr>
-                                                                        {% endfor %}
-                                                                    </table>
+                                                                            {% for thisasset in asset.tags %}
+                                                                                <tr>
+                                                                                    <td>{{ thisasset.assets_tag|aTag }}</td>
+                                                                                    {% for field in asset.fields %}
+                                                                                        <td>{{ thisasset['asset_definableFields_' ~ loop.index] }}</td>
+                                                                                    {% endfor %}
+                                                                                    <td>{{ thisasset['assets_notes']|nl2br }}</td>
+                                                                                    <td>
+                                                                                        {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{ thisasset.flagsblocks.COUNT.FLAG > 0 ?: '' }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="btn-group">
+                                                                                            {% if thisasset.assets_endDate != null and thisasset.assets_endDate < searchResults.PROJECT['DATEEND'] %}
+                                                                                                <button title="Eszköz eltávolításra kerül" class="btn btn-sm btn-success" disabled><i class="fa fa-shopping-basket"></i></button>
+                                                                                            {% elseif thisasset.flagsblocks.COUNT.BLOCK < 1 %}
+                                                                                                <button title="Eltávolítás a projektből" {% if (not thisasset.assignment) or searchResults.PROJECT.ID != thisasset.assignment[0].projects_id %}style="display:none;"{% endif %} class="btn btn-sm btn-warning removeFromBasketAssetButton" data-assetid="{{ thisasset['assets_id'] }}" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
+                                                                                                {% if thisasset.assignment and searchResults.PROJECT.ID != thisasset.assignment[0].projects_id %}
+                                                                                                    <button title="Hozzárendelve ehhez: {{ thisasset.assignment[0]['projects_name'] }}" class="btn btn-sm btn-success" disabled><i class="fa fa-shopping-basket"></i></button>
+                                                                                                {% endif %}
+                                                                                                <button title="Hozzáadás a projekthez" {% if thisasset.assignment %} style="display:none;"{% endif %} class="btn btn-sm btn-success addToBasketAssetButton" data-assetid="{{ thisasset['assets_id'] }}" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
+                                                                                            {% else %}
+                                                                                                <button class="btn btn-sm btn-danger" title="Az eszköz karbantartási munka miatt blokkolva van" disabled><i class="fas fa-ban"></i></button>
+                                                                                            {% endif %}
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            {% endfor %}
+                                                                        </table>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <button type="button" class="btn btn-sm {{ asset.countAvailable > 0 ? 'btn-success' : 'btn-warning' }}" data-toggle="modal" data-target="#assetDetailsModal{{ asset.assetTypes_id }}"><i class="fa fa-calendar"></i></button>
+                                                        <button type="button" class="btn btn-sm {{ asset.countAvailable > 0 ? 'btn-success' : 'btn-warning' }}" data-toggle="modal" data-target="#assetDetailsModal{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
+                                                    {% endif %}
+                                                {% elseif searchResults.PROJECT.DATESTART and searchResults.PROJECT.DATEEND %}
+                                                    {% if asset.count == 1 %}
+                                                        {% if asset.tags[0].assets_endDate != null and asset.tags[0].assets_endDate < searchResults.PROJECT['DATEEND'] %}
+                                                            <button title="Eszköz archiválásra kerül" class="btn btn-sm btn-danger" disabled><i class="fa fa-times"></i></button>
+                                                        {% elseif asset.tags[0].flagsblocks.COUNT.BLOCK < 1 %}
+                                                            {% if asset.tags[0].assignment %}
+                                                                <button title="Hozzárendelve ehhez: {{ asset.tags[0].assignment[0]['projects_name'] }}" class="btn btn-sm btn-danger" disabled><i class="fa fa-times"></i></button>
+                                                            {% else %}
+                                                                <button title="Elérhető" class="btn btn-sm btn-success" disabled><i class="fa fa-check"></i></button>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <button class="btn btn-sm btn-danger" title="Az eszköz karbantartási munka miatt blokkolva van" disabled><i class="fas fa-ban"></i></button>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <div class="modal fade" id="assetDetailsModal{{ asset.assetTypes_id }}">
+                                                            <div class="modal-dialog modal-xl">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">{{ asset.assetTypes_name }}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body" style="padding:0;text-align:left;overflow-x: auto;">
+                                                                        <table class="table table-striped">
+                                                                            <tr>
+                                                                                <th style="width:70px;">ID</th>
+                                                                                {% for field in asset.fields %}
+                                                                                    <th>{{ field }}</th>
+                                                                                {% endfor %}
+                                                                                <th>Notes</th>
+                                                                                {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                                                                                    <th>Díj/nap</th>
+                                                                                    <th>Díj/hét</th>
+                                                                                {% endif %}
+                                                                                <th style="width:1%"><i class="fas fa-flag"></i></th>
+                                                                                <th style="width:30px;"></th>
+                                                                            </tr>
+                                                                            {% for thisasset in asset.tags %}
+                                                                                <tr>
+                                                                                    <td>{{ thisasset.assets_tag|aTag }}</td>
+                                                                                    {% for field in asset.fields %}
+                                                                                        <td>{{ thisasset['asset_definableFields_' ~ loop.index] }}</td>
+                                                                                    {% endfor %}
+                                                                                    <td>{{ thisasset['assets_notes']|nl2br }}</td>
+                                                                                    <td>
+                                                                                        {{ (thisasset.assets_dayRate ?: asset.assetTypes_dayRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{ (thisasset.assets_weekRate ?: asset.assetTypes_weekRate)|money(SEARCH.INSTANCE['instances_config_currency'])|replace({',00':''}) }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{ thisasset.flagsblocks.COUNT.FLAG > 0 ?: '' }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="btn-group">
+                                                                                            {% if thisasset.assets_endDate != null and thisasset.assets_endDate < searchResults.PROJECT['DATEEND'] %}
+                                                                                                <button title="Eszköz eltávolításra kerül" class="btn btn-sm btn-danger" disabled><i class="fa fa-times"></i></button>
+                                                                                            {% elseif thisasset.flagsblocks.COUNT.BLOCK < 1 %}
+                                                                                                {% if thisasset.assignment %}
+                                                                                                    <button title="Hozzárendelve ehhez: {{ thisasset.assignment[0]['projects_name'] }}" class="btn btn-sm btn-danger" disabled><i class="fa fa-times"></i></button>
+                                                                                                {% else %}
+                                                                                                    <button title="Elérhető" class="btn btn-sm btn-success" disabled><i class="fa fa-check"></i></button>
+                                                                                                {% endif %}
+                                                                                            {% else %}
+                                                                                                <button class="btn btn-sm btn-danger" title="Az eszköz karbantartási munka miatt blokkolva van" disabled><i class="fas fa-ban"></i></button>
+                                                                                            {% endif %}
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            {% endfor %}
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" class="btn btn-sm {{ asset.countAvailable > 0 ? 'btn-success' : 'btn-warning' }}" data-toggle="modal" data-target="#assetDetailsModal{{ asset.assetTypes_id }}"><i class="fa fa-calendar"></i></button>
+                                                {% endif %}
                                             {% endif %}
-                                        {% endif %}
-                                            <a href="{{ CONFIG.ROOTURL }}/asset.php?id={{ asset.assetTypes_id }}{{ asset.count == 1 ? '&asset=' ~ asset.tags[0]['assets_id'] : '' }}{{ SEARCH["SETTINGS"]["SHOWARCHIVED"] ? '&showArchived' : ''}}&instance={{ searchResults.SEARCH.INSTANCE_ID }}" class="btn btn-sm btn-default" target="_blank">
-                                                <i class="fas fa-info-circle"></i>
-                                            </a>
+                                                <a href="{{ CONFIG.ROOTURL }}/asset.php?id={{ asset.assetTypes_id }}{{ asset.count == 1 ? '&asset=' ~ asset.tags[0]['assets_id'] : '' }}{{ SEARCH["SETTINGS"]["SHOWARCHIVED"] ? '&showArchived' : ''}}&instance={{ searchResults.SEARCH.INSTANCE_ID }}" class="btn btn-sm btn-default" target="_blank">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -524,6 +553,20 @@ function replaceQueryParam(param, newval, search) {
 
     return (query.length > 2 ? query + "&" : "?") + (newval ? param + "=" + newval : '');
 }
+
+document.getElementById('hidesubassets').addEventListener('change', function() {
+    if (this.checked) {
+        document.getElementById('showsubassets').checked = false;
+    }
+});
+
+document.getElementById('showsubassets').addEventListener('change', function() {
+    if (this.checked) {
+        document.getElementById('hidesubassets').checked = false;
+    }
+});
+
+
 $(document).ready(function () {
     $('#assetSearchForm input[name ="dates"]').daterangepicker({
         timePicker: true,
@@ -701,7 +744,19 @@ $(document).ready(function () {
     {% if searchResults.PROJECT.ID != null and "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN"|instancePermissions %}
     $(".addToBasketAssetButton").click(function () {
         var assetId=$(this).data("assetid");
-        ajaxcall("projects/assets/assign.php", {"assets_id":$(this).data("assetid"),"projects_id":"{{ searchResults.SEARCH.PROJECT_ID }}"}, function (data) {
+
+
+        if (asset.hasSubAssets){
+
+
+        }
+
+
+
+        ajaxcall("projects/assets/assign.php", {
+            "assets_id":$(this).data("assetid"),
+            "projects_id":"{{ searchResults.SEARCH.PROJECT_ID }}"
+            }, function (data) {
             $(".addToBasketAssetButton[data-assetid=" + assetId + "]").hide();
             $(".removeFromBasketAssetButton[data-assetid=" + assetId + "]").show();
             Toast.fire({

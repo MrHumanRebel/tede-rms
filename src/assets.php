@@ -24,6 +24,8 @@ $SEARCH = [
         "SHOWARCHIVED" => ($_GET['showarchived'] == 1 ? true : false),
         "HIDEIMAGES" => ($_GET['hideimages'] == 1 ? true : false),
         "HIDENOSTOCK" => ($_GET['hidenostock'] == 1 ? true : false),
+        "HIDESUBASSETS" => ($_GET['hidesubassets'] == 1 ? true : false),
+        "SHOWSUBASSETS" => ($_GET['showsubassets'] == 1 ? true : false),
     ],
     "TERMS" => [
         "CATEGORY" => is_array($_GET['category']) ? $_GET['category'] : [],
@@ -244,6 +246,36 @@ foreach ($assets as $asset) {
         $asset['tags'][] = $tag;
     }
     $asset['countAvailable'] = $asset['count'] - $asset['countBlocked'];
+
+    $DBLIB->join("assetTypes", "assetSubAssets.assetSubAssets_sub_asset_id = assetTypes.assetTypes_id", "LEFT");
+    $DBLIB->where("assetSubAssets.assetSubAssets_id ", $tag['assets_id']);
+    $subAssets = $DBLIB->get("assetSubAssets");
+
+    if (!empty($subAssets)) {
+        $asset['hasSubAssets'] = true;
+        $asset['countSubAssets'] = count($subAssets);
+
+        $subAssetDetails = [];
+        foreach ($subAssets as $subAsset) {
+            // Check if 'quantity' is set and not null, otherwise default to 0
+            $quantity = isset($subAsset['assetSubAssets_sub_asset_quantity']) ? $subAsset['assetSubAssets_sub_asset_quantity'] : 0;
+
+            // Ensure 'id' is a number, and cast it if necessary
+            $subAssetDetails[] = [
+                'id' => (int) $subAsset['assetSubAssets_sub_asset_id'], // Corrected to match field name
+                'quantity' => $quantity
+            ];
+        }
+
+        // Store the encoded subAssets in the asset array
+        $asset['subAssets'] = json_encode($subAssetDetails);
+    } else {
+        $asset['hasSubAssets'] = false;
+        $asset['countSubAssets'] = 0;
+        $asset['subAssets'] = '[]';  // Empty array in JSON format
+    }
+
+
     $RETURN['ASSETS'][] = $asset;
 }
 $RETURN['SPEED'] = microtime(true) - $scriptStartTime;
