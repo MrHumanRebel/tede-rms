@@ -116,6 +116,11 @@
                     <div class="callout callout-info">
                         <p>A definiálható mezők az adott típusú eszközök specifikus tulajdonságai</p>
                     </div>
+                    
+                <div class="mt-2">
+                    <input type="checkbox" id="isSubAsset" name="isSubAsset">
+                    <label for="isSubAsset">Ez az eszköz aleszköz?</label>
+                </div>
 
                 </div>
                     <div class="input-group" id="assetNotes" style="display:none;">
@@ -314,15 +319,30 @@
                 $("#assetTagDiv").show();
                 $("#saveButton").text("Save");
                 counter = 1;
+                
+                // Make the ajax call to get the asset type data
                 ajaxcall("assets/getAssetTypeData.php", {"term": this.value}, function (data) {
+                    // Reset all definable fields input
                     $(".definableFieldsInput").val("");
+                    
+                    // Loop through the asset categories and show the definable fields
                     $(data.response.assetCategories_fields).each(function (count, value) {
-                        count = count+1;
-                        if (value != "") {
+                        count = count + 1; // Adjusting count (1-based index)
+                        if (value !== "") {
                             $(".definableFieldsGroup[data-fieldcount='" + count + "']").show();
                             $(".definableFieldsLabel[data-fieldcount='" + count + "']").text(value);
                         }
-                    })
+                    });
+
+                    // Check if the asset type is a sub-asset
+                    const isSubAsset = data.response.assetTypes_isSubAsset;
+
+                    // Hide or show the sub-assets group based on isSubAsset value
+                    if (isSubAsset === 1) {
+                        $('#subAssetsGroup').hide();
+                    } else {
+                        $('#subAssetsGroup').show();
+                    }
                 });
             });
             $('#unknownManufacturerShortlink').on('click', function() {
@@ -355,6 +375,10 @@
             $('#saveButton').on('click', function() {
                 var formData = $("#addNewForm").serializeArray();
 
+                formData = formData.filter(function(item) {
+                    return item.name !== 'isSubAsset';
+                });
+
                 // Collect sub-assets and their quantities with indexed keys
                 var subAssets = [];
                 $('.subAssetRow').each(function() {
@@ -373,7 +397,8 @@
                     {"name": "subAssets", "value": JSON.stringify(subAssets)},
                     {"name": "manufacturers_id", "value": $('#manufacturer').val()},
                     {"name": "assetTypes_id", "value": $('#assetType').val()},
-                    {"name": "assets_tag", "value": $('#assetTag').val()}
+                    {"name": "assets_tag", "value": $('#assetTag').val()},
+                    {"name": "isSubAsset", "value": $('#isSubAsset').is(':checked') ? '1' : '0'}
                 );
 
                 if ($('#assetType').val() != null) {

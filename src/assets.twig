@@ -743,25 +743,47 @@ $(document).ready(function () {
     });
     {% if searchResults.PROJECT.ID != null and "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN"|instancePermissions %}
     $(".addToBasketAssetButton").click(function () {
-        var assetId=$(this).data("assetid");
+        var assetId = $(this).data("assetid");
 
+        // Fetch sub-assets first
+        ajaxcall("assets/getSubAssetData.php", { "assets_id": assetId }, function (data) {
+            console.log("Received response:", data);
+            
+            if (data.response.hasSubAssets) {
+                console.log("Asset has sub-assets. Processing...");
 
-        if (asset.hasSubAssets){
+                data.response.subAssets.forEach(subAsset => {
+                    console.log("Processing subAsset:", subAsset);
 
+                    // Assign each sub-asset
+                    ajaxcall("projects/assets/assign.php", {
+                        "assetTypes_id": subAsset.id,
+                        "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}"
+                    }, function (response) {
+                        console.log("✅ Sub-asset assigned successfully!", {
+                            subAssetId: subAsset.id,
+                            response: response
+                        });
+                    });
+                });
+            } else {
+                console.log("ℹ No sub-assets found for this asset.");
+            }
 
-        }
+            // Assign the main asset regardless
+            ajaxcall("projects/assets/assign.php", {
+                "assets_id": assetId,
+                "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}"
+            }, function (response) {
+                $(".addToBasketAssetButton[data-assetid='" + assetId + "']").hide();
+                $(".removeFromBasketAssetButton[data-assetid='" + assetId + "']").show();
 
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Hozzáadva ehhez: {{ searchResults.PROJECT.NAME }}'
+                });
 
-
-        ajaxcall("projects/assets/assign.php", {
-            "assets_id":$(this).data("assetid"),
-            "projects_id":"{{ searchResults.SEARCH.PROJECT_ID }}"
-            }, function (data) {
-            $(".addToBasketAssetButton[data-assetid=" + assetId + "]").hide();
-            $(".removeFromBasketAssetButton[data-assetid=" + assetId + "]").show();
-            Toast.fire({
-                type: 'success',
-                title: 'Hozzáadva ehhez: {{ searchResults.PROJECT.NAME }}'
+                console.log("Asset assigned:", response);
             });
         });
     });
