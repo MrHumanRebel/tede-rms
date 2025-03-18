@@ -22,7 +22,8 @@ if (!empty($subAssets)) {
 }
 
 if (empty($response["subAssets"])) {
-    finish(false, ["code" => "LIST-ASSETTYPES-FAIL", "message" => "Could not find matching sub-assets"]);
+    $response["message"] = "No sub-assets found for the given asset.";  // Optional message
+    finish(true, null, $response); // Continue with the script, not an error
 } else {
-    finish(true, null, $response);
+    finish(true, null, $response); // Continue as normal
 }

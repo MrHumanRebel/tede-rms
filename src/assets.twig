@@ -748,43 +748,92 @@ $(document).ready(function () {
         // Fetch sub-assets first
         ajaxcall("assets/getSubAssetData.php", { "assets_id": assetId }, function (data) {
             console.log("Received response:", data);
-            
+
             if (data.response.hasSubAssets) {
                 console.log("Asset has sub-assets. Processing...");
 
-                data.response.subAssets.forEach(subAsset => {
-                    console.log("Processing subAsset:", subAsset);
+                let hasInsufficientStock = false;
 
-                    // Assign each sub-asset
-                    ajaxcall("projects/assets/assign.php", {
-                        "assetTypes_id": subAsset.id,
-                        "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}"
-                    }, function (response) {
-                        console.log("✅ Sub-asset assigned successfully!", {
-                            subAssetId: subAsset.id,
-                            response: response
+                // Ellenőrizzük az összes al-eszközt
+                let requests = data.response.subAssets.map(subAsset => {
+                    return new Promise((resolve, reject) => {
+                        ajaxcall("assets/getCountAvailable.php", { "assets_id": subAsset.id }, function (countData) {
+                            console.log("Received count data:", countData);
+
+                            if (countData.result && countData.response.length > 0) {
+                                let countAvailable = countData.response[0].countAvailable;
+
+                                if ((countAvailable - subAsset.quantity) >= 0) {
+                                    ajaxcall("projects/assets/assign.php", {
+                                        "assetTypes_id": subAsset.id,
+                                        "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}"
+                                    }, function (response) {
+                                        console.log("✅ Sub-asset assigned successfully!", {
+                                            subAssetId: subAsset.id,
+                                            response: response
+                                        });
+                                        resolve(); // Ha sikerült, mehet tovább
+                                    });
+                                } else {
+                                    console.log("❌ Nincs elegendő eszköz raktáron!");
+                                    hasInsufficientStock = true;
+                                    reject(); // Ha nincs elég készleten, megszakítjuk
+                                }
+                            } else {
+                                console.log("⚠ Hiba: Nem érkezett megfelelő válasz a készlet lekérdezésére.");
+                                reject();
+                            }
                         });
                     });
                 });
-            } else {
-                console.log("ℹ No sub-assets found for this asset.");
-            }
 
-            // Assign the main asset regardless
-            ajaxcall("projects/assets/assign.php", {
-                "assets_id": assetId,
-                "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}"
-            }, function (response) {
-                $(".addToBasketAssetButton[data-assetid='" + assetId + "']").hide();
-                $(".removeFromBasketAssetButton[data-assetid='" + assetId + "']").show();
+                // Várjuk meg az összes al-eszköz ellenőrzését
+                Promise.allSettled(requests).then(results => {
+                    if (hasInsufficientStock) {
+                        console.log("⛔ Az al-eszközök között nincs elegendő készlet. A fő eszközt NEM adjuk hozzá.");
+                        // Frontend értesítés
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hiba',
+                            text: 'Nincs elegendő al-eszköz készleten! A fő eszközt nem adtuk hozzá.',
+                            confirmButtonText: 'OK'
+                        });
+                        return; // Ha bármelyik al-eszköz nem elérhető, nem folytatjuk a fő eszköz hozzárendelését
+                    }
 
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Hozzáadva ehhez: {{ searchResults.PROJECT.NAME }}'
+                    // Ha minden rendben van, hozzárendeljük a fő eszközt
+                    ajaxcall("projects/assets/assign.php", {
+                        "assets_id": assetId,
+                        "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}"
+                    }, function (response) {
+                        $(".addToBasketAssetButton[data-assetid='" + assetId + "']").hide();
+                        $(".removeFromBasketAssetButton[data-assetid='" + assetId + "']").show();
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Hozzáadva ehhez: {{ searchResults.PROJECT.NAME }}'
+                        });
+
+                        console.log("Asset assigned:", response);
+                    });
                 });
+            } else {
+                // Ha nincs al-eszköz, akkor a fő eszközt automatikusan hozzárendeljük
+                ajaxcall("projects/assets/assign.php", {
+                    "assets_id": assetId,
+                    "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}"
+                }, function (response) {
+                    $(".addToBasketAssetButton[data-assetid='" + assetId + "']").hide();
+                    $(".removeFromBasketAssetButton[data-assetid='" + assetId + "']").show();
 
-                console.log("Asset assigned:", response);
-            });
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Hozzáadva ehhez: {{ searchResults.PROJECT.NAME }}'
+                    });
+
+                    console.log("Asset assigned:", response);
+                });
+            }
         });
     });
     $(".addToBasketAssetTypeButton").click(function () {
