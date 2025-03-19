@@ -324,41 +324,4 @@ if (count($SEARCH['TERMS']['CATEGORY']) > 0) {
 $RETURN['SEARCH'] = $SEARCH;
 $PAGEDATA['searchResults'] = $RETURN;
 
-
-$assets = $DBLIB->get("assets");
-if (!$assets) {
-    die($TWIG->render('404.twig', $PAGEDATA));
-}
-
-$PAGEDATA['assets'] = [];
-
-// Create an associative array to store asset IDs by their assetTypes_id
-$groupedAssets = [];
-
-foreach ($assets as $asset) {
-    // Group assets by assetTypes_id
-    $assetTypes_id = $asset['assetTypes_id'];
-
-    // If the assetTypes_id doesn't exist in the array, initialize it as an empty array
-    if (!isset($groupedAssets[$assetTypes_id])) {
-        $groupedAssets[$assetTypes_id] = [];
-    }
-
-    // Add the asset's ID to the corresponding assetTypes_id
-    $groupedAssets[$assetTypes_id][] = $asset['assets_id'];
-}
-
-// Now format the $groupedAssets as requested
-$formattedAssets = [];
-foreach ($groupedAssets as $assetTypes_id => $assetsIds) {
-    $formattedAssets[] = [
-        'assetTypes_id' => $assetTypes_id,
-        'assets' => $assetsIds
-    ];
-}
-
-// Add the formatted assets to the $PAGEDATA array
-$PAGEDATA['groupedAssets'] = $formattedAssets;
-
-
 echo $TWIG->render('assets.twig', $PAGEDATA);

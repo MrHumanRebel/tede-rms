@@ -5,7 +5,8 @@ $results = [
     'count' => 0,
     'countBlocked' => 0,
     'countAvailable' => 0,
-    'availableAssets' => [] // Új tömb az elérhető eszközök ID-jainak tárolására
+    'availableAssets' => [],
+    'blockedAssets' => []
 ];
 
 $DBLIB->where("assets.assetTypes_id", $_POST['assets_id']);
@@ -21,6 +22,7 @@ foreach ($assets as $asset) {
     $count = count($assetTags);
     $countBlocked = 0;
     $availableAssets = [];
+    $blockedAssets = []; // Ensure this is initialized as an empty array
 
     foreach ($assetTags as $tag) {
         if ($dateStart and $dateEnd) {
@@ -44,6 +46,7 @@ foreach ($assets as $asset) {
         $tag['flagsblocks'] = assetFlagsAndBlocks($tag['assets_id']);
         if ($tag['assignment'] || $tag['flagsblocks']['COUNT']['BLOCK'] > 0) {
             $countBlocked++;
+            $blockedAssets[] = $tag['assets_id'];
         } else {
             // Ha az eszköz nincs blokkolva vagy lefoglalva, akkor elérhető
             $availableAssets[] = $tag['assets_id'];
@@ -54,8 +57,8 @@ foreach ($assets as $asset) {
     $results['countBlocked'] += $countBlocked;
     $results['countAvailable'] += ($count - $countBlocked);
 
-    // Az elérhető eszközöket hozzáadjuk a fő tömbhöz
     $results['availableAssets'] = array_merge($results['availableAssets'], $availableAssets);
+    $results['blockedAssets'] = array_merge($results['blockedAssets'], (array)$blockedAssets); // Ensure blockedAssets is an array
 }
 
 // Return the response with the necessary data

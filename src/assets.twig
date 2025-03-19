@@ -753,6 +753,7 @@ $(document).ready(function () {
                 console.log("Asset has sub-assets. Processing...");
 
                 let hasInsufficientStock = false;
+                let shortageDetails = [];
 
                 // Ellenőrizzük az összes al-eszközt
                 let requests = data.response.subAssets.map(subAsset => {
@@ -764,6 +765,7 @@ $(document).ready(function () {
                                 let availableAssets = countData.response.flatMap(res => res.availableAssets || []); // Az összes availableAssets összegyűjtése
 
                                 let totalAvailable = availableAssets.length;
+                                let shortage = subAsset.quantity - totalAvailable;
                                 
                                 if (totalAvailable >= subAsset.quantity) {
                                     let assignPromises = [];
@@ -791,6 +793,7 @@ $(document).ready(function () {
                                 } else {
                                     console.log("❌ Nincs elegendő eszköz raktáron! Szükséges: " + subAsset.quantity + ", Elérhető: " + totalAvailable);
                                     hasInsufficientStock = true;
+                                    shortageDetails.push("Eszköz típus ID: " + subAsset.id + " | Szükséges: " + subAsset.quantity + " | Raktáron: " + totalAvailable + " | Hiányzik: " + (shortage > 0 ? shortage : 0));
                                     reject(); // Ha nincs elég készleten, megszakítjuk
                                 }
                             } else {
@@ -809,7 +812,7 @@ $(document).ready(function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Hiba',
-                            text: 'Nincs elegendő al-eszköz készleten! A fő eszközt nem adtuk hozzá.',
+                            html: 'Nincs elegendő al-eszköz készleten! A fő eszközt nem adtuk hozzá.<br><br>' + shortageDetails.join('<br>'),
                             confirmButtonText: 'OK'
                         });
                         return; // Ha bármelyik al-eszköz nem elérhető, nem folytatjuk a fő eszköz hozzárendelését
