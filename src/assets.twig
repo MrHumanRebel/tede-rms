@@ -761,22 +761,35 @@ $(document).ready(function () {
                             console.log("Received count data:", countData);
 
                             if (countData.result && countData.response.length > 0) {
-                                let countAvailable = countData.response[0].countAvailable;
+                                let availableAssets = countData.response.flatMap(res => res.availableAssets || []); // Az összes availableAssets összegyűjtése
 
-                                if ((countAvailable - subAsset.quantity) >= 0) {
-                                    ajaxcall("projects/assets/assign.php", {
-                                        "assetTypes_id": subAsset.id,
-                                        "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}",
-                                        "assignedAsSubAsset": true
-                                    }, function (response) {
-                                        console.log("✅ Sub-asset assigned successfully!", {
-                                            subAssetId: subAsset.id,
-                                            response: response
-                                        });
-                                        resolve(); // Ha sikerült, mehet tovább
-                                    });
+                                let totalAvailable = availableAssets.length;
+                                
+                                if (totalAvailable >= subAsset.quantity) {
+                                    let assignPromises = [];
+
+                                    for (let i = 0; i < subAsset.quantity; i++) { 
+                                        let availableAsset = availableAssets[i]; // A megfelelő számú eszközt használjuk fel
+
+                                        assignPromises.push(new Promise((res, rej) => {
+                                            ajaxcall("projects/assets/assign.php", {
+                                                "assets_id": availableAsset,
+                                                "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}",
+                                                "assignedAsSubAsset": true
+                                            }, function (response) {
+                                                console.log("✅ Sub-asset assigned successfully!", {
+                                                    subAssetId: subAsset.id,
+                                                    response: response
+                                                });
+                                                res(); // Ha sikerült, mehet tovább
+                                            });
+                                        }));
+                                    }
+
+                                    Promise.all(assignPromises).then(resolve).catch(reject);
+
                                 } else {
-                                    console.log("❌ Nincs elegendő eszköz raktáron!");
+                                    console.log("❌ Nincs elegendő eszköz raktáron! Szükséges: " + subAsset.quantity + ", Elérhető: " + totalAvailable);
                                     hasInsufficientStock = true;
                                     reject(); // Ha nincs elég készleten, megszakítjuk
                                 }

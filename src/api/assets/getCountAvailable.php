@@ -1,7 +1,12 @@
 <?php
 require_once __DIR__ . '/../apiHeadSecure.php';
 
-$results = [];
+$results = [
+    'count' => 0,
+    'countBlocked' => 0,
+    'countAvailable' => 0,
+    'availableAssets' => [] // Új tömb az elérhető eszközök ID-jainak tárolására
+];
 
 $DBLIB->where("assets.assetTypes_id", $_POST['assets_id']);
 $assets = $DBLIB->get("assets");
@@ -15,6 +20,7 @@ foreach ($assets as $asset) {
 
     $count = count($assetTags);
     $countBlocked = 0;
+    $availableAssets = [];
 
     foreach ($assetTags as $tag) {
         if ($dateStart and $dateEnd) {
@@ -38,16 +44,19 @@ foreach ($assets as $asset) {
         $tag['flagsblocks'] = assetFlagsAndBlocks($tag['assets_id']);
         if ($tag['assignment'] || $tag['flagsblocks']['COUNT']['BLOCK'] > 0) {
             $countBlocked++;
+        } else {
+            // Ha az eszköz nincs blokkolva vagy lefoglalva, akkor elérhető
+            $availableAssets[] = $tag['assets_id'];
         }
     }
 
-    $countAvailable = $count - $countBlocked;
-    $results[] = [
-        'count' => $count,
-        'countBlocked' => $countBlocked,
-        'countAvailable' => $countAvailable
-    ];
+    $results['count'] += $count;
+    $results['countBlocked'] += $countBlocked;
+    $results['countAvailable'] += ($count - $countBlocked);
+
+    // Az elérhető eszközöket hozzáadjuk a fő tömbhöz
+    $results['availableAssets'] = array_merge($results['availableAssets'], $availableAssets);
 }
 
 // Return the response with the necessary data
-finish(true, null, $results);
+finish(true, null, [$results]);
