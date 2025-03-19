@@ -14,9 +14,6 @@ if (!$project) finish(false,["message"=>"Project not found"]);
 
 if ($project["projects_dates_deliver_start"] == null or $project["projects_dates_deliver_end"] == null or (strtotime($project["projects_dates_deliver_start"]) >= strtotime($project["projects_dates_deliver_end"]))) finish(false,["message"=>"Please set the dates for the project before attempting to assign assets"]);
 
-
-
-
 $projectFinanceHelper = new projectFinance();
 $projectFinanceCacher = new projectFinanceCacher($project['projects_id']);
 $priceMaths = $projectFinanceHelper->durationMaths($project['projects_id']);
@@ -78,6 +75,13 @@ foreach ($assetsToProcess as $asset) {
     $DBLIB->where("((projects_dates_deliver_start >= '" . $project["projects_dates_deliver_start"] . "' AND projects_dates_deliver_start <= '" . $project["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $project["projects_dates_deliver_start"] . "' AND projects_dates_deliver_end <= '" . $project["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $project["projects_dates_deliver_end"] . "' AND projects_dates_deliver_start <= '" . $project["projects_dates_deliver_start"] . "'))");
     $assignment = $DBLIB->get("assetsAssignments", null, ["assetsAssignments.projects_id"]);
     $flagsBlocks = assetFlagsAndBlocks($asset['assets_id']);
+
+    if ($_POST['assignedAsSubAsset'] == true) {
+        $asset['is_sub_asset'] = true;
+    } else {
+        $asset['is_sub_asset'] = false;
+    }
+
     if ($assignment or $flagsBlocks['COUNT']['BLOCK']>0) { //Can't assign anything with a block on it
         //It's got a clash so we can't assign it
         if (isset($_POST['assets_id']) and $_POST['assets_id'] == $asset['assets_id']) finish(false,["message"=>"Asset wanted not available"]); //Fail because the one we were supposed to assign hasn't worked
@@ -89,7 +93,8 @@ foreach ($assetsToProcess as $asset) {
             "assetsAssignments_deleted" => 0,
             "assetsAssignments_timestamp" => date('Y-m-d H:i:s'),
             "assetsAssignments_linkedTo" => ($asset['linkedto'] !== false ? $assetsProcessing[$asset['linkedto']]['insertedid'] : null),
-            "assetsAssignments_discount" => ($asset['linkedto'] !== false ? $AUTH->data['instance']['instances_config_linkedDefaultDiscount'] : $project['projects_defaultDiscount'])
+            "assetsAssignments_discount" => ($asset['linkedto'] !== false ? $AUTH->data['instance']['instances_config_linkedDefaultDiscount'] : $project['projects_defaultDiscount']),
+            "assetsAssignments_assignedAsSubAsset" => ($asset['is_sub_asset']) ? 1 : 0
         ];
         $insert = $DBLIB->insert("assetsAssignments", $insertData);
         if ($insert) {

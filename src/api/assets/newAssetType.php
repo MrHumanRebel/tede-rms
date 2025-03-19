@@ -12,13 +12,6 @@ if (strlen($array['manufacturers_id']) <1) finish(false, ["code" => "PARAM-ERROR
 if (strlen($array['assetTypes_name']) <1) finish(false, ["code" => "PARAM-ERROR", "message"=> "No asset type name provided"]);
 
 
-if ($array['isSubAsset'] === 'on' || $array['isSubAsset'] === true || $array['isSubAsset'] === 1 || $array['isSubAsset'] === '1') {
-    $array['assetTypes_isSubAsset'] = 1;
-} else {
-    $array['assetTypes_isSubAsset'] = 0;
-}
-
-
 $array['instances_id'] = $AUTH->data['instance']["instances_id"];
 $array['assetTypes_inserted'] = date('Y-m-d H:i:s');
 
@@ -43,7 +36,7 @@ $array['assetTypes_value'] = $moneyParser->parse(($array['assetTypes_value'] ?? 
 $array['assetTypes_dayRate'] = $moneyParser->parse(($array['assetTypes_dayRate'] ?? '0.00'), $AUTH->data['instance']['instances_config_currency'])->getAmount();
 $array['assetTypes_weekRate'] = $moneyParser->parse(($array['assetTypes_weekRate'] ?? '0.00'), $AUTH->data['instance']['instances_config_currency'])->getAmount();
 
-$result = $DBLIB->insert("assetTypes", array_intersect_key($array, array_flip(['assetTypes_name', 'assetTypes_productLink', 'assetCategories_id', 'manufacturers_id', 'assetTypes_description', 'assetTypes_definableFields', 'assetTypes_mass', 'assetTypes_inserted', "instances_id", "assetTypes_dayRate", "assetTypes_weekRate", "assetTypes_value", "assetTypes_isSubAsset"])));
+$result = $DBLIB->insert("assetTypes", array_intersect_key($array, array_flip(['assetTypes_name', 'assetTypes_productLink', 'assetCategories_id', 'manufacturers_id', 'assetTypes_description', 'assetTypes_definableFields', 'assetTypes_mass', 'assetTypes_inserted', "instances_id", "assetTypes_dayRate", "assetTypes_weekRate", "assetTypes_value"])));
 if (!$result) finish(false, ["code" => "INSERT-FAIL", "message"=> "Could not insert asset type"]);
 else finish(true, null, ["assetTypes_id" => $result]);
 

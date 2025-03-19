@@ -117,11 +117,6 @@
                         <p>A definiálható mezők az adott típusú eszközök specifikus tulajdonságai</p>
                     </div>
                     
-                <div class="mt-2">
-                    <input type="checkbox" id="isSubAsset" name="isSubAsset">
-                    <label for="isSubAsset">Ez az eszköz aleszköz?</label>
-                </div>
-
                 </div>
                     <div class="input-group" id="assetNotes" style="display:none;">
                     <div class="input-group-prepend"><span class="input-group-text">Eszköz megjegyzések</span></div>
@@ -175,7 +170,15 @@
                     <label>Eszközcímke</label>
                     <input type="text" class="form-control" id="assetTag" placeholder="Alapértelmezés szerint automatikusan generált" />
                 </div>
+
                 <div class="form-group" id="subAssetsGroup" style="display: none;">
+                        <div class="alert alert-danger mt-2 text-center" style="font-weight: bold; color: white; background-color: red;">
+                            <strong>Figyelem!</strong> 
+                            <br>Két eszköztípus nem lehet azonos, ha tartalmaz aleszközöket, mindenképpen egyedi eszköznév szükséges! <br>
+                            Az aleszközöket tartalmazó eszközből kizárólag 1 db vehető készletre! <br>
+                            Egy eszköz nem lehet önmagának az aleszköze! <br>
+                            Utólagos aleszköz hozzáadására NINCSEN lehetőség! Kizárólag a mennyiséget lehet módosítani!
+                        </div>
                         <label>Al eszközök (Opcionális)</label>
                         <div id="subAssetsContainer">
                             <!-- Ide kerülnek a kiválasztott eszközök -->
@@ -334,15 +337,6 @@
                         }
                     });
 
-                    // Check if the asset type is a sub-asset
-                    const isSubAsset = data.response.assetTypes_isSubAsset;
-
-                    // Hide or show the sub-assets group based on isSubAsset value
-                    if (isSubAsset === 1) {
-                        $('#subAssetsGroup').hide();
-                    } else {
-                        $('#subAssetsGroup').show();
-                    }
                 });
             });
             $('#unknownManufacturerShortlink').on('click', function() {
@@ -375,10 +369,6 @@
             $('#saveButton').on('click', function() {
                 var formData = $("#addNewForm").serializeArray();
 
-                formData = formData.filter(function(item) {
-                    return item.name !== 'isSubAsset';
-                });
-
                 // Collect sub-assets and their quantities with indexed keys
                 var subAssets = [];
                 $('.subAssetRow').each(function() {
@@ -397,8 +387,7 @@
                     {"name": "subAssets", "value": JSON.stringify(subAssets)},
                     {"name": "manufacturers_id", "value": $('#manufacturer').val()},
                     {"name": "assetTypes_id", "value": $('#assetType').val()},
-                    {"name": "assets_tag", "value": $('#assetTag').val()},
-                    {"name": "isSubAsset", "value": $('#isSubAsset').is(':checked') ? '1' : '0'}
+                    {"name": "assets_tag", "value": $('#assetTag').val()}
                 );
 
                 if ($('#assetType').val() != null) {

@@ -29,11 +29,11 @@ final class AddSubAssets extends AbstractMigration
 
             ->create();
 
-        $this->table('assetTypes')
-            ->addColumn('assetTypes_isSubAsset', 'boolean', [
+        $this->table('assetsAssignments')
+            ->addColumn('assetsAssignments_assignedAsSubAsset', 'boolean', [
                 'null' => false,
                 'default' => false,
-                'after' => "assetTypes_value"
+            'after' => "assetsAssignments_deleted"
             ])
             ->save();
     }

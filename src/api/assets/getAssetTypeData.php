@@ -11,7 +11,7 @@ $DBLIB->join("assetCategoriesGroups", "assetCategoriesGroups.assetCategoriesGrou
 
 
 $DBLIB->where("assetTypes_id", $_POST['term']);
-$assets = $DBLIB->getone("assetTypes", ['assetTypes_definableFields', 'assetTypes_id', 'assetTypes_isSubAsset']);
+$assets = $DBLIB->getone("assetTypes", ['assetTypes_definableFields', 'assetTypes_id']);
 
 if ($assets['assetTypes_definableFields']) $assets['assetCategories_fields'] = explode(",", $assets['assetTypes_definableFields']);
 else $assets['assetCategories_fields'] = [];
