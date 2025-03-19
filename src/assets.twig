@@ -374,8 +374,8 @@
                                                                                             {% set not_valid = 1 %}
                                                                                         {% endif %}
                                                                                     {% endfor %}
-                                                                                    <button class="btn btn-success addToBasketAssetTypeButton" {% if asset.countAvailable < 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
-                                                                                    <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count or not_valid == 1 %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
+                                                                                    <button class="btn btn-success addToBasketAssetTypeButton" {% if asset.countAvailable < 1 or asset.countSubAssets %} disabled {% endif %} title="Az összes ilyen típusú eszköz hozzáadása a projekthez" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
+                                                                                    <button class="btn btn-danger removeFromBasketAssetTypeButton" {% if asset.countAvailable == asset.count or not_valid == 1 or asset.countSubAssets %} disabled {% endif %} title="Az összes ilyen típusú eszköz eltávolítása a projektről" data-assetTypeId="{{ asset.assetTypes_id }}"><i class="fas fa-dolly"></i></button>
                                                                                 </th>
                                                                             </tr>
                                                                             {% for thisasset in asset.tags %}
@@ -865,19 +865,59 @@ $(document).ready(function () {
             },
             callback: function (result) {
                 if (result) {
-                    ajaxcall("projects/assets/unassign.php", {"assets_id":assetId,"projects_id":"{{ searchResults.SEARCH.PROJECT_ID }}"}, function (data) {
-                        $(".addToBasketAssetButton[data-assetid=" + assetId + "]").show();
-                        $(".removeFromBasketAssetButton[data-assetid=" + assetId + "]").hide();
-                        Toast.fire({
-                            type: 'success',
-                            title: 'Eltávolítva innen: {{ searchResults.PROJECT.NAME }}'
-                        });
+                    // Először ellenőrizzük, hogy vannak-e al-eszközök
+                    ajaxcall("assets/getSubAssetData.php", { "assets_id": assetId }, function (data) {
+                        console.log("Received response:", data);
+                        
+                        if (data.response.hasSubAssets) {
+                            console.log("Asset has sub-assets. Removing...");
+
+                            let requests = data.response.subAssets.map(subAsset => {
+                                return new Promise((resolve, reject) => {
+                                    ajaxcall("projects/assets/unassign.php", {
+                                        "assetTypes_id": subAsset.id,
+                                        "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}"
+                                    }, function (response) {
+                                        console.log("✅ Sub-asset unassigned successfully!", {
+                                            subAssetId: subAsset.id,
+                                            response: response
+                                        });
+                                        resolve();
+                                    });
+                                });
+                            });
+
+                            // Várjuk meg az összes al-eszköz eltávolítását
+                            Promise.allSettled(requests).then(() => {
+                                // Ha minden al-eszköz eltávolítva, eltávolítjuk a fő eszközt is
+                                ajaxcall("projects/assets/unassign.php", { "assets_id": assetId, "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}" }, function (data) {
+                                    $(".addToBasketAssetButton[data-assetid='" + assetId + "']").show();
+                                    $(".removeFromBasketAssetButton[data-assetid='" + assetId + "']").hide();
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Eltávolítva innen: {{ searchResults.PROJECT.NAME }}'
+                                    });
+                                    console.log("Asset removed:", data);
+                                });
+                            });
+                        } else {
+                            // Ha nincs al-eszköz, akkor csak a fő eszközt távolítjuk el
+                            ajaxcall("projects/assets/unassign.php", { "assets_id": assetId, "projects_id": "{{ searchResults.SEARCH.PROJECT_ID }}" }, function (data) {
+                                $(".addToBasketAssetButton[data-assetid='" + assetId + "']").show();
+                                $(".removeFromBasketAssetButton[data-assetid='" + assetId + "']").hide();
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Eltávolítva innen: {{ searchResults.PROJECT.NAME }}'
+                                });
+                                console.log("Asset removed:", data);
+                            });
+                        }
                     });
                 }
             }
         });
     });
-    // Implement bulk remove, just as addToBasketAssetTypeButton for bulk adding
+    // Implement bulk remove
     $(".removeFromBasketAssetTypeButton").click(function () { // Bulk remove
         const thisButton = $(this);
         var assetTypeId = thisButton.data("assettypeid");

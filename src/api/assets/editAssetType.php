@@ -12,6 +12,23 @@ foreach ($_POST['formData'] as $item) {
     if ($item['value'] == '') $item['value'] = null;
     $array[$item['name']] = $item['value'];
 }
+
+
+// Process sub-asset quantities
+foreach ($array as $key => $value) {
+    if (strpos($key, 'subAssetQuantity_') === 0) {
+        $subAssetId = substr($key, strlen('subAssetQuantity_')); // Extract the sub-asset ID
+        $quantity = $value; // Get the new quantity
+
+        // Update the sub-asset in the database
+        $DBLIB->where("assetSubAssets_sub_asset_id", $subAssetId);
+        $result = $DBLIB->update("assetSubAssets", ["assetSubAssets_sub_asset_quantity" => $quantity]);
+
+        if (!$result) finish(false, ["code" => "UPDATE-FAIL", "message" => "Could not update sub-asset quantity"]);
+    }
+}
+
+
 if (strlen($array['assetTypes_id']) <1) finish(false, ["code" => "PARAM-ERROR", "message"=> "No data for action"]);
 $currencies = new ISOCurrencies();
 $moneyParser = new DecimalMoneyParser($currencies);
