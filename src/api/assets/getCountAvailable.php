@@ -1,13 +1,58 @@
 <?php
 require_once __DIR__ . '/../apiHeadSecure.php';
 
+
+$dates = explode(" - ", $_GET['dates']);
+if (count($dates) == 2) {
+    $dateStart = $dates[0];
+    $dateEnd = $dates[1];
+} else {
+    $dateStart = false;
+    $dateEnd = false;
+}
+
 $results = [
-    'count' => 0,
     'countBlocked' => 0,
     'countAvailable' => 0,
     'availableAssets' => [],
     'blockedAssets' => []
 ];
+
+$RETURN = [
+    "PROJECT" => [
+        "ID" => false,
+        "NAME" => false
+    ]
+];
+
+//Evaluate dates or project
+if ($_POST['project_id'] and $AUTH->instancePermissionCheck("PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AND_UNASSIGN")) {
+    $DBLIB->where("projects_id", $_POST['project_id']);
+    $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
+    $DBLIB->where("projects.projects_deleted", 0);
+    $DBLIB->where("projects.projects_dates_deliver_start", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_deliver_end", NULL, "IS NOT");
+    $thisProject = $DBLIB->getone("projects", ["projects_name", "projects_dates_deliver_start", "projects_dates_deliver_end"]);
+    if (!$thisProject) {
+        $dateStart = false;
+        $dateEnd = false;
+    } else {
+        $dateStart = strtotime($thisProject['projects_dates_deliver_start']);
+        $dateEnd = strtotime($thisProject['projects_dates_deliver_end']);
+        $RETURN['PROJECT']['ID'] = $_POST['project_id'];
+        $RETURN['PROJECT']['NAME'] = $thisProject['projects_name'];
+    }
+} elseif ($dateStart and $dateEnd) {
+    $dateStart = strtotime($dateStart);
+    $dateEnd = strtotime($dateEnd);
+    if ($dateEnd <= $dateStart) {
+        $dateStart = false;
+        $dateEnd = false;
+    }
+} else {
+    $dateStart = false;
+    $dateEnd = false;
+}
 
 $DBLIB->where("assets.assetTypes_id", $_POST['assets_id']);
 $assets = $DBLIB->get("assets");
