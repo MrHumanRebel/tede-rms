@@ -1,23 +1,37 @@
-🎭 TeDeRMS – Bérléskezelő Rendszer
+# 🎭 TeDeRMS – Bérléskezelő Rendszer
 
-A TeDeRMS egy fejlett bérléskezelő rendszer színházi, audiovizuális (AV) és broadcast célokra. A rendszer PHP nyelven készült a Twig sablonmotor segítségével, és egy előre elkészített Docker-konténerben kerül telepítésre. 🚀
+A **TeDeRMS** egy fejlett bérléskezelő rendszer színházi, audiovizuális (AV) és broadcast célokra. A rendszer **PHP** nyelven készült a **Twig** sablonmotor segítségével, és egy előre elkészített **Docker-konténerben** kerül telepítésre. 🚀
 
-A rendszer elérhető hosztolt megoldásként vagy saját üzemeltetésre Docker-konténerként. 🏗️
+A rendszer elérhető **hosztolt megoldásként** vagy **saját üzemeltetésre** Docker-konténerként. 🏗️
 
-✨ Főbb jellemzők
+## ✨ Főbb jellemzők
 
-✅ Kifejezetten a TéDé Rendezvények számára személyre szabott verzió✅ Modern és felhasználóbarát felület 🎨✅ Integrált eszközbérlés-kezelés 🎤🎬✅ Teljes körű adminisztrációs lehetőségek 🔧✅ Könnyű telepítés és skálázhatóság Docker segítségével 🐳
+- ✅ Kifejezetten a **TéDé Rendezvények** számára személyre szabott verzió
+- ✅ Modern és felhasználóbarát felület 🎨
+- ✅ Integrált eszközbérlés-kezelés 🎤🎬
+- ✅ Teljes körű adminisztrációs lehetőségek 🔧
+- ✅ Könnyű telepítés és skálázhatóság **Docker** segítségével 🐳
 
-🛠️ Telepítés
+## 🛠️ Telepítés
 
 A rendszer futtatásához szükséges:
 
-🐳 Docker és Docker Compose telepítése
+### 1️⃣ **Docker és Docker Compose telepítése**
+Győződj meg róla, hogy **Docker** és **Docker Compose** telepítve van a rendszeren.
 
-📂 A repó klónozása és a megfelelő konfiguráció beállítása
+### 2️⃣ **A repó klónozása és a megfelelő konfiguráció beállítása**
+```sh
+git clone https://github.com/TEDERMS/berleskezelo.git
+cd berleskezelo
+cp .env.example .env
+nano .env  # Itt állítsd be a szükséges konfigurációkat
+```
 
-▶️ A konténer indítása a következő parancsokkal:
+### 3️⃣ **A konténer indítása**
+```sh
+docker-compose up -d
+```
 
-📞 Támogatás
+## 📞 Támogatás
 
-Ha kérdésed van vagy támogatásra van szükséged, lépj kapcsolatba a TéDé Rendezvények csapatával. 🤝
+Ha kérdésed van vagy támogatásra van szükséged, lépj kapcsolatba a **TéDé Rendezvények** csapatával. 🤝
