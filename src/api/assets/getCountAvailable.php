@@ -12,6 +12,7 @@ if (count($dates) == 2) {
 }
 
 $results = [
+    'count' => 0,
     'countBlocked' => 0,
     'countAvailable' => 0,
     'availableAssets' => [],
