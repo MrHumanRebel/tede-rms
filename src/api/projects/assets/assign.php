@@ -76,12 +76,6 @@ foreach ($assetsToProcess as $asset) {
     $assignment = $DBLIB->get("assetsAssignments", null, ["assetsAssignments.projects_id"]);
     $flagsBlocks = assetFlagsAndBlocks($asset['assets_id']);
 
-    if ($_POST['assignedAsSubAsset'] == true) {
-        $asset['is_sub_asset'] = true;
-    } else {
-        $asset['is_sub_asset'] = false;
-    }
-
     if ($assignment or $flagsBlocks['COUNT']['BLOCK']>0) { //Can't assign anything with a block on it
         //It's got a clash so we can't assign it
         if (isset($_POST['assets_id']) and $_POST['assets_id'] == $asset['assets_id']) finish(false,["message"=>"Asset wanted not available"]); //Fail because the one we were supposed to assign hasn't worked
@@ -94,7 +88,7 @@ foreach ($assetsToProcess as $asset) {
             "assetsAssignments_timestamp" => date('Y-m-d H:i:s'),
             "assetsAssignments_linkedTo" => ($asset['linkedto'] !== false ? $assetsProcessing[$asset['linkedto']]['insertedid'] : null),
             "assetsAssignments_discount" => ($asset['linkedto'] !== false ? $AUTH->data['instance']['instances_config_linkedDefaultDiscount'] : $project['projects_defaultDiscount']),
-            "assetsAssignments_assignedAsSubAsset" => ($asset['is_sub_asset']) ? 1 : 0
+            "assetsAssignments_assignedAsSubAsset" => ($_POST['assignedAsSubAsset'] === 'false') ? 0 : 1
         ];
         $insert = $DBLIB->insert("assetsAssignments", $insertData);
         if ($insert) {

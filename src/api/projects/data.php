@@ -103,6 +103,9 @@ function projectFinancials($project) {
 
     $return['priceMaths'] = $projectFinanceHelper->durationMaths($project['projects_id']);
     foreach ($assets as $asset) {
+
+        $asset['assignedAsSubAsset'] = $asset['assetsAssignments_assignedAsSubAsset'];
+
         $return['mass'] += ($asset['assets_mass'] == null ? $asset['assetTypes_mass'] : $asset['assets_mass']);
         $asset['value'] = new Money(($asset['assets_value'] != null ? $asset['assets_value'] : $asset['assetTypes_value']), new Currency($AUTH->data['instance']['instances_config_currency']));
         $return['value'] = $return['value']->add($asset['value']);
@@ -114,13 +117,18 @@ function projectFinancials($project) {
             $asset['price'] = $asset['price']->add((new Money(($asset['assets_weekRate'] !== null ? $asset['assets_weekRate'] : $asset['assetTypes_weekRate']), new Currency($AUTH->data['instance']['instances_config_currency'])))->multiply($return['priceMaths']['weeks']));
         } else $asset['price'] = new Money($asset['assetsAssignments_customPrice'],new Currency($AUTH->data['instance']['instances_config_currency']));
 
-        $return['prices']['subTotal'] = $asset['price']->add($return['prices']['subTotal']);
+        if (!$asset['assignedAsSubAsset']) {
+            $return['prices']['subTotal'] = $asset['price']->add($return['prices']['subTotal']);
+        }
 
         if ($asset['assetsAssignments_discount'] > 0) $asset['discountPrice'] = $asset['price']->multiply(1 - ($asset['assetsAssignments_discount'] / 100));
         else $asset['discountPrice'] = $asset['price'];
 
         $return['prices']['discounts'] = $return['prices']['discounts']->add($asset['price']->subtract($asset['discountPrice']));
-        $return['prices']['total'] = $return['prices']['total']->add($asset['discountPrice']);
+
+        if (!$asset['assignedAsSubAsset']) {
+            $return['prices']['total'] = $return['prices']['total']->add($asset['discountPrice']);
+        }
 
         //Formatted values for each asset
         $asset['formattedValue'] = $moneyFormatter->format($asset['value']);
@@ -133,6 +141,8 @@ function projectFinancials($project) {
         $asset['assetTypes_definableFields_ARRAY'] = array_filter(explode(",", $asset['assetTypes_definableFields']));
 
         $asset['latestScan'] = assetLatestScan($asset['assets_id']);
+
+
 
         if ($asset['instances_id'] != $project['instances_id']) {
             if (!isset($return['assetsAssignedSUB'][$asset['instances_id']]['assets'])) $return['assetsAssignedSUB'][$asset['instances_id']]['assets'] = [];
