@@ -115,11 +115,20 @@ function projectFinancials($project) {
             $asset['price'] = new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']));
             $asset['price'] = $asset['price']->add((new Money(($asset['assets_dayRate'] !== null ? $asset['assets_dayRate'] : $asset['assetTypes_dayRate']), new Currency($AUTH->data['instance']['instances_config_currency'])))->multiply($return['priceMaths']['days']));
             $asset['price'] = $asset['price']->add((new Money(($asset['assets_weekRate'] !== null ? $asset['assets_weekRate'] : $asset['assetTypes_weekRate']), new Currency($AUTH->data['instance']['instances_config_currency'])))->multiply($return['priceMaths']['weeks']));
-        } else $asset['price'] = new Money($asset['assetsAssignments_customPrice'],new Currency($AUTH->data['instance']['instances_config_currency']));
+            // Elmentjük a listaár/db-ot is
+            $asset['listPricePerItem'] = $asset['price'];
+        } else {
+            $asset['price'] = new Money($asset['assetsAssignments_customPrice'], new Currency($AUTH->data['instance']['instances_config_currency']));
+            // Elmentjük a listaár/db-ot is
+            $asset['listPricePerItem'] = $asset['price'];
+        }
 
         if (!$asset['assignedAsSubAsset']) {
             $return['prices']['subTotal'] = $asset['price']->add($return['prices']['subTotal']);
         }
+
+        // Elmentjük a kedvezmény mértékét is
+        $asset['discountPercentage'] = $asset['assetsAssignments_discount'] * 100;
 
         if ($asset['assetsAssignments_discount'] > 0) $asset['discountPrice'] = $asset['price']->multiply(1 - ($asset['assetsAssignments_discount'] / 100));
         else $asset['discountPrice'] = $asset['price'];
@@ -137,12 +146,8 @@ function projectFinancials($project) {
         $asset['formattedMass'] = number_format(($asset['assets_mass'] == null ? $asset['assetTypes_mass'] : $asset['assets_mass']), 2, '.', '') . "kg";
 
         $asset['flagsblocks'] = assetFlagsAndBlocks($asset['assets_id']);
-
         $asset['assetTypes_definableFields_ARRAY'] = array_filter(explode(",", $asset['assetTypes_definableFields']));
-
         $asset['latestScan'] = assetLatestScan($asset['assets_id']);
-
-
 
         if ($asset['instances_id'] != $project['instances_id']) {
             if (!isset($return['assetsAssignedSUB'][$asset['instances_id']]['assets'])) $return['assetsAssignedSUB'][$asset['instances_id']]['assets'] = [];

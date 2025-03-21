@@ -173,8 +173,8 @@
                     {% if GET['comments'] %}{% set columnCount = columnCount + 1 %}{% endif %}
                     {% if GET['masses'] %}{% set columnCount = columnCount + 1 %}{% endif %}
                     {% if project.projectsTypes_config_finance == 1 %}
-                        {% if GET['prices'] %}{% set columnCount = columnCount + 1 %}{% endif %}
-                        {% if GET['discounts'] %}{% set columnCount = columnCount + 1 %}{% endif %}
+                        {% if GET['prices'] %}{% set columnCount = columnCount + 2 %}{% endif %} // Each has 2 returns
+                        {% if GET['discounts'] %}{% set columnCount = columnCount + 2 %}{% endif %} // Each has 2 returns
                     {% endif %}
 
                     {% if FINANCIALS.assetsAssigned|length > 0 %}
@@ -183,66 +183,78 @@
                                 headerRows: 1,
                                 widths: [
                                     {% if GET['checkboxes'] %}'auto',{% endif %}
-                                    '*',
-                                    {% if GET['comments'] %}'auto',{% endif %}
-                                    'auto',
+                                    'auto', // Megnevezés
+                                    'auto', // Darabszám
                                     {% if GET['masses'] %}'auto',{% endif %}
+                                    {% if GET['comments'] %}'auto',{% endif %}
                                     {% if project.projectsTypes_config_finance == 1 %}
-                                        {% if GET['prices'] %}'auto',{% endif %}
-                                        {% if GET['discounts'] %}'auto',{% endif %}
+                                        {% if GET['prices'] %}
+                                            'auto', // Listaár/db
+                                            'auto', // Listaár összes
+                                        {% endif %}
+                                        {% if GET['discounts'] %}
+                                            'auto', // Kedvezmény mértéke (%ban)
+                                            'auto', // Kedvezményes listaár összes
+                                        {% endif %}
                                     {% endif %}
                                 ],
                                 body: [
                                     [
                                         {% if GET['checkboxes'] %}' ',{% endif %}
-                                        'Elem',
-                                        {% if GET['comments'] %}' ',{% endif %}
-                                        '{# Definable Fields #} ',
+                                        'Megnevezés',
+                                        'Darabszám',
                                         {% if GET['masses'] %}'Tömeg',{% endif %}
+                                        {% if GET['comments'] %}' ',{% endif %}
                                         {% if project.projectsTypes_config_finance == 1 %}
-                                            {% if GET['prices'] %}'Ár',{% endif %}
-                                            {% if GET['discounts'] %}'Kedvezményes ár',{% endif %}
+                                            {% if GET['prices'] %}
+                                                'Listaár/db',
+                                                'Listaár összes',
+                                            {% endif %}
+                                            {% if GET['discounts'] %}
+                                                'Kedvezmény mértéke',
+                                                'Kedvezményes ár',
+                                            {% endif %}
                                         {% endif %}
                                     ],
-                                {% set currentCategory = "" %}
-
-                                {% if GET['quote'] != 'truck' %} 
-                                    {% for type in FINANCIALS.assetsAssigned|filter(asset => asset['assets'][0].assetsAssignments_assignedAsSubAsset != 1) %}
-                                        {% if type['assets'][0].assetCategories_name != currentCategory %}
-                                            {% set currentCategory = type['assets'][0].assetCategories_name %}
-                                            {% set currentCategoryID = type['assets'][0].assetCategories_id %}
-                                            [{ 
-                                                text: "{{ type['assets'][0].assetCategories_name|escape("js") }}", 
-                                                style: { bold: true },
-                                                fillColor: '#F5F5F5',
-                                                colSpan: {{ columnCount }},
-                                                margin: 3
-                                            },
-                                            {% for i in range(2, columnCount) %}{},{% endfor %}
-                                        ],
-                                        {% endif %}
-                                        {% embed 'project/twigIncludes/assetList/tableItemPDF.twig' with {"type": type,"all": FINANCIALS.assetsAssigned, "categoryid":currentCategoryID,"instanceid": USERDATA.instance.instances_id} %}{% endembed %}
-                                    {% endfor %}
-                                {% else %}
-                                    {% for type in FINANCIALS.assetsAssigned %}
-                                        {% if type['assets'][0].assetCategories_name != currentCategory %}
-                                            {% set currentCategory = type['assets'][0].assetCategories_name %}
-                                            {% set currentCategoryID = type['assets'][0].assetCategories_id %}
-                                            [{ 
-                                                text: "{{ type['assets'][0].assetCategories_name|escape("js") }}", 
-                                                style: { bold: true },
-                                                fillColor: '#F5F5F5',
-                                                colSpan: {{ columnCount }},
-                                                margin: 3
-                                            },
-                                            {% for i in range(2, columnCount) %}{},{% endfor %}
-                                        ],
-                                        {% endif %}
-                                        {% embed 'project/twigIncludes/assetList/tableItemPDF.twig' with {"type": type,"all": FINANCIALS.assetsAssigned, "categoryid":currentCategoryID,"instanceid": USERDATA.instance.instances_id} %}{% endembed %}
-                                    {% endfor %}
-                                {% endif %}
-
-                                ],
+                                    {% set currentCategory = "" %}
+                                    {% if GET['quote'] != 'truck' %}
+                                        {% for type in FINANCIALS.assetsAssigned|filter(asset => asset['assets'][0].assetsAssignments_assignedAsSubAsset != 1) %}
+                                            {% if type['assets'][0].assetCategories_name != currentCategory %}
+                                                {% set currentCategory = type['assets'][0].assetCategories_name %}
+                                                {% set currentCategoryID = type['assets'][0].assetCategories_id %}
+                                                [
+                                                    {
+                                                        text: "{{ type['assets'][0].assetCategories_name|escape("js") }}",
+                                                        style: { bold: true },
+                                                        fillColor: '#F5F5F5',
+                                                        colSpan: {{ columnCount }},
+                                                        margin: 3
+                                                    },
+                                                    {% for i in range(2, columnCount) %}{},{% endfor %}
+                                                ],
+                                            {% endif %}
+                                            {% embed 'project/twigIncludes/assetList/tableItemPDF.twig' with {"type": type,"all": FINANCIALS.assetsAssigned, "categoryid":currentCategoryID,"instanceid": USERDATA.instance.instances_id} %}{% endembed %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for type in FINANCIALS.assetsAssigned %}
+                                            {% if type['assets'][0].assetCategories_name != currentCategory %}
+                                                {% set currentCategory = type['assets'][0].assetCategories_name %}
+                                                {% set currentCategoryID = type['assets'][0].assetCategories_id %}
+                                                [
+                                                    {
+                                                        text: "{{ type['assets'][0].assetCategories_name|escape("js") }}",
+                                                        style: { bold: true },
+                                                        fillColor: '#F5F5F5',
+                                                        colSpan: {{ columnCount }},
+                                                        margin: 3
+                                                    },
+                                                    {% for i in range(2, columnCount) %}{},{% endfor %}
+                                                ],
+                                            {% endif %}
+                                            {% embed 'project/twigIncludes/assetList/tableItemPDF.twig' with {"type": type,"all": FINANCIALS.assetsAssigned, "categoryid":currentCategoryID,"instanceid": USERDATA.instance.instances_id} %}{% endembed %}
+                                        {% endfor %}
+                                    {% endif %}
+                                ]
                             },
                             layout: 'lightHorizontalLines',
                             margin: [ 0, 10, 0, 10 ]
@@ -519,7 +531,7 @@
                 }; 
             },
 
-            {% if GET['draft'] %}watermark: { text: 'MUNKÁBAN', opacity: 0.2, bold: true, italics: false },{% endif %}
+            {% if GET['draft'] %}watermark: { text: 'MINTA', opacity: 0.2, bold: true, italics: false },{% endif %}
             pageSize: 'A4',
             pageOrientation: 'portrait',
             pageMargins: [ 40, 100, 40, 90 ],
@@ -591,6 +603,6 @@
         };
         Pace.start();
     </script>
-    Generating PDF, please wait...
+    Minnyá PDF, várjá...
 </body>
 </html>

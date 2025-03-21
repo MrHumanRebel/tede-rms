@@ -1,25 +1,35 @@
 {% if type['assets']|length > 0 %}
     [
-        {% if GET['checkboxes'] %}'[  ]',{% endif %}
+        {% if GET['checkboxes'] %}'☐',{% endif %}
+
+        {# Megnevezés #}
         { 
-            text: "{% if type['assets'][0].manufacturers_id != 1 %}{{ type['assets'][0].manufacturers_name|escape("js") }} - {% endif %}{{ type['assets'][0].assetTypes_name|escape("js") }} {{ type['assets']|length }} db", 
-            style: { bold: true },
-            colSpan: {{ GET['comments'] ? 3 : 2 }}
+            text: "{% if type['assets'][0].manufacturers_id != 1 %}{{ type['assets'][0].manufacturers_name|escape('js') }} - {% endif %}{{ type['assets'][0].assetTypes_name|escape('js') }} ", 
         },
-        {% for i in range(2, GET['comments'] ? 3 : 2) %}{},{% endfor %}
+
+        {# Darabszám #}
+        {
+            text: "{{ type['assets']|length }} db",
+        },
+
+        {# Tömeg #}
         {% if GET['masses'] %}
-            '{{ (type['totals']['mass'] > 0 ? type['totals']['mass']|escape("js") ~ 'kg' : '') }}',
+            '{{ (type['totals']['mass'] > 0 ? type['totals']['mass']|escape('js') ~ ' kg' : '') }}',
         {% endif %}
+
         {% if project.projectsTypes_config_finance == 1 %}
             {% if GET['prices'] %}
+                '{{ type['assets'][0].listPricePerItem|money|replace({',00':''})|escape('js') }}', 
                 '{{ type['totals']['price']|money|replace({',00':''})|escape('js') }}',
             {% endif %}
             {% if GET['discounts'] %}
+                '{{ type['assets'][0].discountPercentage|money|replace({',00':''})|replace({'Ft':''})|replace({'GBP':''})|escape('js') }}%', 
                 '{{ type['totals']['discountPrice']|money|replace({',00':''})|escape('js') }}',
             {% endif %}
         {% endif %}
     ],
 {% endif %}
+
 
 {% if GET['showAll'] %}
     {% for assetAssignment in type['assets'] %}
