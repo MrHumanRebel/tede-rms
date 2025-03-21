@@ -30,9 +30,9 @@ jobs:
           context: git
           labels: |
             maintainer=adam-rms
-            org.opencontainers.image.source=https://github.com/MrHumanRebel/adam-rms-hun
-            org.opencontainers.image.documentation=https://github.com/MrHumanRebel/adam-rms-hun
-            org.opencontainers.image.url=https://github.com/MrHumanRebel/adam-rms-hun
+            org.opencontainers.image.source=https://github.com/MrHumanRebel/tede-rms
+            org.opencontainers.image.documentation=https://github.com/MrHumanRebel/tede-rms
+            org.opencontainers.image.url=https://github.com/MrHumanRebel/tede-rms
             org.opencontainers.image.vendor="Danci"
             org.opencontainers.image.description="TeDeRMS"
             org.opencontainers.image.licenses=AGPL-3.0

@@ -39,7 +39,7 @@ services:
     restart: always
 
   TeDeRMS:
-    image: ghcr.io/mrhumanrebel/adam-rms-hun:latest
+    image: ghcr.io/MrHumanRebel/tede-rms:latest
     container_name: TeDeRMS
     restart: always
     depends_on:
