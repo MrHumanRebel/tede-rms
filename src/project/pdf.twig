@@ -64,27 +64,16 @@
                 {% endif %}
                 {
                     table: {
-                        widths: [ "50%", "50%"],
+                        widths: [ "60%", "40%"],
                         body: [[
                             {
                                 table: {
                                     body: [
                                         ['Hivatkozás:',"{{project.projects_id|escape("js")}}"],
                                         {% if project.projects_dates_use_start and project.projects_dates_use_end %}
-                                            ['Időpont:', "{{ project.projects_dates_use_start|date('Y. m. d.') }}-{{ project.projects_dates_use_end|date('Y. m. d.') }}"],
+                                            ['Időtartam (tól-ig): ', 
+                                                "{{project.projects_dates_use_start|date('Y. m. d.')}} - {{project.projects_dates_use_end|date('Y. m. d.')}}"],
                                         {% endif %}
-                                        //{% if project.projects_dates_deliver_start %}
-                                        //    ['Átadás:',"{{ project.projects_dates_deliver_start|date("Y. m. d. H:i")|escape("js")}}"],
-                                        //{% endif %}
-                                        //{% if project.projects_dates_use_start %}
-                                        //    ['Kezdés:',"{{ project.projects_dates_use_start|date("Y. m. d. H:i")|escape("js")}}"],
-                                        //{% endif %}
-                                        //{% if project.projects_dates_use_end %}
-                                        //    ['Befejezés:',"{{ project.projects_dates_use_end|date("Y. m. d. H:i")|escape("js") }}"],
-                                        //{% endif %}
-                                        //{% if project.projects_dates_deliver_end %}
-                                        //    ['Átvétel:',"{{ project.projects_dates_deliver_end|date("Y. m. d. H:i")|escape("js") }}"],
-                                        //{% endif %}
                                         {% if GET['totalmass'] and project.projectsTypes_config_assets == 1 %}
                                             ['Tömeg becslés:',"{{FINANCIALS.mass|mass|escape("js") }}"],
                                         {% endif %}
@@ -111,7 +100,28 @@
                     },
                     fillColor: '#F5F5F5',
                     layout: 'noBorders',
-                    margin: [ 0, 10, 0, 10 ]
+                    margin: [ 0, 10, 0, 0 ]
+                },
+                {
+                    table: {
+                        widths: ["100%"],
+                        body: [[
+                            {
+                                table: {
+                                    body: [
+                                        {% if project.projects_invoiceNotes|length > 0 and GET['invoiceNotes'] %}
+                                            ["{{ project.projects_invoiceNotes|escape('js') }}"],
+                                        {% endif %}
+                                    ],
+                                },
+                                layout: 'noBorders',
+                                margin: 10
+                            },                            
+                        ]],
+                    },
+                    fillColor: '#F5F5F5',
+                    layout: 'noBorders',
+                    margin: [ 0, 0, 0, 10 ]
                 },
                 {% if GET['finance'] and "PROJECTS:PROJECT_PAYMENTS:VIEW"|instancePermissions and project.projectsTypes_config_finance == 1 %}
                 {
@@ -154,11 +164,7 @@
                     },
                     layout: 'noBorders',
                 },
-                {% endif %}
-                {% if project.projects_invoiceNotes|length > 0 and GET['invoiceNotes'] %}
-                    { text: "Megjegyzések", style: { fontSize: 20, bold: true } },
-                    "{{ project.projects_invoiceNotes|escape("js") }}",
-                {% endif %}
+                {% endif %}                
                 {% if GET['assets'] and project.projectsTypes_config_assets == 1 %}
                     { text: "Felszerelés", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
                     
@@ -220,59 +226,7 @@
                             layout: 'lightHorizontalLines',
                             margin: [ 0, 10, 0, 10 ]
                         },
-                    {% endif %}
-                    {% if FINANCIALS.assetsAssignedSUB|length > 0 %}{% for instance in FINANCIALS.assetsAssignedSUB %}
-                        { text: "{{ instance['instance']['instances_name']|escape("js") }} Equipment", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
-                        { 
-                            table: {
-                                headerRows: 1,
-                                widths: [
-                                    {% if GET['checkboxes'] %}'auto',{% endif %}
-                                    '*',
-                                    {% if GET['comments'] %}'auto',{% endif %}
-                                    'auto',
-                                    {% if GET['masses'] %}'auto',{% endif %}
-                                    {% if project.projectsTypes_config_finance == 1 %}
-                                        {% if GET['prices'] %}'auto',{% endif %}
-                                        {% if GET['discounts'] %}'auto',{% endif %}
-                                    {% endif %}
-                                ],
-                                body: [
-                                    [
-                                        {% if GET['checkboxes'] %}' ',{% endif %}
-                                        'Item',
-                                        {% if GET['comments'] %}' ',{% endif %}
-                                        '{# Definable Fields #} ',
-                                        {% if GET['masses'] %}'Mass',{% endif %}
-                                        {% if project.projectsTypes_config_finance == 1 %}
-                                            {% if GET['prices'] %}'Price {{ moneySymbol() }}',{% endif %}
-                                            {% if GET['discounts'] %}'Disc {{ moneySymbol() }}',{% endif %}
-                                        {% endif %}
-                                    ],
-                                {% set currentCategory = "" %}
-                                {% for type in instance['assets'] %}
-                                    {% if type['assets'][0].assetCategories_name != currentCategory %}
-                                        {% set currentCategory = type['assets'][0].assetCategories_name %}
-                                        {% set currentCategoryID = type['assets'][0].assetCategories_id %}
-                                        [{ 
-                                            text: "{{ type['assets'][0].assetCategories_name|escape('js') }}", 
-                                            style: { bold: true },
-                                            fillColor: '#F5F5F5',
-                                            colSpan: {{ columnCount }},
-                                            margin: 3
-                                        },
-                                        {% for i in range(2, columnCount) %}{% if not loop.last %},{% endif %}{% endfor %}
-                                    ],
-                                    {% endif %}
-                                    {% embed 'project/twigIncludes/assetList/tableItemPDF.twig' with {"type": type, "all": instance, "categoryid": currentCategoryID, "instanceid": instance['instance'].instances_id} %}{% endembed %}
-                                {% endfor %}
-                                ],
-                            },
-                            layout: 'lightHorizontalLines',
-                            margin: [ 0, 10, 0, 10 ]
-                        },
-                    {% endfor %}{% endif %}
-                    //{ text: "Összesen: {{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) }} féle elem", style: { fontSize: 16, bold: true, alignment: 'right' } },
+                    {% endif %}                    
                 {% endif %}
                 {% if FINANCIALS.payments.subHire.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['subHires']  %}
                     { text: "További bérleti elemek", style: { fontSize: 20, bold: true }, pageBreak: 'before' },

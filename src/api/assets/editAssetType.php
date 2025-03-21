@@ -14,7 +14,42 @@ foreach ($_POST['formData'] as $item) {
 }
 
 
+if (!empty($array['subAssets'])) {
+    $subAssets = json_decode($array['subAssets'], true);
+    $formattedSubAssets = [];
+
+    foreach ($subAssets as $subAsset) {
+
+        if (!isset($subAsset['id'], $subAsset['quantity'], $subAsset['origin'])) {
+            continue;
+        }
+
+        $DBLIB->where("assetSubAssets_sub_asset_id", $subAsset['id']);
+        $existing = $DBLIB->getOne("assetSubAssets");
+
+        if ($existing) {
+            $DBLIB->where("assetSubAssets_sub_asset_id", $subAsset['id']);
+            $result = $DBLIB->update("assetSubAssets", [
+                "assetSubAssets_sub_asset_quantity" => $subAsset['quantity']
+            ]);
+        } else {
+            $result = $DBLIB->insert("assetSubAssets", [
+                "assetSubAssets_id" => $subAsset['origin'],
+                "assetSubAssets_sub_asset_id" => $subAsset['id'],
+                "assetSubAssets_sub_asset_quantity" => $subAsset['quantity']
+            ]);
+        }
+
+        if (!$result) {
+            finish(false, ["code" => "UPDATE-FAIL", "message" => "Could not update sub-asset quantity"]);
+        }
+    }
+}
+
+
+
 // Process sub-asset quantities
+/*
 foreach ($array as $key => $value) {
     if (strpos($key, 'subAssetQuantity_') === 0) {
         $subAssetId = substr($key, strlen('subAssetQuantity_')); // Extract the sub-asset ID
@@ -27,7 +62,7 @@ foreach ($array as $key => $value) {
         if (!$result) finish(false, ["code" => "UPDATE-FAIL", "message" => "Could not update sub-asset quantity"]);
     }
 }
-
+*/
 
 if (strlen($array['assetTypes_id']) <1) finish(false, ["code" => "PARAM-ERROR", "message"=> "No data for action"]);
 $currencies = new ISOCurrencies();

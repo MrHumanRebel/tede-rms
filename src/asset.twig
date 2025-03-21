@@ -1137,25 +1137,81 @@
                                                 <label for="subAssets">Al eszközök</label>
                                                 <div id="subAssetsContainer">
                                                     {% for subAsset in assets.subAssets %}
-                                                        <div class="subAssetItem" data-sub-asset-id="{{ subAsset.assetSubAssets_sub_asset_id }}">
-                                                            <div class="input-group">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text">Név</span>
-                                                                </div>
-                                                                <input type="text" name="subAssetName_{{ subAsset.assetSubAssets_sub_asset_id }}" value="{{ subAsset.assetTypes_name }}" class="form-control" readonly />
-                                                            </div>
-                                                            <div class="input-group mt-2">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text">Mennyiség</span>
-                                                                </div>
-                                                                <input type="number" name="subAssetQuantity_{{ subAsset.assetSubAssets_sub_asset_id }}" value="{{ subAsset.assetSubAssets_sub_asset_quantity }}" class="form-control" />
-                                                            </div>
+                                                        <div class="subAssetRow d-flex align-items-center mb-2" data-sub-asset-id="{{ subAsset.assetSubAssets_sub_asset_id }}">
+                                                            <input type="text" name="subAssetName_{{ subAsset.assetSubAssets_sub_asset_id }}" value="{{ subAsset.assetTypes_name }}" class="form-control" style="width: 60%;" readonly />
+                                                            <input type="number" name="subAssetQuantity_{{ subAsset.assetSubAssets_sub_asset_id }}" value="{{ subAsset.assetSubAssets_sub_asset_quantity }}" class="form-control ml-2" style="width: 30%;" min="1" />
+                                                            <button type="button" class="btn btn-danger ml-2 removeSubAsset">X</button>
                                                         </div>
                                                     {% else %}
                                                         <p>Nincsenek al eszközök</p>
                                                     {% endfor %}
                                                 </div>
+                                                <button type="button" class="btn btn-primary mt-2" id="addSubAsset">Al-eszköz hozzáadása</button>
                                             </div>
+
+                                            <script>
+                                            $(document).ready(function () {
+                                                $('#addSubAsset').click(function () {
+                                                    let index = $('.subAssetRow').length + 1; // Unique index increment
+                                                    let newRow = $(`
+                                                        <div class="subAssetRow d-flex align-items-center mb-2" data-sub-asset-id="">
+                                                            <select class="form-control subAssetSelect" name="assetTypes_sub_asset_id_${index}" style="width: 60%;"></select>
+                                                            <input type="number" class="form-control subAssetQuantity ml-2" name="assetTypes_sub_asset_quantity_${index}" min="1" value="1" style="width: 30%;">
+                                                            <button type="button" class="btn btn-danger ml-2 removeSubAsset">X</button>
+                                                        </div>
+                                                    `);
+
+                                                    $('#subAssetsContainer').append(newRow);
+
+                                                    let selectElement = newRow.find('.subAssetSelect');
+
+                                                    selectElement.select2({
+                                                        tags: false,
+                                                        multiple: false,
+                                                        theme: "bootstrap4",
+                                                        minimumInputLength: 0,
+                                                        width: '100%',
+                                                        minimumResultsForSearch: 1,
+                                                        placeholder: "Válassz egy al-eszközt",
+                                                        ajax: {
+                                                            url: "{{ CONFIG.ROOTURL }}/api/assets/searchSubAssets.php", // API endpoint
+                                                            dataType: "json",
+                                                            type: "POST",
+                                                            data: function (params) {
+                                                                return { term: params.term };
+                                                            },
+                                                            processResults: function (data) {
+                                                                if (data && data.result && data.response) {
+                                                                    return {
+                                                                        results: $.map(data.response, function (item) {
+                                                                            return {
+                                                                                text: item.assetTypes_name,
+                                                                                id: item.assetTypes_id
+                                                                            };
+                                                                        })
+                                                                    };
+                                                                } else {
+                                                                    return { results: [] };
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+
+                                                    // Amikor egy értéket kiválasztunk, frissítjük a `data-sub-asset-id` attribútumot
+                                                    selectElement.on('change', function () {
+                                                        let selectedId = $(this).val();
+                                                        newRow.attr('data-sub-asset-id', selectedId);
+                                                    });
+                                                });
+
+                                                $('#subAssetsContainer').on('click', '.removeSubAsset', function () {
+                                                    $(this).closest('.subAssetRow').remove();
+                                                });
+
+                                                
+                                            });
+                                            </script>
+
 
 
                                             </form>
@@ -1660,22 +1716,48 @@
                     $("#addNewType-dayRate-guide").html("2% = {{ moneySymbol() }}" + ($(this).val()*0.02).toFixed(2));
                     $("#addNewType-weekRate-guide").html("6% = {{ moneySymbol() }}" + ($(this).val()*0.06).toFixed(2));
                 });
+
+
+
                 $('#saveSettingsButton').on('click', function() {
                     var formData = $("#addNewForm").serializeArray();
-                    formData.push({"name": "manufacturers_id", "value": $('#manufacturer').val()}, {"name": "assetTypes_id", "value": "{{ asset.assetTypes_id }}"});
-                    
-                    // Loop through sub-assets to collect edited data
-                    $("input[name^='subAssetQuantity_']").each(function() {
-                        var subAssetId = $(this).attr('name').split('_')[1]; // Get sub-asset ID
-                        var quantity = $(this).val(); // Get the edited quantity value
-                        formData.push({"name": "subAssetQuantity_" + subAssetId, "value": quantity});
+                    formData.push(
+                        {"name": "manufacturers_id", "value": $('#manufacturer').val()},
+                        {"name": "assetTypes_id", "value": "{{ asset.assetTypes_id }}"}
+                    );
+
+                    var subAssets = [];
+
+                    // Az összes már meglévő alelem összegyűjtése
+                    $('.subAssetRow').each(function() {
+                        var subAssetId = $(this).data('sub-asset-id'); // ID az adatokból
+                        var subAssetQuantity = $(this).find('input[type="number"]').val(); // Mennyiség
+
+                        if (subAssetId && subAssetQuantity) { // Csak ha mindkettő megvan
+                            subAssets.push({
+                                "origin": {{ asset.assetTypes_id }},
+                                "id": subAssetId,
+                                "quantity": subAssetQuantity
+                            });
+                        }
                     });
 
-                    console.log(formData); // For debugging
+                    if (subAssets.length > 0) {
+                        formData.push({"name": "subAssets", "value": JSON.stringify(subAssets)});
+                    }
+
+                    console.log("FormData:", formData); // Debug log
+                    console.log("SubAssets JSON:", JSON.stringify(subAssets)); // Ellenőrzés
+
                     ajaxcall("assets/editAssetType.php", { formData }, function (data) {
+                        console.log("Response:", data); // Debug log
                         location.reload();
                     }, false);
                 });
+
+
+
+                
                 $('#saveTypeDefinableFieldButton').on('click', function() {
                     var formData = $("#editDefinableFieldsType").serializeArray();
                     formData.push({"name": "assetTypes_id", "value": "{{asset.assetTypes_id}}"});

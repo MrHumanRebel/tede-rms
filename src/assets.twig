@@ -808,10 +808,20 @@ $(document).ready(function () {
                                     }).catch(reject);
 
                                 } else {
-                                    console.log("❌ Nincs elegendő eszköz raktáron! Szükséges: " + subAsset.quantity + ", Elérhető: " + totalAvailable);
-                                    hasInsufficientStock = true;
-                                    shortageDetails.push("Eszköz típus ID: " + subAsset.id + " | Szükséges: " + subAsset.quantity + " | Raktáron: " + totalAvailable + " | Hiányzik: " + (shortage > 0 ? shortage : 0));
-                                    reject(); // Ha nincs elég készleten, megszakítjuk
+                                    // Fetch the asset name if there's insufficient stock
+                                    ajaxcall("assets/getAssetName.php", { "id": subAsset.id }, function (response) {
+                                        console.log("Response Object: ", response);
+                                        if (response.response.assetName) {
+                                            console.log("❌ Nincs elegendő eszköz raktáron! Eszköz neve: " + response.assetName + ", Szükséges: " + subAsset.quantity + ", Elérhető: " + totalAvailable);
+                                            hasInsufficientStock = true;
+                                            shortageDetails.push("Eszköz típus: " + response.response.assetName + " | ID: " + subAsset.id + " | Szükséges: " + subAsset.quantity + " | Raktáron: " + totalAvailable + " | Hiányzik: " + (shortage > 0 ? shortage : 0));
+                                        } else {
+                                            console.log("❌ Nincs elegendő eszköz raktáron! Eszköz ID: " + subAsset.id + " | Szükséges: " + subAsset.quantity + ", Elérhető: " + totalAvailable);
+                                            hasInsufficientStock = true;
+                                            shortageDetails.push("ID: " + subAsset.id + " | Szükséges: " + subAsset.quantity + " | Raktáron: " + totalAvailable + " | Hiányzik: " + (shortage > 0 ? shortage : 0));
+                                        }
+                                        reject(); // Stop the operation if stock is insufficient
+                                    });
                                 }
                             } else {
                                 console.log("⚠ Hiba: Nem érkezett megfelelő válasz a készlet lekérdezésére.");
