@@ -7,7 +7,7 @@
 
         .google-maps-btn,
         .waze-btn {
-            margin-top: 10px;
+            margin-top: 15px;
             margin-bottom: 5px;
             width: 30px; /* Gomb szélessége */
             height: 30px; /* Gomb magassága */
@@ -31,6 +31,10 @@
 
         .waze-btn {
             background-color: #4285F4; /* Google Maps kék */
+        }
+
+        #duration {
+            margin-bottom: 20px;
         }
 
 
@@ -253,7 +257,94 @@
                                                                 <a class="btn btn-default btn-sm waze-btn" href="https://waze.com/ul?q={{ project.locations_address|replace({ "\r\n": ' ', "\n": ' ', "\r": ' '})|url_encode }}" target="_blank" title="Waze">
                                                                     <i class="fab fa-waze fa-lg"></i>
                                                                 </a>
+                                                                <!-- Becsült távolság -->
+                                                                <div id="distance">Becsült távolság: <span id="distance-value">...</span> </div>
+                                                                <!-- Becsült utazási idő -->
+                                                                <div id="duration">Becsült utazási idő: <span id="duration-value">...</span> </div>
                                                             {% endif %}
+
+                                                            <script>
+                                                                const warehouseAddress = '9174 Dunaszeg Iskola utca 7';  // Fixed address
+
+                                                                // Function to geocode the address
+                                                                function geocodeAddress(address, callback) {
+                                                                    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=jsonv2&limit=1`;
+
+                                                                    console.log('Requesting route data from Nominatim:', url); 
+
+                                                                    fetch(url)
+                                                                        .then(response => response.json())
+                                                                        .then(data => {
+                                                                            if (data.length > 0) {
+                                                                                const latitude = data[0].lat;  // Using lat from the response
+                                                                                const longitude = data[0].lon;  // Using lon from the response
+                                                                                callback({ lat: latitude, lon: longitude });
+                                                                            } else {
+                                                                                console.log('Cím nem található');
+                                                                            }
+                                                                        })
+                                                                        .catch(error => console.log('Hiba a geokódolás során:', error));
+                                                                }
+
+                                                                // Function to calculate distance and duration
+                                                                function calculateRoute(startCoords, endCoords) {
+                                                                    // Ensuring the coordinates are valid
+                                                                    if (!startCoords || !endCoords || !startCoords.lon || !startCoords.lat || !endCoords.lon || !endCoords.lat) {
+                                                                        console.log('Invalid coordinates');
+                                                                        return;
+                                                                    }
+
+                                                                    const osrmUrl = `https://router.project-osrm.org/route/v1/car/${startCoords.lon},${startCoords.lat};${endCoords.lon},${endCoords.lat}?overview=false&annotations=duration,distance`;
+
+                                                                    console.log('Requesting route data from OSRM:', osrmUrl); 
+
+                                                                    fetch(osrmUrl)
+                                                                        .then(response => response.json())
+                                                                        .then(data => {
+                                                                            if (data.routes && data.routes.length > 0) {
+                                                                                const route = data.routes[0];
+                                                                                const distanceKm = route.distance / 1000; // in km
+                                                                                let durationMin = route.duration / 60; // in minutes
+
+                                                                                // Assuming the truck is slower than a car (adjust this factor based on your case)
+                                                                                const truckFactor = 1.15;  // Truck is slower
+                                                                                durationMin = durationMin * truckFactor;
+
+                                                                                // Convert duration from minutes to hours and minutes
+                                                                                const hours = Math.floor(durationMin / 60);
+                                                                                const minutes = Math.round(durationMin % 60);
+
+                                                                                // Update the UI with the distance and duration in hours and minutes
+                                                                                document.getElementById('distance-value').textContent = `${distanceKm.toFixed(2)} km`;
+                                                                                document.getElementById('duration-value').textContent = `${hours} óra ${minutes} perc`;
+                                                                            } else {
+                                                                                console.log('No route found');
+                                                                            }
+                                                                        })
+                                                                        .catch(error => console.log('Error fetching route data:', error));
+                                                                }
+                                                                
+                                                                // Geocode both addresses and calculate the route when both are ready
+                                                                function getRoute() {
+                                                                    console.log("Start getRoute function");
+                                                                    geocodeAddress(warehouseAddress, function(warehouseCoords) {
+                                                                        // A project.locations_address-t kódold itt a JavaScript-ben
+                                                                        const projectAddress = "{{ project.locations_address|replace({ '\r\n': ', ', '\n': ', ', '\r': ', '}) }}";  
+                                                                        const encodedProjectAddress = encodeURIComponent(projectAddress); // JavaScript-ben történő kódolás
+                                                                        console.log("Encoded Project Address: ", encodedProjectAddress);
+                                                                        
+                                                                        geocodeAddress(projectAddress, function(projectCoords) {
+                                                                            calculateRoute(warehouseCoords, projectCoords);
+                                                                        });
+                                                                    });
+                                                                }
+
+                                                                document.addEventListener("DOMContentLoaded", function() {
+                                                                    console.log("Oldal betöltődött.");
+                                                                    getRoute();
+                                                                });
+                                                            </script>
+
                                                         {% elseif project.projectsTypes_config_venue == 1 %}
                                                             <p class="text-sm">Helyszín
                                                                 <b class="d-block">
@@ -267,6 +358,10 @@
                                                                             <a class="btn btn-default btn-sm waze-btn" href="https://waze.com/ul?q={{ project.locations_address|replace({ "\r\n": ' ', "\n": ' ', "\r": ' '})|url_encode }}" target="_blank" title="Waze">
                                                                                 <i class="fab fa-waze fa-lg"></i>
                                                                             </a>
+                                                                            <!-- Becsült távolság -->
+                                                                            <div id="distance">Becsült távolság: <span id="distance-value">...</span> </div>
+                                                                            <!-- Becsült utazási idő -->
+                                                                            <div id="duration">Becsült utazási idő: <span id="duration-value">...</span> </div>
                                                                         {% else %}
                                                                             {{ project.locations_name }}
                                                                         {% endif %}
@@ -1708,7 +1803,7 @@
                 }, function (error) {
                     // Ha nem sikeres a mentés, akkor IS frissítjük a dátumot
                     $('#buildDatePickerInput').val(selectedDate); // Frissítjük az input mezőt
-                    console.error('Hiba történt a mentés során:', error); // Hibajelzés
+                    console.log('Hiba történt a mentés során:', error); // Hibajelzés
                 });
             });
 
