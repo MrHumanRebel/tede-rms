@@ -75,7 +75,7 @@
                                                 "{{project.projects_dates_use_start|date('Y. m. d.')}} - {{project.projects_dates_use_end|date('Y. m. d.')}}"],
                                         {% endif %}
                                         {% if GET['totalmass'] and project.projectsTypes_config_assets == 1 %}
-                                            ['Tömeg becslés:',"{{FINANCIALS.mass|mass|escape("js") }}"],
+                                            ['Tömeg becslés:', "{{ FINANCIALS.mass|mass|replace({'kg': ' kg'})|escape('js') }}"],
                                         {% endif %}
                                         {% if GET['totalvalue'] and project.projectsTypes_config_assets == 1 %}
                                             ['Értékbecslés:',"{{FINANCIALS.value|money|replace({',00':''})|escape('js') }}"],
