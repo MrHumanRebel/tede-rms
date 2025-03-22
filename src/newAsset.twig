@@ -175,9 +175,7 @@
                         <div class="alert alert-danger mt-2 text-center" style="font-weight: bold; color: white; background-color: red;">
                             <strong>Figyelem!</strong> 
                             <br>Két eszköztípus nem lehet azonos, ha tartalmaz aleszközöket, mindenképpen egyedi eszköznév szükséges! <br>
-                            Az aleszközöket tartalmazó eszközből kizárólag 1 db vehető készletre! <br>
-                            Egy eszköz nem lehet önmagának az aleszköze! <br>
-                            Utólagos aleszköz hozzáadására NINCSEN lehetőség! Kizárólag a mennyiséget lehet módosítani!
+                            Az aleszközöket tartalmazó eszközből kizárólag 1 db vehető készletre!
                         </div>
                         <label>Al eszközök (Opcionális)</label>
                         <div id="subAssetsContainer">
@@ -238,13 +236,19 @@
                         },
                         processResults: function (data) {
                             if (data && data.result && data.response) {
+
+                                let parentAssetId = $('#assetType').val();
+
                                 return {
                                     results: $.map(data.response, function (item) {
-                                        return {
-                                            text: item.assetTypes_name,
-                                            id: item.assetTypes_id
+                                        // Azokat az elemeket zárjuk ki, amelyek azonos ID-val rendelkeznek, mint az aktuális eszköz
+                                        if (item.assetTypes_id != parentAssetId) {
+                                            return {
+                                                text: item.assetTypes_name,
+                                                id: item.assetTypes_id
+                                            }
                                         }
-                                    })
+                                    }).filter(item => item !== undefined) // Szűrjük ki az undefined értékeket
                                 };
                             } else return { results: [] };
                         }

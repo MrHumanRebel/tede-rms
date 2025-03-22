@@ -1735,7 +1735,7 @@
 
                         if (subAssetId && subAssetQuantity) { // Csak ha mindkettő megvan
                             subAssets.push({
-                                "origin": {{ asset.assetTypes_id }},
+                                "origin": {{assets[0]['assets_id']}},
                                 "id": subAssetId,
                                 "quantity": subAssetQuantity
                             });

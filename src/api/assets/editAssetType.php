@@ -13,36 +13,28 @@ foreach ($_POST['formData'] as $item) {
     $array[$item['name']] = $item['value'];
 }
 
-
 if (!empty($array['subAssets'])) {
     $subAssets = json_decode($array['subAssets'], true);
     $formattedSubAssets = [];
 
-    foreach ($subAssets as $subAsset) {
+    $deleted = false;
 
+    foreach ($subAssets as $subAsset) {
         if (!isset($subAsset['id'], $subAsset['quantity'], $subAsset['origin'])) {
             continue;
         }
 
-        $DBLIB->where("assetSubAssets_sub_asset_id", $subAsset['id']);
-        $existing = $DBLIB->getOne("assetSubAssets");
-
-        if ($existing) {
-            $DBLIB->where("assetSubAssets_sub_asset_id", $subAsset['id']);
-            $result = $DBLIB->update("assetSubAssets", [
-                "assetSubAssets_sub_asset_quantity" => $subAsset['quantity']
-            ]);
-        } else {
-            $result = $DBLIB->insert("assetSubAssets", [
-                "assetSubAssets_id" => $subAsset['origin'],
-                "assetSubAssets_sub_asset_id" => $subAsset['id'],
-                "assetSubAssets_sub_asset_quantity" => $subAsset['quantity']
-            ]);
+        if ($deleted == false) {
+            $DBLIB->where("assetSubAssets_id", $subAsset['origin']);
+            $DBLIB->delete("assetSubAssets");
+            $deleted = true;
         }
 
-        if (!$result) {
-            finish(false, ["code" => "UPDATE-FAIL", "message" => "Could not update sub-asset quantity"]);
-        }
+        $result = $DBLIB->insert("assetSubAssets", [
+            "assetSubAssets_id" => $subAsset['origin'],
+            "assetSubAssets_sub_asset_id" => $subAsset['id'],
+            "assetSubAssets_sub_asset_quantity" => $subAsset['quantity']
+        ]);
     }
 }
 
