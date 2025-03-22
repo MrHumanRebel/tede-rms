@@ -166,7 +166,7 @@
                 },
                 {% endif %}                
                 {% if GET['assets'] and project.projectsTypes_config_assets == 1 %}
-                    { text: "Felszerelés", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
+                    { text: "Felszerelés", style: { fontSize: 17, bold: true }, pageBreak: 'before' },
                     
                     {% set columnCount = 2 %}
                     {% if GET['checkboxes'] %}{% set columnCount = columnCount + 1 %}{% endif %}
@@ -179,11 +179,13 @@
 
                     {% if FINANCIALS.assetsAssigned|length > 0 %}
                         { 
+                            {% set newColoumnFontSize = 10 %} 
+
                             table: {
                                 headerRows: 1,
                                 widths: [
                                     {% if GET['checkboxes'] %}'auto',{% endif %}
-                                    'auto', // Megnevezés
+                                    '*', // Megnevezés
                                     'auto', // Darabszám
                                     {% if GET['masses'] %}'auto',{% endif %}
                                     {% if GET['comments'] %}'auto',{% endif %}
@@ -200,32 +202,38 @@
                                 ],
                                 body: [
                                     [
-                                        {% if GET['checkboxes'] %}' ',{% endif %}
-                                        'Megnevezés',
-                                        'Darabszám',
-                                        {% if GET['masses'] %}'Tömeg',{% endif %}
-                                        {% if GET['comments'] %}' ',{% endif %}
+                                        {% if GET['checkboxes'] %} 
+                                            { text: ' ', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } }, 
+                                        {% endif %}
+                                        { text: 'Eszköz', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                        { text: 'Mennyiség', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                        {% if GET['masses'] %}
+                                        { text: 'Tömeg', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                        {% endif %}
+                                        {% if GET['comments'] %}
+                                        { text: ' ', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                        {% endif %}
                                         {% if project.projectsTypes_config_finance == 1 %}
                                             {% if GET['prices'] %}
-                                                'Listaár/db',
-                                                'Listaár összes',
+                                            { text: 'Listaár', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                            { text: 'Ár', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } },
                                             {% endif %}
                                             {% if GET['discounts'] %}
-                                                'Kedvezmény mértéke',
-                                                'Kedvezményes ár',
+                                            { text: 'Kedvezmény\n mértéke', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                            { text: 'Kedvezményes\n ár', style: {  bold: true, fontSize: '{{ newColoumnFontSize }}' } },
                                             {% endif %}
                                         {% endif %}
                                     ],
                                     {% set currentCategory = "" %}
                                     {% if GET['quote'] != 'truck' %}
                                         {% for type in FINANCIALS.assetsAssigned|filter(asset => asset['assets'][0].assetsAssignments_assignedAsSubAsset != 1) %}
-                                            {% if type['assets'][0].assetCategories_name != currentCategory %}
-                                                {% set currentCategory = type['assets'][0].assetCategories_name %}
-                                                {% set currentCategoryID = type['assets'][0].assetCategories_id %}
+                                            {% if type['assets'][0].assetCategoriesGroups_name != currentCategory %}
+                                                {% set currentCategory = type['assets'][0].assetCategoriesGroups_name %}
+                                                {% set currentCategoryID = type['assets'][0].assetCategoriesGroups_id %}
                                                 [
                                                     {
-                                                        text: "{{ type['assets'][0].assetCategories_name|escape("js") }}",
-                                                        style: { bold: true },
+                                                        text: "{{ type['assets'][0].assetCategoriesGroups_name|escape("js") }}",
+                                                        style: { bold: true, fontSize: '{{ newColoumnFontSize }}'},
                                                         fillColor: '#F5F5F5',
                                                         colSpan: {{ columnCount }},
                                                         margin: 3
@@ -243,7 +251,7 @@
                                                 [
                                                     {
                                                         text: "{{ type['assets'][0].assetCategories_name|escape("js") }}",
-                                                        style: { bold: true },
+                                                        style: { bold: true, fontSize: '{{ newColoumnFontSize }}' },
                                                         fillColor: '#F5F5F5',
                                                         colSpan: {{ columnCount }},
                                                         margin: 3
@@ -262,7 +270,7 @@
                     {% endif %}                    
                 {% endif %}
                 {% if FINANCIALS.payments.subHire.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['subHires']  %}
-                    { text: "További bérleti elemek", style: { fontSize: 20, bold: true }, pageBreak: 'before' },
+                    { text: "További bérleti elemek", style: { fontSize: 17, bold: true }, pageBreak: 'before' },
                     { 
                         table: {
                             widths: ['auto', '*'{% if GET['prices'] %},'auto','auto'{% endif %}],
@@ -300,140 +308,137 @@
                         },
                         layout: 'noBorders',
                         margin: [ 0, 10, 0, 10 ]
-                    },
-                    {% if GET['prices'] %}
-                    {
-                        columns: [
-                            {
-                                width: '*',
-                                text: 'Összesen: ',
-                                style: { bold: true, alignment: 'right' },
-                                margin: [ 0, 0, 5, 0 ]
-                            },
-                            {
-                                width: 'auto',
-                                text: "{{ FINANCIALS.payments.subHire.total|money|replace({',00':''})|escape('js') }}",
-                            },
-                            
-                        ]
-                    },
-                    {% endif %}
+                    },                    
                 {% endif %}
                 {% if FINANCIALS.payments.sales.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['sales'] %}
-                    { text: "Értékesítés", style: { fontSize: 20, bold: true } },
-                    { 
+                    { text: "Értékesítés", style: { fontSize: 17, bold: true }},
+                    
+                    {% set columnCount = 2 %}
+                    {% if GET['checkboxes'] %}{% set columnCount = columnCount + 1 %}{% endif %}
+                    {% if GET['prices'] %}{% set columnCount = columnCount + 2 %}{% endif %}
+
+                    {
+                        {% set newColoumnFontSize = 10 %} 
+                        {% set newFontSize = 10 %} 
                         table: {
-                            widths: ['auto', '*'{% if GET['prices'] %},'auto','auto'{% endif %}],
+                            headerRows: 1,
+                            widths: [
+                                {% if GET['checkboxes'] %}'auto',{% endif %}
+                                '*', // Megnevezés
+                                'auto', // Darabszám
+                                {% if GET['prices'] %}
+                                    'auto', // Listaár/db
+                                    'auto', // Listaár összes
+                                {% endif %}
+                            ],
                             body: [
-                                {% set currentSupplier = "" %}
+                                [
+                                    {% if GET['checkboxes'] %}' ',{% endif %}
+                                    { text: 'Megnevezés', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                    { text: 'Darabszám', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                    {% if GET['prices'] %}
+                                        { text: 'Listaár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                        { text: 'Ár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                    {% endif %}
+                                ],
+                                
                                 {% for payment in FINANCIALS.payments.sales.ledger %}
-                                {% if currentSupplier != payment.payments_supplier %}
-                                    {% set currentSupplier = payment.payments_supplier %}
-                                    [{ 
-                                        text: "{{ payment.payments_supplier|escape("js") }}", 
-                                        style: { bold: true },
-                                        fillColor: '#F5F5F5',
-                                        colSpan: {{ GET['prices'] ? 4 : 2 }},
-                                        margin: 3
-                                    },
-                                    {% for i in range(2, (GET['prices'] ? 4 : 2)) %}{},{% endfor %}
+                                    [
+                                        {% if GET['checkboxes'] %}' ',{% endif %}
+                                        { 
+                                            text: "{{ payment.payments_comment|escape("js") }}",
+                                            style: { fontSize: '{{ newFontSize }}' },
+                                            margin: [0, 2],
+                                        },
+                                        { 
+                                            text: "{{ payment.payments_quantity > 1 ? payment.payments_quantity ~ " db" : " 1 db" }}",
+                                            style: { fontSize: '{{ newFontSize }}' },
+                                            margin: [0, 2],
+                                        },
+                                        {% if GET['prices'] %}
+                                            { 
+                                                text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}", alignment: 'right',
+                                                style: { fontSize: '{{ newFontSize }}' },
+                                                margin: [0, 2],
+                                            },
+                                            { 
+                                                text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}", alignment: 'right',
+                                                style: { fontSize: '{{ newFontSize }}' },
+                                                margin: [0, 2],
+                                            },
+                                        {% endif %}
                                     ],
-                                {% endif %}
-                                [
-                                    "{{ payment.payments_quantity > 1 ? payment.payments_quantity ~ "x" : "" }}",
-                                    "{{ payment.payments_comment|escape("js") }}",
-                                    {% if GET['prices'] %}
-                                        {
-                                            text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}",
-                                            style: {alignment: 'right'}
-                                        },
-                                        {
-                                            text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}",
-                                            style: {alignment: 'right'}
-                                        },
-                                    {% endif %}
-                                ],
                                 {% endfor %}
-                            ],
+                            ]
                         },
-                        layout: 'noBorders',
+                        layout: 'lightHorizontalLines',
                         margin: [ 0, 10, 0, 10 ]
                     },
-                    {% if GET['prices'] %}
-                    {
-                        columns: [
-                            {
-                                width: '*',
-                                text: 'Összesen: ',
-                                style: { bold: true, alignment: 'right' },
-                                margin: [ 0, 0, 5, 0 ]
-                            },
-                            {
-                                width: 'auto',
-                                text: "{{ FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js') }}",
-                            },
-                            
-                        ]
-                    },
-                    {% endif %}
                 {% endif %}
+
+
                 {% if project.projectsTypes_config_finance == 1 and FINANCIALS.payments.staff.ledger|length > 0 and GET['staff'] %}
-                    { text: "Személyzet", style: { fontSize: 20, bold: true } },
-                    { 
+                    { text: "Személyzet", style: { fontSize: 17, bold: true }},
+    
+                    {% set columnCount = 2 %}
+                    {% if GET['checkboxes'] %}{% set columnCount = columnCount + 1 %}{% endif %}
+                    {% if GET['prices'] %}{% set columnCount = columnCount + 2 %}{% endif %}                   
+                    {
+                        {% set newColoumnFontSize = 10 %} 
+                        {% set newFontSize = 10 %} 
                         table: {
-                            widths: ['auto', '*'{% if GET['prices'] %},'auto','auto'{% endif %}],
-                            body: [
-                                {% set currentSupplier = "" %}
-                                {% for payment in FINANCIALS.payments.staff.ledger %}
-                                {% if currentSupplier != payment.payments_supplier %}
-                                    {% set currentSupplier = payment.payments_supplier %}
-                                    [{ 
-                                        text: "{{ payment.payments_supplier|escape("js") }}", 
-                                        style: { bold: true },
-                                        fillColor: '#F5F5F5',
-                                        colSpan: {{ GET['prices'] ? 4 : 2 }},
-                                        margin: 3
-                                    },
-                                    {% for i in range(2, (GET['prices'] ? 4 : 2)) %}{},{% endfor %}
-                                    ],
+                            headerRows: 1,
+                            widths: [
+                                {% if GET['checkboxes'] %}'auto',{% endif %}
+                                '*', // Megnevezés
+                                'auto', // Darabszám
+                                {% if GET['prices'] %}
+                                    'auto', // Listaár/db
+                                    'auto', // Listaár összes
                                 {% endif %}
+                            ],
+                            body: [
                                 [
-                                    "{{ payment.payments_quantity > 1 ? payment.payments_quantity ~ "x" : "" }}",
-                                    "{{ payment.payments_comment|escape("js") }}",
+                                    {% if GET['checkboxes'] %}' ',{% endif %}
+                                    { text: 'Megnevezés', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                    { text: 'Darabszám', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
                                     {% if GET['prices'] %}
-                                        {
-                                            text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}",
-                                            style: {alignment: 'right'}
-                                        },
-                                        {
-                                            text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}",
-                                            style: {alignment: 'right'}
-                                        },
+                                        { text: 'Listaár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                        { text: 'Ár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
                                     {% endif %}
                                 ],
+                                {% for payment in FINANCIALS.payments.staff.ledger %}
+                                    [
+                                        {% if GET['checkboxes'] %}' ',{% endif %}
+                                        { 
+                                            text: "{{ payment.payments_comment|escape("js") }}",
+                                            style: { fontSize: '{{ newFontSize }}' },
+                                            margin: [0, 2],
+                                        },
+                                        { 
+                                            text: "{{ payment.payments_quantity > 1 ? payment.payments_quantity ~ " db" : " 1 db" }}",
+                                            style: { fontSize: '{{ newFontSize }}' },
+                                            margin: [0, 2],
+                                        },
+                                        {% if GET['prices'] %}
+                                            { 
+                                                text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}", alignment: 'right',
+                                                style: { fontSize: '{{ newFontSize }}' },
+                                                margin: [0, 2],
+                                            },
+                                            { 
+                                                text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}", alignment: 'right',
+                                                style: { fontSize: '{{ newFontSize }}' },
+                                                margin: [0, 2],
+                                            },
+                                        {% endif %}
+                                    ],
                                 {% endfor %}
                             ],
                         },
-                        layout: 'noBorders',
+                        layout: 'lightHorizontalLines',
                         margin: [ 0, 10, 0, 10 ]
                     },
-                    {% if GET['prices'] %}
-                    {
-                        columns: [
-                            {
-                                width: '*',
-                                text: 'Összesen: ',
-                                style: { bold: true, alignment: 'right' },
-                                margin: [ 0, 0, 5, 0 ]
-                            },
-                            {
-                                width: 'auto',
-                                text: "{{ FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js') }}",
-                            },
-                            
-                        ]
-                    },
-                    {% endif %}
                 {% endif %}
                 {% if GET['paymentTerms'] %}
                 {
