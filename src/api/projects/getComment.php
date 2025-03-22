@@ -1,27 +1,29 @@
 <?php
 require_once __DIR__ . '/../apiHeadSecure.php';
 
-// Jogosultság és paraméterek ellenőrzése
-if (!$AUTH->instancePermissionCheck("PROJECTS:VIEW") || !isset($_POST['projects_id']) || !isset($_POST['comment_id'])) {
-    die("404");
-}
+if (!$AUTH->instancePermissionCheck("PROJECTS:VIEW") or !isset($_POST['projects_id']) or !isset($_POST['comment_id'])) die("404");
 
-// Projekt létezésének ellenőrzése
+// Projekt lekérdezése
 $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where("projects.projects_deleted", 0);
 $DBLIB->where("projects.projects_id", $_POST['projects_id']);
-$project = $DBLIB->getOne("projects", ["projects.projects_id"]);
-if (!$project) die(json_encode(["error" => "A projekt nem található"]));
+$project = $DBLIB->getone("projects", ["projects.projects_id"]);
+if (!$project) die("404");
 
-// Komment lekérdezése az auditLog-ból
-$DBLIB->where("auditLog.auditLog_targetID", $_POST['comment_id']);
-$DBLIB->where("auditLog.projects_id", $_POST['projects_id']);
-$comment = $DBLIB->getOne("auditLog", ["auditLog.auditLog_actionData"]);
+// Audit log lekérdezése egyedi komment alapján (uniqueID)
+$DBLIB->where("auditLog.auditLog_deleted", 0);
+$DBLIB->where("auditLog.projects_id", $project['projects_id']);
+$DBLIB->where("auditLog.auditLog_actionType", "QUICKCOMMENT");
+$DBLIB->where("auditLog.auditLog_targetID", $_POST['comment_id']);  // Szűrés uniqueID alapján
+$DBLIB->join("users", "auditLog.users_userid=users.users_userid", "LEFT");
+$auditLog = $DBLIB->get("auditLog", null, ["auditLog.auditLog_actionData"]);
 
-if (!$comment) {
-    die("404");
-}
+if (!$auditLog) die("404"); // Ha nincs komment, 404-es hibával tér vissza
 
-// Komment visszaküldése
-echo json_encode(["comment_text" => $comment['auditLog.auditLog_actionData'] ?? ""]);
-?>
+// Csak az első kommentet adja vissza
+$comment = $auditLog[0];
+
+// Visszaadás a komment szöveggel
+finish(true, null, [
+    'comment_text' => $comment['auditLog_actionData'] ?? '', // Ha a komment szövege null, üres mező
+]);

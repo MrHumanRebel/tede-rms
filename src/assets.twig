@@ -830,8 +830,6 @@ $(document).ready(function () {
                         });
                     });
                 });
-
-
                 // Várjuk meg az összes al-eszköz ellenőrzését
                 Promise.allSettled(requests).then(results => {
                     if (hasInsufficientStock) {

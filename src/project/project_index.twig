@@ -1329,44 +1329,55 @@
                 var comment_id = $(this).data("comment-id");
                 var projects_id = "{{ project.projects_id }}";
 
+                function decodeHtmlEntities(str) {
+                    var doc = new DOMParser().parseFromString(str, "text/html");
+                    return doc.documentElement.textContent;
+                }
+
                 // Előző komment betöltése AJAX-szal
                 ajaxcall("projects/getComment.php", {
                     "comment_id": comment_id,
                     "projects_id": projects_id
                 }, function(data) {
-                        commentText = '';
-                        var commentText = (data && data.comment_text) ? data.comment_text : ''; // Ha null, üres mező
-                        // Megnyitjuk a bootbox dialogot
-                        bootbox.dialog({
-                            title: "Komment szerkesztése",
-                            size: 'large',
-                            message: '<textarea id="editor" class="form-control">' + commentText + '</textarea>',
-                            buttons: {
-                                ok: {
-                                    label: "Mentés",
-                                    className: "btn btn-info",
-                                    callback: function () {
-                                        let content = $('#editor').val();
-                                        if (content) {
-                                            ajaxcall("projects/editQuickComment.php", { // Itt már editQuickComment.php a mentés
-                                                "comment_id": comment_id,
-                                                "projects_id": projects_id,
-                                                "new_comment_text": content
-                                            }, function (data) {
-                                                location.reload();
-                                            });
-                                        }
+                    var commentText = '';
+                    if (data && data.response && data.response.comment_text) {
+                        console.log("Raw comment_text:", data.response.comment_text);
+                        commentText = JSON.parse('"' + data.response.comment_text + '"'); // Decodes \uXXXX sequences
+                        commentText = decodeHtmlEntities(commentText);
+                        console.log("After JSON.parse:", commentText);
+                    }                  
+                    console.log("Nincs elérhető komment!");
+                    // Megnyitjuk a bootbox dialogot
+                    bootbox.dialog({
+                        title: "Komment szerkesztése",
+                        size: 'large',
+                        message: '<textarea id="editor" class="form-control">' + commentText + '</textarea>',
+                        buttons: {
+                            ok: {
+                                label: "Mentés",
+                                className: "btn btn-info",
+                                callback: function () {
+                                    let content = $('#editor').val();
+                                    if (content) {
+                                        ajaxcall("projects/editQuickComment.php", { // Itt már editQuickComment.php a mentés
+                                            "comment_id": comment_id,
+                                            "projects_id": projects_id,
+                                            "new_comment_text": content
+                                        }, function (data) {
+                                            location.reload();
+                                        });
                                     }
-                                },
-                                cancel: {
-                                    label: "Mégsem",
-                                    className: "btn btn-danger"
                                 }
+                            },
+                            cancel: {
+                                label: "Mégsem",
+                                className: "btn btn-danger"
                             }
-                        });
-                    
+                        }
+                    });
                 });
             });
+
 
             $('#pdfGenerateModalQuote').on('show.bs.modal', function (e) {
                 if ($(e.relatedTarget).data('quote') === "true") {
