@@ -278,8 +278,8 @@
                                                                 <b class="d-block">{{ project.projects_dates_deliver_start ? project.projects_dates_deliver_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_deliver_end|date("Y. m. d. H:i") }}</b>
                                                             {% endif %}
                                                             </p>
-                                                            <p class="text-sm">Projekt időtartama
                                                             {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
+                                                            <p class="text-sm">Projekt időtartama
                                                                 <div class="input-group">
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text">Hetek</span>
@@ -416,7 +416,7 @@
                                                                     <span class="time">
                                                                         <i class="fas fa-tag"></i> {{ event.auditLog_targetID }} 
                                                                     </span>
-                                                                    {% if "ASSETS:CREATE"|instancePermissions %}
+                                                                    {% if "ASSETS:CREATE"|instancePermissions or event.users_userid == USERDATA.users_userid or event.auditLog_actionUserid == USERDATA.users_userid %}
                                                                     <button type="button" class="btn btn-tool quickDeleteCommentButton" data-comment-id="{{ event.auditLog_targetID }}" title="Megjegyzés törlése">
                                                                         <i class="fas fa-trash-alt text-danger"></i>
                                                                     </button>

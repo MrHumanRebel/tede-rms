@@ -3,6 +3,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.5/main.min.css" integrity="sha512-1P/SRFqI1do4eNtBsGIAqIZIlnmOQkaY7ESI2vkl+q+hl9HSXmdPqotN0McmeZVyR4AWV+NvkP6pKOiVdY/V5A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.5/main.min.js" integrity="sha512-VyGX7HXwa9yMgIfDPYcj7+XFjtSEzqY7LTf2Tvn2FAf4O6MkD5UzNkrlkMHyLQMbdYfor8SNYKyyeBhTazNgPw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<style>
+    .fc-toolbar-title {
+        font-size: 1.2rem !important;
+        font-weight: bold !important;
+    }
+</style>
+
+
 <div>
     {% set calendarId = random() %}
     <div class="card-body p-0">
@@ -50,7 +58,7 @@
                     const monthNames = ["Január", "Február", "Március", "Április", "Május", "Június",
                         "Július", "Augusztus", "Szeptember", "Október", "November", "December"
                     ]
-                    const prefix = "{{LOCATION ? LOCATION.locations_name ~ ': ' : USER ? 'Saját naptárad: ' : '' }}"
+                    const prefix = `{{LOCATION ? LOCATION.locations_name ~ ': ' : USER ? 'Saját naptár: ' : '' }}`
 
                     return prefix + date['date']['year'] + " " + monthNames[date['date']['month']];
                 },
