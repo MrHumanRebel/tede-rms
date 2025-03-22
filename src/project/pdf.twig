@@ -134,13 +134,8 @@
                                 { text: "{{ FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             [
-                                {% if FINANCIALS.prices.discountPercentage and FINANCIALS.prices.discountPercentage != 0 %}
-                                    { text: "Kedvezmények" },
-                                    { text: "-{{ FINANCIALS.prices.discounts|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
-                                {% else %}
-                                    { text: "" },
-                                    { text: "" },
-                                {% endif %}
+                                { text: "Kedvezmények" },
+                                { text: "-{{ FINANCIALS.prices.discounts|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                                 { text: "Személyzet" },
                                 { text: "{{ FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
@@ -170,7 +165,7 @@
                 },
                 {% endif %}                
                 {% if GET['assets'] and project.projectsTypes_config_assets == 1 %}
-                    { text: "Felszerelés", style: { fontSize: 15, bold: true }, pageBreak: 'before' },
+                    { text: "Felszerelések", style: { fontSize: 15, bold: true }, pageBreak: 'before' },
                     
                     {% set columnCount = 2 %}
                     {% if GET['checkboxes'] %}{% set columnCount = columnCount + 1 %}{% endif %}

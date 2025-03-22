@@ -39,6 +39,10 @@
                                         {% if "BUSINESS:USERS:VIEW:INDIVIDUAL_USER"|instancePermissions %}
                                             </a>
                                         {% endif %}
+                                        {% if crew.users_social_mobilephone %}
+                                            - Telefonszám: 
+                                            <a href="tel:{{ crew.users_social_mobilephone }}">{{ crew.users_social_mobilephone }}</a>
+                                        {% endif %}
                                     {% else %}
                                         {{ crew.crewAssignments_personName }}
                                     {% endif %}

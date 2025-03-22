@@ -3976,7 +3976,7 @@ Rest are set out in corehead
                 'encoding' => 'latin1',
                 'after' => 'users_social_instagram',
             ])
-            ->addColumn('users_social_snapchat', 'string', [
+            ->addColumn('users_social_mobilephone', 'string', [
                 'null' => true,
                 'limit' => 100,
                 'collation' => 'latin1_swedish_ci',
@@ -3988,7 +3988,7 @@ Rest are set out in corehead
                 'limit' => 200,
                 'collation' => 'latin1_swedish_ci',
                 'encoding' => 'latin1',
-                'after' => 'users_social_snapchat',
+            'after' => 'users_social_mobilephone',
             ])
             ->addColumn('users_widgets', 'string', [
                 'null' => true,

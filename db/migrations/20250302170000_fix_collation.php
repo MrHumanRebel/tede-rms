@@ -162,7 +162,7 @@ final class FixCollation extends AbstractMigration
             ALTER TABLE `users` MODIFY COLUMN `users_social_facebook` varchar(100) NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `users` MODIFY COLUMN `users_social_instagram` varchar(100) NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `users` MODIFY COLUMN `users_social_linkedin` varchar(100) NULL  COLLATE utf8mb4_0900_ai_ci;
-            ALTER TABLE `users` MODIFY COLUMN `users_social_snapchat` varchar(100) NULL  COLLATE utf8mb4_0900_ai_ci;
+            ALTER TABLE `users` MODIFY COLUMN `users_social_mobilephone` varchar(100) NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `users` MODIFY COLUMN `users_social_twitter` varchar(100) NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `users` MODIFY COLUMN `users_username` varchar(200) NULL  COLLATE utf8mb4_0900_ai_ci;
             ALTER TABLE `users` MODIFY COLUMN `users_widgets` varchar(500) NULL  COLLATE utf8mb4_0900_ai_ci;

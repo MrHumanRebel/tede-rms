@@ -4,6 +4,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css" integrity="sha256-VVbO1uqtov1mU6f9qu/q+MfDmrqTfoba0rAE07szS20=" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha256-zI6VVO07NPmVW11q3RQE42YbRmJIkkunrcQ9LEYxJsQ=" crossorigin="anonymous"></script>
     <style>
+
+        .google-maps-btn,
+        .waze-btn {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            width: 30px; /* Gomb szélessége */
+            height: 30px; /* Gomb magassága */
+            border-radius: 50%; /* Kerek gomb */
+            display: inline-flex; /* Egymás mellé helyezés */
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .google-maps-btn i,
+        .waze-btn i {
+            font-size: 24px; /* Ikon mérete */
+            color: #fff; /* Fehér ikon */
+        }
+
+        .google-maps-btn {
+            background-color: #7AC142; /* Waze zöld */
+            
+        }
+
+        .waze-btn {
+            background-color: #4285F4; /* Google Maps kék */
+        }
+
+
         .color-palette {
             height: 35px;
             line-height: 35px;
@@ -215,8 +245,13 @@
                                                                 {% endfor %}
                                                             </select>
                                                             {% if project.locations_id != "" %}
-                                                                <a class="btn btn-default btn-sm" href="https://www.google.com/maps/search/?api=1&query={{ project.locations_name ~ "," ~ project.locations_address|replace({ "\r\n":', ', "\n":', ', "\r":', '})|url_encode }}" target="_blank" title="Google Maps">
-                                                                    <i class="fas fa-map-marked-alt"></i>
+                                                                <!-- Google Maps link -->
+                                                                <a class="btn btn-default btn-sm google-maps-btn" href="https://www.google.com/maps/search/?api=1&query={{ project.locations_address|replace({ "\r\n": ', ', "\n": ', ', "\r": ', '})|url_encode }}" target="_blank" title="Google Maps">
+                                                                    <i class="fas fa-map-marked-alt fa-lg"></i>
+                                                                </a>
+                                                                <!-- Waze link -->
+                                                                <a class="btn btn-default btn-sm waze-btn" href="https://waze.com/ul?q={{ project.locations_address|replace({ "\r\n": ' ', "\n": ' ', "\r": ' '})|url_encode }}" target="_blank" title="Waze">
+                                                                    <i class="fab fa-waze fa-lg"></i>
                                                                 </a>
                                                             {% endif %}
                                                         {% elseif project.projectsTypes_config_venue == 1 %}
@@ -224,11 +259,13 @@
                                                                 <b class="d-block">
                                                                     {% if "LOCATIONS:VIEW"|instancePermissions %}
                                                                         {% if project.locations_address %}
-                                                                            <a class="btn btn-default btn-sm" href="https://www.google.com/maps/search/?api=1&query={{ project.locations_name ~ "," ~ project.locations_address|replace({ "\r\n":', ', "\n":', ', "\r":', '})|url_encode }}" target="_blank" title="Google Maps">
-                                                                                <i class="fas fa-map-marked-alt"></i>
+                                                                            <!-- Google Maps link -->
+                                                                            <a class="btn btn-default btn-sm google-maps-btn" href="https://www.google.com/maps/search/?api=1&query={{ project.locations_address|replace({ "\r\n": ', ', "\n": ', ', "\r": ', '})|url_encode }}" target="_blank" title="Google Maps">
+                                                                                <i class="fas fa-map-marked-alt fa-lg"></i>
                                                                             </a>
-                                                                            <a href="https://www.google.com/maps/search/?api=1&query={{ project.locations_name ~ "," ~ project.locations_address|replace({ "\r\n":', ', "\n":', ', "\r":', '})|url_encode }}" target="_blank" style="color: inherit; text-decoration: inherit;">
-                                                                                {{ project.locations_name }}
+                                                                            <!-- Waze link -->
+                                                                            <a class="btn btn-default btn-sm waze-btn" href="https://waze.com/ul?q={{ project.locations_address|replace({ "\r\n": ' ', "\n": ' ', "\r": ' '})|url_encode }}" target="_blank" title="Waze">
+                                                                                <i class="fab fa-waze fa-lg"></i>
                                                                             </a>
                                                                         {% else %}
                                                                             {{ project.locations_name }}

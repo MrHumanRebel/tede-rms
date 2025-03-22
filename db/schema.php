@@ -15460,11 +15460,11 @@ Rest are set out in corehead
           'GENERATION_EXPRESSION' => '',
           'SRS_ID' => NULL,
         ),
-        'users_social_snapchat' => 
+        'users_social_mobilephone' =>
         array (
           'TABLE_CATALOG' => 'def',
           'TABLE_NAME' => 'users',
-          'COLUMN_NAME' => 'users_social_snapchat',
+          'COLUMN_NAME' => 'users_social_mobilephone',
           'ORDINAL_POSITION' => '23',
           'COLUMN_DEFAULT' => NULL,
           'IS_NULLABLE' => 'YES',

@@ -295,7 +295,7 @@ $DBLIB->where("crewAssignments.crewAssignments_deleted", 0);
 $DBLIB->join("users", "crewAssignments.users_userid=users.users_userid", "LEFT");
 $DBLIB->orderBy("crewAssignments.crewAssignments_rank", "ASC");
 $DBLIB->orderBy("crewAssignments.crewAssignments_id", "ASC");
-$PAGEDATA['project']['crewAssignments'] = $DBLIB->get("crewAssignments", null, ["crewAssignments.*", "users.users_name1", "users.users_name2", "users.users_email"]);
+$PAGEDATA['project']['crewAssignments'] = $DBLIB->get("crewAssignments", null, ["crewAssignments.*", "users.users_name1", "users.users_name2", "users.users_email", "users_social_mobilephone"]);
 
 //Files
 $PAGEDATA['files'] = $bCMS->s3List(7, $PAGEDATA['project']['projects_id']);
