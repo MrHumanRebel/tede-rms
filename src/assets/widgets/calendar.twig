@@ -10,10 +10,9 @@
     </div>
     <script>
         $(function () {
-            /* initialize the calendar
-             -----------------------------------------------------------------*/
+            /* initialize the calendar */
             const Calendar = FullCalendar.Calendar;
-            
+
             const calendar{{ calendarId }} = new Calendar(document.getElementById('calendar{{ calendarId }}'), {
                 locale: 'hu',
                 editable: false,
@@ -33,7 +32,19 @@
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listYear'
+                    right: 'customViewSelector'  // Custom dropdown for views
+                },
+                customButtons: {
+                    customViewSelector: {
+                        text: 'Nézet váltás',
+                        click: function() {
+                            const views = ['dayGridMonth', 'timeGridWeek', 'timeGridDay', 'listYear'];
+                            const currentView = calendar{{ calendarId }}.view.type;
+                            let currentIndex = views.indexOf(currentView);
+                            currentIndex = (currentIndex + 1) % views.length;  // Cycle through views
+                            calendar{{ calendarId }}.changeView(views[currentIndex]);
+                        }
+                    }
                 },
                 titleFormat: function(date) {
                     const monthNames = ["Január", "Február", "Március", "Április", "Május", "Június",
@@ -88,14 +99,13 @@
                     var weekStartDates =  {{USERDATA.instance['instances_weekStartDates']|raw}};
                     for (const [date, label] of Object.entries(weekStartDates)) {
                         if (moment(week.date).isSame(date, 'isoWeek')) {
-                            //This date is in this week so return the label
+                            // This date is in this week so return the label
                             if (label === " ") return null;
                             else return label;
                         }
                     }
-                    //default to week number if it doesn't have a label
+                    // Default to week number if it doesn't have a label
                     return week.num;
-                    
                 },
                 {% else %}
                 weekNumberCalculation: "ISO",
