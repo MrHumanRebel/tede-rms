@@ -22,7 +22,13 @@
                 text: '{{ (type['totals']['mass'] > 0 ? type['totals']['mass']|escape('js') ~ ' kg' : '') }}',
                 style: { fontSize: '{{ newFontSize }}' },
             },
+        {% else %}
+            {
+                text: '-',
+                style: { fontSize: '{{ newFontSize }}' },
+            },
         {% endif %}
+
 
         {% if project.projectsTypes_config_finance == 1 %}
             {% if GET['prices'] %}
@@ -74,11 +80,18 @@
             },
 
             {# Tömeg #}
-            {% if GET['masses'] %}{
-                test: '{{ assetAssignment.assets_mass != null ? assetAssignment.assets_mass|mass : (assetAssignment.assetTypes_mass != null and assetAssignment.assetTypes_mass != 0 ? assetAssignment.assetTypes_mass|mass : "") }}',
-                style: { fontSize: '{{ newFontSize }}' },
-            },
+            {% if GET['masses'] %}
+                {
+                    test: '{{ assetAssignment.assets_mass != null ? assetAssignment.assets_mass|mass : (assetAssignment.assetTypes_mass != null and assetAssignment.assetTypes_mass != 0 ? assetAssignment.assetTypes_mass|mass : "") }}',
+                    style: { fontSize: '{{ newFontSize }}' },
+                },
+            {% else %}
+                {
+                    test: '-',
+                    style: { fontSize: '{{ newFontSize }}' },
+                },
             {% endif %}
+
             {% if project.projectsTypes_config_finance == 1 %}
                 {% if GET['prices'] %}              
                 
