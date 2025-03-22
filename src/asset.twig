@@ -1182,13 +1182,19 @@
                                                             },
                                                             processResults: function (data) {
                                                                 if (data && data.result && data.response) {
+
+                                                                    let parentAssetId = {{asset.assetTypes_id}};
+
                                                                     return {
                                                                         results: $.map(data.response, function (item) {
-                                                                            return {
-                                                                                text: item.assetTypes_name,
-                                                                                id: item.assetTypes_id
-                                                                            };
-                                                                        })
+                                                                            // Azokat az elemeket zárjuk ki, amelyek azonos ID-val rendelkeznek, mint az aktuális eszköz
+                                                                            if (item.assetTypes_id != parentAssetId) {
+                                                                                return {
+                                                                                    text: item.assetTypes_name,
+                                                                                    id: item.assetTypes_id
+                                                                                }
+                                                                            }
+                                                                        }).filter(item => item !== undefined) // Szűrjük ki az undefined értékeket
                                                                     };
                                                                 } else {
                                                                     return { results: [] };
