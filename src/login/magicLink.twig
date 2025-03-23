@@ -4,7 +4,9 @@
         <p>Adja meg az email címét, és küldünk egy linket, amivel bejelentkezhet az alkalmazásba</p>
         <input class="form-control form-control-lg" id="email" autocomplete="email" placeholder="Email" type="email" required style="margin-top: 10px; margin-bottom: 10px;" autofocus>
         <div style="width: 100%; text-align:right;">
+            {% if signupEnabled %}
             <a href="?signup" class="btn btn-secondary">Fiók létrehozása</a>
+            {% endif %}
             <button class="btn btn-primary" type="submit" value="Submit">Link generálása</button>
         </div>
     </form>
