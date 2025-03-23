@@ -340,7 +340,7 @@
                                                             {% endif %}
                                                             </p>
                                                             {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
-                                                            <p class="text-sm">Projekt időtartama
+                                                            <p class="text-sm">Projekt időtartama számlázás miatt
                                                                 <div class="input-group">
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text">Hetek</span>
@@ -353,7 +353,7 @@
                                                                     </div>
                                                                 </div>
                                                                 {% if project.projects_dates_use_start %}
-                                                                <div style="width: 100%;text-align: right;">
+                                                                <div style="width: 100%;text-align: left;">
                                                                     {% if project.projects_dates_finances_days is same as(null) and project.projects_dates_finances_weeks is same as (null) %}
                                                                         A projekt időtartama jelenleg a projekt dátumain alapul
                                                                     {% else %}

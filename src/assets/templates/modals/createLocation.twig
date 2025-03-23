@@ -8,12 +8,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="newForm">
+                    <form id="locationCreate-form">
                         <div class="input-group" style="margin-bottom: 5px;">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Név</span>
                             </div>
-                            <input required type="text" class="form-control" name="locations_name">
+                            <input required type="text" class="form-control" name="locations_name" id="locations_name">
                         </div>
                         <div class="input-group" style="margin-bottom: 5px;">
                             <div class="input-group-prepend">
@@ -29,7 +29,7 @@
                         </div>
                         <div class="input-group" style="margin-bottom: 5px;">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">Ügyfél</span>
+                                <span class="input-group-text">Kliens</span>
                             </div>
                             <select class="form-control" name="clients_id">
                                 <option selected></option>
@@ -45,7 +45,7 @@
                             <select class="form-control" name="locations_subOf">
                                 <option selected></option>
                                 {% for location in allLocations %}
-                                    <option value="{{ location.locations_id }}">{{ location.locations_name }}</option>
+                                <option value="{{ location.locations_id }}">{{ location.locations_name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -53,11 +53,12 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Bezárás</button>
-                    <button type="button" class="btn btn-primary" id="saveNew">Mentés</button>
+                    <button type="button" class="btn btn-primary" id="createLocation-button">Mentés</button>
                 </div>
             </div>
         </div>
     </div>
+
     <script>
         $(document).ready(function () {
             $("#createLocation-button").click(function () {
