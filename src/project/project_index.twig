@@ -194,17 +194,22 @@
                                                     {% endif %}
                                                     <div class="text-muted">
                                                         {% if "PROJECTS:EDIT:CLIENT"|instancePermissions and project.projectsTypes_config_client == 1 %}
-                                                            <p class="text-sm">Ügyfél</p>
-                                                            <select class="form-control select2bs4" multiple id="editProjectClient">
-                                                                {% if project.clients_id == "" %}
-                                                                    <option value="" disabled selected>Nincs ügyfél kiválasztva...</option>
-                                                                {% endif %}
-                                                                {% for client in clients %}
-                                                                    {% if client.clients_archived == 0 or ((client.clients_archived == 1) and (project.clients_id == client.clients_id) ) %}
-                                                                        <option value="{{ client.clients_id }}" {{ project.clients_id == client.clients_id ? 'selected' }} {{ client.clients_archived == 1 ? 'disabled' }}>{{ client.clients_archived == 1 ? '[Archived] ' }}{{ client.clients_name }}</option>
+                                                            <div class="form-group">
+                                                                <div class="d-flex justify-content-between align-items-end">
+                                                                    <label class="font-weight-normal"for="editProjectClient">Ügyfél</label>
+                                                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#createClientModal">Ügyfél létrehozása</button>
+                                                                </div>
+                                                                <select class="form-control select2bs4" id="editProjectClient">
+                                                                    {% if project.clients_id == "" %}
+                                                                        <option value="" disabled selected>Nincs ügyfél kiválasztva</option>
                                                                     {% endif %}
-                                                                {% endfor %}
-                                                            </select>
+                                                                    {% for client in clients %}
+                                                                        {% if client.clients_archived == 0 or ((client.clients_archived == 1) and (project.clients_id == client.clients_id) ) %}
+                                                                            <option value="{{ client.clients_id }}" {{ project.clients_id == client.clients_id ? 'selected' }} {{ client.clients_archived == 1 ? 'disabled' }}>{{ client.clients_archived == 1 ? '[Archived] ' }}{{ client.clients_name }}</option>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
                                                         {% elseif project.projectsTypes_config_client == 1  %}
                                                             <p class="text-sm">Ügyfél
                                                                 <b class="d-block">
@@ -214,12 +219,14 @@
                                                             </p>
                                                         {% endif %}
                                                         {% if "PROJECTS:EDIT:LEAD"|instancePermissions %}
-                                                            <p class="text-sm">Projektmenedzser</p>
-                                                            <select class="form-control select2bs4" multiple id="editProjectManager">
-                                                                {% for user in potentialProjectManagers %}
-                                                                    <option value="{{ user.users_userid }}" {{ project.users_userid == user.users_userid ? 'selected' }}>{{ (user.users_name1 ~ " " ~ user.users_name2) }}</option>
-                                                                {% endfor %}
-                                                            </select>
+                                                            <div class="form-group">
+                                                                <label class="font-weight-normal"for="editProjectManager">Projektmenedzser</label>
+                                                                <select class="form-control select2bs4" id="editProjectManager">
+                                                                    {% for user in potentialProjectManagers %}
+                                                                        <option value="{{ user.users_userid }}" {{ project.users_userid == user.users_userid ? 'selected' }}>{{ (user.users_name1 ~ " " ~ user.users_name2) }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
                                                         {% else %}
                                                             <p class="text-sm">Projektmenedzser
                                                                 <b class="d-block">
@@ -234,20 +241,25 @@
                                                             </p>
                                                         {% endif %}
                                                         {% if "PROJECTS:EDIT:ADDRESS"|instancePermissions and project.projectsTypes_config_venue == 1 %}
-                                                            <p class="text-sm">Helyszín</p>
-                                                            <select class="form-control select2bs4" multiple id="editProjectAddress">
-                                                                {% if project.locations_id == "" %}
-                                                                    <option value="" disabled selected>Nincs helyszín kiválasztva...</option>
-                                                                {% endif %}
-                                                                {% for location in locations %}
-                                                                    <option value="{{ location.locations_id }}" {{ project.locations_id == location.locations_id ? 'selected' }} {{ location.locations_archived == 1 ? 'disabled' }}>{{ location.locations_archived == 1 ? '[Archived] ' }}{{ location.locations_name }}</option>
-                                                                    {% for subLocation in location.linkedToThis %}
-                                                                        <option value="{{ subLocation.locations_id }}" {{ project.locations_id == subLocation.locations_id ? 'selected' }}  {{ subLocation.locations_archived == 1 ? 'disabled' }} title="{% for i in range(1, subLocation['tier']) %}{% if loop.last %}&#8627;{% else %}&nbsp;&nbsp;{% endif %}{% endfor %}">
-                                                                            {{ subLocation.locations_archived == 1 ? '[Archived] ' }}{{ subLocation.locations_name }}
-                                                                        </option>
+                                                            <div class="form-group">
+                                                                <div class="d-flex justify-content-between align-items-end">
+                                                                    <label class="font-weight-normal"for="editProjectAddress">Helyszín</label>
+                                                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#createLocationModal">Helyszín létrehozása</button>
+                                                                </div>
+                                                                <select class="form-control select2bs4" id="editProjectAddress">
+                                                                    {% if project.locations_id == "" %}
+                                                                        <option value="" disabled selected>Nincs helyszín kiválasztva...</option>
+                                                                    {% endif %}
+                                                                    {% for location in locations %}
+                                                                        <option value="{{ location.locations_id }}" {{ project.locations_id == location.locations_id ? 'selected' }} {{ location.locations_archived == 1 ? 'disabled' }}>{{ location.locations_archived == 1 ? '[Archived] ' }}{{ location.locations_name }}</option>
+                                                                        {% for subLocation in location.linkedToThis %}
+                                                                            <option value="{{ subLocation.locations_id }}" {{ project.locations_id == subLocation.locations_id ? 'selected' }}  {{ subLocation.locations_archived == 1 ? 'disabled' }} title="{% for i in range(1, subLocation['tier']) %}{% if loop.last %}&#8627;{% else %}&nbsp;&nbsp;{% endif %}{% endfor %}">
+                                                                                {{ subLocation.locations_archived == 1 ? '[Archived] ' }}{{ subLocation.locations_name }}
+                                                                            </option>
+                                                                        {% endfor %}
                                                                     {% endfor %}
-                                                                {% endfor %}
-                                                            </select>
+                                                                </select>
+                                                            </div>
                                                             {% if project.locations_id != "" %}
                                                                 <!-- Google Maps link -->
                                                                 <a class="btn btn-default btn-sm google-maps-btn" href="https://www.google.com/maps/search/?api=1&query={{ project.locations_address|replace({ "\r\n": ', ', "\n": ', ', "\r": ', '})|url_encode }}" target="_blank" title="Google Maps">
@@ -263,9 +275,10 @@
                                                                 <div id="duration">Becsült utazási idő a raktártól: <span id="duration-value">...</span> </div>
                                                             {% endif %}
                                                         {% elseif project.projectsTypes_config_venue == 1 %}
-                                                            <p class="text-sm">Helyszín
+                                                            <p class="text-sm">
+                                                                Helyszín
                                                                 <b class="d-block">
-                                                                    {% if "LOCATIONS:VIEW"|instancePermissions %}
+                                                                    <a style="color: inherit; text-decoration: inherit;"  {% if "LOCATIONS:VIEW"|instancePermissions %}href="{{ CONFIG.ROOTURL }}/location/"{% endif %}>
                                                                         {% if project.locations_address %}
                                                                             <!-- Google Maps link -->
                                                                             <a class="btn btn-default btn-sm google-maps-btn" href="https://www.google.com/maps/search/?api=1&query={{ project.locations_address|replace({ "\r\n": ', ', "\n": ', ', "\r": ', '})|url_encode }}" target="_blank" title="Google Maps">
@@ -282,9 +295,8 @@
                                                                         {% else %}
                                                                             {{ project.locations_name }}
                                                                         {% endif %}
-                                                                    {% endif %}
+                                                                    </a>
                                                                 </b>
-                                                            </p>
                                                         {% endif %}
                                                         {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
                                                         <p class="text-sm">Esemény időtartama                                                          
@@ -355,7 +367,9 @@
                                                     </div>
                                                     <br/>
                                                     {% if project.projects_parent_project_id and project.projects_status_follow_parent %}
-                                                    <div class="alert alert-info mb-1"><p>Ez az alprojekt a szülőprojekt állapotát követi</p></div> 
+                                                        <div class="alert alert-info mb-1">
+                                                            <p>Ez az alprojekt a szülőprojekt állapotát követi</p>
+                                                        </div> 
                                                     {% endif %}
                                                     <div class="alert" id="statusAlert" style="background-color: {{ project.projectsStatuses_backgroundColour }}; color: {{ project.projectsStatuses_foregroundColour }};">
                                                         <h5><b>Állapot: </b>{{ project.projectsStatuses_name }}</h5>
@@ -1302,7 +1316,12 @@
         </div>
     </div>
 
-
+    {% if "CLIENTS:CREATE"|instancePermissions %}
+        {% embed 'assets/templates/modals/createClient.twig' %}{% endembed %}
+    {% endif %}
+    {% if "LOCATIONS:CREATE"|instancePermissions %}
+        {% embed 'assets/templates/modals/createLocation.twig' %}{% endembed %}
+    {% endif %}
 
     <script>
 
