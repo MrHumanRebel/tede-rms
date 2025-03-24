@@ -1410,11 +1410,12 @@
 
         // Function to calculate travel cost
         function calculateTravelCost(distance) {
-            const fuelConsumption = parseFloat(document.getElementById('fuel-consumption').value);  // Get the latest fuel consumption value
-            const fuelPrice = parseFloat(document.getElementById('fuel-price').value);      // Get the latest fuel price value
+            const fuelConsumption = parseFloat(document.getElementById('fuel-consumption').value) || 1;  // Default to 1 if no value is provided
+            const fuelPrice = parseFloat(document.getElementById('fuel-price').value) || 1;      // Default to 1 if no value is provided
 
             if (isNaN(distance) || isNaN(fuelConsumption) || isNaN(fuelPrice)) {
                 alert('Kérjük, adja meg a távolságot, a fogyasztást és az üzemanyag árát.');
+                console.log('No data found');
                 return;
             }
 
