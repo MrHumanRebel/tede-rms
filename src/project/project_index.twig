@@ -278,13 +278,13 @@
                                                                     <!-- Fogyasztás beviteli mező -->
                                                                     <div class="col-md-6">
                                                                         <label class="font-weight-normal" for="fuel-consumption">Fogyasztás (liter/100 km)</label>
-                                                                        <input type="number" class="form-control" id="fuel-consumption" value="10" step="0.1" min="3" max="25">
+                                                                        <input type="number" class="form-control" id="fuel-consumption" value="10" step="0.1" min="1" max="25">
                                                                     </div>
 
                                                                     <!-- Üzemanyag ára beviteli mező -->
                                                                     <div class="col-md-6">
                                                                         <label class="font-weight-normal" for="fuel-price">Üzemanyag ára (Ft)</label>
-                                                                        <input type="number" class="form-control" id="fuel-price" value="615" step="1" min="300" max="1500">
+                                                                        <input type="number" class="form-control" id="fuel-price" value="615" step="1" min="1" max="1500">
                                                                     </div>
                                                                 </div>
                                                                 <!-- Becsült utazási költség -->
@@ -1413,15 +1413,19 @@
             const fuelConsumption = parseFloat(document.getElementById('fuel-consumption').value);  // Get the latest fuel consumption value
             const fuelPrice = parseFloat(document.getElementById('fuel-price').value);      // Get the latest fuel price value
 
-
             if (isNaN(distance) || isNaN(fuelConsumption) || isNaN(fuelPrice)) {
                 alert('Kérjük, adja meg a távolságot, a fogyasztást és az üzemanyag árát.');
                 return;
             }
 
             // Travel cost calculation
-            const cost = (distance / 100) * fuelConsumption * fuelPrice * 2; // Multiply by 2 for round trip
-            document.getElementById('travel-cost-value').textContent = cost.toFixed(2); // Display the cost
+            const cost = distance  * (fuelConsumption / 100) * fuelPrice * 2; // Multiply by 2 for round trip
+            
+            // Round the cost to the nearest integer (whole Ft)
+            const roundedCost = Math.round(cost);
+
+            // Display the rounded cost with " Ft" appended
+            document.getElementById('travel-cost-value').textContent = roundedCost.toString().replace(/,/g, '.') + ' Ft';
         }
         
         // Geocode both addresses and calculate the route when both are ready
