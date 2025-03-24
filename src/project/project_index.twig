@@ -1346,7 +1346,6 @@
     <script>
 
         const warehouseAddress = '9174 Dunaszeg Iskola utca 7';  // Fixed address
-
         // Function to geocode the address
         function geocodeAddress(address, callback) {
             const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=jsonv2&limit=1`;
@@ -1376,7 +1375,6 @@
             }
 
             const osrmUrl = `https://router.project-osrm.org/route/v1/car/${startCoords.lon},${startCoords.lat};${endCoords.lon},${endCoords.lat}?overview=false&annotations=duration,distance`;
-
             console.log('Requesting route data from OSRM:', osrmUrl); 
 
             fetch(osrmUrl)
@@ -1468,23 +1466,29 @@
             }
         }
 
-        // Event listeners to validate values on change
-        document.getElementById('fuel-consumption').addEventListener('input', function() {
-            validateFuelConsumption();  // Validate fuel consumption
-            const distance = parseFloat(document.getElementById('distance-value').textContent);
-            if (!isNaN(distance)) {
-                calculateTravelCost(distance);  // Recalculate the cost
-            }
-        });
+        // Event listener for fuel consumption
+        const fuelConsumptionElement = document.getElementById('fuel-consumption');
+        if (fuelConsumptionElement) {
+            fuelConsumptionElement.addEventListener('input', function() {
+                validateFuelConsumption();  // Validate fuel consumption
+                const distance = parseFloat(document.getElementById('distance-value').textContent);
+                if (!isNaN(distance)) {
+                    calculateTravelCost(distance);  // Recalculate the cost
+                }
+            });
+        }
 
-        document.getElementById('fuel-price').addEventListener('input', function() {
-            validateFuelPrice();  // Validate fuel price
-            const distance = parseFloat(document.getElementById('distance-value').textContent);
-            if (!isNaN(distance)) {
-                calculateTravelCost(distance);  // Recalculate the cost
-            }
-        });
-
+        // Event listener for fuel price
+        const fuelPriceElement = document.getElementById('fuel-price');
+        if (fuelPriceElement) {
+            fuelPriceElement.addEventListener('input', function() {
+                validateFuelPrice();  // Validate fuel price
+                const distance = parseFloat(document.getElementById('distance-value').textContent);
+                if (!isNaN(distance)) {
+                    calculateTravelCost(distance);  // Recalculate the cost
+                }
+            });
+        }
 
         document.addEventListener("DOMContentLoaded", function() {
             console.log("Oldal betöltődött.");
