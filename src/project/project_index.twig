@@ -273,6 +273,23 @@
                                                                 <div id="distance">Becsült távolság a raktártól: <span id="distance-value">...</span> </div>
                                                                 <!-- Becsült utazási idő -->
                                                                 <div id="duration">Becsült utazási idő a raktártól: <span id="duration-value">...</span> </div>
+                                                                <!-- Fogyasztás és üzemanyag ára egymás mellett -->
+                                                                <div class="form-group row">
+                                                                    <!-- Fogyasztás beviteli mező -->
+                                                                    <div class="col-md-6">
+                                                                        <label class="font-weight-normal" for="fuel-consumption">Fogyasztás (liter/100 km)</label>
+                                                                        <input type="number" class="form-control" id="fuel-consumption" value="10" step="0.1" min="3" max="25">
+                                                                    </div>
+
+                                                                    <!-- Üzemanyag ára beviteli mező -->
+                                                                    <div class="col-md-6">
+                                                                        <label class="font-weight-normal" for="fuel-price">Üzemanyag ára (Ft)</label>
+                                                                        <input type="number" class="form-control" id="fuel-price" value="615" step="1" min="300" max="1500">
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Becsült utazási költség -->
+                                                                <div class="mb-3" id="travel-cost">Becsült utazási költség: <span id="travel-cost-value">...</span></div>
+
                                                             {% endif %}
                                                         {% elseif project.projectsTypes_config_venue == 1 %}
                                                             <p class="text-sm">
@@ -280,6 +297,9 @@
                                                                 <b class="d-block">
                                                                     <a style="color: inherit; text-decoration: inherit;"  {% if "LOCATIONS:VIEW"|instancePermissions %}href="{{ CONFIG.ROOTURL }}/location/"{% endif %}>
                                                                         {% if project.locations_address %}
+                                                                            <div> 
+                                                                                {{ project.locations_name }}{% if project.locations_name and project.locations_address %} - {% endif %}{{ project.locations_address }}
+                                                                            </div>
                                                                             <!-- Google Maps link -->
                                                                             <a class="btn btn-default btn-sm google-maps-btn" href="https://www.google.com/maps/search/?api=1&query={{ project.locations_address|replace({ "\r\n": ', ', "\n": ', ', "\r": ', '})|url_encode }}" target="_blank" title="Google Maps">
                                                                                 <i class="fas fa-map-marked-alt fa-lg"></i>
@@ -1378,11 +1398,30 @@
                         // Update the UI with the distance and duration in hours and minutes
                         document.getElementById('distance-value').textContent = `${distanceKm.toFixed(2)} km`;
                         document.getElementById('duration-value').textContent = `${hours} óra ${minutes} perc`;
-                    } else {
+                        
+                        // Once distance is available, automatically calculate the travel cost
+                        calculateTravelCost(distanceKm); // Automatically calculate with default values
+            } else {
                         console.log('No route found');
                     }
                 })
                 .catch(error => console.log('Error fetching route data:', error));
+        }
+
+        // Function to calculate travel cost
+        function calculateTravelCost(distance) {
+            const fuelConsumption = parseFloat(document.getElementById('fuel-consumption').value);  // Get the latest fuel consumption value
+            const fuelPrice = parseFloat(document.getElementById('fuel-price').value);      // Get the latest fuel price value
+
+
+            if (isNaN(distance) || isNaN(fuelConsumption) || isNaN(fuelPrice)) {
+                alert('Kérjük, adja meg a távolságot, a fogyasztást és az üzemanyag árát.');
+                return;
+            }
+
+            // Travel cost calculation
+            const cost = (distance / 100) * fuelConsumption * fuelPrice * 2; // Multiply by 2 for round trip
+            document.getElementById('travel-cost-value').textContent = cost.toFixed(2); // Display the cost
         }
         
         // Geocode both addresses and calculate the route when both are ready
@@ -1399,6 +1438,48 @@
                 });
             });
         }
+
+        // Function to ensure the fuel consumption stays within the min/max values
+        function validateFuelConsumption() {
+            const fuelConsumptionInput = document.getElementById('fuel-consumption');
+            const value = parseFloat(fuelConsumptionInput.value);
+
+            if (value < parseFloat(fuelConsumptionInput.min)) {
+                fuelConsumptionInput.value = fuelConsumptionInput.min;
+            } else if (value > parseFloat(fuelConsumptionInput.max)) {
+                fuelConsumptionInput.value = fuelConsumptionInput.max;
+            }
+        }
+
+        // Function to ensure the fuel price stays within the min/max values
+        function validateFuelPrice() {
+            const fuelPriceInput = document.getElementById('fuel-price');
+            const value = parseFloat(fuelPriceInput.value);
+
+            if (value < parseFloat(fuelPriceInput.min)) {
+                fuelPriceInput.value = fuelPriceInput.min;
+            } else if (value > parseFloat(fuelPriceInput.max)) {
+                fuelPriceInput.value = fuelPriceInput.max;
+            }
+        }
+
+        // Event listeners to validate values on change
+        document.getElementById('fuel-consumption').addEventListener('input', function() {
+            validateFuelConsumption();  // Validate fuel consumption
+            const distance = parseFloat(document.getElementById('distance-value').textContent);
+            if (!isNaN(distance)) {
+                calculateTravelCost(distance);  // Recalculate the cost
+            }
+        });
+
+        document.getElementById('fuel-price').addEventListener('input', function() {
+            validateFuelPrice();  // Validate fuel price
+            const distance = parseFloat(document.getElementById('distance-value').textContent);
+            if (!isNaN(distance)) {
+                calculateTravelCost(distance);  // Recalculate the cost
+            }
+        });
+
 
         document.addEventListener("DOMContentLoaded", function() {
             console.log("Oldal betöltődött.");
