@@ -729,10 +729,9 @@
                             const hours = document.getElementById('payments_hours').value || 1;
                             const description = document.getElementById('payments_comment_hourly');
                             
-                            if (description) { // Ellenőrizzük, hogy a leírás elem létezik
-                                const totalHours = quantity * hours; // Számoljuk ki az összes órát
-                                const descriptionText = `${selectedType}: ${quantity} * ${hours} = Összesen ${totalHours} óra`; // A leírás szövege
-                                description.value = descriptionText; // Frissítjük a leírást
+                            if (description) { // Check if the element exists
+                                const totalHours = quantity * hours; // Multiply the quantity and hours
+                                description.value = `${selectedType}: Összesen ${totalHours} óra`; // Update description with the calculated total hours
                             }
                         }
 
