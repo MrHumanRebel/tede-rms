@@ -132,10 +132,12 @@
                                     margin-left: 20px;
                                 }
                             </style>
+                            {# 
                             <div class="mb-1">
                                 <input type="checkbox" name="showlinked" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.SHOWLINKED ? "checked" : "" }}>
                                 <span>Az egyes eszközökhöz rendelt eszközök megjelenítése</span>
                             </div>
+                            #}
                             <div class="mb-1">
                                 <input type="checkbox" name="showarchived" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.SHOWARCHIVED ? "checked" : "" }}>
                                 <span>Archivált eszközök megjelenítése</span>
@@ -150,11 +152,11 @@
                             </div>
                             <div class="mb-1">
                                 <input type="checkbox" name="hidesubassets" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.HIDESUBASSETS ? "checked" : "" }} id="hidesubassets">
-                                <span>Aleszközök elrejtése</span>
+                                <span>Csak aleszközöket tartalmazók megjelenítése</span>
                             </div>
                             <div class="mb-1">
                                 <input type="checkbox" name="showsubassets" value="1" class="mr-1" {{ searchResults.SEARCH.SETTINGS.SHOWSUBASSETS ? "checked" : "" }} id="showsubassets">
-                                <span>Csak aleszközök megjelenítése</span>
+                                <span>Csak aleszközöket nem tartalmazók megjelenítése</span>
                             </div>
                     </div>
                 </div>
