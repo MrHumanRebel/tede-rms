@@ -44,7 +44,7 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \ 
     libzip-dev \
     libpng-dev \
-    && apt-get clean
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql mysqli intl zip \
     && rm -rf /var/cache/apk/*
