@@ -40,7 +40,7 @@ LABEL org.opencontainers.image.description="TeDeRMS is a free, open source advan
 LABEL org.opencontainers.image.licenses=AGPL-3.0
 
 # Install PHP extensions
-RUN apt-get update && apt-get install --no-cache -y \
+RUN apt-get update && apt-get install -y \
     libicu-dev \ 
     libzip-dev \
     libpng-dev \
