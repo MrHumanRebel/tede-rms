@@ -32,14 +32,15 @@ LABEL org.opencontainers.image.licenses=AGPL-3.0
 RUN apk update && apk add --no-cache \
     apache2 \
     apache2-utils \
-    libicu \
-    libzip \
-    libpng \
+    libicu-dev \
+    libzip-dev \
+    libpng-dev \
     bash \
+    build-base \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql mysqli intl zip \
     && rm -rf /var/cache/apk/*  # Eltávolítjuk az apk cache-t, hogy csökkentsük a méretet
 
-# Apache konfiguráció beállítása, ha szükséges
+# Apache konfiguráció beállítása
 RUN sed -ri -e 's!/var/www/html!/var/www/html/src!g' /etc/apache2/sites-available/*.conf
 
 # A szükséges PHP beállítások
