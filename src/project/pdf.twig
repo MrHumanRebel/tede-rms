@@ -142,8 +142,8 @@
                             [
                                 { text: "Felszerelés végösszeg", style: { bold: true } },
                                 { text: "{{ FINANCIALS.prices.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
-                                { text: "Albérletek" },
-                                { text: "{{ FINANCIALS.payments.subHire.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "" },
+                                { text: "", style: { alignment: 'right' } },
                             ],
                             {% if not GET['quote'] %}
                             [
@@ -334,7 +334,7 @@
                                 [
                                     {% if GET['checkboxes'] %}' ',{% endif %}
                                     { text: 'Megnevezés', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
-                                    { text: 'Darabszám', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                    { text: 'Mennyiség', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
                                     {% if GET['prices'] %}
                                         { text: 'Listaár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
                                         { text: 'Ár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
@@ -398,7 +398,7 @@
                                 [
                                     {% if GET['checkboxes'] %}' ',{% endif %}
                                     { text: 'Megnevezés', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
-                                    { text: 'Darabszám', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
+                                    { text: 'Mennyiség', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
                                     {% if GET['prices'] %}
                                         { text: 'Listaár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
                                         { text: 'Ár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
