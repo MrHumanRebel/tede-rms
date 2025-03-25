@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql mysqli intl zip \
-    && rm -rf /var/cache/apk/*  # Eltávolítjuk az apk cache-t, hogy csökkentsük a méretet
+    && rm -rf /var/cache/apk/*
 
 # Copy our php.ini file
 
