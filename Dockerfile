@@ -16,7 +16,7 @@ RUN --mount=type=bind,source=composer.json,target=composer.json \
 ################################################################################
 # PHP Build Stage
 ################################################################################
-FROM php:8.3-apache AS final
+FROM php:8.4.5-apache AS final
 
 LABEL org.opencontainers.image.source="https://github.com/mrhumanrebel/tede-rms" \
       org.opencontainers.image.documentation="https://szekedani.duckdns.org" \
