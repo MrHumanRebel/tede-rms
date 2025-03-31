@@ -31,15 +31,68 @@ if ($_POST['project_id'] and $AUTH->instancePermissionCheck("PROJECTS:PROJECT_AS
     $DBLIB->where("projects_id", $_POST['project_id']);
     $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
     $DBLIB->where("projects.projects_deleted", 0);
+
     $DBLIB->where("projects.projects_dates_deliver_start", NULL, "IS NOT");
     $DBLIB->where("projects.projects_dates_deliver_end", NULL, "IS NOT");
-    $thisProject = $DBLIB->getone("projects", ["projects_name", "projects_dates_deliver_start", "projects_dates_deliver_end"]);
+
+    $DBLIB->where("projects.projects_dates_tech_start", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_tech_end", NULL, "IS NOT");
+
+    $DBLIB->where("projects.projects_dates_stageStructure_start", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_stageStructure_end", NULL, "IS NOT");
+
+    $DBLIB->where("projects.projects_dates_stage_start", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_stage_end", NULL, "IS NOT");
+
+    $thisProject = $DBLIB->getone(
+        "projects",
+        [
+            "projects_name",
+            "projects_dates_deliver_start",
+            "projects_dates_deliver_end",
+            "projects_dates_tech_start",
+            "projects_dates_tech_end",
+            "projects_dates_stageStructure_start",
+            "projects_dates_stageStructure_end",
+            "projects_dates_stage_start",
+            "projects_dates_stage_end"
+        ]
+    );
     if (!$thisProject) {
         $dateStart = false;
         $dateEnd = false;
     } else {
-        $dateStart = strtotime($thisProject['projects_dates_deliver_start']);
-        $dateEnd = strtotime($thisProject['projects_dates_deliver_end']);
+
+        foreach ($assets as $asset) {
+
+            $groupName = $asset['assetCategoriesGroups_name'];
+
+            switch ($groupName) {
+                case 'Hangtechnika':
+                case 'Fénytechnika':
+                case 'Vetítéstechnika':
+                    $dateStart = strtotime($thisProject['projects_dates_tech_start']);
+                    $dateEnd = strtotime($thisProject['projects_dates_tech_end']);
+                    break;
+
+                case 'Színpadi tartószerkezet':
+                    $dateStart = strtotime($thisProject['projects_dates_stageStructure_start']);
+                    $dateEnd = strtotime($thisProject['projects_dates_stageStructure_end']);
+                    break;
+
+                case 'Színpadtechnika':
+                    $dateStart = strtotime($thisProject['projects_dates_stage_start']);
+                    $dateEnd = strtotime($thisProject['projects_dates_stage_end']);
+                    break;
+
+                case 'Biztonságtechnika':
+                default:
+                    $dateStart = strtotime($thisProject['projects_dates_deliver_start']);
+                    $dateEnd = strtotime($thisProject['projects_dates_deliver_end']);
+                    break;
+            }
+        }
+
         $RETURN['PROJECT']['ID'] = $_POST['project_id'];
         $RETURN['PROJECT']['NAME'] = $thisProject['projects_name'];
     }
@@ -77,7 +130,51 @@ foreach ($assets as $asset) {
             $DBLIB->where("assetsAssignments.assetsAssignments_deleted", 0);
             $DBLIB->join("projects", "assetsAssignments.projects_id=projects.projects_id", "LEFT");
             $DBLIB->where("projects.projects_deleted", 0);
-            $DBLIB->where("((projects_dates_deliver_start >= '" . date("Y-m-d H:i:s", $dateStart)  . "' AND projects_dates_deliver_start <= '" . date("Y-m-d H:i:s", $dateEnd) . "') OR (projects_dates_deliver_end >= '" . date("Y-m-d H:i:s", $dateStart) . "' AND projects_dates_deliver_end <= '" . date("Y-m-d H:i:s", $dateEnd) . "') OR (projects_dates_deliver_end >= '" . date("Y-m-d H:i:s", $dateEnd) . "' AND projects_dates_deliver_start <= '" . date("Y-m-d H:i:s", $dateStart) . "'))");
+
+            $groupName = $asset['assetCategoriesGroups_name'];
+
+            switch ($groupName) {
+                case 'Hangtechnika':
+                case 'Fénytechnika':
+                case 'Vetítéstechnika':
+                    $DBLIB->where("((projects_dates_tech_start >= '" . date("Y-m-d H:i:s", $dateStart) . "' 
+            AND projects_dates_tech_start <= '" . date("Y-m-d H:i:s", $dateEnd) . "') 
+            OR (projects_dates_tech_end >= '" . date("Y-m-d H:i:s", $dateStart) . "' 
+            AND projects_dates_tech_end <= '" . date("Y-m-d H:i:s", $dateEnd) . "') 
+            OR (projects_dates_tech_end >= '" . date("Y-m-d H:i:s", $dateEnd) . "' 
+            AND projects_dates_tech_start <= '" . date("Y-m-d H:i:s", $dateStart) . "'))");
+                    break;
+
+                case 'Színpadi tartószerkezet':
+                    $DBLIB->where("((projects_dates_stageStructure_start >= '" . date("Y-m-d H:i:s", $dateStart) . "' 
+            AND projects_dates_stageStructure_start <= '" . date("Y-m-d H:i:s", $dateEnd) . "') 
+            OR (projects_dates_stageStructure_end >= '" . date("Y-m-d H:i:s", $dateStart) . "' 
+            AND projects_dates_stageStructure_end <= '" . date("Y-m-d H:i:s", $dateEnd) . "') 
+            OR (projects_dates_stageStructure_end >= '" . date("Y-m-d H:i:s", $dateEnd) . "' 
+            AND projects_dates_stageStructure_start <= '" . date("Y-m-d H:i:s", $dateStart) . "'))");
+                    break;
+
+                case 'Színpadtechnika':
+                    $DBLIB->where("((projects_dates_stage_start >= '" . date("Y-m-d H:i:s", $dateStart) . "' 
+            AND projects_dates_stage_start <= '" . date("Y-m-d H:i:s", $dateEnd) . "') 
+            OR (projects_dates_stage_end >= '" . date("Y-m-d H:i:s", $dateStart) . "' 
+            AND projects_dates_stage_end <= '" . date("Y-m-d H:i:s", $dateEnd) . "') 
+            OR (projects_dates_stage_end >= '" . date("Y-m-d H:i:s", $dateEnd) . "' 
+            AND projects_dates_stage_start <= '" . date("Y-m-d H:i:s", $dateStart) . "'))");
+                    break;
+
+                case 'Biztonságtechnika':
+                default:
+                    $DBLIB->where("((projects_dates_deliver_start >= '" . date("Y-m-d H:i:s", $dateStart) . "' 
+            AND projects_dates_deliver_start <= '" . date("Y-m-d H:i:s", $dateEnd) . "') 
+            OR (projects_dates_deliver_end >= '" . date("Y-m-d H:i:s", $dateStart) . "' 
+            AND projects_dates_deliver_end <= '" . date("Y-m-d H:i:s", $dateEnd) . "') 
+            OR (projects_dates_deliver_end >= '" . date("Y-m-d H:i:s", $dateEnd) . "' 
+            AND projects_dates_deliver_start <= '" . date("Y-m-d H:i:s", $dateStart) . "'))");
+                    break;
+            }
+
+
             $DBLIB->join("projectsStatuses", "projects.projectsStatuses_id=projectsStatuses.projectsStatuses_id", "LEFT");
             if ($RETURN['PROJECT']['ID']) {
                 // If a project is being searched for specifically, check if the asset is assigned to that project

@@ -6,16 +6,33 @@ use Money\Money;
 
 if (!$AUTH->instancePermissionCheck("PROJECTS:EDIT:DATES") or !isset($_POST['projects_id'])) die("404");
 
-// Parse the dates from the new format
+$type = $_POST["type"];
+
 $newDates = [
     "projects_dates_deliver_start" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_start']))),
     "projects_dates_deliver_end" => date("Y-m-d H:i:s", strtotime(str_replace(".", "", $_POST['projects_dates_deliver_end'])))
 ];
 
+if (empty($newDates)) {
+    die("Failed to set project dates.");
+}
+
 $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where("projects.projects_deleted", 0);
 $DBLIB->where("projects.projects_id", $_POST['projects_id']);
-$project = $DBLIB->getone("projects", ["projects_id", "projects_dates_deliver_start", "projects_dates_deliver_end", "projects_dates_finances_days", "projects_dates_finances_weeks"]);
+$project = $DBLIB->getone("projects", [
+    "projects_id",
+    "projects_dates_deliver_start",
+    "projects_dates_deliver_end",
+    "projects_dates_tech_start",
+    "projects_dates_tech_end",
+    "projects_dates_stageStructure_start",
+    "projects_dates_stageStructure_end",
+    "projects_dates_stage_start",
+    "projects_dates_stage_end",
+    "projects_dates_finances_days",
+    "projects_dates_finances_weeks"
+]);
 if (!$project) finish(false);
 
 $projectFinanceHelper = new projectFinance();
@@ -27,7 +44,18 @@ if ($project['projects_dates_finances_days'] !== NULL and $project['projects_dat
 } else {
     // We need to calculate the price maths because custom price maths is not set
     $priceMathsOld = $projectFinanceHelper->durationMaths($project['projects_id']);
-    $priceMathsNew = $projectFinanceHelper->durationMathsByDates($newDates['projects_dates_deliver_start'], $newDates['projects_dates_deliver_end']);
+
+    // Determine which date range is being updated and calculate the new price maths accordingly
+    if ($type == "Technikai eszközök") {
+        $priceMathsNew = $projectFinanceHelper->durationMathsByDates($newDates['projects_dates_tech_start'], $newDates['projects_dates_tech_end']);
+    } elseif ($type == "Színpadi tartószerkezeti eszközök") {
+        $priceMathsNew = $projectFinanceHelper->durationMathsByDates($newDates['projects_dates_stageStructure_start'], $newDates['projects_dates_stageStructure_end']);
+    } elseif ($type == "Színpadi eszközök") {
+        $priceMathsNew = $projectFinanceHelper->durationMathsByDates($newDates['projects_dates_stage_start'], $newDates['projects_dates_stage_end']);
+    } else {
+        // Default case if none of the specific date ranges match
+        $priceMathsNew = $projectFinanceHelper->durationMathsByDates($newDates['projects_dates_deliver_start'], $newDates['projects_dates_deliver_end']);
+    }
 }
 
 // We're changing dates so we need to find clashes in the new dates
@@ -35,6 +63,11 @@ $DBLIB->where("assetsAssignments.assetsAssignments_deleted", 0);
 $DBLIB->where("assetsAssignments.projects_id", $project['projects_id']);
 $DBLIB->join("assets", "assetsAssignments.assets_id=assets.assets_id", "LEFT");
 $DBLIB->join("assetTypes", "assets.assetTypes_id=assetTypes.assetTypes_id", "LEFT");
+
+$DBLIB->join("assetCategories", "assetCategories.assetCategories_id=assetTypes.assetCategories_id", "LEFT");
+$DBLIB->join("assetCategoriesGroups", "assetCategoriesGroups.assetCategoriesGroups_id=assetCategories.assetCategoriesGroups_id", "LEFT");
+
+
 $assets = $DBLIB->get("assetsAssignments", null, ["assetsAssignments.assets_id", "assetsAssignments.assetsAssignments_id", "assetsAssignments_customPrice", "assetsAssignments_discount", "assetTypes_weekRate", "assetTypes_dayRate", "assets_dayRate", "assets_weekRate"]);
 if ($assets) {
     $unavailableAssets = [];
@@ -42,13 +75,39 @@ if ($assets) {
         $DBLIB->join("projects", "assetsAssignments.projects_id=projects.projects_id", "LEFT");
         $DBLIB->join("assets", "assetsAssignments.assets_id=assets.assets_id", "LEFT");
         $DBLIB->join("assetTypes", "assets.assetTypes_id=assetTypes.assetTypes_id", "LEFT");
+
+        $DBLIB->join("assetCategories", "assetCategories.assetCategories_id=assetTypes.assetCategories_id", "LEFT");
+        $DBLIB->join("assetCategoriesGroups", "assetCategoriesGroups.assetCategoriesGroups_id=assetCategories.assetCategoriesGroups_id", "LEFT");
+
         $DBLIB->join("projectsStatuses", "projects.projectsStatuses_id=projectsStatuses.projectsStatuses_id", "LEFT");
         $DBLIB->where("assetsAssignments.assets_id", $asset['assets_id']);
         $DBLIB->where("assetsAssignments.assetsAssignments_deleted", 0);
         $DBLIB->where("projects.projects_deleted", 0);
         $DBLIB->where("projectsStatuses.projectsStatuses_assetsReleased", 0);
         $DBLIB->where("(projects.projects_id != " .  $project['projects_id'] . ")"); // Avoid finding the current project
-        $DBLIB->where("((projects_dates_deliver_start >= '" . $newDates["projects_dates_deliver_start"]  . "' AND projects_dates_deliver_start <= '" . $newDates["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $newDates["projects_dates_deliver_start"] . "' AND projects_dates_deliver_end <= '" . $newDates["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $newDates["projects_dates_deliver_end"] . "' AND projects_dates_deliver_start <= '" . $newDates["projects_dates_deliver_start"] . "'))");
+
+        $groupName = $asset['assetCategoriesGroups_name'];
+
+        switch ($groupName) {
+            case "Hangtechnika":
+            case "Fénytechnika":
+            case "Vetítéstechnika":
+                $DBLIB->where("((projects_dates_tech_start >= '" . $newDates["projects_dates_deliver_start"]  . "' AND projects_dates_tech_start <= '" . $newDates["projects_dates_tech_end"] . "') OR (projects_dates_tech_end >= '" . $newDates["projects_dates_deliver_start"] . "' AND projects_dates_tech_end <= '" . $newDates["projects_dates_tech_end"] . "') OR (projects_dates_tech_end >= '" . $newDates["projects_dates_tech_end"] . "' AND projects_dates_tech_start <= '" . $newDates["projects_dates_deliver_start"] . "'))");
+                break;
+
+            case "Színpadi tartószerkezet":
+                $DBLIB->where("((projects_dates_stageStructure_start >= '" . $newDates["projects_dates_deliver_start"]  . "' AND projects_dates_stageStructure_start <= '" . $newDates["projects_dates_stageStructure_end"] . "') OR (projects_dates_stageStructure_end >= '" . $newDates["projects_dates_deliver_start"] . "' AND projects_dates_stageStructure_end <= '" . $newDates["projects_dates_stageStructure_end"] . "') OR (projects_dates_stageStructure_end >= '" . $newDates["projects_dates_stageStructure_end"] . "' AND projects_dates_stageStructure_start <= '" . $newDates["projects_dates_deliver_start"] . "'))");
+                break;
+
+            case "Színpadtechnika":
+                $DBLIB->where("((projects_dates_stage_start >= '" . $newDates["projects_dates_deliver_start"]  . "' AND projects_dates_stage_start <= '" . $newDates["projects_dates_stage_end"] . "') OR (projects_dates_stage_end >= '" . $newDates["projects_dates_deliver_start"] . "' AND projects_dates_stage_end <= '" . $newDates["projects_dates_stage_end"] . "') OR (projects_dates_stage_end >= '" . $newDates["projects_dates_stage_end"] . "' AND projects_dates_stage_start <= '" . $newDates["projects_dates_deliver_start"] . "'))");
+                break;
+            case "Biztonságtechnika":
+            default:
+                $DBLIB->where("((projects_dates_deliver_start >= '" . $newDates["projects_dates_deliver_start"]  . "' AND projects_dates_deliver_start <= '" . $newDates["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $newDates["projects_dates_deliver_start"] . "' AND projects_dates_deliver_end <= '" . $newDates["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $newDates["projects_dates_deliver_end"] . "' AND projects_dates_deliver_start <= '" . $newDates["projects_dates_deliver_start"] . "'))");
+                break;
+        }
+
         $assignment = $DBLIB->getone("assetsAssignments", null, ["assetsAssignments.assetsAssignments_id", "assetsAssignments.assets_id", "assetsAssignments.projects_id", "assetTypes.assetTypes_name", "projects.projects_name", "assets.assets_tag"]);
         if ($assignment) {
             $assignment['old_assetsAssignments_id'] = $asset['assetsAssignments_id'];
@@ -85,16 +144,61 @@ if ($assets) {
 if ($projectFinanceCacher->save()) {
     $DBLIB->where("projects.projects_id", $project['projects_id']);
     // Update project with the new dates in the required format
-    $projectUpdate = $DBLIB->update("projects", $newDates);
+
+    $updateFields = [];
+
+    switch ($type) {
+        case "Technikai eszközök":
+            $updateFields["projects_dates_tech_start"] = $newDates["projects_dates_deliver_start"];
+            $updateFields["projects_dates_tech_end"] = $newDates["projects_dates_deliver_end"];
+            break;
+
+        case "Színpadi tartószerkezeti eszközök":
+            $updateFields["projects_dates_stageStructure_start"] = $newDates["projects_dates_deliver_start"];
+            $updateFields["projects_dates_stageStructure_end"] = $newDates["projects_dates_deliver_end"];
+            break;
+
+        case "Színpadi eszközök":
+            $updateFields["projects_dates_stage_start"] = $newDates["projects_dates_deliver_start"];
+            $updateFields["projects_dates_stage_end"] = $newDates["projects_dates_deliver_end"];
+            break;
+        default:
+            $updateFields["projects_dates_deliver_start"] = $newDates["projects_dates_deliver_start"];
+            $updateFields["projects_dates_deliver_end"] = $newDates["projects_dates_deliver_end"];
+            break;
+    }
+
+    if (!empty($updateFields)) {
+        $projectUpdate = $DBLIB->update("projects", $updateFields);
+    }
+
     if (!$projectUpdate) finish(false);
-    $bCMS->auditLog(
-        "CHANGE-DATE", 
-        "projects", 
-        "A szállítási kezdő dátumot erre állították: ". date("Y-m-d H:i", strtotime($newDates['projects_dates_deliver_start'])) . "\nA szállítási vég dátumot erre állították: ". date("Y-m-d H:i", strtotime($newDates['projects_dates_deliver_end'])), 
-        $AUTH->data['users_userid'], 
-        null, 
-        $_POST['projects_id']
-    );
+
+    $logMessage = "";
+
+    foreach ($newDates as $key => $date) {
+        if ($key == "projects_dates_tech_start" || $key == "projects_dates_tech_end") {
+            $logMessage .= "A technikai eszközök dátumait módosították: " . date("Y-m-d H:i", strtotime($date)) . "\n";
+        } elseif ($key == "projects_dates_stageStructure_start" || $key == "projects_dates_stageStructure_end") {
+            $logMessage .= "A színpadi tartószerkezeti eszközök dátumait módosították: " . date("Y-m-d H:i", strtotime($date)) . "\n";
+        } elseif ($key == "projects_dates_stage_start" || $key == "projects_dates_stage_end") {
+            $logMessage .= "A színpadi eszközök dátumait módosították: " . date("Y-m-d H:i", strtotime($date)) . "\n";
+        } else {
+            $logMessage .= "A szállítási dátumokat módosították: " . date("Y-m-d H:i", strtotime($date)) . "\n";
+        }
+    }
+
+    if ($logMessage) {
+        $bCMS->auditLog(
+            "CHANGE-DATE",
+            "projects",
+            rtrim($logMessage), // eltávolítjuk a végső sortörést
+            $AUTH->data['users_userid'],
+            null,
+            $_POST['projects_id']
+        );
+    }
+
     finish(true, null, ["changed" => true]);
 } else {
     finish(false, ["message" => "Nem lehet módosítani a pénzügyeket a dátumok változtatásához"]);

@@ -5,6 +5,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha256-zI6VVO07NPmVW11q3RQE42YbRmJIkkunrcQ9LEYxJsQ=" crossorigin="anonymous"></script>
     <style>
 
+        .text-sm {
+            font-size: .975rem !important;
+        }
+
         .google-maps-btn,
         .waze-btn {
             margin-top: 15px;
@@ -328,12 +332,22 @@
                                                         </div>
 
                                                         <p class="text-sm">Építési nap
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                                                </div>
+                                                                <input type="text" class="form-control float-right" id="buildDatePickerInput">
                                                             </div>
-                                                            <input type="text" class="form-control float-right" id="buildDatePickerInput">
-                                                        </div>
+                                                        </p>
+
+                                                        <p class="text-sm">Bontási nap
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                                                </div>
+                                                                <input type="text" class="form-control float-right" id="demolitionDatePickerInput">
+                                                            </div>
+                                                        </p>
 
                                                     {% else %}
                                                         <b class="d-block">Esemény időtartama: {{ project.projects_dates_use_start ? project.projects_dates_use_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_use_end|date("Y. m. d. H:i") }}</b>
@@ -342,22 +356,42 @@
                                                         {% endif %}
                                                         </p>
                                                         {% if project.projectsTypes_config_assets == 1 %}
-                                                            <p class="text-sm">Időtartam amikor az eszközök használva vannak
-                                                            {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
-                                                                <div class="input-group">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text"><i class="far fa-clock"></i></span>
+
+                                                            {% set equipment_dates = {
+                                                                "Általános eszközök": {'icon': '📅', 'start': project.projects_dates_deliver_start, 'end': project.projects_dates_deliver_end},
+                                                                "Technikai eszközök": {'icon': '🔊', 'start': project.projects_dates_tech_start, 'end': project.projects_dates_tech_end},
+                                                                "Színpadi tartószerkezeti eszközök": {'icon': '🏠', 'start': project.projects_dates_stageStructure_start, 'end': project.projects_dates_stageStructure_end},
+                                                                "Színpadi eszközök": {'icon': '🛠️', 'start': project.projects_dates_stage_start, 'end': project.projects_dates_stage_end}
+                                                            } %}
+
+                                                            {% for label, data in equipment_dates %}
+                                                                <p class="text-sm">
+                                                                {{ data.icon }} Időtartam amikor a <strong>{{ label }}</strong> használva vannak
+                                                                </p>
+                                                                {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                                                        </div>
+                                                                        <input type="text" class="form-control float-right datePickerInputDeliver"
+                                                                            data-type="{{ label }}"
+                                                                            data-start-date="{{ data.start ? data.start|date('Y. m. d. H:i') }}"
+                                                                            data-end-date="{{ data.end ? data.end|date('Y. m. d. H:i') }}">
                                                                     </div>
-                                                                    <input type="text" class="form-control float-right" id="datePickerInputDeliver">
-                                                                </div>
-                                                                {% if project.projects_dates_use_start %}
-                                                                    <div style="width: 100%;text-align: right;">
-                                                                        <a href="#" id="copyProjectDatesToDeliverDates">Ugyan az mint az esemény időtartama</a>
-                                                                    </div>
+                                                                    {% if project.projects_dates_use_start %}
+                                                                        <div style="width: 100%; text-align: right; margin-top: 5px; margin-bottom: 15px;">
+                                                                            <a href="#" class="copyProjectDatesToDeliverDates" data-type="{{ label }}">
+                                                                                <i class="fas fa-sync-alt"></i> Ugyanaz mint az esemény időtartama
+                                                                            </a>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    <b class="d-block">
+                                                                        {{ data.start ? data.start|date("Y. m. d. H:i") ~ ' - ' ~ data.end|date("Y. m. d. H:i") }}
+                                                                    </b>
                                                                 {% endif %}
-                                                            {% else %}
-                                                                <b class="d-block">{{ project.projects_dates_deliver_start ? project.projects_dates_deliver_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_deliver_end|date("Y. m. d. H:i") }}</b>
-                                                            {% endif %}
+                                                            {% endfor %}
+
                                                             </p>
                                                             {% if "PROJECTS:EDIT:DATES"|instancePermissions %}
                                                             <p class="text-sm">Projekt időtartama számlázás miatt
@@ -1881,13 +1915,9 @@
                     firstDay: 1
                 },
                 // Kezdő dátum beállítása, ha van
-                {% if project.projects_invoiceNotes %}
-                    {% set cleanedDate = project.projects_invoiceNotes | replace({'Építési nap: ': ''}) %}
-                    {% set cleanedDate = cleanedDate | replace({' ': ''}) %}
-                    {% set cleanedDate = cleanedDate | replace({'\n': ''}) %}
-                    {% set cleanedDate = cleanedDate | replace({'\t': ''}) %}
-                    {% set cleanedDate = cleanedDate | slice(0, 10) %}
-                    startDate: "{{ cleanedDate }}",  // Kezdő dátum a számla megjegyzéséből
+                {% if project.projects_dates_build %}
+                    {% set cleanedDate = project.projects_dates_build | date('Y. m. d.') %}
+                    startDate: "{{ cleanedDate }}",  // Kezdő dátum a projekt építési napja
                 {% else %}
                 autoUpdateInput: false,
                 {% endif %}
@@ -1897,25 +1927,58 @@
                 var selectedDate = picker.startDate.format('YYYY. MM. DD.');
                 $(this).val(selectedDate);  // Beállítja az input mező értékét a választott dátumra
 
-                // Az előző megjegyzés törlése és új hozzáadása
-                var updatedNotes = "Építési nap: " + selectedDate;
-
-                // AJAX hívás a projektszámla megjegyzések frissítésére
-                ajaxcall("projects/changeInvoiceNotes.php", {
-                    "projects_invoiceNotes": updatedNotes,
+                // AJAX hívás az építési dátum frissítésére
+                ajaxcall("projects/changeBuildDates.php", {
+                    "projects_dates_build": selectedDate,
                     "projects_id": "{{ project.projects_id }}"
                 }, function (data) {
                     // Ha sikeres a mentés, akkor közvetlenül frissítjük a dátumot a frontend mezőben
+                    console.log("Success:", data); 
                     $('#buildDatePickerInput').val(selectedDate); // Frissítjük az input mezőt
                 }, function (error) {
-                    // Ha nem sikeres a mentés, akkor IS frissítjük a dátumot
-                    $('#buildDatePickerInput').val(selectedDate); // Frissítjük az input mezőt
+                    console.log('Hiba történt a mentés során:', error); 
+                });
+
+            });
+
+            // Bontási dátum választó
+            $('#demolitionDatePickerInput').daterangepicker({
+                singleDatePicker: true,  // Csak egyetlen dátum választása
+                timePicker: false,  // Időt nem választunk
+                locale: {
+                    format: 'YYYY. MM. DD.',  // A kívánt dátumformátum
+                    applyLabel: 'Alkalmaz', 
+                    cancelLabel: 'Mégsem',
+                    customRangeLabel: 'Egyéni időszak',
+                    daysOfWeek: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+                    monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+                    firstDay: 1
+                },
+                // Kezdő dátum beállítása, ha van
+                {% if project.projects_dates_demolition %}
+                    {% set cleanedDate = project.projects_dates_demolition | date('Y. m. d.') %}
+                    startDate: "{{ cleanedDate }}",  // Kezdő dátum a projekt bontási napja
+                {% else %}
+                autoUpdateInput: false,
+                {% endif %}
+            });
+
+            $('#demolitionDatePickerInput').on('apply.daterangepicker', function (ev, picker) {
+                var selectedDate = picker.startDate.format('YYYY. MM. DD.');
+                $(this).val(selectedDate);  // Beállítja az input mező értékét a választott dátumra
+
+                // AJAX hívás a bontási dátum frissítésére
+                ajaxcall("projects/changeDemolitionDates.php", {
+                    "projects_dates_demolition": selectedDate,
+                    "projects_id": "{{ project.projects_id }}"
+                }, function (data) {
+                    // Ha sikeres a mentés, akkor közvetlenül frissítjük a dátumot a frontend mezőben
+                    console.log("Success:", data); 
+                    $('#demolitionDatePickerInput').val(selectedDate); // Frissítjük az input mezőt
+                }, function (error) {
                     console.log('Hiba történt a mentés során:', error); // Hibajelzés
                 });
             });
-
-
-
 
 
             $('#datePickerInput').daterangepicker({
@@ -1943,28 +2006,40 @@
                     location.reload();
                 });
             });
-            $('#datePickerInputDeliver').daterangepicker({
-                timePicker: true,
-                timePickerIncrement: 15,
-                timePicker24Hour: true,
-                locale: {
-                    format: 'YYYY. MM. DD. HH:mm',
-                    applyLabel: 'Alkalmaz', 
-                    cancelLabel: 'Mégsem',
-                    customRangeLabel: 'Egyéni időszak',
-                    daysOfWeek: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
-                    monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
-                    firstDay: 1
-                },
-                {% if project.projects_dates_deliver_start %}
-                startDate: "{{ project.projects_dates_deliver_start|date("Y. m. d. H:i") }}",
-                endDate: "{{ project.projects_dates_deliver_end|date("Y. m. d. H:i") }}"
-                {% else %}
-                autoUpdateInput: false,
-                {% endif %}
+
+
+            $('.datePickerInputDeliver').each(function() {
+                let startDate = $(this).data('start-date');
+                let endDate = $(this).data('end-date');
+                let type = $(this).data('type');
+
+                $(this).daterangepicker({
+                    timePicker: true,
+                    timePickerIncrement: 15,
+                    timePicker24Hour: true,
+                    locale: {
+                        format: 'YYYY. MM. DD. HH:mm',
+                        applyLabel: 'Alkalmaz', 
+                        cancelLabel: 'Mégsem',
+                        customRangeLabel: 'Egyéni időszak',
+                        daysOfWeek: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+                        monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
+                        firstDay: 1
+                    },
+                    startDate: startDate || moment().format('YYYY. MM. DD. HH:mm'),
+                    endDate: endDate || moment().add(1, 'days').format('YYYY. MM. DD. HH:mm'),
+                    autoUpdateInput: !!startDate
+                });
             });
-            function changeProjectDeliverDates(start, end) {
-                ajaxcall("projects/changeProjectDeliverDates.php", {"projects_id": "{{ project.projects_id }}","projects_dates_deliver_start":start,"projects_dates_deliver_end":end}, function (data) {
+
+            function changeProjectDeliverDates(type, start, end) {
+                ajaxcall("projects/changeProjectDeliverDates.php", {
+                    "type": type,
+                    "projects_id": "{{ project.projects_id }}",
+                    "projects_dates_deliver_start":start,
+                    "projects_dates_deliver_end":end
+
+                    }, function (data) {
                     if (data.response.changed) {
                         location.reload();
                     } else {
@@ -2006,14 +2081,26 @@
                     }
                 });
             }
-            $('#datePickerInputDeliver').on('apply.daterangepicker', function(ev, picker) {
-                changeProjectDeliverDates(picker.startDate.format('YYYY.MM.DD. HH:mm'), picker.endDate.format('YYYY.MM.DD. HH:mm'));
+
+            $('.datePickerInputDeliver').on('apply.daterangepicker', function(ev, picker) {
+                let type = $(this).data('type'); // Az eszközcsoport típusa (pl. Technikai eszközök, Színpadi eszközök stb.)
+                console.log("Eszköztípus:", type)
+                console.log("Küldött dátumok:", picker.startDate.format('YYYY-MM-DD HH:mm:ss'), picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+
+                changeProjectDeliverDates(type, 
+                    picker.startDate.format('YYYY.MM.DD. HH:mm'), 
+                    picker.endDate.format('YYYY.MM.DD. HH:mm')
+                );
             });
 
-            $("#copyProjectDatesToDeliverDates").click(function () {
-                changeProjectDeliverDates($("#datePickerInput").data('daterangepicker').startDate.format('YYYY.MM.DD. HH:mm'), $("#datePickerInput").data('daterangepicker').endDate.format('YYYY.MM.DD. HH:mm'));
-            });
+            $(document).on("click", ".copyProjectDatesToDeliverDates", function () {
+                let type = $(this).data('type');
+                let startDate = $("#datePickerInput").data('daterangepicker').startDate.format('YYYY.MM.DD. HH:mm');
+                let endDate = $("#datePickerInput").data('daterangepicker').endDate.format('YYYY.MM.DD. HH:mm');
 
+                changeProjectDeliverDates(type, startDate, endDate);
+            });
+           
             function setFinanceDurationMathsHetek(weeks, days) {
                 ajaxcall("projects/changeProjectFinanceDurationMaths.php", {"projects_id": "{{ project.projects_id }}","projects_dates_finances_weeks":weeks,"projects_dates_finances_days":days}, function (data) {
                     location.reload();

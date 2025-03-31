@@ -102,6 +102,7 @@ function projectFinancials($project) {
     $return['prices'] = ["subTotal" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency'])), "discounts" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency'])), "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))];
 
     $return['priceMaths'] = $projectFinanceHelper->durationMaths($project['projects_id']);
+
     foreach ($assets as $asset) {
 
         $asset['assignedAsSubAsset'] = $asset['assetsAssignments_assignedAsSubAsset'];
@@ -156,6 +157,31 @@ function projectFinancials($project) {
         } else {
             if (!isset($return['assetsAssigned'][$asset['assetTypes_id']])) $return['assetsAssigned'][$asset['assetTypes_id']]['assets'] = [];
             $return['assetsAssigned'][$asset['assetTypes_id']]['assets'][] = $asset;
+        }
+
+
+        $groupName = $asset['assetCategoriesGroups_name'];
+        $price = $asset['discountPrice']; // A kedvezményes árat használjuk
+
+        switch ($groupName) {
+            case 'Hangtechnika':
+                $return['payments']['sound_subTotal'] = $return['payments']['sound_subTotal']->add($price);
+                break;
+            case 'Fénytechnika':
+                $return['payments']['lights_subTotal'] = $return['payments']['lights_subTotal']->add($price);
+                break;
+            case 'Színpadi tartószerkezet':
+                $return['payments']['stage_supportStructure_subTotal'] = $return['payments']['stage_supportStructure_subTotal']->add($price);
+                break;
+            case 'Színpadtechnika':
+                $return['payments']['stage_subTotal'] = $return['payments']['stage_subTotal']->add($price);
+                break;
+            case 'Vetítéstechnika':
+                $return['payments']['led_subTotal'] = $return['payments']['led_subTotal']->add($price);
+                break;
+            case 'Biztonságtechnika':
+                $return['payments']['safety_subTotal'] = $return['payments']['safety_subTotal']->add($price);
+                break;
         }
     }
     foreach ($return['assetsAssigned'] as $key => $type) {
