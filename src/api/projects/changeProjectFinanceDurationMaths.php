@@ -61,10 +61,31 @@ if ($projectFinanceCacher->save()) {
         "projects_dates_finances_weeks" => $REMOVECUSTOM ? null : $WEEKS
     ]);
     if (!$projectUpdate) finish(false);
-    if ($REMOVECUSTOM) $bCMS->auditLog("CHANGE-DATE-FINANCE", "projects", "Removed custom days & weeks for asset cost calculation", $AUTH->data['users_userid'], null, $_POST['projects_id']);
-    else $bCMS->auditLog("CHANGE-DATE-FINANCE", "projects", "Set custom days & weeks for asset cost calculation to " . $DAYS . " day(s) & " . $WEEKS . " week(s)", $AUTH->data['users_userid'], null, $_POST['projects_id']);
+
+    if ($REMOVECUSTOM) {
+        $bCMS->auditLog(
+            "CHANGE-DATE-FINANCE",
+            "projects",
+            "Egyedi napok és hetek eltávolítva az eszközköltség számításából",
+            $AUTH->data['users_userid'],
+            null,
+            $_POST['projects_id']
+        );
+    } else {
+        $bCMS->auditLog(
+            "CHANGE-DATE-FINANCE",
+            "projects",
+            "Egyedi napok és hetek beállítva az eszközköltség számításához: " . $DAYS . " nap és " . $WEEKS . " hét",
+            $AUTH->data['users_userid'],
+            null,
+            $_POST['projects_id']
+        );
+    }
+
     finish(true, null, ["changed" => true]);
-} else finish(false, ["message" => "Cannot modify finances to change dates"]);
+} else {
+    finish(false, ["message" => "Nem lehet módosítani a pénzügyeket a dátumok változtatásához"]);
+}
 
 /** @OA\Post(
  *     path="/projects/changeProjectFinanceDateMaths.php", 

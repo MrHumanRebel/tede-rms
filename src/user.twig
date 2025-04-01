@@ -86,58 +86,92 @@
                                 <form id="account-form">
                                     <div class="form-group">
                                         <label for="username">Felhasználónév:</label>
-                                        <input type="username" class="form-control" name="users_username" required value="{{user['users_username']}}" />
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" name="users_username" required value="{{ user['users_username'] }}" />
+                                        </div>
                                     </div>
+
                                     <div class="form-group">
                                         <label>Vezetéknév:</label>
-                                        <input type="text" class="form-control" name="users_name1" required value="{{user['users_name1']}}" />
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" name="users_name1" required value="{{ user['users_name1'] }}" />
+                                        </div>
                                     </div>
+
                                     <div class="form-group">
                                         <label>Keresztnév:</label>
-                                        <input type="text" class="form-control" name="users_name2" required value="{{user['users_name2']}}" />
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" name="users_name2" required value="{{ user['users_name2'] }}" />
+                                        </div>
                                     </div>
+
                                     <div class="form-group">
                                         <label>E-mail cím:</label>
-                                        <input type="email" class="form-control" name="users_email" required value="{{user['users_email']}}" />
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            </div>
+                                            <input type="email" class="form-control" name="users_email" required value="{{ user['users_email'] }}" />
+                                        </div>
                                     </div>
+
                                     <label>Telefonszám</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
                                         </div>
                                         <input type="text" class="form-control" name="users_social_mobilephone" value="{{ user.users_social_mobilephone }}">
-                                    </div> <br/>
+                                    </div>
+                                    <br/>
+
                                     <label>Jelenléti Felhasználónév</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <span class="input-group-text"><i class="fas fa-user-clock"></i></span>
                                         </div>
                                         <input type="text" class="form-control" name="users_kimai_username" value="{{ user.users_kimai_username }}">
-                                    </div><br/>
+                                    </div>
+                                    <br/>
+
                                     <label>Jelenléti Jelszó</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                         </div>
                                         <input type="password" class="form-control" name="users_kimai_passwd" value="{{ user.users_kimai_passwd }}">
-                                    </div><br/>
+                                    </div>
+                                    <br/>
+
                                     <label>Facebook</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">https://facebook.com/</span>
+                                            <span class="input-group-text"><i class="fab fa-facebook"></i></span>
                                         </div>
                                         <input type="text" class="form-control" name="users_social_facebook" value="{{ user.users_social_facebook }}">
                                     </div>
                                     <br/>
+
                                     <label>Instagram</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">https://instagram.com/</span>
+                                            <span class="input-group-text"><i class="fab fa-instagram"></i></span>
                                         </div>
                                         <input type="text" class="form-control" name="users_social_instagram" value="{{ user.users_social_instagram }}">
-                                    </div><br/>
+                                    </div>
+                                    <br/>
+
                                     <button type="submit" class="btn btn-default">Mentés</button>
                                 </form>
+
                                 <script>
                                     $(document).ready(function() {
                                         $("#account-form").on("submit", function(e){
