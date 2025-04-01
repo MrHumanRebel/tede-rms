@@ -65,7 +65,7 @@
                 events : [
                     {% set startDate = false %}
                     {% for project in projects %}
-                        {% if "ASSETS:CREATE"|instancePermissions %}
+                        {% if "ASSETS:CREATE"|instancePermissions or project.projectsStatuses.projectsStatuses_assetsReleased == 0 %}
                             {% if project.projects_dates_use_start != null and project.projects_dates_use_end != null %}
                                 {
                                     title : "{{ project.projects_name|escape("js") }}",
@@ -78,23 +78,7 @@
                                 {% if startDate > project.projects_dates_use_start|date("c") or startDate == false %}
                                     {% set startDate = project.projects_dates_use_start|date("c") %}
                                 {% endif %}
-                            {% endif %}
-                        {% else %}
-                            {% if project.projectsStatuses.projectsStatuses_assetsReleased == 0 %}
-                                {% if project.projects_dates_use_start != null and project.projects_dates_use_end != null %}
-                                    {
-                                        title : "{{ project.projects_name|escape("js") }}",
-                                        start          : {{ project.projects_dates_use_start|date('U') }}*1000,
-                                        end            : {{ project.projects_dates_use_end|date('U') }}*1000,
-                                        url            : '{{CONFIG.ROOTURL}}/project/?id={{ project.projects_id }}',
-                                        backgroundColor: '{{ project.projectsStatuses_backgroundColour }}',
-                                        textColor    : '{{ project.projectsStatuses_foregroundColour }}'
-                                    },
-                                    {% if startDate > project.projects_dates_use_start|date("c") or startDate == false %}
-                                        {% set startDate = project.projects_dates_use_start|date("c") %}
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
+                            {% endif %}                        
                         {% endif %}
                         {% if USERDATA['instance']['calendarSettings'].showSubProjects %}
                             {%  for subProject in project.subProjects %}

@@ -107,11 +107,12 @@
                         body: [[
                             {
                                 table: {
-                                    body: [
+                                    body: 
                                         {% if project.projects_invoiceNotes|length > 0 and GET['invoiceNotes'] %}
-                                            ["{{ project.projects_invoiceNotes|escape('js') }}"],
+                                            [["{{ project.projects_invoiceNotes|escape('js') }}"]]
+                                        {% else %}
+                                            [[""]] 
                                         {% endif %}
-                                    ],
                                 },
                                 layout: 'noBorders',
                                 margin: 10

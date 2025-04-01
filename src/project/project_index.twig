@@ -1033,7 +1033,7 @@
                                     <label class="form-check-label">Teljes tömeg</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="totalvalue" checked>
+                                    <input class="form-check-input" type="checkbox" name="totalvalue" >
                                     <label class="form-check-label">Teljes érték</label>
                                 </div>
                             {% endif %}
@@ -1157,7 +1157,7 @@
                                     <label class="form-check-label">Teljes tömeg</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="totalvalue" checked>
+                                    <input class="form-check-input" type="checkbox" name="totalvalue" >
                                     <label class="form-check-label">Teljes érték</label>
                                 </div>
                             {% endif %}
@@ -1817,9 +1817,10 @@
                     inputType: 'textarea',
                     value: `{{ project.projects_invoiceNotes|escape("js") }}`,
                     callback: function (result) {
-                        if (result) {
+                        if (result !== null) {  // Ha a felhasználó nem nyomott "Cancel"-t
+                            let finalValue = result.trim() === "" ? " " : result; // Ha üres, akkor szóköz
                             ajaxcall("projects/changeInvoiceNotes.php", {
-                                "projects_invoiceNotes": result,
+                                "projects_invoiceNotes": finalValue,
                                 "projects_id": "{{ project.projects_id }}"
                             }, function (data) {
                                 location.reload();
@@ -2334,6 +2335,10 @@
                         $(".newPaymentModal-nonPaymentOnly").hide();
                         $(".newPaymentModal-paymentHour").show();
                         $(".newPaymentModal-paymentSimple input[name='payments_supplier']").closest('.input-group').hide(); // Szállító elrejtése
+                        break;
+                    case 6:
+                        $("#newPaymentModal-title").html("Szállítási költség hozzáadása");
+                        $(".newPaymentModal-paymentSimple").hide();
                         break;
                 }
             });

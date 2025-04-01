@@ -2,8 +2,15 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
-            <div class="card card-primary">
-                {% embed 'assets/widgets/calendar.twig' with {"projects": calendarProjects } %} {# Felülírjuk a projektek listáját a fejlesztői funkcióból, hogy szükség esetén helyszín szerint rendezhessük őket #}
+            <div class="card card-primary">,
+                {% set filteredCalendarProjects = [] %}
+                {% for project in calendarProjects %}
+                    {% if "ASSETS:CREATE"|instancePermissions or project.projectsStatuses.projectsStatuses_assetsReleased == 0 %}
+                        {% set filteredCalendarProjects = filteredCalendarProjects|merge([project]) %}
+                    {% endif %}
+                {% endfor %}
+
+                {% embed 'assets/widgets/calendar.twig' with {"projects": filteredCalendarProjects } %} 
                 {% endembed %}
             </div>
         </div>

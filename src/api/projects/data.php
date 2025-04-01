@@ -51,7 +51,13 @@ function projectFinancials($project) {
     $DBLIB->orderBy("payments.payments_date", "ASC");
     $DBLIB->where("payments.projects_id", $project['projects_id']);
     $payments = $DBLIB->get("payments");
-    $return['payments'] = ["received" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))], "sales" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))], "subHire" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))], "staff" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))]];
+    $return['payments'] = [
+        "received" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))],
+        "sales" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))],
+        "subHire" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))],
+        "staff" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))],
+        "truck" => ["ledger" => [], "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))] // Új ledger hozzáadva
+    ];
     foreach ($payments as $payment) {
         $payment['files'] = $bCMS->s3List(14, $payment['payments_id']);
         $key = false;
@@ -70,6 +76,9 @@ function projectFinancials($project) {
                 break;
             case 5:
                 $key = 'staff';
+                break;
+            case 6:
+                $key = 'truck';
                 break;
         }
         if ($key) {
@@ -158,7 +167,6 @@ function projectFinancials($project) {
             if (!isset($return['assetsAssigned'][$asset['assetTypes_id']])) $return['assetsAssigned'][$asset['assetTypes_id']]['assets'] = [];
             $return['assetsAssigned'][$asset['assetTypes_id']]['assets'][] = $asset;
         }
-
 
         $groupName = $asset['assetCategoriesGroups_name'];
         $price = $asset['discountPrice']; // A kedvezményes árat használjuk
