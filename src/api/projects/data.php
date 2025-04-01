@@ -167,30 +167,6 @@ function projectFinancials($project) {
             if (!isset($return['assetsAssigned'][$asset['assetTypes_id']])) $return['assetsAssigned'][$asset['assetTypes_id']]['assets'] = [];
             $return['assetsAssigned'][$asset['assetTypes_id']]['assets'][] = $asset;
         }
-
-        $groupName = $asset['assetCategoriesGroups_name'];
-        $price = $asset['discountPrice']; // A kedvezményes árat használjuk
-
-        switch ($groupName) {
-            case 'Hangtechnika':
-                $return['payments']['sound_subTotal'] = $return['payments']['sound_subTotal']->add($price);
-                break;
-            case 'Fénytechnika':
-                $return['payments']['lights_subTotal'] = $return['payments']['lights_subTotal']->add($price);
-                break;
-            case 'Színpadi tartószerkezet':
-                $return['payments']['stage_supportStructure_subTotal'] = $return['payments']['stage_supportStructure_subTotal']->add($price);
-                break;
-            case 'Színpadtechnika':
-                $return['payments']['stage_subTotal'] = $return['payments']['stage_subTotal']->add($price);
-                break;
-            case 'Vetítéstechnika':
-                $return['payments']['led_subTotal'] = $return['payments']['led_subTotal']->add($price);
-                break;
-            case 'Biztonságtechnika':
-                $return['payments']['safety_subTotal'] = $return['payments']['safety_subTotal']->add($price);
-                break;
-        }
     }
     foreach ($return['assetsAssigned'] as $key => $type) {
         if (!isset($return['assetsAssigned'][$key]['totals'])) $return['assetsAssigned'][$key]['totals'] = ["status" => null,"discountPrice"=>new Money(null, new Currency($AUTH->data['instance']['instances_config_currency'])),"price"=>new Money(null, new Currency($AUTH->data['instance']['instances_config_currency'])),"mass"=>0.0];
@@ -227,7 +203,7 @@ function projectFinancials($project) {
         }
     }
 
-    $return['payments']['subTotal'] = $return['prices']['total']->add($return['payments']['sales']['total'],$return['payments']['subHire']['total'],$return['payments']['staff']['total']);
+    $return['payments']['subTotal'] = $return['prices']['total']->add($return['payments']['sales']['total'], $return['payments']['subHire']['total'], $return['payments']['staff']['total'], $return['payments']['truck']['total']);
     $return['payments']['total'] = $return['payments']['subTotal']->subtract($return['payments']['received']['total']);
 
     //add formatted values to everything
@@ -262,6 +238,7 @@ if (!$projectFinanceCache) {
         "projectsFinanceCache_equiptmentTotal" =>$PAGEDATA['FINANCIALS']['prices']['total']->getAmount(),
         "projectsFinanceCache_salesTotal" =>$PAGEDATA['FINANCIALS']['payments']['sales']['total']->getAmount(),
         "projectsFinanceCache_staffTotal" =>$PAGEDATA['FINANCIALS']['payments']['staff']['total']->getAmount(),
+        "projectsFinanceCache_truckTotal" => $PAGEDATA['FINANCIALS']['payments']['truck']['total']->getAmount(),
         "projectsFinanceCache_externalHiresTotal" => $PAGEDATA['FINANCIALS']['payments']['subHire']['total']->getAmount(),
         "projectsFinanceCache_paymentsReceived" =>$PAGEDATA['FINANCIALS']['payments']['received']['total']->getAmount(),
         "projectsFinanceCache_grandTotal" =>$PAGEDATA['FINANCIALS']['payments']['total']->getAmount(),
@@ -275,6 +252,7 @@ elseif ($projectFinanceCache["projectsFinanceCache_equiptmentDiscounts"] != $PAG
 elseif ($projectFinanceCache["projectsFinanceCache_equiptmentTotal"] != $PAGEDATA['FINANCIALS']['prices']['total']->getAmount()) $projectFinancesCacheMismatch = true;
 elseif ($projectFinanceCache["projectsFinanceCache_salesTotal"] != $PAGEDATA['FINANCIALS']['payments']['sales']['total']->getAmount()) $projectFinancesCacheMismatch = true;
 elseif ($projectFinanceCache["projectsFinanceCache_staffTotal"] != $PAGEDATA['FINANCIALS']['payments']['staff']['total']->getAmount()) $projectFinancesCacheMismatch = true;
+elseif ($projectFinanceCache["projectsFinanceCache_truckTotal"] != $PAGEDATA['FINANCIALS']['payments']['truck']['total']->getAmount()) $projectFinancesCacheMismatch = true;
 elseif ($projectFinanceCache["projectsFinanceCache_externalHiresTotal"] !=  $PAGEDATA['FINANCIALS']['payments']['subHire']['total']->getAmount()) $projectFinancesCacheMismatch = true;
 elseif ($projectFinanceCache["projectsFinanceCache_paymentsReceived"] != $PAGEDATA['FINANCIALS']['payments']['received']['total']->getAmount()) $projectFinancesCacheMismatch = true;
 elseif ($projectFinanceCache["projectsFinanceCache_grandTotal"] != $PAGEDATA['FINANCIALS']['payments']['total']->getAmount()) $projectFinancesCacheMismatch = true;
@@ -291,6 +269,7 @@ if ($projectFinancesCacheMismatch) {
         "projectsFinanceCache_equiptmentTotal" =>$PAGEDATA['FINANCIALS']['prices']['total']->getAmount(),
         "projectsFinanceCache_salesTotal" =>$PAGEDATA['FINANCIALS']['payments']['sales']['total']->getAmount(),
         "projectsFinanceCache_staffTotal" =>$PAGEDATA['FINANCIALS']['payments']['staff']['total']->getAmount(),
+        "projectsFinanceCache_truckTotal" => $PAGEDATA['FINANCIALS']['payments']['truck']['total']->getAmount(),
         "projectsFinanceCache_externalHiresTotal" => $PAGEDATA['FINANCIALS']['payments']['subHire']['total']->getAmount(),
         "projectsFinanceCache_paymentsReceived" =>$PAGEDATA['FINANCIALS']['payments']['received']['total']->getAmount(),
         "projectsFinanceCache_grandTotal" =>$PAGEDATA['FINANCIALS']['payments']['total']->getAmount(),
@@ -309,6 +288,10 @@ usort($PAGEDATA['FINANCIALS']['payments']['subHire']['ledger'], function ($a, $b
     return $a['payments_supplier'] <=> $b['payments_supplier'];
 });
 usort($PAGEDATA['FINANCIALS']['payments']['sales']['ledger'], function ($a, $b) {
+    // Sort sub-hires in order of supplier so you can do supplier headings
+    return $a['payments_supplier'] <=> $b['payments_supplier'];
+});
+usort($PAGEDATA['FINANCIALS']['payments']['truck']['ledger'], function ($a, $b) {
     // Sort sub-hires in order of supplier so you can do supplier headings
     return $a['payments_supplier'] <=> $b['payments_supplier'];
 });
