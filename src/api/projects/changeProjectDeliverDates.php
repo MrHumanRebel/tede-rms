@@ -176,16 +176,26 @@ if ($projectFinanceCacher->save()) {
 
     $logMessage = "";
 
-    foreach ($newDates as $key => $date) {
-        if ($key == "projects_dates_tech_start" || $key == "projects_dates_tech_end") {
-            $logMessage .= "A technikai eszközök dátumait módosították: " . date("Y-m-d H:i", strtotime($date)) . "\n";
-        } elseif ($key == "projects_dates_stageStructure_start" || $key == "projects_dates_stageStructure_end") {
-            $logMessage .= "A színpadi tartószerkezeti eszközök dátumait módosították: " . date("Y-m-d H:i", strtotime($date)) . "\n";
-        } elseif ($key == "projects_dates_stage_start" || $key == "projects_dates_stage_end") {
-            $logMessage .= "A színpadi eszközök dátumait módosították: " . date("Y-m-d H:i", strtotime($date)) . "\n";
-        } else {
-            $logMessage .= "A szállítási dátumokat módosították: " . date("Y-m-d H:i", strtotime($date)) . "\n";
-        }
+    if (!empty($updateFields["projects_dates_tech_start"])) {
+        $logMessage .= "A technikai eszközök dátumait módosították: " .
+            date("Y-m-d H:i", strtotime($updateFields["projects_dates_tech_start"])) .
+            " - " .
+            date("Y-m-d H:i", strtotime($updateFields["projects_dates_tech_end"])) . "\n";
+    } elseif (!empty($updateFields["projects_dates_stageStructure_start"])) {
+        $logMessage .= "A színpadi tartószerkezeti eszközök dátumait módosították: " .
+            date("Y-m-d H:i", strtotime($updateFields["projects_dates_stageStructure_start"])) .
+            " - " .
+            date("Y-m-d H:i", strtotime($updateFields["projects_dates_stageStructure_end"])) . "\n";
+    } elseif (!empty($updateFields["projects_dates_stage_start"])) {
+        $logMessage .= "A színpadi eszközök dátumait módosították: " .
+            date("Y-m-d H:i", strtotime($updateFields["projects_dates_stage_start"])) .
+            " - " .
+            date("Y-m-d H:i", strtotime($updateFields["projects_dates_stage_end"])) . "\n";
+    } else {
+        $logMessage .= "A szállítási dátumokat módosították: " .
+            date("Y-m-d H:i", strtotime($updateFields["projects_dates_deliver_start"])) .
+            " - " .
+            date("Y-m-d H:i", strtotime($updateFields["projects_dates_deliver_end"])) . "\n";
     }
 
     if ($logMessage) {

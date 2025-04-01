@@ -39,7 +39,7 @@ $projectFinanceHelper = new projectFinance();
 $projectFinanceCacher = new projectFinanceCacher($project['projects_id']);
 $priceMaths = $projectFinanceHelper->durationMaths($project['projects_id']);
 
-$assetRequiredFields = ["assetTypes_name","assets_tag","assets_id","assets_dayRate","assets_weekRate","assetTypes_dayRate","assetTypes_weekRate","assetTypes_mass","assetTypes_value","assets_value","assets_mass","assets_assetGroups"];
+$assetRequiredFields = ["assetCategoriesGroups_name", "assetTypes_name", "assets_tag", "assets_id", "assets_dayRate", "assets_weekRate", "assetTypes_dayRate", "assetTypes_weekRate", "assetTypes_mass", "assetTypes_value", "assets_value", "assets_mass", "assets_assetGroups"];
 
 if (isset($_POST['assetGroups_id'])) {
     $DBLIB->where("(users_userid IS NULL OR users_userid = '" . $AUTH->data['users_userid'] . "')");
@@ -59,8 +59,8 @@ elseif ($AUTH->instancePermissionCheck("PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_AL
 $DBLIB->where("(assets.assets_endDate IS NULL OR assets.assets_endDate >= '" . $project["projects_dates_deliver_end"] . "')");
 $DBLIB->where("assets.instances_id", $AUTH->data['instance_ids'], 'IN');
 $DBLIB->where("assets_deleted", 0);
-$DBLIB->join("assetTypes","assets.assetTypes_id=assetTypes.assetTypes_id", "LEFT");
 
+$DBLIB->join("assetTypes", "assets.assetTypes_id=assetTypes.assetTypes_id", "LEFT");
 $DBLIB->join("assetCategories", "assetCategories.assetCategories_id=assetTypes.assetCategories_id", "LEFT");
 $DBLIB->join("assetCategoriesGroups", "assetCategoriesGroups.assetCategoriesGroups_id=assetCategories.assetCategoriesGroups_id", "LEFT");
 
@@ -74,6 +74,9 @@ function linkedAssets($assetId,$linkCount) {
     $DBLIB->where("assets.assets_deleted", 0);
     $DBLIB->where("(assets.assets_endDate IS NULL OR assets.assets_endDate >= '" . $project["projects_dates_deliver_end"] . "')");
     $DBLIB->join("assetTypes","assets.assetTypes_id=assetTypes.assetTypes_id", "LEFT");
+    $DBLIB->join("assetCategories", "assetCategories.assetCategories_id=assetTypes.assetCategories_id", "LEFT");
+    $DBLIB->join("assetCategoriesGroups", "assetCategoriesGroups.assetCategoriesGroups_id=assetCategories.assetCategoriesGroups_id", "LEFT");
+
     $assets = $DBLIB->get("assets",null,$assetRequiredFields);
     foreach ($assets as $asset) {
         $asset['linkedto'] = $linkCount;
