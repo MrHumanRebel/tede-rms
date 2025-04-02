@@ -51,12 +51,114 @@
                                 <i class="fas fa-info-circle" data-toggle="popover" title="{{crew.crewAssignments_role|escape('html_attr')}}" data-content="{{ crew.crewAssignments_comment|escape('html_attr') }}"></i>
                             {% endif %}
                             <div class="tools">
+                                {% set response = crew.crewAssignments_response %}
+                                {% if crew.users_userid == user.users_userid or "PROJECTS:PROJECT_CREW:EDIT"|instancePermissions %}
+                                    <!-- Zöld checkbox (Elfogadás) csak akkor, ha van értéke -->
+                                    {% if response == 1 %}
+                                        <i class="fas fa-check-circle confirmCrewAssignment"
+                                        data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
+                                        title="Visszaigazolva"
+                                        style="color: green; cursor: pointer; margin-right: 10px;">
+                                        </i>
+                                    {% else %}
+                                        <i class="far fa-circle confirmCrewAssignment"
+                                        data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
+                                        title="Visszaigazol"
+                                        style="color: green; border: 2px solid green; padding: 3px; border-radius: 50%; cursor: pointer; margin-right: 10px;">
+                                        </i>
+                                    {% endif %}
+
+                                    <!-- Piros checkbox (Elutasítás) csak akkor, ha van értéke -->
+                                    {% if response == 2 %}
+                                        <i class="fas fa-times-circle rejectCrewAssignment"
+                                        data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
+                                        title="Elutasítva"
+                                        style="color: red; cursor: pointer; margin-right: 10px;">
+                                        </i>
+                                    {% else %}
+                                        <i class="far fa-circle rejectCrewAssignment"
+                                        data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
+                                        title="Elutasít"
+                                        style="color: red; border: 2px solid red; padding: 3px; border-radius: 50%; cursor: pointer; margin-right: 10px;">
+                                        </i>
+                                    {% endif %}
+
+                                {% else %}
+                                    <!-- Csak a státusz megjelenítése, módosítás nélkül -->
+                                    {% if response == 1 %}
+                                        <i class="fas fa-check-circle"
+                                        title="Elfogadva"
+                                        style="color: green; margin-right: 10px;">
+                                        </i>
+                                    {% elseif response == 2 %}
+                                        <i class="fas fa-times-circle"
+                                        title="Elutasítva"
+                                        style="color: red; margin-right: 10px;">
+                                        </i>
+                                    {% else %}
+                                        <i class="far fa-circle"
+                                        title="Nincs visszaigazolva"
+                                        style="color: gray; border: 2px solid gray; padding: 3px; border-radius: 50%; margin-right: 10px;">
+                                        </i>
+                                    {% endif %}
+                                {% endif %}
+
+                                <script>
+                                $(document).ready(function () {
+                                    // Function to handle crew assignment updates
+                                    function updateCrewAssignment(assignmentData) {
+                                        ajaxcall("projects/crew/response.php", {
+                                            assignmentId: assignmentData.assignmentId,
+                                            response: assignmentData.response,
+                                            userId: assignmentData.userId,
+                                            projectId: assignmentData.projectId
+                                        }, function (data) {
+                                            if (data.success) {
+                                                location.reload();
+                                            } else {
+                                                location.reload();
+                                            }
+                                        });
+                                    }
+
+                                    // Elfogadás (zöld pipa)
+                                    $(".confirmCrewAssignment").click(function () {
+                                        let assignmentData = $(this).data("assignment");
+                                        updateCrewAssignment(assignmentData);
+                                    });
+
+                                    // Elutasítás (piros pipa)
+                                    $(".rejectCrewAssignment").click(function () {
+                                        let assignmentData = $(this).data("assignment");
+                                        updateCrewAssignment(assignmentData);
+                                    });
+                                });
+                                </script>
+
                                 {% if "PROJECTS:PROJECT_CREW:EDIT"|instancePermissions %}
-                                    <i class="far fa-edit editCrewAssignment" data-assignment="{{ crew.crewAssignments_id }}" data-role="{{crew.crewAssignments_role|escape('html_attr')}}" data-comment="{{crew.crewAssignments_comment|escape('html_attr')}}" title="Szerkesztés"></i>
-                                    <i class="far fa-comment editCrewAssignmentComment" data-assignment="{{ crew.crewAssignments_id }}" data-comment="{{crew.crewAssignments_comment|escape('html_attr')}}" title="Komment szerkesztése"></i>
-                                    <i class="fas fa-trash deleteCrewAssignment" data-assignment="{{ crew.crewAssignments_id }}" title="Stáb törlése"></i>
+                                    <!-- Szerkesztés ikon -->
+                                    <i class="far fa-edit editCrewAssignment"
+                                    data-assignment="{{ crew.crewAssignments_id }}"
+                                    data-role="{{ crew.crewAssignments_role|escape('html_attr') }}"
+                                    data-comment="{{ crew.crewAssignments_comment|escape('html_attr') }}"
+                                    title="Szerkesztés"
+                                    style="margin-right: 5px;"></i>
+
+                                    <!-- Komment szerkesztése ikon -->
+                                    <i class="far fa-comment editCrewAssignmentComment"
+                                    data-assignment="{{ crew.crewAssignments_id }}"
+                                    data-comment="{{ crew.crewAssignments_comment|escape('html_attr') }}"
+                                    title="Komment szerkesztése"
+                                    style="margin-right: 5px;"></i>
+
+                                    <!-- Törlés ikon -->
+                                    <i class="fas fa-trash deleteCrewAssignment"
+                                    data-assignment="{{ crew.crewAssignments_id }}"
+                                    title="Stáb törlése"
+                                    style="margin-right: 5px;"></i>
                                 {% endif %}
                             </div>
+
                         </li>
                     {% endfor %}
                 </ul>
