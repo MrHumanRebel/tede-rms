@@ -53,56 +53,46 @@
                             <div class="tools">
                                 {% set response = crew.crewAssignments_response %}
                                 {% if crew.users_userid == user.users_userid or "PROJECTS:PROJECT_CREW:EDIT"|instancePermissions %}
-                                    <!-- Zöld checkbox (Elfogadás) csak akkor, ha van értéke -->
-                                    {% if response == 1 %}
-                                        <i class="fas fa-check-circle confirmCrewAssignment"
-                                        data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
-                                        title="Visszaigazolva"
-                                        style="color: green; cursor: pointer; margin-right: 10px;">
-                                        </i>
-                                    {% else %}
-                                        <i class="far fa-circle confirmCrewAssignment"
-                                        data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
-                                        title="Visszaigazol"
-                                        style="color: green; border: 2px solid green; padding: 3px; border-radius: 50%; cursor: pointer; margin-right: 10px;">
-                                        </i>
-                                    {% endif %}
-
-                                    <!-- Piros checkbox (Elutasítás) csak akkor, ha van értéke -->
-                                    {% if response == 2 %}
-                                        <i class="fas fa-times-circle rejectCrewAssignment"
-                                        data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
-                                        title="Elutasítva"
-                                        style="color: red; cursor: pointer; margin-right: 10px;">
-                                        </i>
-                                    {% else %}
-                                        <i class="far fa-circle rejectCrewAssignment"
-                                        data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
-                                        title="Elutasít"
-                                        style="color: red; border: 2px solid red; padding: 3px; border-radius: 50%; cursor: pointer; margin-right: 10px;">
-                                        </i>
-                                    {% endif %}
-
+                                    <!-- Elfogadás ikon -->
+                                    <i class="fas fa-check-circle confirmCrewAssignment"
+                                    data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
+                                    title="Visszaigazol"
+                                    style="color: {% if response == 1 or response == NULL %}green{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 10px;">
+                                    </i>
+                                    
+                                    <!-- Elutasítás ikon -->
+                                    <i class="fas fa-times-circle rejectCrewAssignment"
+                                    data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
+                                    title="Elutasít"
+                                    style="color: {% if response == 2 or response == NULL  %}red{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 10px;">
+                                    </i>
                                 {% else %}
-                                    <!-- Csak a státusz megjelenítése, módosítás nélkül -->
-                                    {% if response == 1 %}
-                                        <i class="fas fa-check-circle"
-                                        title="Elfogadva"
-                                        style="color: green; margin-right: 10px;">
-                                        </i>
-                                    {% elseif response == 2 %}
-                                        <i class="fas fa-times-circle"
-                                        title="Elutasítva"
-                                        style="color: red; margin-right: 10px;">
-                                        </i>
-                                    {% else %}
-                                        <i class="far fa-circle"
-                                        title="Nincs visszaigazolva"
-                                        style="color: gray; border: 2px solid gray; padding: 3px; border-radius: 50%; margin-right: 10px;">
-                                        </i>
-                                    {% endif %}
+                                    <!-- Csak a státusz megjelenítése -->
+                                    <i class="fas fa-check-circle"
+                                    title="Elfogadva"
+                                    style="color: {% if response == 1 %}green{% else %}gray{% endif %}; font-size: 1.25em; margin-right: 10px;">
+                                    </i>
+                                    <i class="fas fa-times-circle"
+                                    title="Elutasítva"
+                                    style="color: {% if response == 2 %}red{% else %}gray{% endif %}; font-size: 1.25em; margin-right: 10px;">
+                                    </i>
                                 {% endif %}
 
+                                <!-- Státusz szöveges megjelenítése -->
+                                <p style="font-size: 1em; font-weight: bold; margin-top: 10px; 
+                                    {% if response == 1 %} color: green; 
+                                    {% elseif response == 2 %} color: red; 
+                                    {% else %} color: gray; {% endif %};
+                                    display: flex; justify-content: center; align-items: center; height: 100%;">
+                                    {% if response == 1 %}
+                                        Visszaigazolva
+                                    {% elseif response == 2 %}
+                                        Elutasítva
+                                    {% else %}
+                                        Nincs visszajelzés
+                                    {% endif %}
+                                </p>
+                                
                                 <script>
                                 $(document).ready(function () {
                                     // Function to handle crew assignment updates
