@@ -6,6 +6,16 @@ use Money\Currency;
 use Money\Money;
 use Money\Formatter\IntlMoneyFormatter;
 
+
+function calculateDiscountPercentage($asset)
+{
+    if ($asset['price']->getAmount() > 0) {
+        return ($asset['price']->subtract($asset['discountPrice'])->getAmount() / $asset['price']->getAmount()) * 100;
+    } else {
+        return 0;
+    }
+}
+
 $array = [];
 if (isset($_POST['formData'])) {
     foreach ($_POST['formData'] as $item) {
@@ -108,7 +118,35 @@ function projectFinancials($project) {
     $return['assetsAssignedSUB'] = [];
     $return['mass'] = 0.0; //TODO evaluate whether using floats for mass is a good idea....
     $return['value'] = new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']));
-    $return['prices'] = ["subTotal" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency'])), "discounts" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency'])), "total" => new Money(null, new Currency($AUTH->data['instance']['instances_config_currency']))];
+    $return['prices'] = [
+        "subTotal" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "subTotalSound" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "subTotalLight" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "subTotalProjection" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "subTotalStageStructure" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "subTotalStage" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "subTotalSafety" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+
+        // Discounted prices for each category
+        "soundDiscountPrice" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "lightDiscountPrice" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "projectionDiscountPrice" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "stageStructureDiscountPrice" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "stageDiscountPrice" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "safetyDiscountPrice" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+
+        // Discount percentages for each category
+        "soundDiscountPercentage" => 0,
+        "lightDiscountPercentage" => 0,
+        "projectionDiscountPercentage" => 0,
+        "stageStructureDiscountPercentage" => 0,
+        "stageDiscountPercentage" => 0,
+        "safetyDiscountPercentage" => 0,
+
+        // General discounts and total
+        "discounts" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency'])),
+        "total" => new Money(0, new Currency($AUTH->data['instance']['instances_config_currency']))
+    ];
 
     $return['priceMaths'] = $projectFinanceHelper->durationMaths($project['projects_id']);
 
@@ -133,10 +171,6 @@ function projectFinancials($project) {
             $asset['listPricePerItem'] = $asset['price'];
         }
 
-        if (!$asset['assignedAsSubAsset']) {
-            $return['prices']['subTotal'] = $asset['price']->add($return['prices']['subTotal']);
-        }
-
         // Elmentjük a kedvezmény mértékét is
         $asset['discountPercentage'] = $asset['assetsAssignments_discount'] * 100;
 
@@ -144,6 +178,53 @@ function projectFinancials($project) {
         else $asset['discountPrice'] = $asset['price'];
 
         $return['prices']['discounts'] = $return['prices']['discounts']->add($asset['price']->subtract($asset['discountPrice']));
+
+        $groupName = $asset['assetCategoriesGroups_name'];
+
+        switch ($groupName) {
+            case 'Hangtechnika':
+                $return['prices']['subTotalSound'] = $asset['price']->add($return['prices']['subTotalSound']);
+                $return['prices']['soundDiscountPrice'] = $return['prices']['soundDiscountPrice']->add($asset['price']->subtract($asset['discountPrice']));
+                $return['prices']['soundDiscountPercentage'] = calculateDiscountPercentage($asset);
+                break;
+
+            case 'Fénytechnika':
+                $return['prices']['subTotalLight'] = $asset['price']->add($return['prices']['subTotalLight']);
+                $return['prices']['lightDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
+                $return['prices']['lightDiscountPercentage'] = calculateDiscountPercentage($asset);
+                break;
+
+            case 'Vetítéstechnika':
+                $return['prices']['subTotalProjection'] = $asset['price']->add($return['prices']['subTotalProjection']);
+                $return['prices']['projectionDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
+                $return['prices']['projectionDiscountPercentage'] = calculateDiscountPercentage($asset);
+                break;
+
+            case 'Színpadi tartószerkezet':
+                $return['prices']['subTotalStageStructure'] = $asset['price']->add($return['prices']['subTotalStageStructure']);
+                $return['prices']['stageStructureDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
+                $return['prices']['stageStructureDiscountPercentage'] = calculateDiscountPercentage($asset);
+                break;
+
+            case 'Színpadtechnika':
+                $return['prices']['subTotalStage'] = $asset['price']->add($return['prices']['subTotalStage']);
+                $return['prices']['stageDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
+                $return['prices']['stageDiscountPercentage'] = calculateDiscountPercentage($asset);
+                break;
+
+            case 'Biztonságtechnika':
+                $return['prices']['subTotalSafety'] = $asset['price']->add($return['prices']['subTotalSafety']);
+                $return['prices']['safetyDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
+                $return['prices']['safetyDiscountPercentage'] = calculateDiscountPercentage($asset);
+                break;
+
+            default:
+                break;
+        }
+
+        if (!$asset['assignedAsSubAsset']) {
+            $return['prices']['subTotal'] = $asset['price']->add($return['prices']['subTotal']);
+        }
 
         if (!$asset['assignedAsSubAsset']) {
             $return['prices']['total'] = $return['prices']['total']->add($asset['discountPrice']);

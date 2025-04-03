@@ -126,43 +126,82 @@
                 {% if GET['finance'] and "PROJECTS:PROJECT_PAYMENTS:VIEW"|instancePermissions and project.projectsTypes_config_finance == 1 %}
                 {
                     table: {
-                        widths: [ "35%", "15%", "35%", "15%"],
+                        widths: [ "25%", "25%", "25%", "25%"],
                         body: [
                             [
-                                { text: "Felszerelés részösszeg" },
-                                { text: "{{ FINANCIALS.prices.subTotal|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
-                                { text: "Értékesítés" },
-                                { text: "{{ FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "Tétel megnevezése" },
+                                { text: "Nettó listaár összesen" },
+                                { text: "Kedvezmény mértéke" },
+                                { text: "Kedvezményes nettó ár" },
                             ],
                             [
-                                { text: "Kedvezmények" },
-                                { text: "-{{ FINANCIALS.prices.discounts|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "Hangtechnikai eszközpark bérlete" },
+                                { text: "{{ FINANCIALS.prices.subTotalSound|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.soundDiscountPercentage|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.soundDiscountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                            ],
+                            [
+                                { text: "Fénytechnikai eszközpark bérlete" },
+                                { text: "{{ FINANCIALS.prices.subTotalLight|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPercentage|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                            ],
+                            [
+                                { text: "Színpadi tartószerkezet bérlete" },
+                                { text: "{{ FINANCIALS.prices.subTotalStageStructure|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPercentage|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                            ],
+                            [
+                                { text: "Színpad bérlete" },
+                                { text: "{{ FINANCIALS.prices.subTotalStage|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPercentage|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                            ],
+                            [
+                                { text: "Vetítéstechnika bérlete" },
+                                { text: "{{ FINANCIALS.prices.subTotalProjection|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPercentage|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                            ],
+                            [
+                                { text: "Biztonsági eszközök" },
+                                { text: "{{ FINANCIALS.prices.subTotalSafety|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPercentage|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: "{{ FINANCIALS.prices.discountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                            ],
+                            [
                                 { text: "Személyzet" },
+                                { text: "{{ FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: ""},
                                 { text: "{{ FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
                             [
-                                { text: "Felszerelés végösszeg", style: { bold: true } },
-                                { text: "{{ FINANCIALS.prices.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
-                                { text: "" },
-                                { text: "", style: { alignment: 'right' } },
+                                { text: "Szállítás" },
+                                { text: "{{ FINANCIALS.payments.truck.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                                { text: ""},
+                                { text: "{{ FINANCIALS.payments.truck.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
                             ],
-                            {% if not GET['quote'] %}
                             [
-                                { text: "Részösszeg" },
-                                { text: "{{ FINANCIALS.payments.subTotal|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
-                                { text: "Eddig beérkezett fizetések" },
-                                { text: "-{{ FINANCIALS.payments.received.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
-                            ],
-                            {% endif %}
-                            [
-                                { text: "" },
-                                { text: "", style: { alignment: 'right' } },
-                                { text: "{% if GET['quote'] %}Összesen{% else %}Teljes hátralék{% endif %}", style: { bold: true } },
+                                { text: "Nettó végösszeg" },
+                                { text: ""},
+                                { text: ""},
                                 { text: "{{ FINANCIALS.payments.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right' } },
+                            ],
+                            [
+                                { text: "27 % ÁFA tartalom" },
+                                { text: ""},
+                                { text: ""},
+                                { text: "{{ (FINANCIALS.payments.total.getAmount() * 0.27) | money | replace({',00':''}) | escape('js') }}", style: { alignment: 'right' } },
+                            ],
+                            [
+                                { text: "Bruttó végösszeg" },
+                                { text: ""},
+                                { text: ""},
+                                { text: "{{ (FINANCIALS.payments.total.getAmount() * 1.27) | money | replace({',00':''}) | escape('js') }}", style: { alignment: 'right' } },
                             ],
                         ],
                     },
-                    layout: 'noBorders',
                 },
                 {% endif %}                
                 {% if GET['assets'] and project.projectsTypes_config_assets == 1 %}
