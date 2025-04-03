@@ -50,36 +50,35 @@
                             {% if crew.crewAssignments_comment|length > 0 %}
                                 <i class="fas fa-info-circle" data-toggle="popover" title="{{crew.crewAssignments_role|escape('html_attr')}}" data-content="{{ crew.crewAssignments_comment|escape('html_attr') }}"></i>
                             {% endif %}
-                            <div class="tools">
+                            <div class="tools" style="display: flex; align-items: center; gap: 0px;">
                                 {% set response = crew.crewAssignments_response %}
                                 {% if crew.users_userid == user.users_userid or "PROJECTS:PROJECT_CREW:EDIT"|instancePermissions %}
                                     <!-- Elfogadás ikon -->
                                     <i class="fas fa-check-circle confirmCrewAssignment"
                                     data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
                                     title="Visszaigazol"
-                                    style="color: {% if response == 1 or response == NULL %}green{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 10px;">
+                                    style="color: {% if response == 1 or response == NULL %}green{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 7px;">
                                     </i>
                                     
                                     <!-- Elutasítás ikon -->
                                     <i class="fas fa-times-circle rejectCrewAssignment"
                                     data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
                                     title="Elutasít"
-                                    style="color: {% if response == 2 or response == NULL  %}red{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 10px;">
+                                    style="color: {% if response == 2 or response == NULL  %}red{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 7px;">
                                     </i>
                                 {% else %}
                                     <!-- Csak a státusz megjelenítése -->
                                     <i class="fas fa-check-circle"
                                     title="Elfogadva"
-                                    style="color: {% if response == 1 %}green{% else %}gray{% endif %}; font-size: 1.25em; margin-right: 10px;">
+                                    style="color: {% if response == 1 %}green{% else %}gray{% endif %}; font-size: 1.25em; margin-right: 7px;">
                                     </i>
                                     <i class="fas fa-times-circle"
                                     title="Elutasítva"
-                                    style="color: {% if response == 2 %}red{% else %}gray{% endif %}; font-size: 1.25em; margin-right: 10px;">
+                                    style="color: {% if response == 2 %}red{% else %}gray{% endif %}; font-size: 1.25em; margin-right: 7px;">
                                     </i>
                                 {% endif %}
-
                                 <!-- Státusz szöveges megjelenítése -->
-                                <p style="font-size: 1em; font-weight: bold; margin-top: 10px; 
+                                <p style="font-size: 1em; font-weight: bold; margin-top: 10px; margin-right: 7px;
                                     {% if response == 1 %} color: green; 
                                     {% elseif response == 2 %} color: red; 
                                     {% else %} color: gray; {% endif %};
