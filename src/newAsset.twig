@@ -171,6 +171,15 @@
                     <input type="text" class="form-control" id="assetTag" placeholder="Alapértelmezés szerint automatikusan generált" />
                 </div>
 
+                <div class="form-group" id="warehouseDiv" style="display: none;">
+                    <label>Raktár</label>
+                    <select class="form-control" id="assets_warehouse">
+                        <option value="">Válassz raktárat</option>
+                        <option value="1" {% if asset.assets_warehouse == 1 %} selected {% endif %}>Fő raktár</option>
+                        <option value="2" {% if asset.assets_warehouse == 2 %} selected {% endif %}>Külsős raktár</option>
+                    </select>
+                </div>
+
                 <div class="form-group" id="subAssetsGroup" style="display: none;">
                         <div class="alert alert-danger mt-2 text-center" style="font-weight: bold; color: white; background-color: red;">
                             <strong>Figyelem!</strong> 
@@ -202,6 +211,17 @@
     <script>
         counter = 1;
         $(document).ready(function () {
+
+            $('#assetType').on('input', function() {
+                // Ha az eszköztípus nem üres, mutasd meg a raktár kiválasztót
+                if ($(this).val().trim() !== '') {
+                    $('#warehouseDiv').show();
+                } else {
+                    // Ha üres, rejtsd el a raktár kiválasztót
+                    $('#warehouseDiv').hide();
+                }
+            });
+
             $(".overlay").hide();
             $(".definableFieldsGroup").hide();
             $("#assetGroupsDiv").hide();
@@ -391,7 +411,8 @@
                     {"name": "subAssets", "value": JSON.stringify(subAssets)},
                     {"name": "manufacturers_id", "value": $('#manufacturer').val()},
                     {"name": "assetTypes_id", "value": $('#assetType').val()},
-                    {"name": "assets_tag", "value": $('#assetTag').val()}
+                    {"name": "assets_tag", "value": $('#assetTag').val()}, 
+                    {"name": "assets_warehouse", "value": $('#assets_warehouse').val()},
                 );
 
                 if ($('#assetType').val() != null) {

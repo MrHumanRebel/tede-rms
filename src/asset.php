@@ -8,6 +8,7 @@ if (isset($_GET['instance']) and in_array($_GET['instance'], $AUTH->data['instan
     $PAGEDATA['ASSET_INSTANCE'] = $DBLIB->getone("instances", ["instances_id", "instances_name"]);
 } else $PAGEDATA['ASSET_INSTANCE'] = $AUTH->data['instance'];
 
+
 $DBLIB->orderBy("assetCategories.assetCategories_id", "ASC");
 $DBLIB->orderBy("assetTypes.assetTypes_name", "ASC");
 $DBLIB->join("manufacturers", "manufacturers.manufacturers_id=assetTypes.manufacturers_id", "LEFT");
@@ -25,10 +26,18 @@ $DBLIB->where("assets.assetTypes_id", $PAGEDATA['asset']['assetTypes_id']);
 if (isset($_GET['asset'])) {
     $PAGEDATA['asset']['oneasset'] = true;
     $DBLIB->where("assets.assets_id", $_GET['asset']);
+    $assetWarehouse = $DBLIB->getOne('assets', ['assets_warehouse']);
+    if ($assetWarehouse) {
+        $warehouse_id = $assetWarehouse['assets_warehouse'];
+        $PAGEDATA['asset']['warehouse'] = $warehouse_id;
+    } else {
+        $PAGEDATA['asset']['warehouse'] = null;
+    }
 } else {
     $PAGEDATA['asset']['oneasset'] = false;
     if (!isset($_GET['showArchived'])) $DBLIB->where("(assets.assets_endDate IS NULL OR assets.assets_endDate >= CURRENT_TIMESTAMP())");  //show only active assets by default
 }
+
 $DBLIB->orderBy("assets.asset_definableFields_1", "ASC");
 $DBLIB->orderby("assets.asset_definableFields_2", "ASC");
 $DBLIB->orderby("assets.asset_definableFields_3", "ASC");
