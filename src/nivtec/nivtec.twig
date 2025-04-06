@@ -1,11 +1,17 @@
-{# {% extends "assets/template.twig" %} #}
-
 {% block content %}
   <div class="container">
-    <link rel="stylesheet" href="style.css">
-    <a href="{{ CONFIG.ROOTURL }}/">
-      <img src="{{ CONFIG.ROOTURL }}/static-assets/img/logo_trasparent.png" alt="logo" class="brand-image img-circle elevation-3">
-    </a>
+    {% if USERDATA.users_dark_mode %}
+      <link rel="stylesheet" href="style.css">
+      <a href="{{ CONFIG.ROOTURL }}/">
+        <img src="{{ CONFIG.ROOTURL }}/static-assets/img/logo_trasparent.png" alt="logo" class="brand-image img-circle elevation-3">
+      </a>
+    {% else %}
+      <link rel="stylesheet" href="dark-style.css">
+      <a href="{{ CONFIG.ROOTURL }}/">
+        <img src="{{ CONFIG.ROOTURL }}/static-assets/img/logo_trasparent_dark.png" alt="logo" class="brand-image img-circle elevation-3">
+      </a>
+    {% endif %}
+    
     <h1>{{ title }}</h1>
 
     <div class="input-group">

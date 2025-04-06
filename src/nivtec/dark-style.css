@@ -1,0 +1,187 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    background-color: #121212;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    color: #fff;
+}
+
+.container {
+    background: #1f1f1f;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    box-sizing: border-box;
+    margin: 20px 15px 0 15px;
+    width: calc(100% - 30px);
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.container img {
+    max-width: 20%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    text-align: center;
+    width: 20%;
+    margin: 0 auto 20px auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #333;
+    color: white;
+}
+
+button {
+    background-color: rgb(247, 146, 28);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: rgb(247, 120, 0);
+}
+
+.result {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.result p {
+    margin-bottom: 1px;
+    line-height: 0.9;
+}
+
+.stage-diagram {
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    border: 1px solid #444;
+    border-radius: 10px;
+    background-color: #333;
+    overflow-y: auto;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+
+.copyright {
+    font-size: 12px;
+    margin-top: 15px;
+    color: #888;
+    font-style: italic;
+}
+
+.rotate-group {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.rotate-group label {
+    display: none;
+    align-items: center;
+}
+
+.rotate-group input[type="checkbox"] {
+    margin-left: 15px;
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        padding: 30px;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+    }
+
+    input,
+    button {
+        font-size: 15px;
+        padding: 9px;
+    }
+
+    .container img {
+        max-width: 60% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .input-group {
+        margin-bottom: 10px;
+    }
+
+    input,
+    button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .container img {
+        max-width: 50% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    .input-group {
+        margin-bottom: 10px;
+    }
+
+    input,
+    button {
+        font-size: 13px;
+        padding: 7px;
+    }
+
+    .container img {
+        max-width: 40% !important;
+    }
+
+    .result {
+        font-size: 14px;
+    }
+}
