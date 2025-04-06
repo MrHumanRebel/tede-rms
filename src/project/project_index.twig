@@ -503,6 +503,35 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-8 hidden-md-down">
+                                    {% if project.crewAssignments|length > 0 %}
+                                        <div class="card">
+                                            <div class="card-header">
+                                                {% set totalCrew = project.crewAssignments|length %}
+                                                {% set confirmedCrew = 0 %}
+
+                                                {% for crew in project.crewAssignments %}
+                                                    {% if crew.crewAssignments_response == 1 %}
+                                                        {% set confirmedCrew = confirmedCrew + 1 %}
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                                {% set allConfirmed = totalCrew > 0 and confirmedCrew == totalCrew %}
+
+                                                {% if totalCrew > 0 %}
+                                                    <div style="display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold;
+                                                        color: {% if allConfirmed %}green{% else %}red{% endif %};
+                                                        margin: 5px; justify-content: flex-start; text-align: left;">
+                                                        <i class="fas fa-{% if allConfirmed %}check-circle{% else %}times-circle{% endif %}"></i>
+                                                        {% if allConfirmed %}
+                                                            Mindenki visszaigazolta a beosztását!
+                                                        {% else %}
+                                                            Még nem mindenki igazolta vissza a beosztását!
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
                                     {% if project.auditLog|length > 0 %}
                                         <div class="card">
                                             <div class="card-header">
@@ -555,7 +584,7 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                            <div class="btn-group float-left">
+                                            <div class="btn-group float-left" style="margin-bottom: 15px; margin-left: 15px;">
                                                 <div>
                                                     {% set vechiles = [
                                                         {"name": "Renault: NEA-418"},

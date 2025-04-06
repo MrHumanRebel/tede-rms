@@ -142,7 +142,7 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
                         var errorMessage = "";
                         }
                         bootbox.alert(
-    						"Valami szar hiba történt.{% if CONFIG.LINKS_SUPPORTURL|length > 0 %} <a href='{{ CONFIG.LINKS_SUPPORTURL }}' target='_blank'>Szólj Dancinak, ha zavar</a>{% endif %}<br/><br/>" +
+    						"Valami szar hiba történt xddd {% if CONFIG.LINKS_SUPPORTURL|length > 0 %} <a href='{{ CONFIG.LINKS_SUPPORTURL }}' target='_blank'>Szólj Dancinak, ha zavar</a>{% endif %}<br/><br/>" +
                             errorMessage,
                         function () {
                             if (reloadIfError) {
@@ -157,7 +157,7 @@ ignoreURLs: ['searchUser.php'] // Ignore user searches
                     console.log(jqXHR, textStatus, errorThrown);
                     console.log("Connection Error");
                     bootbox.alert(
-    					"Sorry, nem tudtunk ráakadni az internetre (xDDD), tök mindegy próbáld újra! <a href='{{ CONFIG.LINKS_SUPPORTURL }}' target='_blank'>Szólj Dancinak, ha zavar</a>",
+    					"Sorry, nem tudtunk ráakadni az internetre vagy valami szar xdddd, tök mindegy próbáld újra! <a href='{{ CONFIG.LINKS_SUPPORTURL }}' target='_blank'>Szólj Dancinak, ha zavar</a>",
                         function () {
                         if (reloadIfError) {
                             location.reload();
