@@ -43,18 +43,20 @@
                     style: { fontSize: '{{ newFontSize }}' },
                 },
             {% endif %}
+            {#
             {% if GET['discounts'] %}
-                {# Kedvezmény mértéke #}
+                
                 {
                     text: '{{ type['assets'][0].discountPercentage|money|replace({',00':''})|replace({'Ft':''})|replace({'GBP':''})|escape('js') }}%',
                     style: { fontSize: '{{ newFontSize }}' },
                 },
-                {# Kedvezményes ár #}
+               
                 {
                     text: '{{ type['totals']['discountPrice']|money|replace({',00':''})|escape('js') }}',
                     style: { fontSize: '{{ newFontSize }}' },
                 },
             {% endif %}
+            #}
         {% endif %}
     ],
 {% endif %}
@@ -107,20 +109,22 @@
                 },
                 
                 {% endif %}
+                {#
                 {% if GET['discounts'] %}
                 
-                {# Kedvezmény mértéke #}
+
                 {
                     text: '{{ assetAssignment.discountPercentage|money|replace({',00':''})|replace({'Ft':''})|replace({'GBP':''})|escape('js') }}%',
                     style: { fontSize: '{{ newFontSize }}' },
                 },
-                {# Kedvezményes ár #}
+
                 {
                     text: '{{ assetAssignment.discountPrice|money|replace({',00':''})|escape('js') }}',
                     style: { fontSize: '{{ newFontSize }}' },
                 },
                 
                 {% endif %}
+                #}
                     
             {% endif %}
         ], 

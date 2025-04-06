@@ -181,45 +181,47 @@ function projectFinancials($project) {
 
         $groupName = $asset['assetCategoriesGroups_name'];
 
-        switch ($groupName) {
-            case 'Hangtechnika':
-                $return['prices']['subTotalSound'] = $asset['price']->add($return['prices']['subTotalSound']);
-                $return['prices']['soundDiscountPrice'] = $return['prices']['soundDiscountPrice']->add($asset['price']->subtract($asset['discountPrice']));
-                $return['prices']['soundDiscountPercentage'] = calculateDiscountPercentage($asset);
-                break;
+        if (!$asset['assignedAsSubAsset']) {
+            switch ($groupName) {
+                case 'Hangtechnika':
+                    $return['prices']['subTotalSound'] = $asset['price']->add($return['prices']['subTotalSound']);
+                    $return['prices']['soundDiscountPrice'] = $asset['price']->add($return['prices']['soundDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    $return['prices']['soundDiscountPercentage'] = calculateDiscountPercentage($asset);
+                    break;
 
-            case 'Fénytechnika':
-                $return['prices']['subTotalLight'] = $asset['price']->add($return['prices']['subTotalLight']);
-                $return['prices']['lightDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
-                $return['prices']['lightDiscountPercentage'] = calculateDiscountPercentage($asset);
-                break;
+                case 'Fénytechnika':
+                    $return['prices']['subTotalLight'] = $asset['price']->add($return['prices']['subTotalLight']);
+                    $return['prices']['lightDiscountPrice'] = $asset['price']->add($return['prices']['lightDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    $return['prices']['lightDiscountPercentage'] = calculateDiscountPercentage($asset);
+                    break;
 
-            case 'Vetítéstechnika':
-                $return['prices']['subTotalProjection'] = $asset['price']->add($return['prices']['subTotalProjection']);
-                $return['prices']['projectionDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
-                $return['prices']['projectionDiscountPercentage'] = calculateDiscountPercentage($asset);
-                break;
+                case 'Vetítéstechnika':
+                    $return['prices']['subTotalProjection'] = $asset['price']->add($return['prices']['subTotalProjection']);
+                    $return['prices']['projectionDiscountPrice'] = $asset['price']->add($return['prices']['projectionDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    $return['prices']['projectionDiscountPercentage'] = calculateDiscountPercentage($asset);
+                    break;
 
-            case 'Színpadi tartószerkezet':
-                $return['prices']['subTotalStageStructure'] = $asset['price']->add($return['prices']['subTotalStageStructure']);
-                $return['prices']['stageStructureDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
-                $return['prices']['stageStructureDiscountPercentage'] = calculateDiscountPercentage($asset);
-                break;
+                case 'Színpadi tartószerkezet':
+                    $return['prices']['subTotalStageStructure'] = $asset['price']->add($return['prices']['subTotalStageStructure']);
+                    $return['prices']['stageStructureDiscountPrice'] = $asset['price']->add($return['prices']['stageStructureDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    $return['prices']['stageStructureDiscountPercentage'] = calculateDiscountPercentage($asset);
+                    break;
 
-            case 'Színpadtechnika':
-                $return['prices']['subTotalStage'] = $asset['price']->add($return['prices']['subTotalStage']);
-                $return['prices']['stageDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
-                $return['prices']['stageDiscountPercentage'] = calculateDiscountPercentage($asset);
-                break;
+                case 'Színpadtechnika':
+                    $return['prices']['subTotalStage'] = $asset['price']->add($return['prices']['subTotalStage']);
+                    $return['prices']['stageDiscountPrice'] = $asset['price']->add($return['prices']['stageDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    $return['prices']['stageDiscountPercentage'] = calculateDiscountPercentage($asset);
+                    break;
 
-            case 'Biztonságtechnika':
-                $return['prices']['subTotalSafety'] = $asset['price']->add($return['prices']['subTotalSafety']);
-                $return['prices']['safetyDiscountPrice'] = ($asset['price']->subtract($asset['discountPrice']));
-                $return['prices']['safetyDiscountPercentage'] = calculateDiscountPercentage($asset);
-                break;
+                case 'Biztonságtechnika':
+                    $return['prices']['subTotalSafety'] = $asset['price']->add($return['prices']['subTotalSafety']);
+                    $return['prices']['safetyDiscountPrice'] = $asset['price']->add($return['prices']['safetyDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    $return['prices']['safetyDiscountPercentage'] = calculateDiscountPercentage($asset);
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
 
         if (!$asset['assignedAsSubAsset']) {
