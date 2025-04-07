@@ -3,6 +3,7 @@ require_once __DIR__ . '/common/headSecure.php';
 
 $scriptStartTime = microtime (true);
 
+/*
 $dates = explode(" - ", $_GET['dates']);
 if (count($dates) == 2) {
     $dateStart = $dates[0];
@@ -11,7 +12,7 @@ if (count($dates) == 2) {
     $dateStart = false;
     $dateEnd = false;
 }
-
+*/
 
 $DBLIB->setTrace(true, $_SERVER['SERVER_ROOT']);
 $SEARCH = [
@@ -67,17 +68,44 @@ if ($SEARCH['PROJECT_ID'] and $AUTH->instancePermissionCheck("PROJECTS:PROJECT_A
     $DBLIB->where("projects.projects_deleted", 0);
     $DBLIB->where("projects.projects_dates_deliver_start",NULL,"IS NOT");
     $DBLIB->where("projects.projects_dates_deliver_end",NULL,"IS NOT");
-    $thisProject = $DBLIB->getone("projects",["projects_name", "projects_dates_deliver_start","projects_dates_deliver_end"]);
+    $DBLIB->where("projects.projects_dates_tech_start", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_tech_end", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_stageStructure_start", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_stageStructure_end", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_stage_start", NULL, "IS NOT");
+    $DBLIB->where("projects.projects_dates_stage_end", NULL, "IS NOT");
+    $thisProject = $DBLIB->getone("projects", [
+        "projects_name",
+        "projects_dates_deliver_start",
+        "projects_dates_deliver_end",
+        "projects_dates_tech_start",
+        "projects_dates_tech_end",
+        "projects_dates_stageStructure_start",
+        "projects_dates_stageStructure_end",
+        "projects_dates_stage_start",
+        "projects_dates_stage_end",
+    ]);
     if (!$thisProject) {
         $dateStart = false;
         $dateEnd = false;
     } else {
         $dateStart = strtotime($thisProject['projects_dates_deliver_start']);
         $dateEnd = strtotime($thisProject['projects_dates_deliver_end']);
+
+        $dateStartTech = strtotime($thisProject['projects_dates_tech_start']);
+        $dateEndTech = strtotime($thisProject['projects_dates_tech_end']);
+
+        $dateStartStageStructure = strtotime($thisProject['projects_dates_stageStructure_start']);
+        $dateEndStageStructure = strtotime($thisProject['projects_dates_stageStructure_end']);
+
+        $dateStartStage = strtotime($thisProject['projects_dates_stage_start']);
+        $dateEndStage = strtotime($thisProject['projects_dates_stage_end']);
+
         $RETURN['PROJECT']['ID'] = $SEARCH['PROJECT_ID'];
         $RETURN['PROJECT']['NAME'] = $thisProject['projects_name'];
     }
-} elseif ($dateStart and $dateEnd) {
+}
+/* elseif ($dateStart and $dateEnd) {
   $dateStart = strtotime($dateStart);
   $dateEnd = strtotime($dateEnd);
   if ($dateEnd <= $dateStart) {
@@ -88,6 +116,7 @@ if ($SEARCH['PROJECT_ID'] and $AUTH->instancePermissionCheck("PROJECTS:PROJECT_A
     $dateStart = false;
     $dateEnd = false;
 }
+*/
 $RETURN['PROJECT']['DATESTART'] = $dateStart;
 $RETURN['PROJECT']['DATEEND'] = $dateEnd;
 
@@ -172,7 +201,7 @@ $DBLIB->where("assetTypes_id", $subQuery, 'in');
 //The actual select
 $DBLIB->pageLimit = $SEARCH["PAGE_LIMIT"];
 $DBLIB->where("(assetTypes.instances_id IS NULL OR assetTypes.instances_id = ?)",[$SEARCH['INSTANCE_ID']]);
-$assets = $DBLIB->arraybuilder()->paginate('assetTypes', $SEARCH["PAGE"], ["assetTypes.*", "manufacturers.*", "assetCategories.*", "assetCategoriesGroups_name"]);
+$assets = $DBLIB->arraybuilder()->paginate('assetTypes', $SEARCH["PAGE"], ["assetTypes.*", "manufacturers.*", "assetCategories.*", "assetCategoriesGroups.*"]);
 $RETURN['PAGINATION']['TOTAL-PAGES'] = $DBLIB->totalPages;
 $RETURN['PAGINATION']['COUNT'] = $DBLIB->totalCount;
 $RETURN['PAGINATION']['OFFSET'] = $SEARCH["PAGE_LIMIT"]*($SEARCH["PAGE"]-1);
@@ -180,6 +209,7 @@ foreach ($assets as $asset) {
     $DBLIB->where("assets.assetTypes_id", $asset['assetTypes_id']);
     $DBLIB->where("assets.instances_id",$SEARCH['INSTANCE_ID']);
     $DBLIB->where("assets_deleted",0);
+
     if (!$SEARCH['SETTINGS']['SHOWARCHIVED']) $DBLIB->where ("(assets.assets_endDate IS NULL OR assets.assets_endDate >= '" . date ("Y-m-d H:i:s") . "')");
     if ($SEARCH['TERMS']['GROUPS']) {
         $thisWhere = false;
@@ -210,6 +240,7 @@ foreach ($assets as $asset) {
         if ($thisWhere) $DBLIB->where($thisWhere . ")",$thisValues);
     }
     $DBLIB->orderBy("assets.assets_tag", "ASC");
+
     $assetTags = $DBLIB->get("assets", null, ["assets_id", "assets_notes", "assets_tag", "asset_definableFields_1", "asset_definableFields_2", "asset_definableFields_3", "asset_definableFields_4", "asset_definableFields_5", "asset_definableFields_6", "asset_definableFields_7", "asset_definableFields_8", "asset_definableFields_9", "asset_definableFields_10", "assets_dayRate", "assets_weekRate", "assets_value", "assets_mass", "assets_endDate"]);
     if (!$assetTags) continue;
     $asset['count'] = count($assetTags);
@@ -227,7 +258,30 @@ foreach ($assets as $asset) {
             $DBLIB->where("assetsAssignments.assetsAssignments_deleted", 0);
             $DBLIB->join("projects", "assetsAssignments.projects_id=projects.projects_id", "LEFT");
             $DBLIB->where("projects.projects_deleted", 0);
-            $DBLIB->where("((projects_dates_deliver_start >= '" . date ("Y-m-d H:i:s",$dateStart)  . "' AND projects_dates_deliver_start <= '" . date ("Y-m-d H:i:s",$dateEnd) . "') OR (projects_dates_deliver_end >= '" . date ("Y-m-d H:i:s",$dateStart) . "' AND projects_dates_deliver_end <= '" . date ("Y-m-d H:i:s",$dateEnd) . "') OR (projects_dates_deliver_end >= '" . date ("Y-m-d H:i:s",$dateEnd) . "' AND projects_dates_deliver_start <= '" . date ("Y-m-d H:i:s",$dateStart) . "'))");
+
+            $groupName = $asset['assetCategoriesGroups_name'];
+
+            switch ($groupName) {
+                case 'Hangtechnika':
+                case 'Fénytechnika':
+                case 'Vetítéstechnika':
+                    $DBLIB->where("((projects_dates_tech_start >= '" . date("Y-m-d H:i:s", $dateStartTech)  . "' AND projects_dates_tech_start <= '" . date("Y-m-d H:i:s", $dateEndTech) . "') OR (projects_dates_tech_end >= '" . date("Y-m-d H:i:s", $dateStartTech) . "' AND projects_dates_tech_end <= '" . date("Y-m-d H:i:s", $dateEndTech) . "') OR (projects_dates_tech_end >= '" . date("Y-m-d H:i:s", $dateEndTech) . "' AND projects_dates_tech_start <= '" . date("Y-m-d H:i:s", $dateStartTech) . "'))");
+                    break;
+
+                case 'Színpadi tartószerkezet':
+                    $DBLIB->where("((projects_dates_stageStructure_start >= '" . date("Y-m-d H:i:s", $dateStartStageStructure)  . "' AND projects_dates_stageStructure_start <= '" . date("Y-m-d H:i:s", $dateEndStageStructure) . "') OR (projects_dates_stageStructure_end >= '" . date("Y-m-d H:i:s", $dateStartStageStructure) . "' AND projects_dates_stageStructure_end <= '" . date("Y-m-d H:i:s", $dateEndStageStructure) . "') OR (projects_dates_stageStructure_end >= '" . date("Y-m-d H:i:s", $dateEndStageStructure) . "' AND projects_dates_stageStructure_start <= '" . date("Y-m-d H:i:s", $dateStartStageStructure) . "'))");
+                    break;
+
+                case 'Színpadtechnika':
+                    $DBLIB->where("((projects_dates_stage_start >= '" . date("Y-m-d H:i:s", $dateStartStage)  . "' AND projects_dates_stage_start <= '" . date("Y-m-d H:i:s", $dateEndStage) . "') OR (projects_dates_stage_end >= '" . date("Y-m-d H:i:s", $dateStartStage) . "' AND projects_dates_stage_end <= '" . date("Y-m-d H:i:s", $dateEndStage) . "') OR (projects_dates_stage_end >= '" . date("Y-m-d H:i:s", $dateEndStage) . "' AND projects_dates_stage_start <= '" . date("Y-m-d H:i:s", $dateStartStage) . "'))");
+                    break;
+
+                case 'Biztonságtechnika':
+                default:
+                    $DBLIB->where("((projects_dates_deliver_start >= '" . date("Y-m-d H:i:s", $dateStart)  . "' AND projects_dates_deliver_start <= '" . date("Y-m-d H:i:s", $dateEnd) . "') OR (projects_dates_deliver_end >= '" . date("Y-m-d H:i:s", $dateStart) . "' AND projects_dates_deliver_end <= '" . date("Y-m-d H:i:s", $dateEnd) . "') OR (projects_dates_deliver_end >= '" . date("Y-m-d H:i:s", $dateEnd) . "' AND projects_dates_deliver_start <= '" . date("Y-m-d H:i:s", $dateStart) . "'))");
+                    break;
+            }
+
             $DBLIB->join("projectsStatuses", "projects.projectsStatuses_id=projectsStatuses.projectsStatuses_id", "LEFT");
             if ($RETURN['PROJECT']['ID']) {
                 // If a project is being searched for specifically then we need to check if the asset is assigned to that project or if it is assigned to another project
@@ -275,7 +329,6 @@ foreach ($assets as $asset) {
         $asset['countSubAssets'] = 0;
         $asset['subAssets'] = '[]';  // Empty array in JSON format
     }
-
 
     $RETURN['ASSETS'][] = $asset;
 }
