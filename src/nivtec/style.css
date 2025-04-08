@@ -4,7 +4,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     height: 100%;
-    background-color: #e0f7fa;
+    background-color: #d3d3d3;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -119,6 +119,14 @@ button:hover {
     display: none;
 }
 
+a {
+    color: rgb(247, 146, 28);
+}
+
+a:hover,
+a:active {
+    color: rgb(247, 146, 28);
+}
 @media (max-width: 1024px) {
     .container {
         padding: 30px;

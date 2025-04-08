@@ -122,6 +122,14 @@ button:hover {
     display: none;
 }
 
+a {
+    color: rgb(247, 146, 28);
+}
+
+a:hover,
+a:active {
+    color: rgb(247, 146, 28);
+}
 @media (max-width: 1024px) {
     .container {
         padding: 30px;
