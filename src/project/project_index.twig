@@ -171,9 +171,11 @@
                                         <div class="card-header">
                                             <h3 class="card-title">{{ project.projectsTypes_name }}</h3>
                                             <div class="card-tools">
+                                                {#
                                                 {% if project.projectsTypes_config_assets == 1 and project.projects_dates_deliver_start and project.projects_archived != 1 and "PROJECTS:PROJECT_ASSETS:CREATE:ASSIGN_ALL_BUSINESS_ASSETS"|instancePermissions %}
                                                     <button type="button" class="btn btn-tool" title="Minden eszköz hozzáadása a projekthez" id="addAllAssetsToProject"><i class="fas fa-dolly"></i></button>
                                                 {% endif %}
+                                                #}
                                             </div>
                                         </div>
                                         <div class="card-body">
@@ -196,6 +198,16 @@
                                                         <p class="text-muted">{{ project.projects_description|nl2br }}</p>
                                                         <hr/>
                                                     {% endif %}
+                                                    {#
+                                                    <div class="form-group" style="margin-top: 25px;">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="allow_excess_checkout" name="allow_excess_checkout" {% if project.allow_excess_checkout %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="allow_excess_checkout">
+                                                                Több eszköz kiajánlásának engedélyezése mint ami raktárkészleten van
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    #}
                                                     <div class="text-muted">
                                                         {% if "PROJECTS:EDIT:CLIENT"|instancePermissions and project.projectsTypes_config_client == 1 %}
                                                             <div class="form-group">
