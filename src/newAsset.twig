@@ -175,11 +175,11 @@
                     <label>Raktár</label>
                     <select class="form-control" id="assets_warehouse">
                         <option value="">Válassz raktárat</option>
-                        <option value="1" {% if asset.assets_warehouse == 1 %} selected {% endif %}>Dunaszeg Iskola utca 7.</option>
+                        <option value="1" {% if asset.assets_warehouse == 1 or asset.assets_warehouse is not defined %} selected {% endif %}>Dunaszeg Iskola utca 7.</option>
                         <option value="2" {% if asset.assets_warehouse == 2 %} selected {% endif %}>Külsős raktár</option>
                     </select>
                 </div>
-
+                
                 <div class="form-group" id="subAssetsGroup" style="display: none;">
                         <div class="alert alert-danger mt-2 text-center" style="font-weight: bold; color: white; background-color: red;">
                             <strong>Figyelem!</strong> 
@@ -344,7 +344,7 @@
                 $("#assetNotes").show();
                 $("#assetGroupsDiv").show();
                 $("#assetTagDiv").show();
-                $("#saveButton").text("Save");
+                $("#saveButton").text("Mentés");
                 counter = 1;
                 
                 // Make the ajax call to get the asset type data
@@ -421,7 +421,7 @@
                     formData.push({"name": "assets_assetGroups", "value": assetGroups.join(',')});
 
                     ajaxcall("assets/newAssetFromType.php", {formData}, function(data) {
-                        $("#saveButton").text("Add Another");
+                        $("#saveButton").text("Még egy hozzáadása");
                         $('#assetTag').val("");
                         Toast.fire({
                             type: 'success',

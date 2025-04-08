@@ -8,14 +8,14 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         {% if search|length > 0 %}
-                            Search results for manufacturers matching <b>{{ search }}</b>
+                            Keresési eredmények a következő gyártókra: <b>{{ search }}</b>
                         {% else %}
-                            Manufacturers
+                            Gyártók
                         {% endif %}
                     </h3>
                     <div class="card-tools pull-right">
                         <form class="input-group input-group-sm" style="width: 150px;" method="GET">
-                            <input type="text" name="q" class="form-control" placeholder="Search" value="{{ search }}" />
+                            <input type="text" name="q" class="form-control" placeholder="Keresés" value="{{ search }}" />
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                                 {% if "ASSETS:MANUFACTURERS:CREATE"|instancePermissions %}
@@ -34,13 +34,13 @@
                                 <tr>
                                     <td><a href="{{CONFIG.ROOTURL}}/assets.php?manufacturer%5B%5D={{ manufacturer.manufacturers_id }}&showlinked=1&showarchived=1">{{ manufacturer.manufacturers_name }}</a></td>
                                     <td><a href="{{ manufacturer.manufacturers_website }}" target="_blank">{{ manufacturer.manufacturers_website }}</a></td>
-                                    <td>{{  manufacturer.manufacturers_notes|nl2br }}</td>
+                                    <td>{{ manufacturer.manufacturers_notes|nl2br }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     {% else %}
-                        <center><p style="margin: 10px;"><i>No results</i><br/><a href="?">Remove any filters</a></p></center>
+                        <center><p style="margin: 10px;"><i>Nincs találat</i><br/><a href="?">Szűrők eltávolítása</a></p></center>
                     {% endif %}
                 </div>
                 <div class="overlay" id="loadingoverlay">
@@ -53,7 +53,7 @@
                 $("#loadingoverlay").hide();
                 {% if "ASSETS:MANUFACTURERS:CREATE"|instancePermissions %}
                 $("#newManufacturerButton").click(function () {
-                    bootbox.prompt("Enter Manufacturer Name", function (result) {
+                    bootbox.prompt("Adja meg a gyártó nevét", function (result) {
                         if (result) {
                             ajaxcall("manufacturer/new.php", {"manufacturers_name": result}, function (data) {
                                 location.reload();

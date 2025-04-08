@@ -10733,7 +10733,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .text-muted {
-  color: #6c757d !important;
+  color: #000000 !important;
 }
 
 .text-black-50 {
@@ -46091,7 +46091,7 @@ blockquote.quote-gray-dark h6 {
 }
 
 .dark-mode .text-muted {
-  color: #adb5bd !important;
+  color: #000000 !important;
 }
 
 .dark-mode .text-lightblue {
