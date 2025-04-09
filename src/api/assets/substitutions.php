@@ -25,6 +25,12 @@ $DBLIB->where("assetsAssignments.assetsAssignments_deleted", 0);
 $DBLIB->where("projects.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where("projects_dates_deliver_start",NULL,"IS NOT");
 $DBLIB->where("projects_dates_deliver_end",NULL,"IS NOT");
+$DBLIB->where("projects_dates_tech_start", NULL, "IS NOT");
+$DBLIB->where("projects_dates_tech_end", NULL, "IS NOT");
+$DBLIB->where("projects_dates_stageStructure_start", NULL, "IS NOT");
+$DBLIB->where("projects_dates_stageStructure_end", NULL, "IS NOT");
+$DBLIB->where("projects_dates_stage_start", NULL, "IS NOT");
+$DBLIB->where("projects_dates_stage_end", NULL, "IS NOT");
 $DBLIB->join("assetsAssignments", "assetsAssignments.assets_id = assets.assets_id");
 $DBLIB->join("projects", "assetsAssignments.projects_id = projects.projects_id");
 $DBLIB->where("projects.projects_deleted", 0);
@@ -40,7 +46,12 @@ $DBLIB->where("assets.assets_id", $currentAsset["assets_id"], "!=");
 $DBLIB->where("assets.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where ("(assets.assets_endDate IS NULL OR assets.assets_endDate >= '" . date ("Y-m-d H:i:s") . "')");
 $DBLIB->where('assets.assets_deleted', 0);
-$assets = $DBLIB->get("assets", null, ["assets_id","assets_tag","asset_definableFields_1"]);
+
+$DBLIB->join("assetTypes", "assets.assetTypes_id=assetTypes.assetTypes_id", "LEFT");
+$DBLIB->join("assetCategories", "assetCategories.assetCategories_id=assetTypes.assetCategories_id", "LEFT");
+$DBLIB->join("assetCategoriesGroups", "assetCategoriesGroups.assetCategoriesGroups_id=assetCategories.assetCategoriesGroups_id", "LEFT");
+
+$assets = $DBLIB->get("assets", null, ["assets_id", "assets_tag", "asset_definableFields_1", "assetCategoriesGroups_name"]);
 foreach ($assets as $asset) {
     $DBLIB->where("assets_id", $asset['assets_id']);
     $DBLIB->where("assetsAssignments.assetsAssignments_deleted", 0);
@@ -48,8 +59,35 @@ foreach ($assets as $asset) {
     $DBLIB->join("projectsStatuses", "projects.projectsStatuses_id=projectsStatuses.projectsStatuses_id", "LEFT");
     $DBLIB->where("projects.projects_deleted", 0);
     $DBLIB->where("projectsStatuses.projectsStatuses_assetsReleased", 0);
-    $DBLIB->where("((projects_dates_deliver_start >= '" . $currentAsset["projects_dates_deliver_start"] . "' AND projects_dates_deliver_start <= '" . $currentAsset["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $currentAsset["projects_dates_deliver_start"] . "' AND projects_dates_deliver_end <= '" . $currentAsset["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $currentAsset["projects_dates_deliver_end"] . "' AND projects_dates_deliver_start <= '" . $currentAsset["projects_dates_deliver_start"] . "'))");
+
+    $groupName = $asset['assetCategoriesGroups_name'];
+
+    switch ($groupName) {
+        case 'Hangtechnika':
+        case 'Fénytechnika':
+        case 'Vetítéstechnika':
+            $DBLIB->where("((projects_dates_tech_start >= '" . $currentAsset["projects_dates_tech_start"] . "' AND projects_dates_tech_start <= '" . $currentAsset["projects_dates_tech_end"] . "') OR (projects_dates_tech_end >= '" . $currentAsset["projects_dates_tech_start"] . "' AND projects_dates_tech_end <= '" . $currentAsset["projects_dates_tech_end"] . "') OR (projects_dates_tech_end >= '" . $currentAsset["projects_dates_tech_end"] . "' AND projects_dates_tech_start <= '" . $currentAsset["projects_dates_tech_start"] . "'))");
+
+            break;
+
+        case 'Színpadi tartószerkezet':
+            $DBLIB->where("((projects_dates_stageStructure_start >= '" . $currentAsset["projects_dates_stageStructure_start"] . "' AND projects_dates_stageStructure_start <= '" . $currentAsset["projects_dates_stageStructure_end"] . "') OR (projects_dates_stageStructure_end >= '" . $currentAsset["projects_dates_stageStructure_start"] . "' AND projects_dates_stageStructure_end <= '" . $currentAsset["projects_dates_stageStructure_end"] . "') OR (projects_dates_stageStructure_end >= '" . $currentAsset["projects_dates_stageStructure_end"] . "' AND projects_dates_stageStructure_start <= '" . $currentAsset["projects_dates_stageStructure_start"] . "'))");
+
+            break;
+
+        case 'Színpadtechnika':
+            $DBLIB->where("((projects_dates_stage_start >= '" . $currentAsset["projects_dates_stage_start"] . "' AND projects_dates_stage_start <= '" . $currentAsset["projects_dates_stage_end"] . "') OR (projects_dates_stage_end >= '" . $currentAsset["projects_dates_stage_start"] . "' AND projects_dates_stage_end <= '" . $currentAsset["projects_dates_stage_end"] . "') OR (projects_dates_stage_end >= '" . $currentAsset["projects_dates_stage_end"] . "' AND projects_dates_stage_start <= '" . $currentAsset["projects_dates_stage_start"] . "'))");
+
+            break;
+
+        case 'Biztonságtechnika':
+        default:
+            $DBLIB->where("((projects_dates_deliver_start >= '" . $currentAsset["projects_dates_deliver_start"] . "' AND projects_dates_deliver_start <= '" . $currentAsset["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $currentAsset["projects_dates_deliver_start"] . "' AND projects_dates_deliver_end <= '" . $currentAsset["projects_dates_deliver_end"] . "') OR (projects_dates_deliver_end >= '" . $currentAsset["projects_dates_deliver_end"] . "' AND projects_dates_deliver_start <= '" . $currentAsset["projects_dates_deliver_start"] . "'))");
+            break;
+    }
+
     $assignments = $DBLIB->get("assetsAssignments", null, ["assetsAssignments.projects_id"]);
+
     $flagsBlocks = assetFlagsAndBlocks($asset['assets_id']);
     if (count($assignments) < 1 and $flagsBlocks['COUNT']['BLOCK'] < 1) {
         $ASSET_OPTIONS[] = $asset;

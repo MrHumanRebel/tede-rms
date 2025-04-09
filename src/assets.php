@@ -3,7 +3,7 @@ require_once __DIR__ . '/common/headSecure.php';
 
 $scriptStartTime = microtime (true);
 
-/*
+
 $dates = explode(" - ", $_GET['dates']);
 if (count($dates) == 2) {
     $dateStart = $dates[0];
@@ -12,7 +12,6 @@ if (count($dates) == 2) {
     $dateStart = false;
     $dateEnd = false;
 }
-*/
 
 $DBLIB->setTrace(true, $_SERVER['SERVER_ROOT']);
 $SEARCH = [
@@ -104,8 +103,7 @@ if ($SEARCH['PROJECT_ID'] and $AUTH->instancePermissionCheck("PROJECTS:PROJECT_A
         $RETURN['PROJECT']['ID'] = $SEARCH['PROJECT_ID'];
         $RETURN['PROJECT']['NAME'] = $thisProject['projects_name'];
     }
-}
-/* elseif ($dateStart and $dateEnd) {
+} elseif ($dateStart and $dateEnd) {
   $dateStart = strtotime($dateStart);
   $dateEnd = strtotime($dateEnd);
   if ($dateEnd <= $dateStart) {
@@ -116,7 +114,7 @@ if ($SEARCH['PROJECT_ID'] and $AUTH->instancePermissionCheck("PROJECTS:PROJECT_A
     $dateStart = false;
     $dateEnd = false;
 }
-*/
+
 $RETURN['PROJECT']['DATESTART'] = $dateStart;
 $RETURN['PROJECT']['DATEEND'] = $dateEnd;
 
