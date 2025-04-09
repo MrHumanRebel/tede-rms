@@ -43,7 +43,8 @@ $ASSET_OPTIONS = [];
 
 $DBLIB->where("assets.assetTypes_id", $currentAsset["assetTypes_id"]);
 $DBLIB->where("assets.assets_id", $currentAsset["assets_id"], "!=");
-$DBLIB->where("assets.instances_id", $AUTH->data['instance']['instances_id']);
+// Allow from any organization
+//$DBLIB->where("assets.instances_id", $AUTH->data['instance']['instances_id']);
 $DBLIB->where ("(assets.assets_endDate IS NULL OR assets.assets_endDate >= '" . date ("Y-m-d H:i:s") . "')");
 $DBLIB->where('assets.assets_deleted', 0);
 

@@ -351,7 +351,14 @@
                                                                 <input type="text" class="form-control float-right" id="buildDatePickerInput">
                                                             </div>
                                                         </p>
-
+                                                        {% if project.projects_dates_use_start %}
+                                                            <div style="width: 100%; text-align: right; margin-top: 5px; margin-bottom: 15px;">
+                                                                <a href="#" class="copyProjectDatesToBuildDates" data-type="buildDatePickerInput" data-target="#buildDatePickerInput">
+                                                                    <i class="fas fa-sync-alt"></i> Ugyanaz mint az esemény időtartama
+                                                                </a>
+                                                            </div>
+                                                        {% endif %}
+                                                        {#
                                                         <p class="text-sm">Bontási nap
                                                             <div class="input-group">
                                                                 <div class="input-group-prepend">
@@ -360,6 +367,7 @@
                                                                 <input type="text" class="form-control float-right" id="demolitionDatePickerInput">
                                                             </div>
                                                         </p>
+                                                        #}
 
                                                     {% else %}
                                                         <b class="d-block">Esemény időtartama: {{ project.projects_dates_use_start ? project.projects_dates_use_start|date("Y. m. d. H:i") ~ ' - ' ~ project.projects_dates_use_end|date("Y. m. d. H:i") }}</b>
@@ -2147,6 +2155,26 @@
                 let endDate = $("#datePickerInput").data('daterangepicker').endDate.format('YYYY.MM.DD. HH:mm');
 
                 changeProjectDeliverDates(type, startDate, endDate);
+            });
+
+            $(document).on("click", ".copyProjectDatesToBuildDates", function () {
+                let target = $(this).data('target'); // Pl. "#buildDatePickerInput"
+                let startDate = $("#datePickerInput").data('daterangepicker').startDate;
+                let formattedDate = startDate.format('YYYY. MM. DD.');
+
+                // Beállítjuk az input értékét
+                $(target).val(formattedDate);
+
+                // AJAX hívás az építési dátum frissítésére
+                ajaxcall("projects/changeBuildDates.php", {
+                    "projects_dates_build": formattedDate,
+                    "projects_id": "{{ project.projects_id }}"
+                }, function (data) {
+                    console.log("Success:", data);
+                    $(target).val(formattedDate); // biztos ami biztos újra beállítjuk xd
+                }, function (error) {
+                    console.log('Hiba történt a mentés során:', error);
+                });
             });
            
             function setFinanceDurationMathsHetek(weeks, days) {

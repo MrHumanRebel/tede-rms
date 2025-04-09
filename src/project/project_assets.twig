@@ -20,7 +20,7 @@
             {% endif %}
             {% for instance in FINANCIALS.assetsAssignedSUB %}
                 <li class="nav-item">
-                    <a class="nav-link" id="asset-list-tab-instance{{ instance['instance'].instances_id }}" data-toggle="pill" href="#asset-list-tabs-instance{{ instance['instance'].instances_id }}" role="tab" aria-controls="asset-list-tabs-instance{{ instance['instance'].instances_id }}" aria-selected="false">{{  instance['instance'].instances_name }} Assets</a>
+                    <a class="nav-link" id="asset-list-tab-instance{{ instance['instance'].instances_id }}" data-toggle="pill" href="#asset-list-tabs-instance{{ instance['instance'].instances_id }}" role="tab" aria-controls="asset-list-tabs-instance{{ instance['instance'].instances_id }}" aria-selected="false">{{  instance['instance'].instances_name }}</a>
                 </li>
             {% endfor %}
             <li class="pt-2 px-3">
