@@ -208,6 +208,7 @@
                         <thead>
                         <tr>
                             <th>Mennyiség</th>
+                            {# <th>Megnevezés</th> #}
                             <th style="width: 100%;">Megjegyzés</th>
                             <th>Összeg</th>
                             <th>Összesen</th>
@@ -215,18 +216,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% set currentSupplier = "" %}
                         {% for payment in FINANCIALS.payments.truck.ledger %}
-                            {% if currentSupplier != payment.payments_supplier %}
-                                {% set currentSupplier = payment.payments_supplier %}
-                                {% if payment.payments_supplier != "" %}
-                                    <tr>
-                                        <td colspan="99" style="background-color: #F5F5F5;"><b>{{ payment.payments_supplier }}</b></td>
-                                    </tr>
-                                {% endif %}
-                            {% endif %}
                             <tr>
                                 <td style="width: 10px;">{{ payment.payments_quantity }}x</td>
+                                {# <td>{{ payment.payments_supplier|nbsp}}</td> #}
                                 <td>{{ payment.payments_comment|nl2br }}</td>
                                 <td style="width:100px;">{{ payment.payments_amount|money|replace({',00':''}) }}</td>
                                 <td style="width:100px;text-align: right;">{{ payment.payments_amountTotal|money|replace({',00':''}) }}</td>

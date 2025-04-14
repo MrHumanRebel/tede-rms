@@ -22,7 +22,7 @@ if (strlen($array['projects_id']) < 1) finish(false, ["code" => "PARAM-ERROR", "
 unset($array['payments_hours']);
 
 // Ensure payments_quantity_hourly is set, and if so, assign it the value of payments_quantity
-if (isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourly'] !== '' && $array['payments_quantity_hourly'] != 0) {
+if (!empty($array['payments_quantity_hourly']) && isset($array['payments_quantity_hourly']) && $array['payments_quantity_hourly'] !== '' && $array['payments_quantity_hourly'] != 0) {
     // Override payments_quantity with payments_quantity_hourly if it's set
     $array['payments_quantity'] = $array['payments_quantity_hourly'];
     // Delete payments_quantity_hourly after overriding
@@ -32,11 +32,8 @@ if (isset($array['payments_quantity_hourly']) && (empty($array['payments_quantit
     unset($array['payments_quantity_hourly']);
 }
 
-// Ensure payments_quantity has a default value if not provided
-if (!$array['payments_quantity']) $array['payments_quantity'] = 1;
-
 // Ensure payments_amount_hourly is set, and if so, assign it the value of payments_amount
-if (isset($array['payments_amount_hourly']) && $array['payments_amount_hourly'] !== '' && $array['payments_amount_hourly'] != 0) {
+if (!empty($array['payments_amount_hourly']) && isset($array['payments_amount_hourly']) && $array['payments_amount_hourly'] !== '' && $array['payments_amount_hourly'] != 0) {
     // Override payments_amount with payments_amount_hourly if it's set
     $array['payments_amount'] = $array['payments_amount_hourly'];
     // Delete payments_amount_hourly after overriding
@@ -46,10 +43,8 @@ if (isset($array['payments_amount_hourly']) && (empty($array['payments_amount_ho
     unset($array['payments_amount_hourly']);
 }
 
-
-
 // Ensure payments_comment_hourly is set, and if so, assign it the value of payments_comment
-if (isset($array['payments_comment_hourly']) && $array['payments_comment_hourly'] !== '') {
+if (!empty($array['payments_comment_hourly']) && isset($array['payments_comment_hourly']) && $array['payments_comment_hourly'] !== '') {
     // Override payments_comment with payments_comment_hourly if it's set
     $array['payments_comment'] = $array['payments_comment_hourly'];
     // Delete payments_comment_hourly after overriding

@@ -757,14 +757,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Mennyiség</span>
                             </div>
-                            <input class="form-control" type="number" step="1" min="1" value="1" id="payments_quantity_hourly" name="payments_quantity_hourly" oninput="calculateTotalHourlyRate(); updateDescription();">
+                            <input class="form-control" type="number" step="1" min="0" value="0" id="payments_quantity_hourly" name="payments_quantity_hourly" oninput="calculateTotalHourlyRate(); updateDescription();">
                         </div>
 
                         <div class="input-group mb-3 newPaymentModal-paymentHour">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Óra</span>
                             </div>
-                            <input class="form-control" type="number" step="1" min="1" value="1" id="payments_hours" name="payments_hours" oninput="calculateTotalHourlyRate(); updateDescription();">
+                            <input class="form-control" type="number" step="1" min="0" value="0" id="payments_hours" name="payments_hours" oninput="calculateTotalHourlyRate(); updateDescription();">
                         </div>
 
                         <div class="input-group mb-3 newPaymentModal-paymentHour">
@@ -797,8 +797,8 @@
 
                         // Function to calculate the total hourly rate (Mennyiség * Óra * Órabér)
                         function calculateTotalHourlyRate() {
-                            const quantity = document.getElementById('payments_quantity_hourly').value || 1; // Default to 1 if no quantity is entered
-                            const hours = document.getElementById('payments_hours').value || 1; // Default to 1 if no hours are entered
+                            const quantity = document.getElementById('payments_quantity_hourly').value || 0; 
+                            const hours = document.getElementById('payments_hours').value || 0;
                             const hourlyRate = document.getElementById('payments_hourlyRate').value || 0;
                             const total = document.getElementById('payments_amount_hourly');
                             total.value = hours * hourlyRate; // Calculate total as Mennyiség * Óra * Órabér
@@ -808,8 +808,8 @@
                         function updateDescription() {
                             const workforceType = document.getElementById('payments_workforceType');
                             const selectedType = workforceType.options[workforceType.selectedIndex].text; // Get the name of the selected workforce type
-                            const quantity = document.getElementById('payments_quantity_hourly').value || 1;
-                            const hours = document.getElementById('payments_hours').value || 1;
+                            const quantity = document.getElementById('payments_quantity_hourly').value || 0;
+                            const hours = document.getElementById('payments_hours').value || 0;
                             const description = document.getElementById('payments_comment_hourly');
                             
                             if (description) { // Check if the element exists
@@ -2419,6 +2419,8 @@
             });
             $("#newPaymentModal-button").click(function () {
                 var formData = $("#newPaymentModal-form").serializeArray();
+                console.log($("input[name='payments_quantity']").val());
+
                 ajaxcall("projects/newPayment.php", {formData}, function (data) {
                     location.reload();
                 });
