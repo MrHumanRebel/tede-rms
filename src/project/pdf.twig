@@ -325,9 +325,89 @@
                                 ]
                             },
                             layout: 'lightHorizontalLines',
-                            margin: [ 0, 10, 0, 10 ]
+                            {% if FINANCIALS.payments.sales.ledger|length > 0 %}
+                                margin: [0, 10, 0, 0]  // No bottom margin if there's a sales ledger
+                            {% else %}
+                                margin: [0, 10, 0, 10]  // Default bottom margin
+                            {% endif %}
                         },
                     {% endif %}                    
+                {% endif %}
+                {% if FINANCIALS.payments.sales.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['sales'] %}
+
+                    {% set columnCount = 2 %}
+                    {% if GET['checkboxes'] %}{% set columnCount = columnCount + 1 %}{% endif %}
+                    {% if GET['comments'] %}{% set columnCount = columnCount + 1 %}{% endif %}
+                    {% if GET['masses'] %}{% set columnCount = columnCount + 1 %}{% endif %}
+                    {% if project.projectsTypes_config_finance == 1 %}
+                        {% if GET['prices'] %}{% set columnCount = columnCount + 2 %}{% endif %} // Each has 2 returns
+                        //{% if GET['discounts'] %}{% set columnCount = columnCount + 2 %}{% endif %} // Each has 2 returns
+                    {% endif %}
+
+                    {
+                        {% set newColoumnFontSize = 10 %} 
+                        {% set newFontSize = 10 %} 
+                        table: {
+                            headerRows: 0,
+                            widths: [
+                                    {% if GET['checkboxes'] %}'auto',{% endif %}
+                                    '*', // Megnevezés
+                                    'auto', // Darabszám
+                                    {% if GET['masses'] %}'auto',{% endif %}
+                                    {% if GET['comments'] %}'auto',{% endif %}
+                                    {% if project.projectsTypes_config_finance == 1 %}
+                                        {% if GET['prices'] %}
+                                            'auto', // Listaár/db
+                                            'auto', // Listaár összes
+                                        {% endif %}
+                                        /*
+                                        {% if GET['discounts'] %}
+                                            'auto', // Kedvezmény mértéke (%ban)
+                                            'auto', // Kedvezményes listaár összes
+                                        {% endif %}
+                                        */
+                                    {% endif %}
+                            ],
+                            body: [                               
+                                
+                                {% for payment in FINANCIALS.payments.sales.ledger %}
+                                    [
+                                        {% if GET['checkboxes'] %}' ',{% endif %}
+                                        { 
+                                            text: "{{ payment.payments_comment|escape("js") }}",
+                                            style: { fontSize: '{{ newFontSize }}' },
+                                            margin: [0, 2],
+                                        },
+                                        { 
+                                            text: "{{ payment.payments_quantity > 1 ? payment.payments_quantity ~ " db" : " 1 db" }}",
+                                            style: { fontSize: '{{ newFontSize }}' },
+                                            margin: [0, 2],
+                                        },
+                                        { 
+                                            text: "",
+                                            style: { fontSize: '{{ newFontSize }}' },
+                                            margin: [27.5, 2],
+                                        },
+                                        
+                                        {% if GET['prices'] %}
+                                            { 
+                                                text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}", alignment: 'right',
+                                                style: { fontSize: '{{ newFontSize }}' },
+                                                margin: [0, 2],
+                                            },
+                                            { 
+                                                text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}", alignment: 'right',
+                                                style: { fontSize: '{{ newFontSize }}' },
+                                                margin: [0, 2],
+                                            },
+                                        {% endif %}
+                                    ],
+                                {% endfor %}
+                            ]
+                        },
+                        layout: 'lightHorizontalLines',
+                        margin: [ 0, 0, 0, 10 ]
+                    },
                 {% endif %}
                 {% if FINANCIALS.payments.subHire.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['subHires']  %}
                     { text: "További bérleti elemek", style: { fontSize: 15, bold: true }, pageBreak: 'before' },
@@ -369,71 +449,6 @@
                         layout: 'noBorders',
                         margin: [ 0, 10, 0, 10 ]
                     },                    
-                {% endif %}
-                {% if FINANCIALS.payments.sales.ledger|length > 0 and project.projectsTypes_config_finance == 1 and GET['sales'] %}
-                    { text: "Értékesítés", style: { fontSize: 15, bold: true }},
-                    
-                    {% set columnCount = 2 %}
-                    {% if GET['checkboxes'] %}{% set columnCount = columnCount + 1 %}{% endif %}
-                    {% if GET['prices'] %}{% set columnCount = columnCount + 2 %}{% endif %}
-
-                    {
-                        {% set newColoumnFontSize = 10 %} 
-                        {% set newFontSize = 10 %} 
-                        table: {
-                            headerRows: 1,
-                            widths: [
-                                {% if GET['checkboxes'] %}'auto',{% endif %}
-                                '*', // Megnevezés
-                                'auto', // Darabszám
-                                {% if GET['prices'] %}
-                                    'auto', // Listaár/db
-                                    'auto', // Listaár összes
-                                {% endif %}
-                            ],
-                            body: [
-                                [
-                                    {% if GET['checkboxes'] %}' ',{% endif %}
-                                    { text: 'Megnevezés', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
-                                    { text: 'Mennyiség', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
-                                    {% if GET['prices'] %}
-                                        { text: 'Listaár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
-                                        { text: 'Ár', style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
-                                    {% endif %}
-                                ],
-                                
-                                {% for payment in FINANCIALS.payments.sales.ledger %}
-                                    [
-                                        {% if GET['checkboxes'] %}' ',{% endif %}
-                                        { 
-                                            text: "{{ payment.payments_comment|escape("js") }}",
-                                            style: { fontSize: '{{ newFontSize }}' },
-                                            margin: [0, 2],
-                                        },
-                                        { 
-                                            text: "{{ payment.payments_quantity > 1 ? payment.payments_quantity ~ " db" : " 1 db" }}",
-                                            style: { fontSize: '{{ newFontSize }}' },
-                                            margin: [0, 2],
-                                        },
-                                        {% if GET['prices'] %}
-                                            { 
-                                                text: "{{ payment.payments_amount|money|replace({',00':''})|escape('js') }}", alignment: 'right',
-                                                style: { fontSize: '{{ newFontSize }}' },
-                                                margin: [0, 2],
-                                            },
-                                            { 
-                                                text: "{{ payment.payments_amountTotal|money|replace({',00':''})|escape('js') }}", alignment: 'right',
-                                                style: { fontSize: '{{ newFontSize }}' },
-                                                margin: [0, 2],
-                                            },
-                                        {% endif %}
-                                    ],
-                                {% endfor %}
-                            ]
-                        },
-                        layout: 'lightHorizontalLines',
-                        margin: [ 0, 10, 0, 10 ]
-                    },
                 {% endif %}
                 {% if project.projectsTypes_config_finance == 1 and FINANCIALS.payments.staff.ledger|length > 0 and GET['staff'] %}
                     { text: "Személyzet", style: { fontSize: 15, bold: true }},
