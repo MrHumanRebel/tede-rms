@@ -375,4 +375,50 @@ if (count($SEARCH['TERMS']['CATEGORY']) > 0) {
 $RETURN['SEARCH'] = $SEARCH;
 $PAGEDATA['searchResults'] = $RETURN;
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Ensure POST data is received
+    $data = json_decode(file_get_contents('php://input'), true);
+    if ($data) {
+        $assetId = intval($data['asset_id']);
+        $projectId = intval($data['project_id']);
+        $quantity = intval($data['quantity']);
+
+        // Validate the data
+        if ($assetId && $projectId && $quantity > 0) {
+            // Check if the asset already exists in the project
+            $existing = $DBLIB
+                ->where('tempStock_assets_id', $assetId)
+                ->where('tempStock_project_id', $projectId)
+                ->getOne('tempStockAssets');
+
+            if ($existing) {
+                // If the asset exists, update the quantity
+                $DBLIB->where('id', $existing['id'])->update('tempStockAssets', [
+                    'tempStock_assets_quantity' => $existing['tempStock_assets_quantity'] + $quantity
+                ]);
+            } else {
+                // If the asset doesn't exist, insert it
+                $DBLIB->insert('tempStockAssets', [
+                    'tempStock_assets_id' => $assetId,
+                    'tempStock_project_id' => $projectId,
+                    'tempStock_assets_quantity' => $quantity,
+                ]);
+            }
+            // Return success response
+            echo json_encode(['success' => true]);
+        } else {
+            // Invalid data
+            echo json_encode(['success' => false, 'message' => 'Hibás adatok!']);
+        }
+    } else {
+        // No data received
+        echo json_encode(['success' => false, 'message' => 'Nincs adat!']);
+    }
+}
+
+
+
+
+
+
 echo $TWIG->render('assets.twig', $PAGEDATA);

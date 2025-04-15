@@ -418,7 +418,56 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <button type="button" class="btn btn-sm {{ asset.countAvailable > 0 ? 'btn-success' : 'btn-warning' }}" data-toggle="modal" data-target="#assetDetailsModal{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
+                                                        <button type="button" class="btn btn-sm {{ asset.countAvailable > 0 ? 'btn-success' : 'btn-warning' }}" title="Hozzárendelés a raktárból" data-toggle="modal" data-target="#assetDetailsModal{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-primary" title="Raktárkészleten felüli mennyiség hozzárendelése" data-toggle="modal" data-target="#assignExtraAssetModal{{ asset.assetTypes_id }}">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>  
+                                                        <div class="modal fade" id="assignExtraAssetModal{{ asset.assetTypes_id }}" tabindex="-1" role="dialog" aria-labelledby="assignExtraAssetModalLabel{{ asset.assetTypes_id }}" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="assignExtraAssetModalLabel{{ asset.assetTypes_id }}">Extra eszköz hozzárendelés</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Bezárás">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group">
+                                                                            <label for="quantity{{ asset.assetTypes_id }}">Mennyiség</label>
+                                                                            <input type="number" class="form-control assignExtraInput" id="quantity{{ asset.assetTypes_id }}" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button 
+                                                                            type="button" 
+                                                                            class="btn btn-success assignExtraAssetButton" 
+                                                                            data-assettypeid="{{ asset.assetTypes_id }}" 
+                                                                            data-projectid="{{ searchResults.SEARCH.PROJECT_ID }}"
+                                                                            data-action="add">
+                                                                            Hozzáadás
+                                                                        </button>
+                                                                        <button 
+                                                                            type="button" 
+                                                                            class="btn btn-warning assignExtraAssetButton" 
+                                                                            data-assettypeid="{{ asset.assetTypes_id }}" 
+                                                                            data-projectid="{{ searchResults.SEARCH.PROJECT_ID }}"
+                                                                            data-action="remove">
+                                                                            Eltávolítás
+                                                                        </button>
+                                                                        <button 
+                                                                            type="button" 
+                                                                            class="btn btn-danger assignExtraAssetButton" 
+                                                                            data-assettypeid="{{ asset.assetTypes_id }}" 
+                                                                            data-projectid="{{ searchResults.SEARCH.PROJECT_ID }}"
+                                                                            data-action="remove_all">
+                                                                            Összes eltávolítása
+                                                                        </button>
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Mégse</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                 
                                                     {% endif %}
                                                 {% elseif searchResults.PROJECT.DATESTART and searchResults.PROJECT.DATEEND %}
                                                     {% if asset.count == 1 %}
@@ -566,6 +615,28 @@ document.getElementById('showsubassets').addEventListener('change', function() {
     if (this.checked) {
         document.getElementById('hidesubassets').checked = false;
     }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.assignExtraAssetButton').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const assetTypeId = this.dataset.assettypeid;
+            const projectId = this.dataset.projectid;
+            const action = this.dataset.action;
+            const input = document.getElementById('quantity' + assetTypeId);
+            const quantity = parseInt(input.value) || 0;
+
+            ajaxcall("projects/assets/assignExtraAsset.php", {
+                asset_id: assetTypeId,
+                project_id: projectId,
+                quantity: quantity,
+                action: action
+            }, function () {
+                $('#assignExtraAssetModal' + assetTypeId).modal('hide');
+                location.reload();
+            });
+        });
+    });
 });
 
 
