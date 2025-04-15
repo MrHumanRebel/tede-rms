@@ -272,6 +272,11 @@
                                                         </strong>
                                                     </li>
                                                 {% endif %}
+                                                {% if asset.extra_assets != 0 %}
+                                                    <li class="small" title="Raktárkészleten felül" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">{{ asset.extra_assets }} Raktáron felül!</strong>
+                                                    </li>
+                                                {% endif %}
                                             {% else %}
                                                 {% if asset.assetTypes_mass != "" and asset.assetTypes_mass != 0 %}
                                                 <li class="small">
@@ -316,6 +321,11 @@
                                                         <strong style="font-size: larger; color: green; border: 2px solid green; padding: 3px 10px; border-radius: 10px;">
                                                             {{ asset.countSubAssets }} Aleszközt tartalmaz!
                                                         </strong>
+                                                    </li>
+                                                {% endif %}
+                                                {% if asset.extra_assets != 0 %}
+                                                    <li class="small" title="Raktárkészleten felül" style="margin-top: 10px;">
+                                                        <strong style="font-size: larger; color: red; border: 2px solid red; padding: 3px 10px; border-radius: 10px;">{{ asset.extra_assets }} Raktáron felül!</strong>
                                                     </li>
                                                 {% endif %}
                                             {% endif %}
@@ -419,14 +429,14 @@
                                                             </div>
                                                         </div>
                                                         <button type="button" class="btn btn-sm {{ asset.countAvailable > 0 ? 'btn-success' : 'btn-warning' }}" title="Hozzárendelés a raktárból" data-toggle="modal" data-target="#assetDetailsModal{{ asset.assetTypes_id }}"><i class="fa fa-shopping-basket"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-primary" title="Raktárkészleten felüli mennyiség hozzárendelése" data-toggle="modal" data-target="#assignExtraAssetModal{{ asset.assetTypes_id }}">
+                                                        <button type="button" class="btn btn-sm btn-primary" title="Raktárkészleten felüli mennyiség hozzárendelése készlettől teljesen függetlenül" data-toggle="modal" data-target="#assignExtraAssetModal{{ asset.assetTypes_id }}">
                                                             <i class="fa fa-plus"></i>
                                                         </button>  
                                                         <div class="modal fade" id="assignExtraAssetModal{{ asset.assetTypes_id }}" tabindex="-1" role="dialog" aria-labelledby="assignExtraAssetModalLabel{{ asset.assetTypes_id }}" aria-hidden="true">
                                                             <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="assignExtraAssetModalLabel{{ asset.assetTypes_id }}">Extra eszköz hozzárendelés</h5>
+                                                                        <h5 class="modal-title" id="assignExtraAssetModalLabel{{ asset.assetTypes_id }}">Eszköz hozzárendelés készlettől függetlenül: <strong>{{ asset.assetTypes_name }}</strong></h5>
                                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Bezárás">
                                                                             <span aria-hidden="true">&times;</span>
                                                                         </button>

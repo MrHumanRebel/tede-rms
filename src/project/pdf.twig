@@ -138,7 +138,7 @@
                     {% set newColoumnFontSize = 11 %} 
 
                     table: {
-                        widths: [ "25%", "25%", "25%", "25%"],
+                        widths: ["25%", "25%", "25%", "25%"],
                         body: [
                             [
                                 { text: "Tétel megnevezése", style: { bold: true, fontSize: '{{ newColoumnFontSize }}' } },
@@ -148,77 +148,61 @@
                             ],
                             [
                                 { text: "Hangtechnikai eszközpark bérlete", style: { fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "{{ FINANCIALS.prices.subTotalSound|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.soundDiscountPercentage|escape('js') }} %", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.soundDiscountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "{{ FINANCIALS.prices.subTotalSound ? (FINANCIALS.prices.subTotalSound|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.soundDiscountPercentage ? (FINANCIALS.prices.soundDiscountPercentage ~ ' %') : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.soundDiscountPrice ? (FINANCIALS.prices.soundDiscountPrice|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ],
                             [
                                 { text: "Fénytechnikai eszközpark bérlete", style: { fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "{{ FINANCIALS.prices.subTotalLight|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.lightDiscountPercentage|escape('js') }} %", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.lightDiscountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "{{ FINANCIALS.prices.subTotalLight ? (FINANCIALS.prices.subTotalLight|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.lightDiscountPercentage ? (FINANCIALS.prices.lightDiscountPercentage ~ ' %') : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.lightDiscountPrice ? (FINANCIALS.prices.lightDiscountPrice|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ],
                             [
                                 { text: "Színpadi tartószerkezet bérlete", style: { fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "{{ FINANCIALS.prices.subTotalStageStructure|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.stageStructureDiscountPercentage|escape('js') }} %", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.stageStructureDiscountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "{{ FINANCIALS.prices.subTotalStageStructure ? (FINANCIALS.prices.subTotalStageStructure|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.stageStructureDiscountPercentage ? (FINANCIALS.prices.stageStructureDiscountPercentage ~ ' %') : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.stageStructureDiscountPrice ? (FINANCIALS.prices.stageStructureDiscountPrice|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ],
                             [
                                 { text: "Színpad bérlete", style: { fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "{{ FINANCIALS.prices.subTotalStage|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.stageDiscountPercentage|escape('js') }} %", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.stageDiscountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "{{ FINANCIALS.prices.subTotalStage ? (FINANCIALS.prices.subTotalStage|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.stageDiscountPercentage ? (FINANCIALS.prices.stageDiscountPercentage ~ ' %') : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.stageDiscountPrice ? (FINANCIALS.prices.stageDiscountPrice|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ],
                             [
                                 { text: "Vetítéstechnika bérlete", style: { fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "{{ FINANCIALS.prices.subTotalProjection|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.projectionDiscountPercentage|escape('js') }} %", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.projectionDiscountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "{{ FINANCIALS.prices.subTotalProjection ? (FINANCIALS.prices.subTotalProjection|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.projectionDiscountPercentage ? (FINANCIALS.prices.projectionDiscountPercentage ~ ' %') : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.projectionDiscountPrice ? (FINANCIALS.prices.projectionDiscountPrice|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ],
                             [
                                 { text: "Biztonsági eszközök", style: { fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "{{ FINANCIALS.prices.subTotalSafety|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.safetyDiscountPercentage|escape('js') }} %", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "{{ FINANCIALS.prices.safetyDiscountPrice|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "{{ FINANCIALS.prices.subTotalSafety ? (FINANCIALS.prices.subTotalSafety|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.safetyDiscountPercentage ? (FINANCIALS.prices.safetyDiscountPercentage ~ ' %') : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.prices.safetyDiscountPrice ? (FINANCIALS.prices.safetyDiscountPrice|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ],
                             [
                                 { text: "Személyzet", style: { fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "{{ FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "" },
-                                { text: "{{ FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "{{ FINANCIALS.payments.staff.total ? (FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "-", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.payments.staff.total ? (FINANCIALS.payments.staff.total|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ],
                             [
                                 { text: "Szállítás", style: { fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "{{ FINANCIALS.payments.truck.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } },
-                                { text: "" },
-                                { text: "{{ FINANCIALS.payments.truck.total|money|replace({',00':''})|escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
-                            ],
-                            {% set rawNetto = FINANCIALS.payments.total.getAmount() %}
-                            {% set netto = rawNetto | round(0, 'floor') %}
-                            {% set afa = (netto * 0.27) | round(0, 'floor') %}
-                            {% set brutto = netto + afa %}
-
-                            [
-                                { text: "Nettó végösszeg", style: { bold: true, fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "" },
-                                { text: "" },
-                                { text: "{{ netto | money | replace({',00':''}) | escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "{{ FINANCIALS.payments.truck.total ? (FINANCIALS.payments.truck.total|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "-", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.payments.truck.total ? (FINANCIALS.payments.truck.total|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ],
                             [
-                                { text: "27 % ÁFA tartalom", style: { bold: true, fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "" },
-                                { text: "" },
-                                { text: "{{ afa | money | replace({',00':''}) | escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
-                            ],
-                            [
-                                { text: "Bruttó végösszeg", style: { bold: true, fontSize: '{{ newColoumnFontSize }}' }},
-                                { text: "" },
-                                { text: "" },
-                                { text: "{{ brutto | money | replace({',00':''}) | escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                                { text: "Egyéb", style: { fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.payments.sales.total ? (FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "-", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "{{ FINANCIALS.payments.sales.total ? (FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
                             ]
-                        ],
+                        ]
                     },
+
                 },
                 {% endif %}                
                 {% if GET['assets'] and project.projectsTypes_config_assets == 1 %}

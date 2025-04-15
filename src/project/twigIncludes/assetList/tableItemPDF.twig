@@ -12,14 +12,14 @@
 
         {# Darabszám #}
         {
-            text: "{{ type['assets']|length }} db",
+            text: "{{ type['assets']|length + (type['assets'][0].extra_assets|default(0)) }} db",
             style: { fontSize: '{{ newFontSize }}' },
         },
 
         {# Tömeg #}
         {% if GET['masses'] %}
             {
-                text: '{{ (type['totals']['mass'] > 0 ? type['totals']['mass']|escape('js') ~ ' kg' : '') }}',
+                text: '{% set extra = type['assets'][0].extra_assets|default(0) %}{% set count = type['assets']|length %}{% set totalMass = type['totals']['mass'] + (count > 0 ? (type['totals']['mass'] / count * extra) : 0) %}{{ totalMass > 0 ? (totalMass|round(1, "floor") ~ " kg")|escape("js") : "" }}',
                 style: { fontSize: '{{ newFontSize }}' },
             },
         {% else %}

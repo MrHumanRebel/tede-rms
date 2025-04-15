@@ -108,12 +108,18 @@ function projectFinancials($project) {
     $DBLIB->join("assetCategories", "assetTypes.assetCategories_id=assetCategories.assetCategories_id", "LEFT");
     $DBLIB->join("assetCategoriesGroups", "assetCategoriesGroups.assetCategoriesGroups_id=assetCategories.assetCategoriesGroups_id", "LEFT");
     $DBLIB->join("assetsAssignmentsStatus", "assetsAssignments.assetsAssignmentsStatus_id=assetsAssignmentsStatus.assetsAssignmentsStatus_id", "LEFT");
+
+    $DBLIB->join("tempStockAssets", "tempStockAssets.tempStock_assets_id = assetTypes.assetTypes_id AND tempStockAssets.tempStock_project_id = {$project['projects_id']}", "LEFT");
+
     $DBLIB->orderBy("assetCategories.assetCategories_rank", "ASC");
     $DBLIB->orderBy("assetTypes.assetTypes_id", "ASC");
     $DBLIB->orderBy("assets.assets_tag", "ASC");
     $DBLIB->where("assets.assets_deleted", 0);
-    $assets = $DBLIB->get("assetsAssignments", null, ["assetCategories.assetCategories_rank","assetsAssignmentsStatus.assetsAssignmentsStatus_id", "assetsAssignmentsStatus.assetsAssignmentsStatus_order", "assetsAssignmentsStatus.assetsAssignmentsStatus_name","assetsAssignments.*", "manufacturers.manufacturers_name", "assetTypes.*", "assets.*", "assetCategories.assetCategories_name", "assetCategories.assetCategories_fontAwesome", "assetCategoriesGroups.assetCategoriesGroups_name", "assets.instances_id"]);
+    $assets = $DBLIB->get("assetsAssignments", null, ["assetCategories.assetCategories_rank", "assetsAssignmentsStatus.assetsAssignmentsStatus_id", "assetsAssignmentsStatus.assetsAssignmentsStatus_order", "assetsAssignmentsStatus.assetsAssignmentsStatus_name", "assetsAssignments.*", "manufacturers.manufacturers_name", "assetTypes.*", "assets.*", "assetCategories.assetCategories_name", "assetCategories.assetCategories_fontAwesome", "assetCategoriesGroups.assetCategoriesGroups_name", "assets.instances_id", "tempStockAssets.tempStock_assets_quantity"]);
 
+
+
+    $return['extra_assets'] = 0;
     $return['assetsAssigned'] = [];
     $return['assetsAssignedSUB'] = [];
     $return['mass'] = 0.0; //TODO evaluate whether using floats for mass is a good idea....
@@ -152,7 +158,13 @@ function projectFinancials($project) {
 
     foreach ($assets as $asset) {
 
+        # Count how many items are assigned to this project from the same type
+        $asset['count'] = count(array_filter($assets, function ($a) use ($asset) {
+            return $a['assetTypes_id'] == $asset['assetTypes_id'] && $a['assetsAssignments_assignedAsSubAsset'] == 0;
+        }));
+
         $asset['assignedAsSubAsset'] = $asset['assetsAssignments_assignedAsSubAsset'];
+        $asset['extra_assets'] = $asset['tempStock_assets_quantity'];
 
         $return['mass'] += ($asset['assets_mass'] == null ? $asset['assetTypes_mass'] : $asset['assets_mass']);
         $asset['value'] = new Money(($asset['assets_value'] != null ? $asset['assets_value'] : $asset['assetTypes_value']), new Currency($AUTH->data['instance']['instances_config_currency']));
@@ -179,6 +191,11 @@ function projectFinancials($project) {
 
         $return['prices']['discounts'] = $return['prices']['discounts']->add($asset['price']->subtract($asset['discountPrice']));
 
+        // Ha az extra_assets nem nulla, akkor annyi darabszor adjuk hozzá az árat, amennyi az extra_assets értéke
+        if ($asset['extra_assets'] != 0) {
+            $return['prices']['discounts'] = $return['prices']['discounts']->add($asset['price']->multiply($asset['extra_assets']));
+        }
+
         $groupName = $asset['assetCategoriesGroups_name'];
 
         if (!$asset['assignedAsSubAsset']) {
@@ -186,36 +203,73 @@ function projectFinancials($project) {
                 case 'Hangtechnika':
                     $return['prices']['subTotalSound'] = $asset['price']->add($return['prices']['subTotalSound']);
                     $return['prices']['soundDiscountPrice'] = $asset['price']->add($return['prices']['soundDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    // Ha az extra_assets nem nulla, akkor annyi darabszor adjuk hozzá az árat
+                    if ($asset['extra_assets'] != 0 && $asset['count'] > 0) {
+                        $unitPrice = $asset['price']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $unitDiscountPrice = $asset['discountPrice']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $return['prices']['subTotalSound'] = $return['prices']['subTotalSound']->add($unitPrice);
+                        $return['prices']['soundDiscountPrice'] = $return['prices']['soundDiscountPrice']->add($unitDiscountPrice);
+                    }
                     $return['prices']['soundDiscountPercentage'] = calculateDiscountPercentage($asset);
                     break;
 
                 case 'Fénytechnika':
                     $return['prices']['subTotalLight'] = $asset['price']->add($return['prices']['subTotalLight']);
                     $return['prices']['lightDiscountPrice'] = $asset['price']->add($return['prices']['lightDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    if ($asset['extra_assets'] != 0 && $asset['count'] > 0) {
+                        $unitPrice = $asset['price']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $unitDiscountPrice = $asset['discountPrice']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $return['prices']['subTotalLight'] = $return['prices']['subTotalLight']->add($unitPrice);
+                        $return['prices']['lightDiscountPrice'] = $return['prices']['lightDiscountPrice']->add($unitDiscountPrice);
+                    }
                     $return['prices']['lightDiscountPercentage'] = calculateDiscountPercentage($asset);
                     break;
 
                 case 'Vetítéstechnika':
                     $return['prices']['subTotalProjection'] = $asset['price']->add($return['prices']['subTotalProjection']);
                     $return['prices']['projectionDiscountPrice'] = $asset['price']->add($return['prices']['projectionDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    if ($asset['extra_assets'] != 0 && $asset['count'] > 0) {
+                        $unitPrice = $asset['price']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $unitDiscountPrice = $asset['discountPrice']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $return['prices']['subTotalProjection'] = $return['prices']['subTotalProjection']->add($unitPrice);
+                        $return['prices']['projectionDiscountPrice'] = $return['prices']['projectionDiscountPrice']->add($unitDiscountPrice);
+                    }
                     $return['prices']['projectionDiscountPercentage'] = calculateDiscountPercentage($asset);
                     break;
 
                 case 'Színpadi tartószerkezet':
                     $return['prices']['subTotalStageStructure'] = $asset['price']->add($return['prices']['subTotalStageStructure']);
                     $return['prices']['stageStructureDiscountPrice'] = $asset['price']->add($return['prices']['stageStructureDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    if ($asset['extra_assets'] != 0 && $asset['count'] > 0) {
+                        $unitPrice = $asset['price']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $unitDiscountPrice = $asset['discountPrice']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $return['prices']['subTotalStageStructure'] = $return['prices']['subTotalStageStructure']->add($unitPrice);
+                        $return['prices']['stageStructureDiscountPrice'] = $return['prices']['stageStructureDiscountPrice']->add($unitDiscountPrice);
+                    }
                     $return['prices']['stageStructureDiscountPercentage'] = calculateDiscountPercentage($asset);
                     break;
 
                 case 'Színpadtechnika':
                     $return['prices']['subTotalStage'] = $asset['price']->add($return['prices']['subTotalStage']);
                     $return['prices']['stageDiscountPrice'] = $asset['price']->add($return['prices']['stageDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    if ($asset['extra_assets'] != 0 && $asset['count'] > 0) {
+                        $unitPrice = $asset['price']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $unitDiscountPrice = $asset['discountPrice']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $return['prices']['subTotalStage'] = $return['prices']['subTotalStage']->add($unitPrice);
+                        $return['prices']['stageDiscountPrice'] = $return['prices']['stageDiscountPrice']->add($unitDiscountPrice);
+                    }
                     $return['prices']['stageDiscountPercentage'] = calculateDiscountPercentage($asset);
                     break;
 
                 case 'Biztonságtechnika':
                     $return['prices']['subTotalSafety'] = $asset['price']->add($return['prices']['subTotalSafety']);
                     $return['prices']['safetyDiscountPrice'] = $asset['price']->add($return['prices']['safetyDiscountPrice']->add($asset['discountPrice']->subtract($asset['price'])));
+                    if ($asset['extra_assets'] != 0 && $asset['count'] > 0) {
+                        $unitPrice = $asset['price']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $unitDiscountPrice = $asset['discountPrice']->multiply($asset['extra_assets'])->divide($asset['count'], PHP_ROUND_HALF_UP);
+                        $return['prices']['subTotalSafety'] = $return['prices']['subTotalSafety']->add($unitPrice);
+                        $return['prices']['safetyDiscountPrice'] = $return['prices']['safetyDiscountPrice']->add($unitDiscountPrice);
+                    }
                     $return['prices']['safetyDiscountPercentage'] = calculateDiscountPercentage($asset);
                     break;
 
@@ -226,10 +280,16 @@ function projectFinancials($project) {
 
         if (!$asset['assignedAsSubAsset']) {
             $return['prices']['subTotal'] = $asset['price']->add($return['prices']['subTotal']);
+            if ($asset['extra_assets'] != 0) {
+                $return['prices']['subTotal'] = $return['prices']['subTotal']->add($asset['price']->multiply($asset['extra_assets']));
+            }
         }
 
         if (!$asset['assignedAsSubAsset']) {
             $return['prices']['total'] = $return['prices']['total']->add($asset['discountPrice']);
+            if ($asset['extra_assets'] != 0) {
+                $return['prices']['total'] = $return['prices']['total']->add($asset['discountPrice']->multiply($asset['extra_assets']));
+            }
         }
 
         //Formatted values for each asset
@@ -257,13 +317,25 @@ function projectFinancials($project) {
             if ($return['assetsAssigned'][$key]['totals']['status'] == null) $return['assetsAssigned'][$key]['totals']['status'] = $asset['assetsAssignmentsStatus_name'];
             elseif ($return['assetsAssigned'][$key]['totals']['status'] != $asset['assetsAssignmentsStatus_name']) $return['assetsAssigned'][$key]['totals']['status'] = false; //They aren't all the same
             $return['assetsAssigned'][$key]['totals']['discountPrice'] = $return['assetsAssigned'][$key]['totals']['discountPrice']->add($asset['discountPrice']);
+
+            $baseItemCount = $asset['count'] ?? 1;
+            $extraCount = $asset['extra_assets'] ?? 0;
+
+            $priceWithExtras = ($asset['price']->divide($baseItemCount))->multiply($extraCount);
+
             $return['assetsAssigned'][$key]['totals']['price'] = $return['assetsAssigned'][$key]['totals']['price']->add($asset['price']);
+            $return['assetsAssigned'][$key]['totals']['price'] = $return['assetsAssigned'][$key]['totals']['price']->add($priceWithExtras);
+
             $return['assetsAssigned'][$key]['totals']['mass'] += ($asset['assets_mass'] == null ? $asset['assetTypes_mass'] : $asset['assets_mass']);
         }
         //formatted Totals
         $return['assetsAssigned'][$key]['totals']['formattedDiscountPrice'] = $moneyFormatter->format($return['assetsAssigned'][$key]['totals']['discountPrice']);
         $return['assetsAssigned'][$key]['totals']['formattedPrice'] = $moneyFormatter->format($return['assetsAssigned'][$key]['totals']['price']);
         $return['assetsAssigned'][$key]['totals']['formattedMass'] = number_format($return['assetsAssigned'][$key]['totals']['mass'], 2, '.', '') . "kg";
+
+
+        $return['assetsAssigned'][$key]['totals']['priceWithExtras'] = $return['assetsAssigned'][$key]['totals']['price'];
+        $return['assetsAssigned'][$key]['totals']['formattedPriceWithExtras'] = $moneyFormatter->format($return['assetsAssigned'][$key]['totals']['priceWithExtras']);
     }
     foreach ($return['assetsAssignedSUB'] as $instanceid => $instance) {
         if (!isset($return['assetsAssignedSUB'][$instanceid]['instance'])) {
@@ -276,7 +348,15 @@ function projectFinancials($project) {
                 if ($return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['status'] == null) $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['status'] = $asset['assetsAssignmentsStatus_name'];
                 elseif ($return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['status'] != $asset['assetsAssignmentsStatus_name']) $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['status'] = false; //They aren't all the same
                 $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['discountPrice'] = $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['discountPrice']->add($asset['discountPrice']);
+
+                $baseItemCount = $asset['count'] ?? 1;
+                $extraCount = $asset['extra_assets'] ?? 0;
+
+                $priceWithExtras = ($asset['price']->divide($baseItemCount))->multiply($extraCount);
+
                 $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['price'] = $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['price']->add($asset['price']);
+                $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['price'] = $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['price']->add($priceWithExtras);
+
                 $return['assetsAssignedSUB'][$instanceid]['assets'][$key]['totals']['mass'] += ($asset['assets_mass'] == null ? $asset['assetTypes_mass'] : $asset['assets_mass']);
             }
             //Formatted totals

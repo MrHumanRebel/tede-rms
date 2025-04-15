@@ -247,7 +247,14 @@ foreach ($assets as $asset) {
     $asset['fields'] = explode(",", $asset['assetTypes_definableFields']);
     $asset['thumbnail'] = $bCMS->s3List(2, $asset['assetTypes_id'],'s3files_meta_uploaded','ASC',1);
     $asset['tags'] = [];
-    $asset['isAssetReleased'] = false; // Alapértelmezett érték
+    $asset['isAssetReleased'] = false;
+    $asset['extra_assets'] = 0;
+
+    $DBLIB->where("tempStockAssets.tempStock_assets_id", $asset['assetTypes_id']);
+    $DBLIB->where("tempStockAssets.tempStock_project_id", $SEARCH['PROJECT_ID']);
+    $DBLIB->where("tempStockAssets.tempStock_assets_quantity", null, "IS NOT");
+    $asset['extra_assets'] = $DBLIB->getValue("tempStockAssets", "tempStock_assets_quantity");
+
 
     foreach ($assetTags as $tag) {
         if ($dateStart and $dateEnd) {
