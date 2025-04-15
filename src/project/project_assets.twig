@@ -53,11 +53,12 @@
                 </div>
             </li>
         </ul>
-    </div>
+    </div>    
     <div class="card-body p-0">
         <div class="tab-content" id="asset-list-tabs-tabContent">
             <div class="tab-pane fade show active p-3" id="asset-list-tabs-home" role="tabpanel" aria-labelledby="asset-list-tabs-home-tab">
                 <p style="font-style: italic;">A projekt ezen eszközeinek megtekintéséhez válasszon egy céget fent</p>
+                
                 <p>{{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) }} féle eszköz{{ (FINANCIALS.assetsAssigned|length + FINANCIALS.assetsAssignedSUB|length) != 1 ? 'ök' : '' }} rendelve a {{ project.projects_name }} projekthez ({{FINANCIALS.mass|mass }})</p>
                 {% if project.projectsTypes_config_finance == 1 %}
                     <p>A projekt időtartama {{ FINANCIALS['priceMaths']["weeks"] }} hét{{ FINANCIALS['priceMaths']["weeks"] != 1 ? '' : '' }} és {{ FINANCIALS['priceMaths']["days"] }} nap{{ FINANCIALS['priceMaths']["days"] != 1 ? '' : '' }}</p>
@@ -65,8 +66,9 @@
                     <a href="{{ CONFIG.ROOTURL }}/project/?id={{ project.projects_id }}">A projekt időtartamának módosítása</a>
                     {% endif %}
                 </p>
-                {% endif %}
+                {% endif %}              
             </div>
+            
             <div class="tab-pane fade" id="asset-list-tabs-thisinstance" role="tabpanel" aria-labelledby="asset-list-tabs-profile-tab">
                 {% embed 'project/twigIncludes/assetList/table.twig' with {"instanceid": USERDATA.instance.instances_id} %}
                     {% block tableBody %}
@@ -85,7 +87,12 @@
                         {% endfor %}
                     {% endblock %}
                 {% endembed %}
+                <h5 style="text-align: center; font-weight: bold;">Plusz eszközök a projektben</h5>
+                <div id="extraAssetsList">
+                        <!-- Extra assets will be loaded here -->
+                </div>
             </div>
+
             {% for instance in FINANCIALS.assetsAssignedSUB %}
                 <div class="tab-pane fade" id="asset-list-tabs-instance{{ instance['instance'].instances_id }}" role="tabpanel" aria-labelledby="asset-list-tabs-messages-tab">
                     {% embed 'project/twigIncludes/assetList/table.twig' with {"instanceid": instance['instance'].instances_id } %}
@@ -107,11 +114,58 @@
                     {% endembed %}
                 </div>
             {% endfor %}
+            
         </div>
     </div>
 </div>
 
 <script>
+
+    function loadExtraAssets() {
+        $.ajax({
+            url: '/api/projects/assets/getExtraAsset.php',  // Correct URL based on the structure
+            type: 'POST',
+            data: { project_id: {{ project.projects_id }} },
+            success: function(response) {
+                if (response.assets && response.assets.length > 0) {
+                    let assetsHtml = `
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Gyártó</th>
+                                    <th>Eszköz típus</th>
+                                    <th>Mennyiség</th>
+                                    <th>Tömeg</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    response.assets.forEach(asset => {
+                        assetsHtml += `
+                            <tr>
+                                <td>${asset.manufacturer_name}</td>
+                                <td>${asset.type_name}</td>
+                                <td>${asset.quantity} db</td>
+                                <td>${parseFloat(asset.sum_mass).toFixed(2)} kg</td>
+                            </tr>
+                        `;
+                    });
+                    assetsHtml += '</tbody></table>';
+                    $('#extraAssetsList').html(assetsHtml);
+                } else {
+                    $('#extraAssetsList').html('<p>No extra assets found for this project.</p>');
+                }
+            },
+            error: function() {
+                $('#extraAssetsList').html('<p>Error loading assets.</p>');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        loadExtraAssets();
+    });
+
     $(document).ready(function () {
         const Toast = Swal.mixin({
             toast: true,
