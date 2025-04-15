@@ -199,6 +199,29 @@
                                 { text: "{{ FINANCIALS.payments.sales.total ? (FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
                                 { text: "-", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }},
                                 { text: "{{ FINANCIALS.payments.sales.total ? (FINANCIALS.payments.sales.total|money|replace({',00':''})|escape('js')) : '-' }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' }}
+                            ],
+                            {% set rawNetto = FINANCIALS.payments.total.getAmount() %}
+                            {% set netto = rawNetto | round(0, 'floor') %}
+                            {% set afa = (netto * 0.27) | round(0, 'floor') %}
+                            {% set brutto = netto + afa %}
+
+                            [
+                                { text: "Nettó végösszeg", style: { bold: true, fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "" },
+                                { text: "" },
+                                { text: "{{ netto | money | replace({',00':''}) | escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                            ],
+                            [
+                                { text: "27 % ÁFA tartalom", style: { bold: true, fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "" },
+                                { text: "" },
+                                { text: "{{ afa | money | replace({',00':''}) | escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
+                            ],
+                            [
+                                { text: "Bruttó végösszeg", style: { bold: true, fontSize: '{{ newColoumnFontSize }}' }},
+                                { text: "" },
+                                { text: "" },
+                                { text: "{{ brutto | money | replace({',00':''}) | escape('js') }}", style: { alignment: 'right', fontSize: '{{ newColoumnFontSize }}' } }
                             ]
                         ]
                     },

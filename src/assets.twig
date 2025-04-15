@@ -472,7 +472,7 @@
                                                                             data-action="remove_all">
                                                                             Összes eltávolítása
                                                                         </button>
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Mégse</button>
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Bezárás</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -641,8 +641,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 project_id: projectId,
                 quantity: quantity,
                 action: action
-            }, function () {
+            }).then(function () {
                 $('#assignExtraAssetModal' + assetTypeId).modal('hide');
+            }).finally(function () {
                 location.reload();
             });
         });
