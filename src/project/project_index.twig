@@ -552,6 +552,7 @@
                                             </div>
                                         </div>
                                     {% endif %}
+                                    <div id="extraAssetsAlert"></div>
                                     {% if project.auditLog|length > 0 %}
                                         <div class="card">
                                             <div class="card-header">
@@ -1433,6 +1434,39 @@
     {% endif %}
 
     <script>
+
+            function getIfExtraAssets() {
+            $.ajax({
+                url: '/api/projects/assets/getExtraAsset.php',
+                type: 'POST',
+                data: { project_id: {{ project.projects_id }} },
+                success: function(response) {
+                    if (response.assets && response.assets.length > 0) {
+                        $('#extraAssetsAlert').html(`
+                            <div class="card">
+                                <div class="card-header">
+                                    <div style="display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: bold;
+                                        color: orange; margin: 5px; justify-content: flex-start; text-align: left;">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        A projekt raktárkészleten felüli eszközöket is tartalmaz!
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    } else {
+                        $('#extraAssetsAlert').html('');
+                    }
+                },
+                error: function() {
+                    $('#extraAssetsAlert').html('<p class="text-danger text-center">Hiba történt az eszközök betöltésekor.</p>');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            getIfExtraAssets();
+        });
+
 
         const warehouseAddress = '9174 Dunaszeg Iskola utca 7';  // Fixed address
         // Function to geocode the address

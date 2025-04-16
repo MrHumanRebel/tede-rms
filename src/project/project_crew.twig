@@ -79,7 +79,7 @@
                             {% endif %}
                             <div class="tools" style="display: flex; align-items: center; flex-wrap: wrap; gap: 7px;">
                                 {% set response = crew.crewAssignments_response %}
-                                {% if crew.users_userid == user.users_userid or "PROJECTS:PROJECT_CREW:EDIT"|instancePermissions %}
+                                {% if crew.users_userid == USERDATA.users_userid or "PROJECTS:PROJECT_CREW:EDIT"|instancePermissions %}
                                     <!-- Elfogadás ikon -->
                                     <i class="fas fa-check-circle confirmCrewAssignment"
                                     data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
