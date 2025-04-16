@@ -1,11 +1,6 @@
 <?php
 require_once __DIR__ . '/../../apiHeadSecure.php';
 
-// Check if the user has the permission to edit the crew assignment
-if (!$AUTH->instancePermissionCheck("PROJECTS:PROJECT_CREW:EDIT")) {
-    finish(false, ["error" => "PERMISSION_ERROR", "message" => "Nincs jogosultságod a módosításhoz"]);
-}
-
 $response = intval($_POST['response']);
 $userId = intval($_POST['userId']);
 $projectId = intval($_POST['projectId']);
