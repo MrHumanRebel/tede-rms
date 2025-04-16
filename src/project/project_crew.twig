@@ -79,69 +79,76 @@
                             {% endif %}
                             <div class="tools" style="display: flex; align-items: center; flex-wrap: wrap; gap: 7px;">
                                 {% set response = crew.crewAssignments_response %}
-                                    {% set isSelf = crew.users_userid == USERDATA.users_userid %}
-
+                                {% if crew.users_userid == USERDATA.users_userid %}
                                     <!-- Elfogadás ikon -->
                                     <i class="fas fa-check-circle confirmCrewAssignment"
-                                    {% if isSelf %}
-                                    data-clickable="true"
                                     data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
-                                    {% endif %}
                                     title="Visszaigazol"
-                                    style="color: {% if response == 1 or response == NULL %}green{% else %}gray{% endif %}; font-size: 1.25em; cursor: {% if isSelf %}pointer{% else %}default{% endif %}; margin-right: 7px;">
+                                    style="color: {% if response == 1 or response == NULL %}green{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 7px;">
                                     </i>
-
+                                    
                                     <!-- Elutasítás ikon -->
                                     <i class="fas fa-times-circle rejectCrewAssignment"
-                                    {% if isSelf %}
-                                    data-clickable="true"
                                     data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
-                                    {% endif %}
                                     title="Elutasít"
-                                    style="color: {% if response == 2 or response == NULL %}red{% else %}gray{% endif %}; font-size: 1.25em; cursor: {% if isSelf %}pointer{% else %}default{% endif %}; margin-right: 7px;">
+                                    style="color: {% if response == 2 or response == NULL  %}red{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 7px;">
                                     </i>
-
-                                    <!-- Státusz szöveg -->
-                                    <p style="font-size: 1em; font-weight: bold; margin-top: 10px; margin-right: 7px;
-                                        {% if response == 1 %} color: green;
-                                        {% elseif response == 2 %} color: red;
-                                        {% else %} color: gray; {% endif %};
-                                        display: flex; justify-content: center; align-items: center; height: 100%;">
-                                        {% if response == 1 %}
-                                            Visszaigazolva
-                                        {% elseif response == 2 %}
-                                            Elutasítva
-                                        {% else %}
-                                            Nincs visszajelzés
-                                        {% endif %}
-                                    </p>
-
-                                    <script>
-                                    $(document).ready(function () {
-                                        function updateCrewAssignment(assignmentData) {
-                                            ajaxcall("projects/crew/response.php", {
-                                                assignmentId: assignmentData.assignmentId,
-                                                response: assignmentData.response,
-                                                userId: assignmentData.userId,
-                                                projectId: assignmentData.projectId
-                                            }, function (data) {
+                                {% else %}
+                                    <!-- Csak a státusz megjelenítése -->
+                                    <i class="fas fa-check-circle"
+                                    title="Elfogadva"
+                                    style="color: {% if response == 1 %}green{% else %}gray{% endif %}; font-size: 1.25em; margin-right: 7px;">
+                                    </i>
+                                    <i class="fas fa-times-circle"
+                                    title="Elutasítva"
+                                    style="color: {% if response == 2 %}red{% else %}gray{% endif %}; font-size: 1.25em; margin-right: 7px;">
+                                    </i>
+                                {% endif %}
+                                <!-- Státusz szöveges megjelenítése -->
+                                <p style="font-size: 1em; font-weight: bold; margin-top: 10px; margin-right: 7px;
+                                    {% if response == 1 %} color: green; 
+                                    {% elseif response == 2 %} color: red; 
+                                    {% else %} color: gray; {% endif %};
+                                    display: flex; justify-content: center; align-items: center; height: 100%;">
+                                    {% if response == 1 %}
+                                        Visszaigazolva
+                                    {% elseif response == 2 %}
+                                        Elutasítva
+                                    {% else %}
+                                        Nincs visszajelzés
+                                    {% endif %}
+                                </p>
+                                
+                                <script>
+                                $(document).ready(function () {
+                                    // Function to handle crew assignment updates
+                                    function updateCrewAssignment(assignmentData) {
+                                        ajaxcall("projects/crew/response.php", {
+                                            response: assignmentData.response,
+                                            userId: assignmentData.userId,
+                                            projectId: assignmentData.projectId
+                                        }, function (data) {
+                                            if (data.success) {
                                                 location.reload();
-                                            });
-                                        }
-
-                                        // Csak azok a gombok lehetnek kattinthatóak, amikhez van data-clickable attribútum
-                                        $(".confirmCrewAssignment[data-clickable='true']").on("click", function () {
-                                            const assignmentData = $(this).data("assignment");
-                                            updateCrewAssignment(assignmentData);
+                                            } else {
+                                                location.reload();
+                                            }
                                         });
+                                    }
 
-                                        $(".rejectCrewAssignment[data-clickable='true']").on("click", function () {
-                                            const assignmentData = $(this).data("assignment");
-                                            updateCrewAssignment(assignmentData);
-                                        });
+                                    // Elfogadás (zöld pipa)
+                                    $(".confirmCrewAssignment").click(function () {
+                                        let assignmentData = $(this).data("assignment");
+                                        updateCrewAssignment(assignmentData);
                                     });
-                                    </script>
 
+                                    // Elutasítás (piros pipa)
+                                    $(".rejectCrewAssignment").click(function () {
+                                        let assignmentData = $(this).data("assignment");
+                                        updateCrewAssignment(assignmentData);
+                                    });
+                                });
+                                </script>
 
                                 {% if "PROJECTS:PROJECT_CREW:EDIT"|instancePermissions %}
                                     <!-- Szerkesztés ikon -->
