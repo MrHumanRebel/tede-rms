@@ -32,11 +32,6 @@ if (!$assignment) {
     finish(false, ["error" => "NO_ASSIGNMENT", "message" => "Nincs ilyen hozzárendelés"]);
 }
 
-// Check if the user is authorized to update the assignment
-if ($assignment["users_userid"] !== $userId) {
-    finish(false, ["error" => "PERMISSION_ERROR", "message" => "Nincs jogosultságod a módosításhoz"]);
-}
-
 // Update the crew assignment response
 $DBLIB->where("crewAssignments_id", $assignment['crewAssignments_id']);
 if (!$DBLIB->update("crewAssignments", ["crewAssignments_response" => $response])) {

@@ -82,14 +82,14 @@
                                 {% if crew.users_userid == USERDATA.users_userid %}
                                     <!-- Elfogadás ikon -->
                                     <i class="fas fa-check-circle confirmCrewAssignment"
-                                    data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
+                                    data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ USERDATA.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 1}'
                                     title="Visszaigazol"
                                     style="color: {% if response == 1 or response == NULL %}green{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 7px;">
                                     </i>
                                     
                                     <!-- Elutasítás ikon -->
                                     <i class="fas fa-times-circle rejectCrewAssignment"
-                                    data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ crew.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
+                                    data-assignment='{"assignmentId": "{{ crew.crewAssignments_id }}", "userId": "{{ USERDATA.users_userid }}", "projectId": "{{ crew.projects_id }}", "response": 2}'
                                     title="Elutasít"
                                     style="color: {% if response == 2 or response == NULL  %}red{% else %}gray{% endif %}; font-size: 1.25em; cursor: pointer; margin-right: 7px;">
                                     </i>
