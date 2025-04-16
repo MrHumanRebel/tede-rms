@@ -33,7 +33,7 @@ if (!$assignment) {
 }
 
 // Check if the user is authorized to update the assignment
-if ($assignment["users_userid"] !== $userId && !$AUTH->instancePermissionCheck("PROJECTS:PROJECT_CREW:EDIT")) {
+if ($assignment["users_userid"] !== $userId) {
     finish(false, ["error" => "PERMISSION_ERROR", "message" => "Nincs jogosultságod a módosításhoz"]);
 }
 
