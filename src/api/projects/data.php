@@ -193,7 +193,7 @@ function projectFinancials($project) {
 
         // Ha az extra_assets nem nulla, akkor annyi darabszor adjuk hozzá az árat, amennyi az extra_assets értéke
         if ($asset['extra_assets'] != 0) {
-            $return['prices']['discounts'] = $return['prices']['discounts']->add($asset['price']->multiply($asset['extra_assets']));
+            $return['prices']['discounts'] = $return['prices']['discounts']->add(($asset['price']->subtract($asset['discountPrice']))->multiply($asset['extra_assets']));
         }
 
         $groupName = $asset['assetCategoriesGroups_name'];

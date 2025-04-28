@@ -91,6 +91,59 @@
                 <div id="extraAssetsList">
                         <!-- Extra assets will be loaded here -->
                 </div>
+                {% if FINANCIALS.payments.sales.ledger %}
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 style="text-align: center; font-weight: bold;">Plusz értékesítések a projektben</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if FINANCIALS.payments.sales.ledger|length > 0 %}
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Mennyiség</th>
+                                                <th>Megjegyzés</th>
+                                                {% if project.projectsTypes_config_finance == 1 %}
+                                                    {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                                                        <th>Összeg</th>
+                                                        <th>Összesen</th>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% set currentSupplier = "" %}
+                                            {% for payment in FINANCIALS.payments.sales.ledger %}
+                                                {% if currentSupplier != payment.payments_supplier %}
+                                                    {% set currentSupplier = payment.payments_supplier %}
+                                                    {% if payment.payments_supplier != "" %}
+                                                        <tr>
+                                                            <td colspan="99" style="background-color: #f5f5f5;"><strong>{{ payment.payments_supplier }}</strong></td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endif %}
+                                                <tr>
+                                                    <td>{{ payment.payments_quantity }} db</td>
+                                                    <td>{{ payment.payments_comment|nl2br }}</td>
+                                                    {% if project.projectsTypes_config_finance == 1 %}
+                                                        {% if "ASSETS:ASSET_TYPES:EDIT"|instancePermissions %}
+                                                            <td>{{ payment.payments_amount|money|replace({',00':''}) }}</td>
+                                                            <td>{{ payment.payments_amountTotal|money|replace({',00':''}) }}</td>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p class="text-center text-primary"><strong>Nincs értékesítés rögzítve ehhez a projekthez.</strong></p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
             </div>
 
             {% for instance in FINANCIALS.assetsAssignedSUB %}
