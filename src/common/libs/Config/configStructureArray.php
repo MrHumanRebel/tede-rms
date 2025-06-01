@@ -15,8 +15,10 @@ $configStructureArray = [
       "options" => [], // An array of options that can be selected for a select dropdown
       "verifyMatch" => function ($value, $options) { // A filter which takes the value provided by the user, the options array in the config, and returns an array with the following keys: valid, value, error
         $checkedValue = filter_var($value, FILTER_VALIDATE_URL);
-        if ($checkedValue !== false) return ["valid" => true, "value" => rtrim($checkedValue, '/'), "error" => null];
-        else return ["valid" => false, "value" => null, "error" => "Invalid URL"];
+        if ($checkedValue !== false)
+          return ["valid" => true, "value" => rtrim($checkedValue, '/'), "error" => null];
+        else
+          return ["valid" => false, "value" => null, "error" => "Invalid URL"];
       },
     ],
     "specialRequest" => false, // Should this value by downloaded for every single pageload? True is reccomended for values that are used by every single page or are used by twig, and so should be taken from the database in a bulk call to improve performance
@@ -101,8 +103,10 @@ $configStructureArray = [
       "options" => [],
       "verifyMatch" => function ($value, $options) {
         $checkedValue = filter_var($value, FILTER_VALIDATE_EMAIL);
-        if ($checkedValue) return ["valid" => true, "value" => $checkedValue, "error" => null];
-        else return ["valid" => false, "value" => "", "error" => "Invalid email address"];
+        if ($checkedValue)
+          return ["valid" => true, "value" => $checkedValue, "error" => null];
+        else
+          return ["valid" => false, "value" => "", "error" => "Invalid email address"];
       }
     ],
     "specialRequest" => true,
@@ -235,6 +239,27 @@ $configStructureArray = [
     "default" => 465,
     "envFallback" => "CONFIG_EMAILS_SMTP_PORT",
   ],
+  "EMAILS_SMTP_ENCRYPTION" => [
+    "form" => [
+      "type" => "select",
+      "default" => function () {
+        return "SSL";
+      },
+      "name" => "SMTP encryption type",
+      "group" => "Email",
+      "description" => "If SMTP is selected above, the encryption type to use when connecting to the SMTP server",
+      "required" => false,
+      "maxlength" => 255,
+      "minlength" => 0,
+      "options" => ["None", "SSL", "TLS"],
+      "verifyMatch" => function ($value, $options) {
+        return ["valid" => in_array($value, $options), "value" => $value, "error" => in_array($value, $options) ? '' : "Invalid option selected"];
+      }
+    ],
+    "specialRequest" => true,
+    "default" => "SSL",
+    "envFallback" => false,
+  ],
   "EMAILS_FOOTER" => [
     "form" => [
       "type" => "text",
@@ -319,8 +344,10 @@ $configStructureArray = [
       "options" => [],
       "verifyMatch" => function ($value, $options) {
         $checkedValue = filter_var($value, FILTER_VALIDATE_REGEXP, ["options" => ["regexp" => "/^[A-Z0-9]+$/"]]);
-        if ($checkedValue) return ["valid" => true, "value" => $checkedValue, "error" => null];
-        else return ["valid" => false, "value" => null, "error" => "Invalid JWT key"];
+        if ($checkedValue)
+          return ["valid" => true, "value" => $checkedValue, "error" => null];
+        else
+          return ["valid" => false, "value" => null, "error" => "Invalid JWT key"];
       }
     ],
     "specialRequest" => false,
@@ -471,8 +498,10 @@ $configStructureArray = [
       "options" => [],
       "verifyMatch" => function ($value, $options) {
         $checkedValue = filter_var($value, FILTER_VALIDATE_REGEXP, ["options" => ["regexp" => "/^[a-zA-Z0-9_ ]+$/"]]);
-        if ($checkedValue) return ["valid" => true, "value" => $checkedValue, "error" => null];
-        else return ["valid" => false, "value" => null, "error" => "Invalid name"];
+        if ($checkedValue)
+          return ["valid" => true, "value" => $checkedValue, "error" => null];
+        else
+          return ["valid" => false, "value" => null, "error" => "Invalid name"];
       }
     ],
     "specialRequest" => false,
@@ -494,8 +523,10 @@ $configStructureArray = [
       "options" => [],
       "verifyMatch" => function ($value, $options) {
         $checkedValue = filter_var($value, FILTER_VALIDATE_URL);
-        if ($checkedValue) return ["valid" => true, "value" => $checkedValue, "error" => null];
-        else return ["valid" => false, "value" => "", "error" => "Invalid URL"];
+        if ($checkedValue)
+          return ["valid" => true, "value" => $checkedValue, "error" => null];
+        else
+          return ["valid" => false, "value" => "", "error" => "Invalid URL"];
       }
     ],
     "specialRequest" => false,
@@ -517,8 +548,10 @@ $configStructureArray = [
       "options" => [],
       "verifyMatch" => function ($value, $options) {
         $checkedValue = filter_var($value, FILTER_VALIDATE_URL);
-        if ($checkedValue) return ["valid" => true, "value" => $checkedValue, "error" => null];
-        else return ["valid" => false, "value" => "", "error" => "Invalid URL"];
+        if ($checkedValue)
+          return ["valid" => true, "value" => $checkedValue, "error" => null];
+        else
+          return ["valid" => false, "value" => "", "error" => "Invalid URL"];
       }
     ],
     "specialRequest" => false,
@@ -540,8 +573,10 @@ $configStructureArray = [
       "options" => [],
       "verifyMatch" => function ($value, $options) {
         $checkedValue = filter_var($value, FILTER_VALIDATE_URL);
-        if ($checkedValue) return ["valid" => true, "value" => $checkedValue, "error" => null];
-        else return ["valid" => false, "value" => "", "error" => "Invalid URL"];
+        if ($checkedValue)
+          return ["valid" => true, "value" => $checkedValue, "error" => null];
+        else
+          return ["valid" => false, "value" => "", "error" => "Invalid URL"];
       }
     ],
     "specialRequest" => false,
@@ -933,7 +968,7 @@ $configStructureArray = [
     "default" => false,
     "envFallback" => false,
   ],
-  "STRIPE_WEBHOOK_SECRET"  => [
+  "STRIPE_WEBHOOK_SECRET" => [
     "form" => [
       "type" => "text",
       "default" => function () {
@@ -996,7 +1031,7 @@ $configStructureArray = [
     "default" => "Enabled",
     "envFallback" => false,
   ],
-  "TELEMETRY_NOTES"  => [
+  "TELEMETRY_NOTES" => [
     "form" => [
       "type" => "text",
       "default" => function () {
@@ -1017,7 +1052,7 @@ $configStructureArray = [
     "default" => false,
     "envFallback" => false,
   ],
-  "TELEMETRY_NANOID"  => [
+  "TELEMETRY_NANOID" => [
     "form" => [
       "type" => "text",
       "default" => function () {
