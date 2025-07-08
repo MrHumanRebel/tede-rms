@@ -1,10 +1,11 @@
 <?php
 require_once __DIR__ . '/../apiHeadSecure.php';
 
-if (!$AUTH->serverPermissionCheck("INSTANCES:IMPORT:ASSETS") or !isset($_POST['instances_id'])) die("404");
+if (!$AUTH->serverPermissionCheck("INSTANCES:IMPORT:ASSETS") or !isset($_POST['instances_id']))
+    die("404");
 
 //Expected list of headers for the CSV file
-$CSVHEADERS = ["assetTypes_name","assetTypes_description","assetTypes_productLink","assetTypes_mass","assetTypes_dayRate","assetTypes_weekRate","assetTypes_value","assetCategories_id","manufacturers_name","assets_tag","assets_notes","assets_storageLocation","assets_dayRate","assets_WeekRate","assets_value","assets_mass","assetType_definableFieldsName_1","assetType_definableFieldsName_2","assetType_definableFieldsName_3","assetType_definableFieldsName_4","assetType_definableFieldsName_5","assetType_definableFieldsName_6","assetType_definableFieldsName_7","assetType_definableFieldsName_8","assetType_definableFieldsName_9","assetType_definableFieldsName_10","asset_definableFields_1","asset_definableFields_2","asset_definableFields_3","asset_definableFields_4","asset_definableFields_5","asset_definableFields_6","asset_definableFields_7","asset_definableFields_8","asset_definableFields_9","asset_definableFields_10"];
+$CSVHEADERS = ["assetTypes_name", "assetTypes_description", "assetTypes_productLink", "assetTypes_mass", "assetTypes_dayRate", "assetTypes_weekRate", "assetTypes_value", "assetCategories_id", "manufacturers_name", "assets_tag", "assets_notes", "assets_storageLocation", "assets_dayRate", "assets_WeekRate", "assets_value", "assets_mass", "assetType_definableFieldsName_1", "assetType_definableFieldsName_2", "assetType_definableFieldsName_3", "assetType_definableFieldsName_4", "assetType_definableFieldsName_5", "assetType_definableFieldsName_6", "assetType_definableFieldsName_7", "assetType_definableFieldsName_8", "assetType_definableFieldsName_9", "assetType_definableFieldsName_10", "asset_definableFields_1", "asset_definableFields_2", "asset_definableFields_3", "asset_definableFields_4", "asset_definableFields_5", "asset_definableFields_6", "asset_definableFields_7", "asset_definableFields_8", "asset_definableFields_9", "asset_definableFields_10"];
 
 $createdAssetTypes = [];
 $successfulAssets = [];
@@ -12,7 +13,8 @@ $failedAssets = [];
 
 //Validate file is what we expect
 // Undefined or Multiple Files
-if (!isset($_FILES['csvFile']['error']) || is_array($_FILES['csvFile']['error'])) finish(false, "Invalid file parameters");
+if (!isset($_FILES['csvFile']['error']) || is_array($_FILES['csvFile']['error']))
+    finish(false, "Invalid file parameters");
 
 // Check upload error value value.
 switch ($_FILES['csvFile']['error']) {
@@ -22,25 +24,43 @@ switch ($_FILES['csvFile']['error']) {
         finish(false, "No file uploaded");
     case UPLOAD_ERR_INI_SIZE:
     case UPLOAD_ERR_FORM_SIZE:
-        finish(false,'Exceeded filesize limit');
+        finish(false, 'Exceeded filesize limit');
     default:
-        finish(false,'Unknown errors');
+        finish(false, 'Unknown errors');
 }
 //Check the file is a CSV or an excel file - excel doesn't save csvs correctly
-if ($_FILES['csvFile']['type'] != "text/csv" && $_FILES['csvFile']['type'] != "application/vnd.ms-excel") finish(false, "File is not a CSV");
+if ($_FILES['csvFile']['type'] != "text/csv" && $_FILES['csvFile']['type'] != "application/vnd.ms-excel")
+    finish(false, "File is not a CSV");
 //Check the file is not empty
-if ($_FILES['csvFile']['size'] == 0) finish(false, "File is empty");
+if ($_FILES['csvFile']['size'] == 0)
+    finish(false, "File is empty");
 
 //File is probably ok, lets try and read it
 $csv = array_map('str_getcsv', file($_FILES['csvFile']['tmp_name']));
 //Check the file has the correct headers
-if ($csv[0] != $CSVHEADERS) finish(false, "File does not have the correct headers");
+if ($csv[0] != $CSVHEADERS)
+    finish(false, "File does not have the correct headers");
 
 //File is ok, lets start importing
 $DBLIB->where("instances.instances_id", $_POST['instances_id']);
 $DBLIB->where("instances.instances_deleted", 0);
 $instance = $DBLIB->getOne("instances", ["instances.instances_id", "instances.instances_name"]);
-if (!$instance) finish(false, "Instance not found");
+if (!$instance)
+    finish(false, "Instance not found");
+
+// Function to remove issuses with dollar signs and other non-numeric characters from numeric strings
+function sanitizeNumericString(string $input): string
+{
+    $output = (string) '';
+    $length = strlen($input);
+    for ($i = 0; $i < $length; $i++) {
+        $char = $input[$i];
+        if (ctype_digit($char) || $char === '.') {
+            $output .= (string) $char;
+        }
+    }
+    return $output;
+}
 
 //Loop through the CSV file and import each row
 //From this point, finish() is not used to return errors, instead the script will 
@@ -49,13 +69,13 @@ for ($i = 1; $i < count($csv); $i++) {
     $row = $csv[$i];
 
     //Validate row data
-    array_walk($row, function(&$value, $key) {
+    array_walk($row, function (&$value, $key) {
         global $bCMS;
         $value = $bCMS->sanitizeStringMYSQL($value);
     });
 
     //Check if asset with given tag already exists
-    if (isset($row[9]) and $row[9] != null){
+    if (isset($row[9]) and $row[9] != null) {
         $DBLIB->where("assets_tag", $row[9]);
         $DBLIB->where("assets.instances_id", $_POST['instances_id']);
         $DBLIB->where("assets.assets_deleted", 0);
@@ -63,10 +83,11 @@ for ($i = 1; $i < count($csv); $i++) {
         if ($asset) {
             //Don't override existing information
             array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Asset with tag " . $row[9] . " already exists"]);
-            continue; 
+            continue;
         }
-    } else $row[9] = generateNewTag();
-    
+    } else
+        $row[9] = generateNewTag();
+
     //Asset Type
     if (!isset($row[0]) or $row[0] == null) {
         array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Asset Type not specified"]);
@@ -76,10 +97,11 @@ for ($i = 1; $i < count($csv); $i++) {
     $DBLIB->where("(assetTypes.instances_id = ? or assetTypes.instances_id IS NULL)", [$_POST['instances_id']]);
     $assetType = $DBLIB->getOne("assetTypes", ["assetTypes.assetTypes_id"]);
 
-    if(!$assetType){
+    if (!$assetType) {
         //Create new asset type
         //Manufacturer
-        if($row[8] == "") $row[8] = "Unknown/Generic"; //Use the generic manufacturer if none specified
+        if ($row[8] == "")
+            $row[8] = "Unknown/Generic"; //Use the generic manufacturer if none specified
         $DBLIB->where("manufacturers_name", "%" . $row[8] . "%", "LIKE");
         $DBLIB->where("(manufacturers.instances_id = ? or manufacturers.instances_id IS NULL)", [$_POST['instances_id']]);
         $manufacturer = $DBLIB->getOne("manufacturers", ["manufacturers.manufacturers_id"]);
@@ -90,16 +112,16 @@ for ($i = 1; $i < count($csv); $i++) {
             ];
             $manufacturer['manufacturers_id'] = $DBLIB->insert("manufacturers", $manufacturer);
         }
-        
+
         //Asset Category
-        $DBLIB->where("assetCategories_id", $row[7],);
+        $DBLIB->where("assetCategories_id", $row[7], );
         $DBLIB->where("(assetCategories.instances_id = ? or assetCategories.instances_id IS NULL)", [$_POST['instances_id']]);
         $DBLIB->where("assetCategories.assetCategories_deleted", 0);
         $assetCategory = $DBLIB->getOne("assetCategories", ["assetCategories.assetCategories_id"]);
         if (!$assetCategory) {
             //Asset Category not found
             //This is the one thing we can't just create with data from the CSV
-            array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Asset Category with id '". $row[7] . "' not found in this instance"]);
+            array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Asset Category with id '" . $row[7] . "' not found in this instance"]);
             continue;
         }
 
@@ -110,7 +132,7 @@ for ($i = 1; $i < count($csv); $i++) {
         }
         $definableFields = rtrim($definableFields, ",");
 
-         
+
         //Actually create new asset type
         $assetType = [
             "assetTypes_name" => $row[0],
@@ -120,15 +142,17 @@ for ($i = 1; $i < count($csv); $i++) {
             "assetTypes_description" => $row[1],
             "assetTypes_productLink" => $row[2],
             "assetTypes_definableFields" => $definableFields,
-            "assetTypes_mass" => $row[3] ?: 0,
+            "assetTypes_mass" => floatval(sanitizeNumericString($row[3])),
             "assetTypes_inserted" => date('Y-m-d H:i:s'),
-            "assetTypes_dayRate" => $row[4] ?: 0,
-            "assetTypes_weekRate" => $row[5] ?: 0,
-            "assetTypes_value" => $row[6] ?: 0,   
+            "assetTypes_dayRate" => floatval(sanitizeNumericString($row[4])),
+            "assetTypes_weekRate" => floatval(sanitizeNumericString($row[5])),
+            "assetTypes_value" => floatval(sanitizeNumericString($row[6])),
         ];
         $assetType['assetTypes_id'] = $DBLIB->insert("assetTypes", $assetType);
-        if ($assetType['assetTypes_id']) array_push($createdAssetTypes, $assetType);
-        else array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Error creating Asset Type"]);
+        if ($assetType['assetTypes_id'])
+            array_push($createdAssetTypes, $assetType);
+        else
+            array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Error creating Asset Type"]);
 
     }
 
@@ -148,21 +172,26 @@ for ($i = 1; $i < count($csv); $i++) {
         "asset_definableFields_8" => $row[33],
         "asset_definableFields_9" => $row[34],
         "asset_definableFields_10" => $row[35],
-        "assets_dayRate" => $row[12] ?: 0,
-        "assets_weekRate" => $row[13] ?: 0,
-        "assets_value" => $row[14] ?: 0,
-        "assets_mass" => $row[15] ?: 0,
+        "assets_dayRate" => floatval(sanitizeNumericString($row[12])),
+        "assets_weekRate" => floatval(sanitizeNumericString($row[13])),
+        "assets_value" => floatval(sanitizeNumericString($row[14])),
+        "assets_mass" => floatval(sanitizeNumericString($row[15])),
     ];
-    $asset['assets_id'] = $DBLIB->insert("assets", $asset);
 
-    //Add Row ID to asset array for logging output
-    $asset['row'] = $i;
-
-    if ($asset['assets_id']) array_push($successfulAssets, $asset);
-    else array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Unknown error"]);
+    try {
+        $asset['assets_id'] = $DBLIB->insert("assets", $asset);
+        $asset['row'] = $i; //Add Row ID to asset array for logging output
+        if ($asset['assets_id'])
+            array_push($successfulAssets, $asset);
+        else
+            array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Unknown error"]);
+    } catch (Exception $e) {
+        $asset['row'] = $i; //Add Row ID to asset array for logging output
+        array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Database error: " . $e->getMessage()]);
+    }
 }
 
-return finish(true, null, ["createdTypes" => $createdAssetTypes,"successfulAssets" => $successfulAssets, "failedAssets" => $failedAssets]);
+return finish(true, null, ["createdTypes" => $createdAssetTypes, "successfulAssets" => $successfulAssets, "failedAssets" => $failedAssets]);
 
 /**
  *  @OA\Post(
