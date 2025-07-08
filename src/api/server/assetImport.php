@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/../apiHeadSecure.php';
 
+use Money\Currency;
+use Money\Money;
+use Money\Currencies\ISOCurrencies;
+use Money\Parser\DecimalMoneyParser;
+
 if (!$AUTH->serverPermissionCheck("INSTANCES:IMPORT:ASSETS") or !isset($_POST['instances_id']))
     die("404");
 
@@ -44,7 +49,8 @@ if ($csv[0] != $CSVHEADERS)
 //File is ok, lets start importing
 $DBLIB->where("instances.instances_id", $_POST['instances_id']);
 $DBLIB->where("instances.instances_deleted", 0);
-$instance = $DBLIB->getOne("instances", ["instances.instances_id", "instances.instances_name"]);
+$instance = $DBLIB->getOne("instances", ["instances.instances_id", "instances.instances_name", "instances.instances_config_currency"]);
+
 if (!$instance)
     finish(false, "Instance not found");
 
@@ -62,16 +68,25 @@ function sanitizeNumericString(string $input): string
     return $output;
 }
 
+function formatMoney(float $value): string
+{
+    global $instance;
+    $currencies = new ISOCurrencies();
+    $moneyParser = new DecimalMoneyParser($currencies);
+    return $moneyParser->parse((string) $value, new Currency($instance['instances_config_currency']))->getAmount();
+}
+
 //Loop through the CSV file and import each row
 //From this point, finish() is not used to return errors, instead the script will 
 // continue and return a list of successfully added and failed assets
 for ($i = 1; $i < count($csv); $i++) {
     $row = $csv[$i];
 
-    //Validate row data
+    // Strip slashes and trim each value in the row
     array_walk($row, function (&$value, $key) {
         global $bCMS;
-        $value = $bCMS->sanitizeStringMYSQL($value);
+        $value = stripslashes($value);
+        $value = trim($value);
     });
 
     //Check if asset with given tag already exists
@@ -93,7 +108,7 @@ for ($i = 1; $i < count($csv); $i++) {
         array_push($failedAssets, ["row" => $i, "tag" => $row[9], "reason" => "Asset Type not specified"]);
         continue;
     }
-    $DBLIB->where("assetTypes_name", "%" . $row[0] . "%", "LIKE");
+    $DBLIB->where("assetTypes_name", $row[0]);
     $DBLIB->where("(assetTypes.instances_id = ? or assetTypes.instances_id IS NULL)", [$_POST['instances_id']]);
     $assetType = $DBLIB->getOne("assetTypes", ["assetTypes.assetTypes_id"]);
 
@@ -102,7 +117,7 @@ for ($i = 1; $i < count($csv); $i++) {
         //Manufacturer
         if ($row[8] == "")
             $row[8] = "Unknown/Generic"; //Use the generic manufacturer if none specified
-        $DBLIB->where("manufacturers_name", "%" . $row[8] . "%", "LIKE");
+        $DBLIB->where("manufacturers_name", $row[8]);
         $DBLIB->where("(manufacturers.instances_id = ? or manufacturers.instances_id IS NULL)", [$_POST['instances_id']]);
         $manufacturer = $DBLIB->getOne("manufacturers", ["manufacturers.manufacturers_id"]);
         if (!$manufacturer) {
@@ -144,9 +159,9 @@ for ($i = 1; $i < count($csv); $i++) {
             "assetTypes_definableFields" => $definableFields,
             "assetTypes_mass" => floatval(sanitizeNumericString($row[3])),
             "assetTypes_inserted" => date('Y-m-d H:i:s'),
-            "assetTypes_dayRate" => floatval(sanitizeNumericString($row[4])),
-            "assetTypes_weekRate" => floatval(sanitizeNumericString($row[5])),
-            "assetTypes_value" => floatval(sanitizeNumericString($row[6])),
+            "assetTypes_dayRate" => formatMoney(floatval(sanitizeNumericString($row[4]))),
+            "assetTypes_weekRate" => formatMoney(floatval(sanitizeNumericString($row[5]))),
+            "assetTypes_value" => formatMoney(floatval(sanitizeNumericString($row[6]))),
         ];
         $assetType['assetTypes_id'] = $DBLIB->insert("assetTypes", $assetType);
         if ($assetType['assetTypes_id'])
@@ -172,9 +187,9 @@ for ($i = 1; $i < count($csv); $i++) {
         "asset_definableFields_8" => $row[33],
         "asset_definableFields_9" => $row[34],
         "asset_definableFields_10" => $row[35],
-        "assets_dayRate" => floatval(sanitizeNumericString($row[12])),
-        "assets_weekRate" => floatval(sanitizeNumericString($row[13])),
-        "assets_value" => floatval(sanitizeNumericString($row[14])),
+        "assets_dayRate" => formatMoney(floatval(sanitizeNumericString($row[12]))),
+        "assets_weekRate" => formatMoney(floatval(sanitizeNumericString($row[13]))),
+        "assets_value" => formatMoney(floatval(sanitizeNumericString($row[14]))),
         "assets_mass" => floatval(sanitizeNumericString($row[15])),
     ];
 
